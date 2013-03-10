@@ -1,0 +1,112 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# szuka danego przez szukany_tekst wyrażenia w hasłach
+
+import codecs
+import catlib
+import wikipedia
+import pagegenerators
+import re
+import xmlreader
+from klasa import *
+
+def frequencyList(data):
+    
+    site = wikipedia.getSite()
+    lista_stron2 = getListFromXML(data)
+    ranking = {}
+    re_example_translation = re.compile(u'→(.*?)(?=\<ref|\n|$)')
+    re_colloc_translation = re.compile(u'→(.*?)(?=\<ref|\n|•|;|$)')
+    re_link = re.compile(u'\[\[([^\:]*?)(?=\]\]|\||#pl)')
+    alltitles = set()
+    i = 1
+    for a in lista_stron2:            
+        alltitles.add(a.title)
+        if 'Wikipedysta:AlkamidBot' not in a.title:
+            try: h = Haslo(a.title, a.text)
+            except sectionsNotFound:
+                pass
+            except WrongHeader:
+                pass
+            else:
+                if h.type == 3:    
+                    to_search = ''
+                    for sekcja in h.listLangs:
+                        sekcja.pola()
+                        if sekcja.type not in (2,4,5,7,11):
+                            if sekcja.lang == 'polski' or sekcja.lang == u'termin obcy w języku polskim':
+                                to_search = to_search + sekcja.dodatki.text + sekcja.znaczeniaWhole.text + sekcja.przyklady.text + sekcja.skladnia.text + sekcja.kolokacje.text + sekcja.synonimy.text + sekcja.antonimy.text + sekcja.pokrewne.text + sekcja.frazeologia.text + sekcja.etymologia.text + sekcja.uwagi.text
+                            else:
+                                s_example_translation = None
+                                s_colloc_translation = None
+                                
+                                if u'→' in sekcja.przyklady.text:
+                                    s_example_translation = re.findall(re_example_translation, sekcja.przyklady.text)
+                                if s_example_translation:
+                                    for a in s_example_translation:
+                                        to_search += a
+                                if u'→' in sekcja.kolokacje.text:
+                                    s_colloc_translation = re.findall(re_colloc_translation, sekcja.kolokacje.text)
+                                if s_colloc_translation:
+                                    for a in s_colloc_translation:
+                                        to_search += a
+                                        
+                                to_search = to_search + sekcja.znaczeniaWhole.text
+                    
+                    s_link = re.findall(re_link, to_search)     
+                    for link in s_link:
+                        if '#' not in link: #if there is a hash in the link, it is not '#pl' (excluded in regex), therefore not a Polish link
+                            try: ranking[link]
+                            except KeyError:
+                                ranking[link] = 1
+                            else:
+                                ranking[link] += 1
+               
+
+    dictlist = []
+    for key, value in ranking.iteritems():
+        temp = [key,value]
+        dictlist.append(temp)
+    
+    def sortkey(row):
+       return float(row[1])
+        
+    dictlist.sort(key=sortkey, reverse=True)
+    
+    htmllist = u'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"\n"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\n<html xmlns="http://www.w3.org/1999/xhtml\nxml:lang="pl">\n<head>\n<meta http-equiv="content-type" content="text/html; charset=UTF-8" />\n</head><body>'
+    
+    alltext = []
+    i = 1
+    for i in range(5):
+        alltext.append('')
+    for elem in dictlist:
+        if i>20000:
+            break
+        htmllist += u'\n%s=%d' % (elem[0], elem[1])
+        if i<10000:
+            alltext[i/2000] += u'\n[[%s]]=%d' % (elem[0], elem[1])
+        i+= 1
+       
+    dictlist = [s for s in dictlist if s[0] not in alltitles]
+    
+    nonExistingText = ''
+    for elem in dictlist:
+        nonExistingText += u'\n%s=%d' % (elem[0], elem[1])
+        
+    nonExistingText = nonExistingText.strip()
+     
+    for num, elem in enumerate(alltext):
+        elem = elem.strip()
+        outputPage = wikipedia.Page(site, u'Indeks:Polski - Najpopularniejsze słowa %d-%d' % (num*2000+1, (num+1)*2000))
+        elem = u'Lista frekwencyjna języka polskiego na podstawie odnośników na stronach Wikisłownika.\n\n{{język linków|polski}}\n' + elem + u'\n[[Kategoria:Polski (słowniki tematyczne)]]\n[[Kategoria:Listy frekwencyjne|polski]]'
+        outputPage.put(elem, comment='aktualizacja')
+    
+    htmllist += u'</body></html>'
+    file = open('/home/alkamid/public_html/frequencyListPL.html', 'w')
+    file.write(htmllist.encode( "utf-8" ))
+    file.close
+    
+    file = open('output/frequencyListPL.txt', 'w')
+    file.write(nonExistingText.encode( "utf-8" ))
+    file.close
