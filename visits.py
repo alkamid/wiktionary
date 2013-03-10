@@ -92,6 +92,9 @@ def main():
 					try: a[1] = a[1].decode('string-escape').decode('utf-8')
 					except UnicodeDecodeError:
 						a[1] = a[1].decode('string-escape').decode('iso-8859-2')
+					except ValueError:
+						#this is to ignore ValueError: Trailing \ in string
+						continue
 	
 					
 					#if the page is not in the dictionary, add it with the initial count; if it is in dictionary, sum the visits
