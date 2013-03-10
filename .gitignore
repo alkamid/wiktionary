@@ -1,0 +1,13 @@
+# Python class #
+###################
+*.pyc
+
+# Directories #
+/importsjp/
+/inne/
+/input/
+/log/
+/output/
+/src/
+/szablony/
+/wikt-listy/

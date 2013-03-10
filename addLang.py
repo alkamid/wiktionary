@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+'''This script adds necessary pages/templates for a new language - what takes a human a few minutes, it does automatically'''
+
 import wikipedia
 import pagegenerators
 import re
@@ -12,17 +14,24 @@ import time
 def main():
 	site = wikipedia.getSite()
 	
-	shortName = u'akan'
-	shortOnly = 0
-	kod = u'ak'
-	jakie = u'akan'
-	zjezyka = u'akan'
-	etymSkr = u'ak'
+	'''Start input - remember to change the variables below!'''
+	
+	shortName = u'akan' #short language name, i.e. without "język"
+	shortOnly = 0 #some languages are referred to by their name only, e.g. "esperanto" (not "esperanto language") - in that case, set shortOnly to 1
+	kod = u'ak' #wikimedia or ISO code
+	jakie = u'akan' #adjective: polski -> polskie, esperanto -> esperanckie, volapuk -> volapuk
+	zjezyka = u'akan' #"z języka polskiego", "z esperanto", "z języka akan"
+	etymSkr = u'ak' #abbreviation to use in {{etym}} template, chosen arbitrarily
+	
+	'''End input'''
+	
+	
 	if shortOnly:
 		longName = shortName
 	else:
 		longName = u'język %s' % shortName
 		
+	#some templates/pages use "Język xxx", others use "język xxx"
 	longNameCapital = longName[0].upper() + longName[1:]
 	
 	#kolejne czynności z http://pl.wiktionary.org/wiki/Wikis%C5%82ownik:Struktura_j%C4%99zyka_w_Wikis%C5%82owniku
