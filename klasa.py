@@ -932,7 +932,7 @@ def writeRCLimit(name, limit=666):
 def readRCLimit(name):
 	file = open(u'%s/wikt/moje/rclimits/%s.txt' % (os.environ['HOME'], name), 'r')
 	data = file.readlines()
-	return data[0]
+	return data[0].strip()
 	file.close
 
 def checkForNewDumps(lastUpdate):
