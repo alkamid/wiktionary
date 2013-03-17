@@ -5,6 +5,7 @@
 is basically to sum data from 24 files, sort them in decreasing order and put on pl.wikt'''
 import codecs
 import os
+import glob #need this to remove files
 import subprocess
 import wikipedia
 import urllib
@@ -135,6 +136,12 @@ def main():
 	file.close
 	
 	statSite.put(text, comment = 'aktualizacja', botflag=False)
+	
+	#cleanup
+	os.chdir('/mnt/user-store/alkamid-tmp/stats/')
+	toRemove= glob.glob('pagecounts*.gz')
+	for file in toRemove:
+		os.remove(file)
 
 if __name__ == '__main__':
     try:
