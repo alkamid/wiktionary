@@ -712,7 +712,7 @@ def data_stat():
 		stat.put(final, comment=u'zmiana daty')
 
 
-def main(oldDate, newDate):
+def statystyka(oldDate, newDate):
 	global offline_mode
 	offline_mode = 0
 	global filename
@@ -737,11 +737,3 @@ def main(oldDate, newDate):
 	data_stat()
 	
 	writeRCLimit(u'statystyka', data) #save the date - will be used as the last update date in the next run
-	
-	
-if __name__ == '__main__':
-    try:
-        main()
-    finally:
-        wikipedia.stopme()
-
