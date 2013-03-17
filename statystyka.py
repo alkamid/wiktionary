@@ -712,15 +712,15 @@ def data_stat():
 		stat.put(final, comment=u'zmiana daty')
 
 
-def main():
+def main(oldDate, newDate):
 	global offline_mode
 	offline_mode = 0
 	global filename
 	filename = "output/statystykanowa.txt"
 	global data
-	data = '20130228'
+	data = newDate
 	global data_old
-	data_old = '20130215'
+	data_old = oldDate
 	global data_slownie
 	data_slownie = data[6] + data[7] + u'.' + data[4] + data[5] + u'.' + data[0] + data[1] + data[2] + data[3]
 	global data_old_slownie
@@ -735,6 +735,8 @@ def main():
 	dlaczego(new)
 	#licznik()
 	data_stat()
+	
+	writeRCLimit(u'statystyka', data) #save the date - will be used as the last update date in the next run
 	
 	
 if __name__ == '__main__':

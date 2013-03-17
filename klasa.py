@@ -935,9 +935,41 @@ def readRCLimit(name):
 	return data[0]
 	file.close
 
+def checkForNewDumps(lastUpdate):
+    #lastUpdate is a date of the previous dump
+    #returns new dump's date if found, if not returns 1
+    
+    dumpFolder = '/mnt/user-store/dumps/store/plwiktionary/'
+    
+    year = int(lastUpdate[:4])
+    month = int(lastUpdate[4:6])
+    day = int(lastUpdate[6:8])
+    
+    lastDumpDate = datetime.datetime(year,month,day)
+    now = datetime.datetime.now() #there is no point searching in the future, so limit the loops to today's date
+    
+    checked = lastDumpDate + datetime.timedelta(days=1)
+    i=0
+    while checked <= now:
+        tempDate = checked.strftime('%Y%m%d')
+        filename = dumpFolder + 'plwiktionary-%s-pages-articles.xml.bz2' % tempDate
+
+        checked = checked + datetime.timedelta(days=1) #checking day by day
+
+        try: open(filename)
+        except IOError: #check next day if there is no file with current date
+            continue
+        else:
+            return tempDate
+    return 1            
+
 def getListFromXML(data, findLatest=False):
-	#searches for the newest file in dumps folder
-	if findLatest:
+	#converts a wikimedia dump to a python list
+    #if findLatest True, it will search for the newest dump in dumps folder
+
+    dumpFolder = '/mnt/user-store/dumps/store/plwiktionary/'
+    
+    if findLatest:
 		now = datetime.datetime.now()
 		today_year = now.year
 
@@ -961,8 +993,7 @@ def getListFromXML(data, findLatest=False):
 						date += u'0%d' % day
 					else:
 						date += u'%d' % day
-					#filename = '/mnt/user-store/alkamid-tmp/plwiktionary-%s-pages-articles.xml.bz2' % date
-					filename = '/mnt/user-store/dumps/store/plwiktionary/plwiktionary-%s-pages-articles.xml.bz2' % date
+					filename = dumpFolder + 'plwiktionary-%s-pages-articles.xml.bz2' % date
 					try: open(filename)
 					except IOError:
 						continue
@@ -971,10 +1002,9 @@ def getListFromXML(data, findLatest=False):
 		if found:
 			lista_stron1 = xmlreader.XmlDump(filename)
 		else:
-			raise DumpNotFound
-	else:		
-		#lista_stron1 = xmlreader.XmlDump('/mnt/user-store/alkamid-tmp/plwiktionary-%s-pages-articles.xml.bz2' % data)
-		lista_stron1 = xmlreader.XmlDump('/mnt/user-store/dumps/store/plwiktionary/plwiktionary-%s-pages-articles.xml.bz2' % data)
+			raise DumpNotFound		
+    else:
+        lista_stron1 = xmlreader.XmlDump(dumpFolder + 'plwiktionary-%s-pages-articles.xml.bz2' % data)
 	
 	lista_stron2 = xmlreader.XmlDump.parse(lista_stron1)
 	return lista_stron2
