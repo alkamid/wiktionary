@@ -20,14 +20,14 @@ def main():
 		return 0 # new dump not found, do nothing
 	else:
 		print 'Found new dump (%s), processing... (old dump was %s)' % (newDump, lastDump)
-		'''brakCzesciMowy.brakCzesciMowy(newDump)
+		brakCzesciMowy.brakCzesciMowy(newDump)
 		rzeczownik_rodzaj.rzeczownikRodzaj(newDump)
 		rzeczownik_rodzaj_niepotrzebny.rzeczownikRodzajNiepotrzebny(newDump)
 		fraz.fraz(newDump)
 		czescimowy.czescimowy(newDump)
 		czescimowyReplace.czescimowyReplace()
 		frequencyList.frequencyList(newDump)
-		missingLangs.missingLangs(newDump)'''
+		missingLangs.missingLangs(newDump)
 		statystyka(lastDump, newDump)
 	
 if __name__ == '__main__':
