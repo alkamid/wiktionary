@@ -958,7 +958,7 @@ def checkForNewDumps(lastUpdate):
 
         try: open(filename)
         except IOError: #check next day if there is no file with current date
-            continue
+            pass
         else:
             return tempDate
     return 1            
@@ -985,7 +985,7 @@ def getListFromXML(data, findLatest=False):
         	
         	try: open(filename)
         	except IOError:
-        		continue
+        		pass
         	else:
         		found = 1
 		
