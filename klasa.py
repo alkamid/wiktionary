@@ -949,7 +949,7 @@ def checkForNewDumps(lastUpdate):
     now = datetime.datetime.now() #there is no point searching in the future, so limit the loops to today's date
     
     checked = lastDumpDate + datetime.timedelta(days=1)
-    i=0
+
     while checked <= now:
         tempDate = checked.strftime('%Y%m%d')
         filename = dumpFolder + 'plwiktionary-%s-pages-articles.xml.bz2' % tempDate
@@ -972,33 +972,23 @@ def getListFromXML(data, findLatest=False):
     if findLatest:
 		now = datetime.datetime.now()
 		today_year = now.year
-
+		checked = now
 		found = 0
 		#check the current and the previous year (useful in January)
-		for year in (today_year, today_year-1):
-			if found:
-				break	
-			for month in range(12, 0, -1):
-				if found:
-					break
-				for day in range(31,0,-1):
-					if found:
-						break
-					date = u'%s' % year
-					if month <10:
-						date += u'0%d' % month
-					else:
-						date += u'%d' % month
-					if day <10:
-						date += u'0%d' % day
-					else:
-						date += u'%d' % day
-					filename = dumpFolder + 'plwiktionary-%s-pages-articles.xml.bz2' % date
-					try: open(filename)
-					except IOError:
-						continue
-					else:
-						found = 1
+		while checked > now - datetime.timedelta(days=90):
+			if found == 1:
+				break
+			tempDate = checked.strftime('%Y%m%d')
+        	filename = dumpFolder + 'plwiktionary-%s-pages-articles.xml.bz2' % tempDate
+
+        	checked = checked - datetime.timedelta(days=1) #checking day by day
+        	
+        	try: open(filename)
+        	except IOError:
+        		continue
+        	else:
+        		found = 1
+		
 		if found:
 			lista_stron1 = xmlreader.XmlDump(filename)
 		else:
