@@ -166,6 +166,7 @@ def CountLength(input):
 	usun.append(u'{{importIDO}}')
 	usun.append(u'{{importEOV}}')
 	usun.append(u'{{importIT}}')
+	usun.append(u'{{importEnWikt}}')
 	usun.append(u'{{niesprawdzona odmiana}}')
 	usun.append(u'({{termin obcy w języku polskim}})')
 	usun.append(u'{{Rzeczownik języka polskiego')
@@ -488,8 +489,8 @@ def stat_wikitable(old, new):
 				text11 = text11 + u'\n|%s=%.0f' % (new[a].shortName, new[a].countAudio)
 				text12 = text12 + u'\n|%s=%.1f' % (new[a].shortName, new[a].percGraph)
 				text13 = text13 + u'\n|%s=%.1f' % (new[a].shortName, new[a].percAudio)
-				text9 = text9 + u'\n|%s=%.0f' % (new[a].shortName, new[a].countMeans)
-				text16 = text16 + u'\n|%s=%.4f' % (new[a].shortName, new[a].avgMean)
+				text9 = text9 + u'\n|%s=%.0f' % (new[a].shortName.lower(), new[a].countMeans)
+				text16 = text16 + u'\n|%s=%.4f' % (new[a].shortName.lower(), new[a].avgMean)
 		
 	
 	all = countAll(new)
@@ -506,7 +507,7 @@ def stat_wikitable(old, new):
 	text_dlugosc_template = text14 + u'\n|=%.0f|data=%s\n|#default=bd.\n}}' % (all[1]/1000, data_slownie)
 	text_srednia_template = text15 + u'\n|=|data=%s\n|#default=bd.\n}}' % (data_slownie)
 	text_znaczenia_srednia_template = text16 + u'\n|=%.4f\n|data=%s\n|#default=bd.\n}}' % (all[8], data_slownie)
-			
+	
 	site = wikipedia.getSite()
 	page_dlugosc = wikipedia.Page(site, u'Wikipedysta:Alkamid/statystyka/długość')
 	page_srednia = wikipedia.Page(site, u'Wikipedysta:Alkamid/statystyka/długość_średnia')
@@ -734,6 +735,6 @@ def statystyka(oldDate, newDate):
 	stat_wikitable(old, new)
 	dlaczego(new)
 	#licznik()
+	writeRCLimit(u'statystyka', data) #save the date - will be used as the last update date in the next run
 	data_stat()
 	
-	writeRCLimit(u'statystyka', data) #save the date - will be used as the last update date in the next run
