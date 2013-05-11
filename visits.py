@@ -56,7 +56,7 @@ def main():
 		else:
 			hour = '%d' % i
 		for j in range(9):
-			folder = '/mnt/user-store/alkamid-tmp/stats/'
+			folder = '/mnt/user-store/alkamid/stats/'
 			filename = 'pagecounts-%s-%s000%d.gz' % (date_string, hour, j)
 			try: inp = gzip.open(folder + filename)
 			except IOError:
@@ -138,7 +138,7 @@ def main():
 	statSite.put(text, comment = 'aktualizacja', botflag=False)
 	
 	#cleanup
-	os.chdir('/mnt/user-store/alkamid-tmp/stats/')
+	os.chdir('/mnt/user-store/alkamid/stats/')
 	toRemove= glob.glob('pagecounts*.gz')
 	for file in toRemove:
 		os.remove(file)

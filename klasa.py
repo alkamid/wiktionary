@@ -742,6 +742,8 @@ def flagLastRev(site, revid, comment=u''):
 	
 	query.GetData(params, site)
 
+
+#TODO: pobierać z WS:Kody języków
 def getAllLanguages():
 	site = wikipedia.getSite('pl', 'wiktionary')
 	page = wikipedia.Page(site, u'Mediawiki:common.js')
@@ -752,7 +754,8 @@ def getAllLanguages():
 	
 	s_langs = re.search(re_langs, page.get())
 
-	shortOnly = [u'interlingua', u'jidysz', u'ido', u'esperanto', u'esperanto (morfem)', u'slovio', u'tetum', u'hindi', u'użycie międzynarodowe', u'znak chiński', u'volapük', u'inuktitut', u'tok pisin', u'ladino', u'sanskryt', u'tupinambá', u'lojban', u'novial', u'papiamento', u'ewe', u'lingala', u'pitjantjatjara', u'dżuhuri', u'sranan tongo', u'termin obcy w języku polskim', u'quenya', u'brithenig', u'Lingua Franca Nova', u'wenedyk', u'romániço']
+	shortOnly = [u'interlingua', u'jidysz', u'ido', u'esperanto', u'esperanto (morfem)', u'slovio', u'tetum', u'hindi', u'użycie międzynarodowe', u'znak chiński', u'volapük', u'inuktitut', u'tok pisin', u'ladino', u'sanskryt', u'tupinambá', u'lojban', u'novial', u'papiamento', u'ewe', u'lingala', u'pitjantjatjara', u'dżuhuri', u'sranan tongo', u'termin obcy w języku polskim', u'quenya', u'brithenig', u'Lingua Franca Nova', u'wenedyk', u'romániço', u'jèrriais']
+	capitalFirst = [u'Lingua Franca Nova', u'!Xóõ']
 	if s_langs:
 		tempLangTable = re.findall(re_oneLang, s_langs.group(1))
 		for a in tempLangTable:
@@ -890,6 +893,15 @@ class SectionFr():
 			self.genre = u'mf?'
 		else:
 			self.genre = u'unknown'
+
+def pageCounter(language):
+	#returns number of entries for a language
+	params = {
+			'action'	:'expandtemplates',
+			'text'		:'{{PAGESINCAT:%s (indeks)|R}}' % language,
+			}
+	qr = GetData(params)
+	print qr['expandtemplates']['*']
 			
 def RecentChanges(limit):
 	limitString = limit
@@ -968,36 +980,37 @@ def getListFromXML(data, findLatest=False):
     #if findLatest True, it will search for the newest dump in dumps folder
 
     dumpFolder = '/mnt/user-store/dumps/store/plwiktionary/'
+    filename = dumpFolder + 'plwiktionary-%s-pages-articles.xml.bz2' % data
     
     if findLatest:
 		now = datetime.datetime.now()
 		today_year = now.year
 		checked = now
 		found = 0
-		#check the current and the previous year (useful in January)
-		while checked > now - datetime.timedelta(days=90):
+
+		while checked > (now - datetime.timedelta(days=90)):
 			if found == 1:
 				break
+			
 			tempDate = checked.strftime('%Y%m%d')
-        	filename = dumpFolder + 'plwiktionary-%s-pages-articles.xml.bz2' % tempDate
-
-        	checked = checked - datetime.timedelta(days=1) #checking day by day
-        	
-        	try: open(filename)
-        	except IOError:
-        		pass
-        	else:
-        		found = 1
+			tempFilename = dumpFolder + 'plwiktionary-%s-pages-articles.xml.bz2' % tempDate
+			
+			checked = checked - datetime.timedelta(days=1) #checking day by day
+			
+			try: open(tempFilename)
+			except IOError:
+				pass
+			else:
+				found = 1
 		
 		if found:
-			lista_stron1 = xmlreader.XmlDump(filename)
+			filename = tempFilename
 		else:
-			raise DumpNotFound		
-    else:
-        lista_stron1 = xmlreader.XmlDump(dumpFolder + 'plwiktionary-%s-pages-articles.xml.bz2' % data)
+			raise DumpNotFound
 	
-	lista_stron2 = xmlreader.XmlDump.parse(lista_stron1)
-	return lista_stron2
+
+    lista_stron = xmlreader.XmlDump.parse(xmlreader.XmlDump(filename))
+    return list(lista_stron)
 
 def log(text, filename='log_all', test_mode=0):
     if test_mode == 1:

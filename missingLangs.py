@@ -13,7 +13,7 @@ from klasa import *
 def missingLangs(data):
 
 	data_slownie = data[6] + data[7] + u'.' + data[4] + data[5] + u'.' + data[0] + data[1] + data[2] + data[3]
-	lista_stron = list(getListFromXML(data))
+	lista_stron = getListFromXML(data)
 	wikt = wikipedia.Site('pl', 'wiktionary')
 	foundList = set()
 	notFound = set()
@@ -38,7 +38,9 @@ def missingLangs(data):
 				
 	existing = set(a.shortName for a in LangsMediaWiki)
 	diff = foundList - existing
-
+	
+	missingText = u''
+	
 	for a in lista_stron:
 		try: word = Haslo(a.title, a.text)
 		except notFromMainNamespace:
@@ -52,4 +54,8 @@ def missingLangs(data):
 				for lang in word.listLangs:
 					if lang.type != 2:
 						if lang.lang in diff:
-							print u'%s - %s' % (lang.lang, word.title)
+							missingText = missingText + u'%s - %s\n' % (lang.lang, word.title)
+							
+	file = open(u'%s/wikt/moje/output/missingLangs.txt' % (os.environ['HOME']), 'w')
+	file.write(missingText.encode("utf-8"))
+	file.close()
