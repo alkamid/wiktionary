@@ -11,6 +11,7 @@ import datetime
 import os
 import xmlreader
 import bz2
+import sys
 from query import GetData
 from os import environ
 
@@ -1072,3 +1073,36 @@ class HasloFrXML():
 			self.list_lang.append(SectionFr(b, self.title))	
 		else:
 			self.type = 4
+
+#this is taken from http://code.activestate.com/recipes/578163-retry-loop/ - useful for some of the scripts that fetch things from websites - we don't want intermittent errors to crash the script
+class RetryError(Exception):
+    pass
+
+def retryloop(attempts, timeout):
+    starttime = time.time()
+    success = set()
+    for i in range(attempts): 
+        success.add(True)
+        yield success.clear
+        if success:
+            return
+        if time.time() > starttime + timeout:
+            break
+    raise RetryError
+
+""" 
+Usage:
+
+for retry in retryloop(10, timeout=30):
+    try:
+        something
+    except SomeException:
+        retry()
+
+for retry in retryloop(10, timeout=30):
+    something
+    if somecondition:
+        retry()
+
+"""
+#retry feature - end
