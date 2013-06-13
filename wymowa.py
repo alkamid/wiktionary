@@ -98,34 +98,44 @@ def main():
 
 	for page in lista_main:
 
-		try:
-			wikipedia.ImagePage(site, u'Pl-%s.ogg' % page.title()).fileIsOnCommons()
-		except wikipedia.NoPage:
+		for retry in retryloop(5, timeout=30):
 			try:
-				wikipedia.ImagePage(site, u'Pl-%s.OGG' % page.title()).fileIsOnCommons()
+				wikipedia.ImagePage(site, u'Pl-%s.ogg' % page.title()).fileIsOnCommons()
 			except wikipedia.NoPage:
-				if page.title() in lista_gwary1:
-					lista_gwary2.append(page.title())
-				else:
-					if page.title() in lista_przest:
-						lista_przest2.append(page.title())
-					else:
-						if page.title() in lista_obce1:
-							lista_obce2.append(page.title())
+				for retry in retryloop(5,timeout=30):
+					try:
+						wikipedia.ImagePage(site, u'Pl-%s.OGG' % page.title()).fileIsOnCommons()
+					except wikipedia.NoPage:
+						if page.title() in lista_gwary1:
+							lista_gwary2.append(page.title())
 						else:
-							try: s_ipa = re.search(re_ipa, page.get())
-							except urllib2.HTTPError:
-								pass
+							if page.title() in lista_przest:
+								lista_przest2.append(page.title())
 							else:
-								if s_ipa == None:
-									lista_ipa.append(page.title())
+								if page.title() in lista_obce1:
+									lista_obce2.append(page.title())
 								else:
-									lista.append(page.title())
-				count_brak = count_brak + 1
+									try: s_ipa = re.search(re_ipa, page.get())
+									except urllib2.HTTPError:
+										pass
+									else:
+										if s_ipa == None:
+											lista_ipa.append(page.title())
+										else:
+											lista.append(page.title())
+						count_brak = count_brak + 1
+					except urllib2.HTTPError:
+						retry()
+					except RuntimeError:
+						retry()
+					else:
+						count_jest = count_jest + 1
+			except RuntimeError:
+				retry()
+			except urllib2.HTTPError:
+				retry()
 			else:
 				count_jest = count_jest + 1
-		else:
-			count_jest = count_jest + 1
 		count_all = count_all + 1
 
 			
