@@ -10,8 +10,11 @@ import pagegenerators
 import re
 import math
 import datetime
+import logging
 
 def main():
+	
+	logging.basicConfig()
 	
 	wiki = wikipedia.getSite('pl', 'wikipedia')
 	wikt = wikipedia.getSite('pl', 'wiktionary')

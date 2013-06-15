@@ -112,7 +112,7 @@ def main():
 							print u'The number of counts is not an integer! The entire line reads: "%s"' % line
 		except IOError:
 			pass
-		print i
+		#print i - just for debugging, shows which hour we are in
 		inp.close
 	
 	ranking = sorted(rankingDict.items(), key=itemgetter(1), reverse=True)
