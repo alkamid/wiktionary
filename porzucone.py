@@ -51,7 +51,7 @@ def main():
 				if strona in pages:
 					pages.remove(strona)
 				if not pages:
-					dodaj = u'\n<br /><a href=http://pl.wiktionary.org/wiki/%s>%s</a>' % (strona.title(), strona.title())
+					dodaj = u'\n<br /><a href="http://pl.wiktionary.org/wiki/%s">%s</a>' % (strona.title(), strona.title())
 					final_lista = final_lista + dodaj
 					count_all = count_all + 1
 					
