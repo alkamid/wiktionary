@@ -16,12 +16,12 @@ def main():
 	
 	'''Start input - remember to change the variables below!'''
 	
-	shortName = u'marwari' #short language name, i.e. without "język"
+	shortName = u'sango' #short language name, i.e. without "język"
 	shortOnly = 0 #some languages are referred to by their name only, e.g. "esperanto" (not "esperanto language") - in that case, set shortOnly to 1
-	kod = u'mwr' #wikimedia or ISO code
-	jakie = u'marwari' #adjective: polski -> polskie, esperanto -> esperanckie, volapuk -> volapuk
-	zjezyka = u'marwari' #"z języka polskiego", "z esperanto", "z języka akan"
-	etymSkr = u'marw' #abbreviation to use in {{etym}} template, chosen arbitrarily
+	kod = u'sg' #wikimedia or ISO code
+	jakie = u'sango' #adjective: polski -> polskie, esperanto -> esperanckie, volapuk -> volapuk
+	zjezyka = u'sango' #"z języka polskiego", "z esperanto", "z języka akan"
+	etymSkr = u'sang' #abbreviation to use in {{etym}} template, chosen arbitrarily
 	
 	'''End input'''
 	
@@ -227,9 +227,9 @@ def main():
 		if s_before and s_after:
 			textPage8 = s_before.group(1)
 			if shortOnly:
-				textPage8 += u'{{Wikisłownik:STAT/ramka| %s | w=x | }}\n' % shortName
+				textPage8 += u'|{{Wikisłownik:STAT/ramka| %s | w=x | }}\n' % shortName
 			else:
-				textPage8 += u'{{Wikisłownik:STAT/ramka| %s | }}\n' % shortName
+				textPage8 += u'|{{Wikisłownik:STAT/ramka| %s | }}\n' % shortName
 			textPage8 += s_after.group(1)
 			page8.put(textPage8, comment=u"Dodanie języka %s" % zjezyka)
 		else:
