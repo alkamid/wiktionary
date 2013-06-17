@@ -16,12 +16,12 @@ def main():
 	
 	'''Start input - remember to change the variables below!'''
 	
-	shortName = u'aztecki' #short language name, i.e. without "język"
+	shortName = u'marwari' #short language name, i.e. without "język"
 	shortOnly = 0 #some languages are referred to by their name only, e.g. "esperanto" (not "esperanto language") - in that case, set shortOnly to 1
-	kod = u'nci' #wikimedia or ISO code
-	jakie = u'azteckie' #adjective: polski -> polskie, esperanto -> esperanckie, volapuk -> volapuk
-	zjezyka = u'azteckiego' #"z języka polskiego", "z esperanto", "z języka akan"
-	etymSkr = u'azt' #abbreviation to use in {{etym}} template, chosen arbitrarily
+	kod = u'mwr' #wikimedia or ISO code
+	jakie = u'marwari' #adjective: polski -> polskie, esperanto -> esperanckie, volapuk -> volapuk
+	zjezyka = u'marwari' #"z języka polskiego", "z esperanto", "z języka akan"
+	etymSkr = u'marw' #abbreviation to use in {{etym}} template, chosen arbitrarily
 	
 	'''End input'''
 	
@@ -126,7 +126,7 @@ def main():
 	#7. skróty do sekcji
 	page7 = wikipedia.Page(site, u'Wikisłownik:Kody języków')
 	if u' %s\n' % shortName not in page7.get():
-		zaczepienie = u'|}\n\n{{Przypisy}}'
+		zaczepienie = u'|}\n\n== Linki zewnętrzne'
 		re_before = re.compile(ur'(.*?)%s' % re.escape(zaczepienie), re.DOTALL)
 		re_after = re.compile(ur'.*?(%s.*)' % re.escape(zaczepienie), re.DOTALL)
 		s_before = re.search(re_before, page7.get())
@@ -138,7 +138,7 @@ def main():
 			page7.put(textPage7, comment=u"Dodanie języka %s" % zjezyka)
 			#print textPage7
 		else:
-			print u'Nie dodano parametru do strony Wikisłownik:Kody języków!'
+			print u'\n----------------------------------------\nNie dodano parametru do strony Wikisłownik:Kody języków!\n--------------------\n'
 	else:
 		print u'Nazwa języka (%s) istnieje już na stronie Wikisłownik:Kody języków' % shortName
 	
@@ -219,7 +219,7 @@ def main():
 	
 	# new version (without the first column consisting of numbers)
 	if u' %s ' % shortName not in page8.get():
-		zaczepienie = u'|- class="sortbottom"\n| align=right | \'\'\'Razem:\'\'\'\n| align=right | <small>100%</small> '
+		zaczepienie = u'}}\n<tr class="sortbottom">\n<td/>\n<td align=right>\'\'\'Razem:\'\'\'</td>\n<td align=right><small>100%</small></td>'
 		re_before = re.compile(ur'(.*?)%s' % re.escape(zaczepienie), re.DOTALL)
 		re_after = re.compile(ur'.*?(%s.*)' % re.escape(zaczepienie), re.DOTALL)
 		s_before = re.search(re_before, page8.get())
@@ -227,9 +227,9 @@ def main():
 		if s_before and s_after:
 			textPage8 = s_before.group(1)
 			if shortOnly:
-				textPage8 += u'{{User:Joystick/statystyka/ramka| %s | w=x | }}\n' % shortName
+				textPage8 += u'{{Wikisłownik:STAT/ramka| %s | w=x | }}\n' % shortName
 			else:
-				textPage8 += u'{{User:Joystick/statystyka/ramka| %s | }}\n' % shortName
+				textPage8 += u'{{Wikisłownik:STAT/ramka| %s | }}\n' % shortName
 			textPage8 += s_after.group(1)
 			page8.put(textPage8, comment=u"Dodanie języka %s" % zjezyka)
 		else:
