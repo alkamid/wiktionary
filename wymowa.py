@@ -17,6 +17,7 @@ import wikipedia
 import pagegenerators
 import re
 import datetime
+from random import shuffle #for shuffling lists (recording words alphabetically may be tiring)
 from klasa import *
 
 def main():
@@ -76,6 +77,7 @@ def main():
 	
 	final = u''
 	r = u''
+	with_r = []
 	
 	lista = []
 	lista_gwary1 = []
@@ -216,11 +218,17 @@ def main():
 	for a in lista_male:
 		if re.search(re_r, a) == None:
 			r = r + u'\n[[%s]]' % a
+		else:
+			with_r.append(u'%s' % a)
 	
 	#print r		
 	output_r.put(r, comment = u'Aktualizacja listy słów bez litery r')
 	
-	print datetime.datetime.now()
+	shuffle(with_r)
+	file = open(u'%s/wikt/moje/output/pron_with_r.txt' % (os.environ['HOME']), 'w')	
+	for item in with_r:
+		file.write(item.encode('utf-8') + '\n')
+	file.close()
 
 if __name__ == '__main__':
     try:
