@@ -17,6 +17,7 @@ import wikipedia
 import pagegenerators
 import re
 import datetime
+import resource
 from random import shuffle #for shuffling lists (recording words alphabetically may be tiring)
 from klasa import *
 
@@ -151,8 +152,8 @@ def main():
 		if a in lista:
 			outputPopular += u'\n[[%s]]' % a
 		
-	data = datetime.datetime.now() + datetime.timedelta(hours=1)
-	data1 = data.strftime("Ostatnia aktualizacja: %Y-%m-%d, %H:%M:%S")
+	date = datetime.datetime.now() + datetime.timedelta(hours=2) #TODO summer time/winter time
+	data1 = date.strftime("Ostatnia aktualizacja: %Y-%m-%d, %H:%M:%S")
 	
 	final = final + data1
 	final += u'\n= najczęściej odwiedzane ='
@@ -225,9 +226,14 @@ def main():
 	output_r.put(r, comment = u'Aktualizacja listy słów bez litery r')
 	
 	shuffle(with_r)
-	file = open(u'%s/wikt/moje/output/pron_with_r.txt' % (os.environ['HOME']), 'w')	
+	file = open(u'%s/public_html/pron_with_r.html' % (os.environ['HOME']), 'w')	
+	file.write(u'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"\n"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\n<html xmlns="http://www.w3.org/1999/xhtml\nxml:lang="pl">\n<head>\n<meta http-equiv="content-type" content="text/html; charset=UTF-8" />\n</head><body>')
+
+	file.write('<br />' + data1.encode('utf-8') + '\n')
 	for item in with_r:
-		file.write(item.encode('utf-8') + '\n')
+		file.write('<br />' + item.encode('utf-8') + '\n')
+
+	file.write(u'</body></html>')
 	file.close()
 
 if __name__ == '__main__':
