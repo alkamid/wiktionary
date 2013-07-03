@@ -195,7 +195,11 @@ class Sekcja():
 	regex['pola-skladnia'] = re.compile(u'{{składnia}}(.*?)\n{{kolokacje}}', re.DOTALL)
 	regex['pola-kolokacje'] = re.compile(u'{{kolokacje}}(.*?)\n{{synonimy}}', re.DOTALL)
 	regex['pola-synonimy'] = re.compile(u'{{synonimy}}(.*?)\n{{antonimy}}', re.DOTALL)
-	regex['pola-antonimy'] = re.compile(u'{{antonimy}}(.*?)\n{{pokrewne}}', re.DOTALL)
+	regex['pola-antonimy'] = re.compile(u'{{antonimy}}(.*?)\n({{hiperonimy}}|{{hiponimy}}|{{holonimy}}|{{meronimy}}|{{pokrewne}})', re.DOTALL)
+	regex['pola-hiperonimy'] = re.compile(u'{{hiperonimy}}(.*?)\n({{hiponimy}}|{{holonimy}}|{{meronimy}}|{{pokrewne}})', re.DOTALL)
+	regex['pola-hiponimy'] = re.compile(u'{{hiponimy}}(.*?)\n({{holonimy}}|{{meronimy}}|{{pokrewne}})', re.DOTALL)
+	regex['pola-holonimy'] = re.compile(u'{{holonimy}}(.*?)\n({{meronimy}}|{{pokrewne}})', re.DOTALL)
+	regex['pola-meronimy'] = re.compile(u'{{meronimy}}(.*?)\n{{pokrewne}}', re.DOTALL)
 	regex['pola-pokrewne'] = re.compile(u'{{pokrewne}}(.*?)\n{{frazeologia}}', re.DOTALL)
 	regex['pola-frazeologia'] = re.compile(u'{{frazeologia}}(.*?)\n{{etymologia}}', re.DOTALL)
 	regex['pola-etymologia'] = re.compile(u'{{etymologia}}(.*?)\n{{uwagi}}', re.DOTALL)
@@ -209,7 +213,11 @@ class Sekcja():
 	#japanese words
 	regex['pola-ja-kan-dodatki'] = re.compile(ur'(.*?)(\n|){{czytania}}', re.DOTALL)
 	regex['pola-ja-kan-czytania'] = re.compile(ur'{{czytania}}(.*?)\n{{wymowa}}', re.DOTALL)
-	regex['pola-ja-kan-antonimy'] = re.compile(ur'{{antonimy}}(.*?)\n{{złożenia}}', re.DOTALL)
+	regex['pola-ja-kan-antonimy'] = re.compile(ur'{{antonimy}}(.*?)\n\n({{hiperonimy}}|{{hiponimy}}|{{holonimy}}|{{meronimy}}|{{złożenia}})', re.DOTALL)
+	regex['pola-ja-kan-hiperonimy'] = re.compile(u'{{hiperonimy}}(.*?)\n({{hiponimy}}|{{holonimy}}|{{meronimy}}|{{złożenia}})', re.DOTALL)
+	regex['pola-ja-kan-hiponimy'] = re.compile(u'{{hiponimy}}(.*?)\n({{holonimy}}|{{meronimy}}|{{złożenia}})', re.DOTALL)
+	regex['pola-ja-kan-holonimy'] = re.compile(u'{{holonimy}}(.*?)\n({{meronimy}}|{{złożenia}})', re.DOTALL)
+	regex['pola-ja-kan-meronimy'] = re.compile(u'{{meronimy}}(.*?)\n{{złożenia}}', re.DOTALL)
 	regex['pola-ja-kan-zlozenia'] = re.compile(ur'{{złożenia}}(.*?)\n{{pokrewne}}', re.DOTALL)
 	
 	#korean kanji words
@@ -264,6 +272,10 @@ class Sekcja():
 				self.skladnia = Pole(u'')
 				self.kolokacje = Pole(u'')
 				self.synonimy = Pole(u'')
+				self.hiperonimy = Pole(u'')
+				self.hiponimy = Pole(u'')
+				self.holonimy = Pole(u'')
+				self.meronimy = Pole(u'')
 				self.antonimy = Pole(u'')
 				self.frazeologia = Pole(u'')
 				self.etymologia = Pole(u'')
@@ -333,7 +345,7 @@ class Sekcja():
 			self.znaczeniaWhole = Pole(znaczeniaWhole)
 		
 		if self.type == 9:
-			self.content = self.dodatki.text + u'\n{{wymowa}}' + self.wymowa.text + u'\n{{znaczenia}}' + self.znaczeniaWhole.text + u'\n{{odmiana}}' + self.odmiana.text + u'\n{{przykłady}}' + self.przyklady.text + u'\n{{składnia}}' + self.skladnia.text + u'\n{{kolokacje}}' + self.kolokacje.text + u'\n{{synonimy}}' + self.synonimy.text + u'\n{{antonimy}}' + self.antonimy.text + u'\n{{pokrewne}}' + self.pokrewne.text + u'\n{{frazeologia}}' + self.frazeologia.text + u'\n{{etymologia}}' + self.etymologia.text + u'\n{{uwagi}}' + self.uwagi.text + u'\n{{tłumaczenia}}' + self.tlumaczenia.text + u'\n{{źródła}}' + self.zrodla.text
+			self.content = self.dodatki.text + u'\n{{wymowa}}' + self.wymowa.text + u'\n{{znaczenia}}' + self.znaczeniaWhole.text + u'\n{{odmiana}}' + self.odmiana.text + u'\n{{przykłady}}' + self.przyklady.text + u'\n{{składnia}}' + self.skladnia.text + u'\n{{kolokacje}}' + self.kolokacje.text + u'\n{{synonimy}}' + self.synonimy.text + u'\n{{antonimy}}' + self.antonimy.text + u'\n{{hiperonimy}}' + self.hiperonimy.text + u'\n{{hiponimy}}' + self.hiponimy.text + u'\n{{holonimy}}' + self.holonimy.text + u'\n{{meronimy}}' + self.meronimy.text + u'\n{{pokrewne}}' + self.pokrewne.text + u'\n{{frazeologia}}' + self.frazeologia.text + u'\n{{etymologia}}' + self.etymologia.text + u'\n{{uwagi}}' + self.uwagi.text + u'\n{{tłumaczenia}}' + self.tlumaczenia.text + u'\n{{źródła}}' + self.zrodla.text
 		elif self.type == 8:
 			self.content = self.dodatki.text + u'\n{{wymowa}}' + self.wymowa.text + u'\n{{znaczenia}}' + self.znaczeniaWhole.text + u'\n{{przykłady}}' + self.przyklady.text + u'\n{{złożenia}}' + self.zlozenia.text + u'\n{{etymologia}}' + self.etymologia.text + u'\n{{uwagi}}' + self.uwagi.text + u'\n{{źródła}}' + self.zrodla.text
 		elif self.type == 6:
@@ -341,7 +353,7 @@ class Sekcja():
 		elif self.type == 4:
 			self.content = u'\n{{klucz}}' + self.klucz.text + u'\n{{kreski}}' + self.kreski.text + u'\n{{warianty' + self.warianty.merge(2) + u'}}' + u'\n{{kolejność}}' + self.kolejnosc.merge(2) + u'\n{{znaczenia}}' + self.znaczeniaWhole.text + u'\n{{etymologia}}' + self.etymologia.merge(2) + u'\n{{kody' + self.kody.merge(2) + u'}}' + u'\n{{słowniki' + self.slowniki.merge(2) + u'}}' + u'\n{{uwagi}}' + self.uwagi.text + u'\n{{źródła}}' + self.zrodla.text
 		elif self.type == 1:
-			self.content = self.dodatki.text + u'\n{{wymowa}}' + self.wymowa.text + u'\n{{znaczenia}}' + self.znaczeniaWhole.text + u'\n{{odmiana}}' + self.odmiana.text + u'\n{{przykłady}}' + self.przyklady.text + u'\n{{składnia}}' + self.skladnia.text + u'\n{{kolokacje}}' + self.kolokacje.text + u'\n{{synonimy}}' + self.synonimy.text + u'\n{{antonimy}}' + self.antonimy.text + u'\n{{pokrewne}}' + self.pokrewne.text + u'\n{{frazeologia}}' + self.frazeologia.text + u'\n{{etymologia}}' + self.etymologia.text + u'\n{{uwagi}}' + self.uwagi.text + u'\n{{źródła}}' + self.zrodla.text
+			self.content = self.dodatki.text + u'\n{{wymowa}}' + self.wymowa.text + u'\n{{znaczenia}}' + self.znaczeniaWhole.text + u'\n{{odmiana}}' + self.odmiana.text + u'\n{{przykłady}}' + self.przyklady.text + u'\n{{składnia}}' + self.skladnia.text + u'\n{{kolokacje}}' + self.kolokacje.text + u'\n{{synonimy}}' + self.synonimy.text + u'\n{{antonimy}}' + u'\n{{hiperonimy}}' + self.hiperonimy.text + u'\n{{hiponimy}}' + self.hiponimy.text + u'\n{{holonimy}}' + self.holonimy.text + u'\n{{meronimy}}' + self.meronimy.text + self.antonimy.text + u'\n{{pokrewne}}' + self.pokrewne.text + u'\n{{frazeologia}}' + self.frazeologia.text + u'\n{{etymologia}}' + self.etymologia.text + u'\n{{uwagi}}' + self.uwagi.text + u'\n{{źródła}}' + self.zrodla.text
 		elif self.type == 10:
 			self.content = self.dodatki.text + u'\n{{wymowa}}' + self.wymowa.text + u'\n{{znaczenia}}' + self.znaczeniaWhole.text + u'\n{{odmiana}}' + self.odmiana.text + u'\n{{przykłady}}' + self.przyklady.text + u'\n{{składnia}}' + self.skladnia.text + u'\n{{kolokacje}}' + self.kolokacje.text + u'\n{{synonimy}}' + self.synonimy.text + u'\n{{antonimy}}' + self.antonimy.text + u'\n{{pochodne}}' + self.pochodne.text + u'\n{{frazeologia}}' + self.frazeologia.text + u'\n{{etymologia}}' + self.etymologia.text + u'\n{{uwagi}}' + self.uwagi.text + u'\n{{źródła}}' + self.zrodla.text	
 		
@@ -390,6 +402,10 @@ class Sekcja():
 					s_kolokacje = re.search(self.regex['pola-kolokacje'], self.content)
 					s_synonimy = re.search(self.regex['pola-synonimy'], self.content)
 					s_antonimy = re.search(self.regex['pola-antonimy'], self.content)
+					s_hiperonimy = re.search(self.regex['pola-hiperonimy'], self.content)
+					s_hiponimy = re.search(self.regex['pola-hiponimy'], self.content)
+					s_holonimy = re.search(self.regex['pola-holonimy'], self.content)
+					s_meronimy = re.search(self.regex['pola-meronimy'], self.content)
 					s_pokrewne = re.search(self.regex['pola-pokrewne'], self.content)
 					s_frazeologia = re.search(self.regex['pola-frazeologia'], self.content)
 					s_etymologia = re.search(self.regex['pola-etymologia'], self.content)
@@ -410,6 +426,22 @@ class Sekcja():
 						self.kolokacje = Pole(s_kolokacje.group(1))
 						self.synonimy = Pole(s_synonimy.group(1))
 						self.antonimy = Pole(s_antonimy.group(1))
+						if s_hiperonimy:
+							self.hiperonimy = Pole(s_hiperonimy.group(1))
+						else:
+							self.hiperonimy = Pole(u'')
+						if s_hiponimy:
+							self.hiponimy = Pole(s_hiponimy.group(1))
+						else:
+							self.hiponimy = Pole(u'')
+						if s_holonimy:
+							self.holonimy = Pole(s_holonimy.group(1))
+						else:
+							self.holonimy = Pole(u'')
+						if s_meronimy:
+							self.meronimy = Pole(s_meronimy.group(1))
+						else:
+							self.meronimy = Pole(u'')
 						self.pokrewne = Pole(s_pokrewne.group(1))
 						self.frazeologia = Pole(s_frazeologia.group(1))
 						self.etymologia = Pole(s_etymologia.group(1))
@@ -427,12 +459,16 @@ class Sekcja():
 					s_kolokacje = re.search(self.regex['pola-kolokacje'], self.content)
 					s_synonimy = re.search(self.regex['pola-synonimy'], self.content)
 					s_antonimy = re.search(self.regex['pola-antonimy'], self.content)
+					s_hiperonimy = re.search(self.regex['pola-hiperonimy'], self.content)
+					s_hiponimy = re.search(self.regex['pola-hiponimy'], self.content)
+					s_holonimy = re.search(self.regex['pola-holonimy'], self.content)
+					s_meronimy = re.search(self.regex['pola-meronimy'], self.content)
 					s_pokrewne = re.search(self.regex['pola-pokrewne'], self.content)
 					s_frazeologia = re.search(self.regex['pola-frazeologia'], self.content)
 					s_etymologia = re.search(self.regex['pola-etymologia'], self.content)
 					s_uwagi = re.search(self.regex['pola-uwagi'], self.content)
 					
-					if s_wymowa and s_znaczeniaWhole and s_odmiana and s_przyklady and s_skladnia and s_kolokacje and s_synonimy and s_frazeologia and s_etymologia and s_uwagi:
+					if s_wymowa and s_znaczeniaWhole and s_odmiana and s_przyklady and s_skladnia and s_kolokacje and s_synonimy and s_antonimy and s_frazeologia and s_etymologia and s_uwagi:
 						self.wymowa = Pole(s_wymowa.group(1))
 						self.znaczeniaWhole = Pole(s_znaczeniaWhole.group(1))
 						self.odmiana = Pole(s_odmiana.group(1))
@@ -440,6 +476,23 @@ class Sekcja():
 						self.skladnia = Pole(s_skladnia.group(1))
 						self.kolokacje = Pole(s_kolokacje.group(1))
 						self.synonimy = Pole(s_synonimy.group(1))
+						self.antonimy = Pole(s_antonimy.group(1))
+						if s_hiperonimy:
+							self.hiperonimy = Pole(s_hiperonimy.group(1))
+						else:
+							self.hiperonimy = Pole(u'')
+						if s_hiponimy:
+							self.hiponimy = Pole(s_hiponimy.group(1))
+						else:
+							self.hiponimy = Pole(u'')
+						if s_holonimy:
+							self.holonimy = Pole(s_holonimy.group(1))
+						else:
+							self.holonimy = Pole(u'')
+						if s_meronimy:
+							self.meronimy = Pole(s_meronimy.group(1))
+						else:
+							self.meronimy = Pole(u'')
 						self.frazeologia = Pole(s_frazeologia.group(1))
 						self.etymologia = Pole(s_etymologia.group(1))
 						self.uwagi = Pole(s_uwagi.group(1))
@@ -474,6 +527,10 @@ class Sekcja():
 					
 					s_zlozenia_kanji = re.search(self.regex['pola-ja-kan-zlozenia'], self.content)
 					s_antonimy_kanji = re.search(self.regex['pola-ja-kan-antonimy'], self.content)
+					s_hiperonimy_kanji = re.search(self.regex['pola-ja-kan-hiperonimy'], self.content)
+					s_hiponimy_kanji = re.search(self.regex['pola-ja-kan-hiponimy'], self.content)
+					s_holonimy_kanji = re.search(self.regex['pola-ja-kan-holonimy'], self.content)
+					s_meronimy_kanji = re.search(self.regex['pola-ja-kan-meronimy'], self.content)
 					
 					s_wymowa = re.search(self.regex['pola-wymowa'], self.content)
 					s_znaczeniaWhole = re.search(self.regex['pola-znaczeniaWhole'], self.content)
@@ -496,6 +553,22 @@ class Sekcja():
 						self.kolokacje = Pole(s_kolokacje.group(1))
 						self.synonimy = Pole(s_synonimy.group(1))
 						self.antonimy = Pole(s_antonimy_kanji.group(1))
+						if s_hiperonimy_kanji:
+							self.hiperonimy = Pole(s_hiperonimy_kanji.group(1))
+						else:
+							self.hiperonimy = Pole(u'')
+						if s_hiponimy_kanji:
+							self.hiponimy = Pole(s_hiponimy_kanji.group(1))
+						else:
+							self.hiponimy = Pole(u'')
+						if s_holonimy_kanji:
+							self.holonimy = Pole(s_holonimy_kanji.group(1))
+						else:
+							self.holonimy = Pole(u'')
+						if s_meronimy_kanji:
+							self.meronimy = Pole(s_meronimy_kanji.group(1))
+						else:
+							self.meronimy = Pole(u'')
 						self.zlozenia = Pole(s_zlozenia_kanji.group(1))
 						self.pokrewne = Pole(s_pokrewne.group(1))
 						self.frazeologia = Pole(s_frazeologia.group(1))
@@ -532,6 +605,10 @@ class Sekcja():
 					s_kolokacje = re.search(self.regex['pola-kolokacje'], self.content)
 					s_synonimy = re.search(self.regex['pola-synonimy'], self.content)
 					s_antonimy = re.search(self.regex['pola-antonimy'], self.content)
+					s_hiperonimy = re.search(self.regex['pola-hiperonimy'], self.content)
+					s_hiponimy = re.search(self.regex['pola-hiponimy'], self.content)
+					s_holonimy = re.search(self.regex['pola-holonimy'], self.content)
+					s_meronimy = re.search(self.regex['pola-meronimy'], self.content)
 					s_pokrewne = re.search(self.regex['pola-pokrewne'], self.content)
 					s_frazeologia = re.search(self.regex['pola-frazeologia'], self.content)
 					s_etymologia = re.search(self.regex['pola-etymologia'], self.content)
@@ -546,6 +623,22 @@ class Sekcja():
 						self.kolokacje = Pole(s_kolokacje.group(1))
 						self.synonimy = Pole(s_synonimy.group(1))
 						self.antonimy = Pole(s_antonimy.group(1))
+						if s_hiperonimy:
+							self.hiperonimy = Pole(s_hiperonimy.group(1))
+						else:
+							self.hiperonimy = Pole(u'')
+						if s_hiponimy:
+							self.hiponimy = Pole(s_hiponimy.group(1))
+						else:
+							self.hiponimy = Pole(u'')
+						if s_holonimy:
+							self.holonimy = Pole(s_holonimy.group(1))
+						else:
+							self.holonimy = Pole(u'')
+						if s_meronimy:
+							self.meronimy = Pole(s_meronimy.group(1))
+						else:
+							self.meronimy = Pole(u'')
 						self.pokrewne = Pole(s_pokrewne.group(1))
 						self.frazeologia = Pole(s_frazeologia.group(1))
 						self.etymologia = Pole(s_etymologia.group(1))
@@ -756,7 +849,7 @@ def getAllLanguages():
 	s_langs = re.search(re_langs, page.get())
 
 	shortOnly = [u'interlingua', u'jidysz', u'ido', u'esperanto', u'esperanto (morfem)', u'slovio', u'tetum', u'hindi', u'użycie międzynarodowe', u'znak chiński', u'volapük', u'inuktitut', u'tok pisin', u'ladino', u'sanskryt', u'tupinambá', u'lojban', u'novial', u'papiamento', u'ewe', u'lingala', u'pitjantjatjara', u'dżuhuri', u'sranan tongo', u'termin obcy w języku polskim', u'quenya', u'brithenig', u'Lingua Franca Nova', u'wenedyk', u'romániço', u'jèrriais']
-	capitalFirst = [u'Lingua Franca Nova', u'!Xóõ']
+
 	if s_langs:
 		tempLangTable = re.findall(re_oneLang, s_langs.group(1))
 		for a in tempLangTable:
