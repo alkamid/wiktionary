@@ -5,16 +5,17 @@
 
 import os
 import codecs
-import wikipedia
+import pywikibot
 import datetime
 import re
+import config
 from klasa import *
 
 def main():
-	site = wikipedia.getSite()
-	page_list = wikipedia.Page(site, u'Portal:Francuski/potrzebne')
+	site = pywikibot.getSite()
+	page_list = pywikibot.Page(site, u'Portal:Francuski/potrzebne')
 	lista = []
-	inp = codecs.open('%s/wikt/moje/inne/lista_franc.txt' % os.environ['HOME'], encoding='utf-8')
+	inp = codecs.open('%sinne/lista_franc.txt' % config.path['scripts'], encoding='utf-8')
 	data = datetime.datetime.now().strftime("%Y-%m-%d")
 
 	re_stary = re.compile(u'(\*.*?\n)\[\[Kat', re.DOTALL)
@@ -33,6 +34,8 @@ def main():
 		if a[2] not in excluded:
 			try:
 				haslo = Haslo(a[2])
+			except urllib2.HTTPError:
+				pass
 			except sectionsNotFound:
 				pass
 			except WrongHeader:
@@ -71,4 +74,4 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()

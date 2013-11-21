@@ -4,20 +4,21 @@
 # szuka danego przez szukany_tekst wyrażenia w hasłach
 
 import codecs
-import catlib
-import wikipedia
-import pagegenerators
+from pywikibot import catlib
+import pywikibot
+from pywikibot import pagegenerators
 import re
-import xmlreader
+import config
+from pywikibot import xmlreader
 from os import environ
 from klasa import *
 
 def main():
     
-    site = wikipedia.getSite()
+    site = pywikibot.getSite()
     files = {}
     table = {}
-    file = codecs.open(u'%s/wikt/moje/output/frequencyListPL.txt' % (environ['HOME']), 'r', 'utf-8')
+    file = codecs.open(u'%soutput/frequencyListPL.txt' % (config.path['scripts']), 'r', 'utf-8')
         
     #table = u'<div class="plainlinks">\n{| border="0"\n! POLSKIE\n! NIEPOLSKIE\n|-\n| valign="top" |'
     table = u'\n{| class="wikitable sortable"\n! słowo !! linków '
@@ -36,13 +37,13 @@ def main():
         tmp = line.split('=')
 
         found = 0
-        page = wikipedia.Page(site, tmp[0].strip())
+        page = pywikibot.Page(site, tmp[0].strip())
         try: page.get()
-        except wikipedia.NoPage:
+        except pywikibot.NoPage:
             pass
-        except wikipedia.IsRedirectPage:
+        except pywikibot.IsRedirectPage:
             pass
-        except wikipedia.InvalidTitle:
+        except pywikibot.InvalidTitle:
             continue
         except TypeError:
             pass
@@ -60,13 +61,13 @@ def main():
     
     table += u'\n|-\n|}'        
 
-    file = open(u'%s/wikt/moje/output/frequencyProcessedTable.txt' % environ['HOME'], 'w')
+    file = open(u'%soutput/frequencyProcessedTable.txt' % config.path['scripts'], 'w')
     file.write(table.encode('utf-8'))
     file.close()
     if dluga:
-        outputPage = wikipedia.Page(site, u'Wikipedysta:AlkamidBot/listy/Najbardziej_potrzebne_-_długa_lista')
+        outputPage = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/listy/Najbardziej_potrzebne_-_długa_lista')
     else:
-        outputPage = wikipedia.Page(site, u'Wikipedysta:AlkamidBot/listy/Najbardziej_potrzebne')
+        outputPage = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/listy/Najbardziej_potrzebne')
     
     outputPage.put(table, comment='aktualizacja')
     
@@ -74,4 +75,4 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()
