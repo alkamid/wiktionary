@@ -7,7 +7,7 @@ import codecs
 import os
 import glob #need this to remove files
 import subprocess
-import wikipedia
+import pywikibot
 import urllib
 import urllib2
 import datetime
@@ -32,10 +32,8 @@ def checkSum(folder, filename, dateString):
 
 def main():
 	#get the default site - the bot is operating on pl.wikt only
-	site = wikipedia.getSite()
-	
-	
-	
+	site = pywikibot.getSite()
+		
 	#a list and a dict to handle individual entries
 	lista = []
 	rankingDict = {}
@@ -47,7 +45,7 @@ def main():
 	date_string = date_yesterday.strftime("%Y%m%d")
 	data_slownie = date_string[6] + date_string[7] + '.' + date_string[4] + date_string[5] + '.' + date_string[0] + date_string[1] + date_string[2] + date_string[3]
 	
-	statSite = wikipedia.Page(site, u'Wikipedysta:AlkamidBot/statystyka/wizyty')
+	statSite = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/statystyka/wizyty')
 	
 	for i in range(24):
 		
@@ -55,31 +53,22 @@ def main():
 			hour = '0%d' % i
 		else:
 			hour = '%d' % i
-		for j in range(9):
-			folder = '/mnt/user-store/alkamid/stats/'
-			filename = 'pagecounts-%s-%s000%d.gz' % (date_string, hour, j)
+
+		for j in range(25):
+			if j<10:
+				j = '0%d' % j
+			else:
+				j = '%d' % j
+			folder = '/public/pagecounts/pagecounts-raw/'
+			filename = '%s/%s-%s/pagecounts-%s-%s00%s.gz' % (date_string[:4], date_string[:4], date_string[4:6], date_string, hour, j)
+			
 			try: inp = gzip.open(folder + filename)
 			except IOError:
-				url = 'http://dumps.wikimedia.org/other/pagecounts-raw/%s/%s-%s/pagecounts-%s-%s000%d.gz' % (date_string[:4], date_string[:4], date_string[4:6], date_string, hour, j)
-				while True:
-					try: urllib2.urlopen(url)
-					except urllib2.HTTPError:
-						break
-					else:
-						urllib.urlretrieve(url, folder + filename)
-						try: open(folder+filename)
-						except IOError:
-							break
-						if checkSum(folder, filename, date_string):
-							break
-				try: inp = gzip.open(folder + filename)
-				except IOError:
-					pass
-				else:
-					break
-			else:
-				break
-		
+				print 'ioerror'
+				continue
+			
+			#here was the code used for downloading pagecounts, moved to the end of this file
+	
 		try:
 			for line in inp:
 				#only process lines starting with "pl.d" which means pl.wiktionary
@@ -147,4 +136,31 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()
+
+
+
+	'''//This was used when I had to download pagecounts. As they are stored on Wikimedia Labs servers, there is no need to download them now // for j in range(9):
+			folder = '/mnt/user-store/alkamid/stats/'
+			filename = 'pagecounts-%s-%s000%d.gz' % (date_string, hour, j)
+			try: inp = gzip.open(folder + filename)
+			except IOError:
+				url = 'http://dumps.wikimedia.org/other/pagecounts-raw/%s/%s-%s/pagecounts-%s-%s000%d.gz' % (date_string[:4], date_string[:4], date_string[4:6], date_string, hour, j)
+				while True:
+					try: urllib2.urlopen(url)
+					except urllib2.HTTPError:
+						break
+					else:
+						urllib.urlretrieve(url, folder + filename)
+						try: open(folder+filename)
+						except IOError:
+							break
+						if checkSum(folder, filename, date_string):
+							break
+				try: inp = gzip.open(folder + filename)
+				except IOError:
+					pass
+				else:
+					break
+			else:
+				break'''
