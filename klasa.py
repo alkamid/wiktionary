@@ -1054,8 +1054,6 @@ def checkForNewDumps(lastUpdate):
     #lastUpdate is a date of the previous dump
     #returns new dump's date if found, if not returns 1
     
-    dumpFolder = '/public/datasets/public/plwiktionary/'
-    
     year = int(lastUpdate[:4])
     month = int(lastUpdate[4:6])
     day = int(lastUpdate[6:8])
@@ -1067,10 +1065,9 @@ def checkForNewDumps(lastUpdate):
 
     while checked <= now:
         tempDate = checked.strftime('%Y%m%d')
-	filename = dumpFolder + tempDate
+	filename = config.path['dumps'] + tempDate
 
         checked = checked + datetime.timedelta(days=1) #checking day by day
-
         if os.path.isdir(filename):
 		return tempDate
     return 1            
