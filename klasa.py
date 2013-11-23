@@ -9,6 +9,7 @@ import locale
 import time
 import datetime
 import os
+import config
 from pywikibot import xmlreader
 import bz2
 import sys
@@ -1040,11 +1041,11 @@ def writeRCLimit(name, limit=666):
 		current = datetime.datetime.now()
 		limit = current.strftime(time_format)
 	
-	file = open(u'%s/wikt/moje/rclimits/%s.txt' % (os.environ['HOME'], name), 'w')
+	file = open(u'%srclimits/%s.txt' % (config.path['scripts'], name), 'w')
 	file.write(limit.encode( "utf-8" ))
 	file.close
 def readRCLimit(name):
-	file = open(u'%s/wikt/moje/rclimits/%s.txt' % (os.environ['HOME'], name), 'r')
+	file = open(u'%srclimits/%s.txt' % (config.path['scripts'], name), 'r')
 	data = file.readlines()
 	return data[0].strip()
 	file.close
@@ -1078,8 +1079,7 @@ def getListFromXML(data, findLatest=False):
 	#converts a wikimedia dump to a python list
     #if findLatest True, it will search for the newest dump in dumps folder
 
-    dumpFolder = '/public/datasets/public/plwiktionary/'
-    filename = dumpFolder + '%s/plwiktionary-%s-pages-articles.xml.bz2' % (data,data)
+    filename = config.path['dumps'] + '%s/plwiktionary-%s-pages-articles.xml.bz2' % (data,data)
     
     if findLatest:
 		now = datetime.datetime.now()
@@ -1092,7 +1092,7 @@ def getListFromXML(data, findLatest=False):
 				break
 			
 			tempDate = checked.strftime('%Y%m%d')
-			tempFilename = dumpFolder + tempDate
+			tempFilename = config.path['dumps'] + tempDate
 			
 			checked = checked - datetime.timedelta(days=1) #checking day by day
 			
@@ -1101,6 +1101,7 @@ def getListFromXML(data, findLatest=False):
 		
 		if found:
 			filename = tempFilename + '/plwiktionary-%s-pages-articles.xml.bz2' % (tempDate)
+			print filename
 		else:
 			raise DumpNotFound
 	
@@ -1113,7 +1114,7 @@ def log(text, filename='log_all', test_mode=0):
         print text
     else:
         if text != u'':
-            file = open("%s/wikt/moje/log/%s.txt" % (environ['HOME'], filename), 'a')
+            file = open("%slog/%s.txt" % (config.path['scripts'], filename), 'a')
             file.write (('\n' + text).encode("utf-8"))
             file.close
 	
