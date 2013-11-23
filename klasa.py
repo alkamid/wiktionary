@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import wikipedia
+import pywikibot
 import re
 import codecs
 import collections
@@ -9,17 +9,17 @@ import locale
 import time
 import datetime
 import os
-import xmlreader
+from pywikibot import xmlreader
 import bz2
 import sys
-from query import GetData
+from pywikibot.data.api import Request
 from os import environ
 
 locale.setlocale(locale.LC_COLLATE,"pl_PL.UTF-8")
 #possible types:
 #0 - redirect
 #1 - page does not exist
-#2 - wikipedia error
+#2 - pywikibot.error
 #3 - valid page
 #4 - page exists, but no language sections were found
 #5 - not from the main namespace
@@ -30,7 +30,7 @@ class Haslo():
 	regex['langs-lang'] = re.compile(ur'(== .*?\(\{\{.*?\}\}\) ==.*?)(?=$|[^{{]==)', re.DOTALL)
 	def __init__(self, title, text='faoweoucmo3u4210987acskjdh', new=False):
 		if new == True:
-			self.site = wikipedia.getSite('pl', 'wiktionary')
+			self.site = pywikibot.getSite('pl', 'wiktionary')
 			self.type = 3
 			self.title = title
 			self.wstepna = u''
@@ -38,19 +38,19 @@ class Haslo():
 			self.listLangs = []
 		elif text == 'faoweoucmo3u4210987acskjdh':
 		
-			self.site = wikipedia.getSite('pl', 'wiktionary')
+			self.site = pywikibot.getSite('pl', 'wiktionary')
 			self.type = 1
 			self.title = title
 			self.wstepna = u''
-			page = wikipedia.Page(self.site, self.title)
+			page = pywikibot.Page(self.site, self.title)
 
 			try:
 				self.content = page.get()
-			except wikipedia.IsRedirectPage:
+			except pywikibot.IsRedirectPage:
 				self.type = 0
-			except wikipedia.NoPage:
+			except pywikibot.NoPage:
 				self.type = 1
-			except wikipedia.Error:
+			except pywikibot.Error:
 				self.type = 2
 			else:
 				self.type = 3
@@ -65,7 +65,7 @@ class Haslo():
 			self.content = text
 			self.type = 3
 			#checking the namespace
-			if u'Wikipedysta:AlkamidBot/sjp/' not in self.title and (u'Dyskusja:' in self.title or u'Wikipedysta:' in self.title or u'Dyskusja Wikipedysty:' in self.title or u'Wikisłownik:' in self.title or u'Wikidyskusja:' in self.title or u'Plik:' in self.title or u'Dyskusja pliku:' in self.title or u'MediaWiki:' in self.title or u'Dyskusja MediaWiki:' in self.title or u'Szablon:' in self.title or u'Dyskusja szablonu:' in self.title or u'Pomoc:' in self.title or u'Dyskusja pomocy:' in self.title or u'Kategoria:' in self.title or u'Dyskusja kategorii:' in self.title or u'Aneks:' in self.title or u'Dyskusja aneksu:' in self.title or u'Indeks:' in self.title or u'Dyskusja indeksu:' in self.title or u'Portal:' in self.title or u'Dyskusja portalu:' in self.title): #czy to dobry sposób na sprawdzanie?
+			if u'Wikipedysta:AlkamidBot/sjp/' not in self.title and (u'Dyskusja:' in self.title or u'Wikipedysta:' in self.title or u'Wikipedystka:' in self.title or u'Dyskusja Wikipedysty:' in self.title or u'Dyskusja Wikipedystki:' in self.title or u'Wikisłownik:' in self.title or u'Wikidyskusja:' in self.title or u'Plik:' in self.title or u'Dyskusja pliku:' in self.title or u'MediaWiki:' in self.title or u'Dyskusja MediaWiki:' in self.title or u'Szablon:' in self.title or u'Dyskusja szablonu:' in self.title or u'Pomoc:' in self.title or u'Dyskusja pomocy:' in self.title or u'Kategoria:' in self.title or u'Dyskusja kategorii:' in self.title or u'Aneks:' in self.title or u'Dyskusja aneksu:' in self.title or u'Indeks:' in self.title or u'Dyskusja indeksu:' in self.title or u'Portal:' in self.title or u'Dyskusja portalu:' in self.title or u'Moduł:' in self.title or u'Dyskusja modułu:' in self.title): #czy to dobry sposób na sprawdzanie?
 				self.type = 5
 			
 			if self.type == 3:
@@ -102,14 +102,14 @@ class Haslo():
 			if offline:
 				print toPush
 			else:
-				page = wikipedia.Page(self.site, self.title)
+				page = pywikibot.Page(self.site, self.title)
 				try: content = page.get()
-				except wikipedia.IsRedirectPage:
+				except pywikibot.IsRedirectPage:
 					print u'%s - konflikt edycji' % self.title
-				except wikipedia.NoPage:
+				except pywikibot.NoPage:
 					if new:
 						page.put(toPush, comment=myComment)
-				except wikipedia.Error:
+				except pywikibot.Error:
 					print u'%s - konflikt edycji' % self.title
 				else:
 					if content == self.content and content != toPush:
@@ -213,7 +213,7 @@ class Sekcja():
 	#japanese words
 	regex['pola-ja-kan-dodatki'] = re.compile(ur'(.*?)(\n|){{czytania}}', re.DOTALL)
 	regex['pola-ja-kan-czytania'] = re.compile(ur'{{czytania}}(.*?)\n{{wymowa}}', re.DOTALL)
-	regex['pola-ja-kan-antonimy'] = re.compile(ur'{{antonimy}}(.*?)\n\n({{hiperonimy}}|{{hiponimy}}|{{holonimy}}|{{meronimy}}|{{złożenia}})', re.DOTALL)
+	regex['pola-ja-kan-antonimy'] = re.compile(ur'{{antonimy}}(.*?)\n({{hiperonimy}}|{{hiponimy}}|{{holonimy}}|{{meronimy}}|{{złożenia}})', re.DOTALL)
 	regex['pola-ja-kan-hiperonimy'] = re.compile(u'{{hiperonimy}}(.*?)\n({{hiponimy}}|{{holonimy}}|{{meronimy}}|{{złożenia}})', re.DOTALL)
 	regex['pola-ja-kan-hiponimy'] = re.compile(u'{{hiponimy}}(.*?)\n({{holonimy}}|{{meronimy}}|{{złożenia}})', re.DOTALL)
 	regex['pola-ja-kan-holonimy'] = re.compile(u'{{holonimy}}(.*?)\n({{meronimy}}|{{złożenia}})', re.DOTALL)
@@ -450,6 +450,7 @@ class Sekcja():
 						self.type = 7
 				
 				elif u'esperanto' in self.lang:
+
 					s_dodatki = re.search(self.regex['pola-dodatki'], self.content)
 					s_wymowa = re.search(self.regex['pola-wymowa'], self.content)
 					s_znaczeniaWhole = re.search(self.regex['pola-znaczeniaWhole'], self.content)
@@ -468,7 +469,7 @@ class Sekcja():
 					s_etymologia = re.search(self.regex['pola-etymologia'], self.content)
 					s_uwagi = re.search(self.regex['pola-uwagi'], self.content)
 					
-					if s_wymowa and s_znaczeniaWhole and s_odmiana and s_przyklady and s_skladnia and s_kolokacje and s_synonimy and s_antonimy and s_frazeologia and s_etymologia and s_uwagi:
+					if s_wymowa and s_znaczeniaWhole and s_odmiana and s_przyklady and s_skladnia and s_kolokacje and s_synonimy and s_frazeologia and s_etymologia and s_uwagi:
 						self.wymowa = Pole(s_wymowa.group(1))
 						self.znaczeniaWhole = Pole(s_znaczeniaWhole.group(1))
 						self.odmiana = Pole(s_odmiana.group(1))
@@ -476,7 +477,6 @@ class Sekcja():
 						self.skladnia = Pole(s_skladnia.group(1))
 						self.kolokacje = Pole(s_kolokacje.group(1))
 						self.synonimy = Pole(s_synonimy.group(1))
-						self.antonimy = Pole(s_antonimy.group(1))
 						if s_hiperonimy:
 							self.hiperonimy = Pole(s_hiperonimy.group(1))
 						else:
@@ -496,32 +496,33 @@ class Sekcja():
 						self.frazeologia = Pole(s_frazeologia.group(1))
 						self.etymologia = Pole(s_etymologia.group(1))
 						self.uwagi = Pole(s_uwagi.group(1))
+
+						if u'(morfem)' in self.lang:
+							s_antonimy_eom = re.search(self.regex['pola-eom-antonimy'], self.content)
+							s_pochodne_eom = re.search(self.regex['pola-eom-pochodne'], self.content)
+							if s_antonimy_eom and s_pochodne_eom:
+								self.type = 10
+								self.dodatki = Pole(s_dodatki.group(1))
+								self.antonimy = Pole(s_antonimy_eom.group(1))
+								self.pochodne = Pole(s_pochodne_eom.group(1))
+							else:
+								self.type = 7
+						else:
+							s_dodatki_eo = re.search(self.regex['pola-eo-dodatki'], self.content)
+							s_morfologia_eo = re.search(self.regex['pola-eo-morfologia'], self.content)
+							s_antonimy = re.search(self.regex['pola-antonimy'], self.content)
+							s_pokrewne = re.search(self.regex['pola-pokrewne'], self.content)
+						
+							if s_dodatki_eo and s_morfologia_eo:
+								self.type = 12
+								self.morfologia = Pole(s_morfologia_eo.group(1))
+								self.dodatki = Pole(s_dodatki_eo.group(1))							
+								self.antonimy = Pole(s_antonimy.group(1))
+								self.pokrewne = Pole(s_pokrewne.group(1))
+							else:
+								self.type = 7
 					else:
 						self.type = 7
-					if u'(morfem)' in self.lang:
-						s_antonimy_eom = re.search(self.regex['pola-eom-antonimy'], self.content)
-						s_pochodne_eom = re.search(self.regex['pola-eom-pochodne'], self.content)
-						if s_antonimy_eom and s_pochodne_eom:
-							self.type = 10
-							self.dodatki = Pole(s_dodatki.group(1))
-							self.antonimy = Pole(s_antonimy_eom.group(1))
-							self.pochodne = Pole(s_pochodne_eom.group(1))
-						else:
-							self.type = 7
-					else:
-						s_dodatki_eo = re.search(self.regex['pola-eo-dodatki'], self.content)
-						s_morfologia_eo = re.search(self.regex['pola-eo-morfologia'], self.content)
-						s_antonimy = re.search(self.regex['pola-antonimy'], self.content)
-						s_pokrewne = re.search(self.regex['pola-pokrewne'], self.content)
-						
-						if s_dodatki_eo and s_morfologia_eo:
-							self.type = 12
-							self.morfologia = Pole(s_morfologia_eo.group(1))
-							self.dodatki = Pole(s_dodatki_eo.group(1))							
-							self.antonimy = Pole(s_antonimy.group(1))
-							self.pokrewne = Pole(s_pokrewne.group(1))
-						else:
-							self.type = 7
 				elif self.lang == u'japoński' or self.lang == u'koreański':
 					
 					
@@ -672,7 +673,7 @@ class Sekcja():
 					self.dodatki = Pole(s_ekwi_zh.group(1))'''
 				
 				
-			if self.type not in (2,3,4,7,11):
+			if self.type not in (2,3,7,11):
 				s_znaczeniaDetail = re.findall(self.regex['pola-znaczeniaDetail'], self.znaczeniaWhole.text)
 				if s_znaczeniaDetail:
 					self.znaczeniaDetail = [list(tup) for tup in s_znaczeniaDetail]
@@ -681,7 +682,10 @@ class Sekcja():
 					if int(s_numer.group(1)[0]) != len(self.znaczeniaDetail):
 						self.type = 14
 				else:
-					self.type = 5
+					if self.type == 4:
+						self.znaczeniaDetail = []
+					else:
+						self.type = 5
 				
 			
 		
@@ -827,6 +831,7 @@ def flagLastRev(site, revid, comment=u''):
 	
 	token = site.getToken(sysop=False)
 	params = {
+		'site': site,
 	    'action': 'review',
 	    'revid': revid,
 	    'token': token,
@@ -834,13 +839,14 @@ def flagLastRev(site, revid, comment=u''):
 	    'comment': comment,
         }
 	
-	query.GetData(params, site)
+	req = Request(**params)
+	query = req.submit()
 
 
 #TODO: pobierać z WS:Kody języków
 def getAllLanguages():
-	site = wikipedia.getSite('pl', 'wiktionary')
-	page = wikipedia.Page(site, u'Mediawiki:common.js')
+	site = pywikibot.getSite('pl', 'wiktionary')
+	page = pywikibot.Page(site, u'Mediawiki:common.js')
 	
 	langTable = []
 	re_langs = re.compile(ur'function om\$initLangDictionaries\(\) \{\n\tom\$Lang2Code={\n(.*?)\n\t\};', re.DOTALL)
@@ -869,8 +875,8 @@ def getAllLanguages():
 
 def obrazkiAndrzeja():
 	#wyniki działania funkcji to dictionary w formie dict['slowo'] = [grafika1, grafika2, ...]
-	site = wikipedia.getSite()
-	pageImages = wikipedia.Page(site, u'Wikipedysta:Andrzej 22/Ilustracje')
+	site = pywikibot.getSite()
+	pageImages = pywikibot.Page(site, u'Wikipedysta:Andrzej 22/Ilustracje')
 	re_sekcja = re.compile(ur'\=\=\s*\[\[(.*?)\]\]\s*\=\=(.*?)(?=\=\=)', re.DOTALL)
 	re_img = re.compile(ur'(\[\[Plik\:.*?\]\])(?=\[\[Plik|<br)')
 	re_subnr = ws = re.compile(ur'\([0-9]\.[0-9]\)') # do zamieniania (1.1) na {{brak|numer}} w obrazkach
@@ -994,15 +1000,15 @@ def pageCounter(language):
 			'action'	:'expandtemplates',
 			'text'		:'{{PAGESINCAT:%s (indeks)|R}}' % language,
 			}
-	qr = GetData(params)
+	req = Request(**params)
+	qr = req.submit()
 	print qr['expandtemplates']['*']
-			
+		
 def RecentChanges(limit):
 	limitString = limit
 	time_format = "%Y-%m-%dT%H:%M:%SZ"
 	limit = datetime.datetime.fromtimestamp(time.mktime(time.strptime(limitString, time_format)))	
 	current = datetime.datetime.now()
-	
 	list = set()
 	params = {
 	        'action'    :'query',
@@ -1015,7 +1021,8 @@ def RecentChanges(limit):
 	while current > limit:
 		textDate = current.strftime(time_format)
 		params['rcstart'] = textDate
-		qr = GetData(params)
+		req = Request(**params)
+		qr = req.submit()
 		try: current = datetime.datetime.fromtimestamp(time.mktime(time.strptime(qr['query-continue']['recentchanges']['rcstart'], time_format)))
 		except KeyError:
 			for elem in qr['query']['recentchanges']:
@@ -1025,6 +1032,7 @@ def RecentChanges(limit):
 			for elem in qr['query']['recentchanges']:
 				list.add(elem['title'])
 	return list
+
 
 def writeRCLimit(name, limit=666):
 	if limit == 666:
@@ -1045,7 +1053,7 @@ def checkForNewDumps(lastUpdate):
     #lastUpdate is a date of the previous dump
     #returns new dump's date if found, if not returns 1
     
-    dumpFolder = '/mnt/user-store/dumps/store/plwiktionary/'
+    dumpFolder = '/public/datasets/public/plwiktionary/'
     
     year = int(lastUpdate[:4])
     month = int(lastUpdate[4:6])
@@ -1058,23 +1066,20 @@ def checkForNewDumps(lastUpdate):
 
     while checked <= now:
         tempDate = checked.strftime('%Y%m%d')
-        filename = dumpFolder + 'plwiktionary-%s-pages-articles.xml.bz2' % tempDate
+	filename = dumpFolder + tempDate
 
         checked = checked + datetime.timedelta(days=1) #checking day by day
 
-        try: open(filename)
-        except IOError: #check next day if there is no file with current date
-            pass
-        else:
-            return tempDate
+        if os.path.isdir(filename):
+		return tempDate
     return 1            
 
 def getListFromXML(data, findLatest=False):
 	#converts a wikimedia dump to a python list
     #if findLatest True, it will search for the newest dump in dumps folder
 
-    dumpFolder = '/mnt/user-store/dumps/store/plwiktionary/'
-    filename = dumpFolder + 'plwiktionary-%s-pages-articles.xml.bz2' % data
+    dumpFolder = '/public/datasets/public/plwiktionary/'
+    filename = dumpFolder + '%s/plwiktionary-%s-pages-articles.xml.bz2' % (data,data)
     
     if findLatest:
 		now = datetime.datetime.now()
@@ -1087,18 +1092,15 @@ def getListFromXML(data, findLatest=False):
 				break
 			
 			tempDate = checked.strftime('%Y%m%d')
-			tempFilename = dumpFolder + 'plwiktionary-%s-pages-articles.xml.bz2' % tempDate
+			tempFilename = dumpFolder + tempDate
 			
 			checked = checked - datetime.timedelta(days=1) #checking day by day
 			
-			try: open(tempFilename)
-			except IOError:
-				pass
-			else:
+			if os.path.isdir(tempFilename):
 				found = 1
 		
 		if found:
-			filename = tempFilename
+			filename = tempFilename + '/plwiktionary-%s-pages-articles.xml.bz2' % (tempDate)
 		else:
 			raise DumpNotFound
 	
@@ -1117,19 +1119,19 @@ def log(text, filename='log_all', test_mode=0):
 	
 class HasloFr():
 	def __init__(self, a):
-		site = wikipedia.getSite('fr', 'wiktionary')
+		site = pywikibot.getSite('fr', 'wiktionary')
 		
 		self.type = 1
 		self.title = a
-		self.page = wikipedia.Page(site, self.title)
+		self.page = pywikibot.Page(site, self.title)
 
 		try:
 			self.content = self.page.get()
-		except wikipedia.IsRedirectPage:
+		except pywikibot.IsRedirectPage:
 			self.type = 0
-		except wikipedia.NoPage:
+		except pywikibot.NoPage:
 			self.type = 1
-		except wikipedia.Error:
+		except pywikibot.Error:
 			self.type = 2
 		else:
 			self.type = 3
@@ -1145,15 +1147,15 @@ class HasloFrXML():
 	def __init__(self, a):
 		self.type = 1
 		self.title = a
-		self.page = wikipedia.Page(site, self.title)
+		self.page = pywikibot.Page(site, self.title)
 
 		try:
 			self.content = self.page.get()
-		except wikipedia.IsRedirectPage:
+		except pywikibot.IsRedirectPage:
 			self.type = 0
-		except wikipedia.NoPage:
+		except pywikibot.NoPage:
 			self.type = 1
-		except wikipedia.Error:
+		except pywikibot.Error:
 			self.type = 2
 		else:
 			self.type = 3
