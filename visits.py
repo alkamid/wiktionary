@@ -12,6 +12,7 @@ import urllib
 import urllib2
 import datetime
 import gzip
+import config
 from operator import itemgetter
 
 def checkSum(folder, filename, dateString):
@@ -59,7 +60,7 @@ def main():
 				j = '0%d' % j
 			else:
 				j = '%d' % j
-			folder = '/public/pagecounts/pagecounts-raw/'
+			folder = config.path['pagecounts']
 			filename = '%s/%s-%s/pagecounts-%s-%s00%s.gz' % (date_string[:4], date_string[:4], date_string[4:6], date_string, hour, j)
 			
 			try: inp = gzip.open(folder + filename)
