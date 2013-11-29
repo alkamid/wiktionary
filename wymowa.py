@@ -98,11 +98,11 @@ def main():
 
 		for retry in retryloop(5, timeout=30):
 			try:
-				pywikibot.ImagePage(site, u'Pl-%s.ogg' % page.title()).fileIsOnCommons()
+				pywikibot.ImagePage(site, u'Pl-%s.ogg' % page.title()).fileIsShared()
 			except pywikibot.NoPage:
 				for retry in retryloop(5,timeout=30):
 					try:
-						pywikibot.ImagePage(site, u'Pl-%s.OGG' % page.title()).fileIsOnCommons()
+						pywikibot.ImagePage(site, u'Pl-%s.OGG' % page.title()).fileIsShared()
 					except pywikibot.NoPage:
 						if page.title() in lista_gwary:
 							outputGwary.add(page.title())
