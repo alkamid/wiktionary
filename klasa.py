@@ -847,7 +847,7 @@ def flagLastRev(site, revid, comment=u''):
 #TODO: pobierać z WS:Kody języków
 def getAllLanguages():
 	site = pywikibot.getSite('pl', 'wiktionary')
-	page = pywikibot.Page(site, u'Mediawiki:common.js')
+	page = pywikibot.Page(site, u'Mediawiki:Common.js')
 	
 	langTable = []
 	re_langs = re.compile(ur'function om\$initLangDictionaries\(\) \{\n\tom\$Lang2Code={\n(.*?)\n\t\};', re.DOTALL)
