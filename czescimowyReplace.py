@@ -1,13 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import wikipedia
-import catlib
-import pagegenerators
+import pywikibot
+from pywikibot import catlib
+from pywikibot import pagegenerators
 import re
-import xmlreader
+from pywikibot import xmlreader
 import collections
 from klasa import *
+import config
 
 #uwagi wstępne
 #nie można zmieniać ''przymiotnik -> ''przymiotnik'', bo będą niepożądane zmiany, ewentualnie można byłoby szukać ''przymiotnik\n i zmieniać, ale struktura hasła w parserze jest taka, że to \n nie wchodzi do zmiennej
@@ -15,9 +16,9 @@ from klasa import *
         
 def czescimowyReplace():
 
-    site = wikipedia.getSite()
-    inp = codecs.open('/home/alkamid/wikt/moje/output/czescimowy_input.txt', encoding='utf-8')
-    replacePage = wikipedia.Page(site, u'Wikipedysta:AlkamidBot/części_mowy/zamiana')
+    site = pywikibot.getSite()
+    inp = codecs.open('%soutput/czescimowy_input.txt' % config.path['scripts'], encoding='utf-8')
+    replacePage = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/części_mowy/zamiana')
     replacePageText = replacePage.get()
     tempListReplace = replacePageText.split(u'\n')
     replaceList = []
@@ -37,19 +38,19 @@ def czescimowyReplace():
             replaceList.append([old, new])
             cnt = 1
     
-    for replaceText in replaceList:
-        print replaceText[0]
-        print replaceText[1]
+    #for replaceText in replaceList:
+    #    print replaceText[0]
+    #    print replaceText[1]
             
     for line in inp:
         if line:
             try: h = Haslo(line)
             except sectionsNotFound:
                 pass
-            except wikipedia.InvalidTitle:
+            except pywikibot.InvalidTitle:
                 pass
             else:
-                print h.title
+                #print h.title
                 if h.type == 3:
                     changed = 0
                     for c in h.listLangs:
