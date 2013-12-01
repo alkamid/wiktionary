@@ -49,6 +49,8 @@ def czescimowyReplace():
                 pass
             except pywikibot.InvalidTitle:
                 pass
+            except AttributeError:
+                pass
             else:
                 #print h.title
                 if h.type == 3:
