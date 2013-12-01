@@ -99,11 +99,11 @@ def main():
 		for retry in retryloop(5, timeout=30):
 			try:
 				pywikibot.ImagePage(site, u'Pl-%s.ogg' % page.title()).fileIsShared()
-			except pywikibot.NoPage:
+			except (pywikibot.NoPage, KeyError):
 				for retry in retryloop(5,timeout=30):
 					try:
 						pywikibot.ImagePage(site, u'Pl-%s.OGG' % page.title()).fileIsShared()
-					except pywikibot.NoPage:
+					except (pywikibot.NoPage, KeyError):
 						if page.title() in lista_gwary:
 							outputGwary.add(page.title())
 						else:
