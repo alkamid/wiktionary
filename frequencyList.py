@@ -4,16 +4,17 @@
 # szuka danego przez szukany_tekst wyrażenia w hasłach
 
 import codecs
-import catlib
-import wikipedia
-import pagegenerators
+from pywikibot import catlib
+import pywikibot
+from pywikibot import pagegenerators
 import re
-import xmlreader
+from pywikibot import xmlreader
 from klasa import *
+import config
 
 def frequencyList(data):
     
-    site = wikipedia.getSite()
+    site = pywikibot.getSite()
     lista_stron2 = getListFromXML(data)
     ranking = {}
     re_example_translation = re.compile(u'→(.*?)(?=\<ref|\n|$)')
@@ -98,15 +99,15 @@ def frequencyList(data):
      
     for num, elem in enumerate(alltext):
         elem = elem.strip()
-        outputPage = wikipedia.Page(site, u'Indeks:Polski - Najpopularniejsze słowa %d-%d' % (num*2000+1, (num+1)*2000))
+        outputPage = pywikibot.Page(site, u'Indeks:Polski - Najpopularniejsze słowa %d-%d' % (num*2000+1, (num+1)*2000))
         elem = u'Lista frekwencyjna języka polskiego na podstawie odnośników na stronach Wikisłownika.\n\n{{język linków|polski}}\n' + elem + u'\n[[Kategoria:Polski (słowniki tematyczne)]]\n[[Kategoria:Listy frekwencyjne|polski]]'
         outputPage.put(elem, comment='aktualizacja')
     
     htmllist += u'</body></html>'
-    file = open('/home/alkamid/public_html/frequencyListPL.html', 'w')
+    file = open('%spublic_html/frequencyListPL.html' % (config.path['home']), 'w')
     file.write(htmllist.encode( "utf-8" ))
     file.close
     
-    file = open('output/frequencyListPL.txt', 'w')
+    file = open('%soutput/frequencyListPL.txt' % (config.path['scripts']), 'w')
     file.write(nonExistingText.encode( "utf-8" ))
     file.close
