@@ -1,20 +1,20 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import wikipedia
-import pagegenerators
+import pywikibot
+from pywikibot import pagegenerators
 import re
-import xmlreader
+from pywikibot import xmlreader
 import collections
 from klasa import *
-
+import config
 
 # the script looks for newly added languages (the languages for which the templates do not exist)	
 def missingLangs(data):
 
 	data_slownie = data[6] + data[7] + u'.' + data[4] + data[5] + u'.' + data[0] + data[1] + data[2] + data[3]
 	lista_stron = getListFromXML(data)
-	wikt = wikipedia.Site('pl', 'wiktionary')
+	wikt = pywikibot.Site('pl', 'wiktionary')
 	foundList = set()
 	notFound = set()
 	
@@ -56,6 +56,6 @@ def missingLangs(data):
 						if lang.lang in diff:
 							missingText = missingText + u'%s - %s\n' % (lang.lang, word.title)
 							
-	file = open(u'%s/wikt/moje/output/missingLangs.txt' % (os.environ['HOME']), 'w')
+	file = open(u'%soutput/missingLangs.txt' % (config.path['scripts']), 'w')
 	file.write(missingText.encode("utf-8"))
 	file.close()
