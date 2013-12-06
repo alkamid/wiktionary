@@ -170,7 +170,7 @@ def main():
 		
 	final_gw += u'\n= przestarzałe ='
 	
-	for d in lista_przest2:
+	for d in outputArchaic:
 		final_gw += u'\n[[%s]]' % d
 	
 	final = final + u'\n= wyraz obcy w języku polskim ='
