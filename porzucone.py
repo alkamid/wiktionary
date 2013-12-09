@@ -49,7 +49,6 @@ def main():
 					dodaj = u'\n<br /><a href="http://pl.wiktionary.org/wiki/%s">%s</a>' % (strona.title(), strona.title())
 					final_lista = final_lista + dodaj
 					count_all = count_all + 1
-					print strona.title()
 					
 
 	data = datetime.datetime.now() + datetime.timedelta(hours=2)
@@ -58,7 +57,8 @@ def main():
 	final = final + data1 + u'<br />: Licznik porzuconych: %d' % count_all
 	final = final + final_lista
 	final = final + u'</body></html>'
-		
+	
+	print final
 	file = open('%spublic_html/porzucone.html' % (config.path['home']), 'w')
 	file.write(final.encode( "utf-8" ))
 	file.close
