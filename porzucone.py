@@ -58,7 +58,6 @@ def main():
 	final = final + final_lista
 	final = final + u'</body></html>'
 	
-	print final
 	file = open('%spublic_html/porzucone.html' % (config.path['home']), 'w')
 	file.write(final.encode( "utf-8" ))
 	file.close
