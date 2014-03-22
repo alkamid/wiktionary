@@ -4,11 +4,11 @@
 # statystyka długości haseł - pobiera ja z xml
 
 import codecs
-import catlib
-import wikipedia
-import pagegenerators
+from pywikibot import catlib
+import pywikibot
+from pywikibot import pagegenerators
 import re
-import xmlreader
+from pywikibot import xmlreader
 import math
 import collections
 from klasa import *
@@ -287,8 +287,8 @@ def licz_jezyki(data):
 							if graphtmp:
 								statList[u'%s' % b.langLong].addGraph()
 								statList[u'%s' % b.langLong].addGraphAll(graphtmp)
-							if b.type not in (2,3,7,11):
-								statList[u'%s' % b.langLong].addMeans(meanings(b.znaczeniaWhole))
+							if b.type not in (2,3,5,7,11):
+								statList[u'%s' % b.langLong].addMeans(meanings(b.znaczeniaDetail))
 								statList[u'%s' % b.langLong].addRef(refs(b.content, b.zrodla))
 				
 	for c in statList:
@@ -325,10 +325,15 @@ def meanings(input):
 	counter = 0.0
 	
 	if input:
-		s_count = re.findall(re_count, input.text)
-		counter = len(s_count)*1.0
+		for elem in input:
+			if u'{{forma' in elem[0]:
+				continue
+			else:
+				s_count = re.findall(re_count, elem[1])
+				counter += len(s_count)*1.0
 
 	return counter
+
 
 def refs(inputWhole, inputZrodla):
 	#counting references
@@ -512,19 +517,19 @@ def stat_wikitable(old, new):
 	text_srednia_template = text15 + u'\n|=|data=%s\n|#default=bd.\n}}' % (data_slownie)
 	text_znaczenia_srednia_template = text16 + u'\n|=%.4f\n|data=%s\n|#default=bd.\n}}' % (all[8], data_slownie)
 	
-	site = wikipedia.getSite()
-	page_dlugosc = wikipedia.Page(site, u'Wikipedysta:Alkamid/statystyka/długość')
-	page_srednia = wikipedia.Page(site, u'Wikipedysta:Alkamid/statystyka/długość_średnia')
-	page_multimedia = wikipedia.Page(site, u'Wikipedysta:Alkamid/statystyka/multimedia')
-	page_znaczenia = wikipedia.Page(site, u'Wikipedysta:AlkamidBot/statystyka/znaczenia')
-	page_znaczenia_templ = wikipedia.Page(site, u'Wikipedysta:AlkamidBot/statystyka/znaczenia/template')
-	page_znaczenia_srednia_templ = wikipedia.Page(site, u'Wikipedysta:AlkamidBot/statystyka/znaczenia_średnia/template')
-	page_dlugosc_templ = wikipedia.Page(site, u'Wikipedysta:AlkamidBot/statystyka/długość/template')
-	page_srednia_templ = wikipedia.Page(site, u'Wikipedysta:AlkamidBot/statystyka/długość_średnia/template')
-	page_GraphCount_templ = wikipedia.Page(site, u'Wikipedysta:AlkamidBot/statystyka/liczba_grafik/template')
-	page_GraphPerc_templ = wikipedia.Page(site, u'Wikipedysta:AlkamidBot/statystyka/procent_grafik/template')
-	page_AudioCount_templ = wikipedia.Page(site, u'Wikipedysta:AlkamidBot/statystyka/liczba_audio/template')
-	page_AudioPerc_templ = wikipedia.Page(site, u'Wikipedysta:AlkamidBot/statystyka/procent_audio/template')
+	site = pywikibot.getSite()
+	page_dlugosc = pywikibot.Page(site, u'Wikipedysta:Alkamid/statystyka/długość')
+	page_srednia = pywikibot.Page(site, u'Wikipedysta:Alkamid/statystyka/długość_średnia')
+	page_multimedia = pywikibot.Page(site, u'Wikipedysta:Alkamid/statystyka/multimedia')
+	page_znaczenia = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/statystyka/znaczenia')
+	page_znaczenia_templ = pywikibot.Page(site, u'Szablon:licznikZnaczeń')
+	page_znaczenia_srednia_templ = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/statystyka/znaczenia_średnia/template')
+	page_dlugosc_templ = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/statystyka/długość/template')
+	page_srednia_templ = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/statystyka/długość_średnia/template')
+	page_GraphCount_templ = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/statystyka/liczba_grafik/template')
+	page_GraphPerc_templ = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/statystyka/procent_grafik/template')
+	page_AudioCount_templ = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/statystyka/liczba_audio/template')
+	page_AudioPerc_templ = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/statystyka/procent_audio/template')
 	
 	filename_dlugosc = "output/wikitable-dlugosc.txt"
 	filename_srednia = "output/wikitable-srednia.txt"
@@ -568,9 +573,9 @@ def stat_wikitable(old, new):
 		page_AudioPerc_templ.put(text_AudioPerc_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
 
 def dlaczego(new):
-	site = wikipedia.getSite()
-	dlaczego_strona = wikipedia.Page(site, u'Wikisłownik:Dlaczego Wikisłownik')
-	presskit = wikipedia.Page(site, u'Wikisłownik:Presskit')
+	site = pywikibot.getSite()
+	dlaczego_strona = pywikibot.Page(site, u'Wikisłownik:Dlaczego Wikisłownik')
+	presskit = pywikibot.Page(site, u'Wikisłownik:Presskit')
 
 	audioCount = 0
 	graphCount = 0
@@ -608,10 +613,10 @@ def dlaczego(new):
 	presskit.put(presskitText, comment=u'aktualizacja', botflag=True)
 		
 def licznik():
-	site = wikipedia.getSite()
+	site = pywikibot.getSite()
 	lista_stron = getListFromXML(data)
-	dlaczego_strona = wikipedia.Page(site, u'Wikisłownik:Dlaczego Wikisłownik')
-	presskit = wikipedia.Page(site, u'Wikisłownik:Presskit')
+	dlaczego_strona = pywikibot.Page(site, u'Wikisłownik:Dlaczego Wikisłownik')
+	presskit = pywikibot.Page(site, u'Wikisłownik:Presskit')
 	liczba_znakow = 0.0
 	liczba_slow = 0.0
 	liczba_audio = 0
@@ -635,11 +640,11 @@ def licznik():
 
 		try:
 			text = page.text
-		except wikipedia.NoPage:
+		except pywikibot.NoPage:
 			print u'strona nie istnieje'
-		except wikipedia.IsRedirectPage:
+		except pywikibot.IsRedirectPage:
 			print u'%s - przekierowanie' % (page.title())
-		except wikipedia.Error:
+		except pywikibot.Error:
 			print u'nieznany błąd'
 		
 		liczba_audio += len(re.findall(audio, text))
@@ -700,8 +705,8 @@ def licznik():
 
 def data_stat():
 	
-	site = wikipedia.getSite()
-	stat = wikipedia.Page(site, u'Wikisłownik:Statystyka')
+	site = pywikibot.getSite()
+	stat = pywikibot.Page(site, u'Wikisłownik:Statystyka')
 	
 	re_przed = re.compile(u'(.*Zestawienie obejmuje 50 największych \(posiadających najwięcej haseł\) języków na Wikisłowniku. Zanalizowano stan na dzień )', re.DOTALL)
 	re_po = re.compile(u'.*Zestawienie obejmuje 50 największych \(posiadających najwięcej haseł\) języków na Wikisłowniku. Zanalizowano stan na dzień.*?(.\n.*)', re.DOTALL)
