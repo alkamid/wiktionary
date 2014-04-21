@@ -1,8 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# szuka danego przez szukany_tekst wyrażenia w hasłach
-
 import codecs
 from pywikibot import catlib
 import pywikibot
@@ -11,6 +9,18 @@ import re
 from pywikibot import xmlreader
 from klasa import *
 import config
+
+
+# the list of words that are ignored in all frequency lists
+def getDeletedList():
+    deleted = set()
+    site = pywikibot.Site()
+    pageDeleted = pywikibot.Page(site, u'Wikisłownik:Ranking brakujących tłumaczeń/zawsze usuwane')
+    for line in pageDeleted.get().split('\n'):
+        if line[0] == ':':
+            lineList = line.split('[[')
+            deleted.add(lineList[1].strip(']'))
+    return deleted
 
 def frequencyList(data):
     
@@ -21,6 +31,9 @@ def frequencyList(data):
     re_colloc_translation = re.compile(u'→(.*?)(?=\<ref|\n|•|;|$)')
     re_link = re.compile(u'\[\[([^\:]*?)(?=\]\]|\||#pl)')
     alltitles = set()
+
+    deleted = getDeletedList()
+
     i = 1
     for a in lista_stron2:            
         alltitles.add(a.title)
@@ -57,7 +70,7 @@ def frequencyList(data):
                     
                     s_link = re.findall(re_link, to_search)     
                     for link in s_link:
-                        if '#' not in link: #if there is a hash in the link, it is not '#pl' (excluded in regex), therefore not a Polish link
+                        if '#' not in link and link not in deleted: #if there is a hash in the link, it is not '#pl' (excluded in regex), therefore not a Polish link; also, exlude words from deleted list
                             try: ranking[link]
                             except KeyError:
                                 ranking[link] = 1
@@ -78,9 +91,11 @@ def frequencyList(data):
     htmllist = u'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"\n"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\n<html xmlns="http://www.w3.org/1999/xhtml\nxml:lang="pl">\n<head>\n<meta http-equiv="content-type" content="text/html; charset=UTF-8" />\n</head><body>'
     
     alltext = []
-    i = 1
+
     for i in range(5):
         alltext.append('')
+
+    i = 0
     for elem in dictlist:
         if i>20000:
             break
