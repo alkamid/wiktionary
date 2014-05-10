@@ -116,6 +116,8 @@ def main():
 									try: s_ipa = re.search(re_ipa, page.get())
 									except urllib2.HTTPError:
 										pass
+                                                                        except pywikibot.exceptions.NoPage:
+                                                                                pass
 									else:
 										if s_ipa == None:
 											lista_ipa.add(page.title())
