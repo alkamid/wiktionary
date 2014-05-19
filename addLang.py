@@ -78,7 +78,7 @@ def main():
 			textPage4 = s_before.group(1)
 			textPage4 += u'{{PAGESINCAT:%s (indeks)|R}}+\n' % shortName
 			textPage4 += s_after.group(1)
-			page4.put(textPage4, comment=u"Dodanie języka %s" % zjezyka)
+			page4.put(textPage4, comment=u"Dodanie języka %s" % zjezyka, as_group='sysop')
 			#print textPage4
 		else:
 			pywikibot.output(u'Nie dodano parametru do szablonu {{licznik}}!')
@@ -176,25 +176,6 @@ def main():
 		pywikibot.output(u'Nazwa języka (%s) istnieje już w szablonie {{etym/język}}' % shortName)
 	
 
-
-	#9. MediaWiki:Gadget-false-blue-links.js
-	page9 = pywikibot.Page(site, u'MediaWiki:Gadget-false-blue-links.js')
-	if u'"%s"' % (shortName) not in page9.get():
-		zaczepienie = u'\n  };\n  /*var tab="";\n  for (var jezyk in om$Lang2Code)'
-		re_before = re.compile(ur'(.*?)%s' % re.escape(zaczepienie), re.DOTALL)
-		re_after = re.compile(ur'.*?(%s.*)' % re.escape(zaczepienie), re.DOTALL)
-		s_before = re.search(re_before, page9.get())
-		s_after = re.search(re_after, page9.get())
-		if s_before and s_after:
-			textPage9 = s_before.group(1)
-			textPage9 += u',\n	"%s"	:"%s"' % (shortName, kod)
-			textPage9 += s_after.group(1)	
-			page9.put(textPage9, comment=u"Dodanie języka %s" % zjezyka, as_group='sysop')
-			#print textPage9
-		else:
-			pywikibot.output(u'Nie dodano parametru do strony MediaWiki:Gadget-false-blue-links.js!')
-	else:
-		pywikibot.output(u'Nazwa języka (%s) istnieje już na stronie MediaWiki:Gadget-false-blue-links.js' % shortName)
 
 	#9. MediaWiki:Common.js
 	page10 = pywikibot.Page(site, u'MediaWiki:Common.js')
