@@ -6,14 +6,14 @@
 import sys
 sys.path.append('/home/adam/pywiki/pywikipedia')
 import codecs
-import catlib
-import wikipedia
-import pagegenerators
+from pywikibot import Category
+import pywikibot
+from pywikibot import pagegenerators
 import re
 
 def main():
 	
-	frwikt = wikipedia.getSite('fr', 'wiktionary')
+	frwikt = pywikibot.getSite('fr', 'wiktionary')
 	
 	lista = []
 	inp = codecs.open('lista_aneksy', encoding='utf-8')
@@ -24,7 +24,7 @@ def main():
 		lista.append(line.split())
 			
 	for a in lista:
-		page = wikipedia.Page(frwikt, u'Modèle:fr-conj-3-%s' % (a[0]))
+		page = pywikibot.Page(frwikt, u'Modèle:fr-conj-3-%s' % (a[0]))
 		text = page.get()
 		text_przed = u'<noinclude>[[Kategoria:Język francuski - szablony koniugacji|3-%s]] </noinclude>\n<noinclude>Koniugacja czasowników kończących się na \'\'\'\'\'-%s\'\'\'\'\' :\n:<nowiki>{{</nowiki>fr-koniugacja-3-%s | \'\'<prefiks>\'\' | \'\'<IPA prefiksu>\'\' | \'\'<parametry opcjonalne>\'\' }}\n*\'\'<prefiks>\'\' : to, co poprzedza \'\'-%s\'\'\n*\'\'<IPA prefiksu>\'\' : wymowa prefiksu w IPA.\n*\'\'<parametry dodatkowe>\'\' :\n**<code>\'=tak<code> jeśli słowo zaczyna się samogłoską\n**<code>aux-être=tak<code> jeśli posiłkowym czasownikiem jest [[être]]\n----' % (a[0], a[0], a[0], a[0])
 		text = re.sub(usun_poczatek, u'', text)
@@ -52,4 +52,4 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()

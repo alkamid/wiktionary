@@ -65,7 +65,6 @@ def main():
 			
 			try: inp = gzip.open(folder + filename)
 			except IOError:
-				print 'ioerror'
 				continue
 			
 			#here was the code used for downloading pagecounts, moved to the end of this file
@@ -121,17 +120,17 @@ def main():
 	text += u'\n|}'
 	text = text.replace(u'_', u' ')
 	
-	file = open("%s/wikt/moje/log/visits.txt" % os.environ['HOME'], 'w')
+	file = open("%soutput/visits.txt" % config.path['scripts'], 'w')
 	file.write(textFile.encode('utf-8'))
 	file.close
 	
 	statSite.put(text, comment = 'aktualizacja', botflag=False)
 	
-	#cleanup
-	os.chdir('/mnt/user-store/alkamid/stats/')
+	#cleanup  - only if you download files along the way
+	'''os.chdir('/mnt/user-store/alkamid/stats/')
 	toRemove= glob.glob('pagecounts*.gz')
 	for file in toRemove:
-		os.remove(file)
+		os.remove(file)'''
 
 if __name__ == '__main__':
     try:

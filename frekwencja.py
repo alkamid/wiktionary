@@ -6,10 +6,10 @@
 import sys
 sys.path.append('/home/adam/pywiki/pywikipedia')
 import codecs
-import wikipedia
+import pywikibot
 
 def main():
-	site = wikipedia.getSite()
+	site = pywikibot.getSite()
 	lista = []
 	inp = codecs.open('myfile', encoding='utf-8')
 
@@ -26,14 +26,14 @@ def main():
 	for a in lista:
 		if (a[1] == "v"):
 			
-			page = wikipedia.Page(site, u'%s' % (a[0]))
+			page = pywikibot.Page(site, u'%s' % (a[0]))
 			try:
 				exists = page.get()
-			except wikipedia.NoPage:
+			except pywikibot.NoPage:
 				text += '*[[' + a[0] + '#fr|' + a[0] + ']]' + '\n'
-			except wikipedia.IsRedirectPage:
+			except pywikibot.IsRedirectPage:
 				text += '*[[' + a[0] + '#fr|' + a[0] + ']] - przekierowanie' + '\n'
-			except wikipedia.Error:
+			except pywikibot.Error:
 				print 'nieznany błąd'
 		
 			i+=1.00
@@ -49,4 +49,4 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()

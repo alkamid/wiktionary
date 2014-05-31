@@ -1,11 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import wikipedia
-import catlib
-import pagegenerators
+import pywikibot
+from pywikibot import pagegenerators
 import re
-import xmlreader
+from pywikibot import xmlreader
 import collections
 from klasa import *
 
@@ -13,9 +12,9 @@ from klasa import *
 def czescimowy(data):
 	
 	data_slownie = data[6] + data[7] + u'.' + data[4] + data[5] + u'.' + data[0] + data[1] + data[2] + data[3]
-	site = wikipedia.getSite()
-	allowedPage = wikipedia.Page(site, u'Wikipedysta:AlkamidBot/części_mowy/dozwolone')
-	outputPage = wikipedia.Page(site, u'Wikipedysta:AlkamidBot/części_mowy/wszystkie')
+	site = pywikibot.getSite()
+	allowedPage = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/części_mowy/dozwolone')
+	outputPage = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/części_mowy/wszystkie')
 	allowedPageText = allowedPage.get()
 	tempListAllowed = allowedPageText.split(u'\n')
 	allowedParts = {}

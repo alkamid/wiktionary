@@ -4,13 +4,13 @@
 import sys
 sys.path.append('/home/alkamid/wikt/pywikipedia')
 #sys.path.append('/home/adam/pywiki/pywikipedia')
-import wikipedia, query, userlib
+import pywikibot. query, userlib
 
 __version__ = '$Id: revertbot.py 7957 2010-02-24 14:26:58Z xqt $'
 
 """
     (c) Bryan Tong Minh, 2008
-    (c) Pywikipedia team, 2008-2010
+    (c) Pypywikibot.team, 2008-2010
     Licensed under the terms of the MIT license.
 """
 
@@ -101,16 +101,16 @@ class BaseRevertBot(object):
             rev['user'], rev['timestamp'])
         if self.comment: comment += ': ' + self.comment
 
-        page = wikipedia.Page(self.site, item['title'])
-        wikipedia.output(u"\n\n>>> \03{lightpurple}%s\03{default} <<<" % page.aslink(True, True))
+        page = pywikibot.Page(self.site, item['title'])
+        pywikibot.output(u"\n\n>>> \03{lightpurple}%s\03{default} <<<" % page.aslink(True, True))
         old = page.get()
         new = rev['*']
-        wikipedia.showDiff(old, new)
+        pywikibot.showDiff(old, new)
         page.put(new, comment)
         return comment
 
     def log(self, msg):
-        wikipedia.output(msg)
+        pywikibot.output(msg)
 
 import re
 
@@ -118,7 +118,7 @@ class myRevertBot(BaseRevertBot):
         
     def callback(self, item):
         if 'top' in item:
-            page = wikipedia.Page(self.site, item['title'])
+            page = pywikibot.Page(self.site, item['title'])
             text=page.get()
             pattern = re.compile(u'\[\[.+?:.+?\..+?\]\]', re.UNICODE)
             return pattern.search(text) >= 0
@@ -126,13 +126,13 @@ class myRevertBot(BaseRevertBot):
 
 def main():
     item = None
-    for arg in wikipedia.handleArgs():
+    for arg in pywikibot.handleArgs():
         continue
-    bot = myRevertBot(site = wikipedia.getSite())
+    bot = myRevertBot(site = pywikibot.getSite())
     bot.revert_contribs()
 
 if __name__ == "__main__":
     try:
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()

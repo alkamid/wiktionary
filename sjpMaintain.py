@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import codecs
-import wikipedia
+import pywikibot
 import re
+import config
 from os import environ
 from klasa import *
 from sjpClass import kategoriaSlowa, checkHistory
@@ -28,8 +29,8 @@ def checkIfExists(page):
 	return changed
 
 def createMapping(map):
-	mapPage = wikipedia.Page(site, u'Wikipedysta:AlkamidBot/sjp/mapa')
-	wordListFilename = u'%s/wikt/moje/output/frequencyListPL.txt' % environ['HOME']
+	mapPage = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/sjp/mapa')
+	wordListFilename = u'%soutput/frequencyListPL.txt' % config.path['scripts']
 	wordList = codecs.open(wordListFilename, 'r', 'utf-8')
 	i=1
 	table = u'{| class="wikitable"'
@@ -62,7 +63,7 @@ def checkImages(page, obrazki):
 	return changed
 
 def updateTable(katPages, pageCount, tableText):
-	page = wikipedia.Page(site, u'%s%d' % (katPages, pageCount))
+	page = pywikibot.Page(site, u'%s%d' % (katPages, pageCount))
 	history = page.getVersionHistory()
 	if history[0][2] == u'Olafbot' and history[0][3] == u'Zawartość została przeniesiona do artykułów.':
 		tableText = tableText.replace(u'\n| [[%s%d|%d]]' % (katPages, pageCount, pageCount), u'')
@@ -70,7 +71,7 @@ def updateTable(katPages, pageCount, tableText):
 							
 def main():
 	global site
-	site = wikipedia.getSite()
+	site = pywikibot.getSite()
 	wordsPerPage = 10
 	
 	kategorie = []
@@ -82,7 +83,7 @@ def main():
 	kategorie.append(kategoriaSlowa(u'brak_znaczenia', wordsPerPage, u'brak_znaczen/', u'\n|-\n| bez znaczeń', u'brak_znaczenia'))
 	kategorie.append(kategoriaSlowa(u'przymiotnik_od', wordsPerPage, u'przymiotnik_od/', u'\n|-\n| \"przymiotnik od\"', u'przymiotnik_od'))
 	
-	tabelkaPage = wikipedia.Page(site, u'Wikipedysta:AlkamidBot/sjp/tabelka')
+	tabelkaPage = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/sjp/tabelka')
 	tabText = tabelkaPage.get()
 	for kat in kategorie:
 		s_limits = re.search(ur'%s([0-9]*?)\|[0-9]*?]]\n\|-' % kat.pages, tabText)
@@ -121,6 +122,6 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()
         
 

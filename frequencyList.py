@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import codecs
-from pywikibot import catlib
+from pywikibot import Category
 import pywikibot
 from pywikibot import pagegenerators
 import re

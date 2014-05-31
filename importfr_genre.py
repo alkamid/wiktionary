@@ -4,9 +4,9 @@
 import sys
 sys.path.append('/home/adam/wikt/pywikipedia')
 #sys.path.append('/home/alkamid/wikt/pywikipedia')
-import wikipedia
-import catlib
-import pagegenerators
+import pywikibot
+from pywikibot import Category
+from pywikibot import pagegenerators
 import re
 import codecs
 from klasa import *
@@ -15,9 +15,9 @@ def main():
 	
 
 	lista = ReadList('/home/adam/wikt/moje/inne/bez_rodzaju.txt')
-	#site = wikipedia.getSite('fr', 'wiktionary')
-	#cat = catlib.Category(site,u'Catégorie:Noms_communs_en_français')
-	#cat = catlib.Category(site,u'Catégorie:français')
+	#site = pywikibot.getSite('fr', 'wiktionary')
+	#cat = Category(site,u'Catégorie:Noms_communs_en_français')
+	#cat = Category(site,u'Catégorie:français')
 	#lista = pagegenerators.CategorizedPageGenerator(cat)
 	
 	for a in lista:
@@ -44,4 +44,4 @@ if __name__ == '__main__':
 	try:
 		main()
 	finally:
-		wikipedia.stopme()
+		pywikibot.stopme()

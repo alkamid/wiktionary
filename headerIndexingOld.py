@@ -4,14 +4,14 @@
 # wstawia odpowiedni parametr w językach używających znaków diaktrycznych
 
 import codecs
-import catlib
-import wikipedia
-import pagegenerators
+from pywikibot import Category
+import pywikibot
+from pywikibot import pagegenerators
 import re
 from klasa import *
 
 def main():
-    site = wikipedia.getSite()
+    site = pywikibot.getSite()
     
     replace = {}
     replace[u'nowogrecki'] = {u'Ά': u'Α', u'Έ': u'Ε', u'Ί': u'Ι', u'Ϊ': u'Ι', u'Ό': u'Ο', u'Ύ': u'Υ', u'Ϋ': u'Υ', u'Ώ': u'Ω', u'ά': u'α', u'έ': u'ε', u'ί': u'ι', u'ϊ': u'ι', u'ΐ': u'ι', u'ό': u'ο', u'ύ': u'υ', u'ϋ': u'υ', u'ΰ': u'υ', u'ώ': u'ω', u'ς': u'σ'}
@@ -19,7 +19,7 @@ def main():
     replace[u'hiszpański'] = {u'Á': u'A',u'É': u'E',u'Í': u'I',u'Ó': u'O',u'Ú': u'U',u'á': u'a',u'é': u'e',u'í': u'i',u'ó': u'o',u'ú': u'u'}
     
     for lang in replace:
-        cat = catlib.Category(site, u'Kategoria:%s (indeks)' % lang)
+        cat = Category(site, u'Kategoria:%s (indeks)' % lang)
         lista_stron = pagegenerators.CategorizedPageGenerator(cat)
     
         for a in lista_stron:
@@ -54,4 +54,4 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()

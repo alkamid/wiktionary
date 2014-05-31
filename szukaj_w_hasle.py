@@ -4,11 +4,11 @@
 # szuka danego przez szukany_tekst wyrażenia w hasłach
 
 import codecs
-import catlib
-import wikipedia
-import pagegenerators
+from pywikibot import Category
+import pywikibot
+from pywikibot import pagegenerators
 import re
-import query
+from pywikibot.compat import query
 from datetime import datetime
 import time
 from klasa import *
@@ -38,11 +38,11 @@ def main():
 		
 	'''print query.GetData(params)['query']
 	
-	site = wikipedia.getSite()
+	site = pywikibot.getSite()
 	lista = pagegenerators.RecentchangesPageGenerator(100, site)
 	lista1 = pagegenerators.RecentchangesPageGenerator(100, site)
 	
-	#lista = [wikipedia.Page(site, u'depuis')]
+	#lista = [pywikibot.Page(site, u'depuis')]
 	
 	#for a in lista:
 		#his = a.getVersionHistory()
@@ -63,7 +63,7 @@ def main():
 				print h.title'''
 	
 	'''
-	site = wikipedia.getSite()
+	site = pywikibot.getSite()
 	sekcje = []
 	sekcje.append(u'{{odmiana')
 	sekcje.append(u'{{etymologia}}')
@@ -119,14 +119,14 @@ def main():
 	
 	for pp in lista_gen:
 		
-		page = wikipedia.Page(site, u'%s' % (pp))
+		page = pywikibot.Page(site, u'%s' % (pp))
 		try:
 			text = page.get()
-		except wikipedia.NoPage:
+		except pywikibot.NoPage:
 			continue
-		except wikipedia.IsRedirectPage:
+		except pywikibot.IsRedirectPage:
 			continue
-		except wikipedia.Error:
+		except pywikibot.Error:
 			print 'nieznany błąd'
 		
 		if u'{{przykłady}}' not in text:
@@ -143,4 +143,4 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import wikipedia
+import pywikibot
 
 class kategoriaSlowa():
     def __init__(self, name, counter, pages, tabelka, outputFile):
@@ -17,10 +17,10 @@ class kategoriaSlowa():
 
 def checkHistory(pagename):
     #returns 1, if AlkamidBot or Olafbot were the last authors, 0 if someone is verifying the page (=it was last edited by someone else)
-    site = wikipedia.getSite()
-    page = wikipedia.Page(site, pagename)
+    site = pywikibot.getSite()
+    page = pywikibot.Page(site, pagename)
     try: page.get()
-    except wikipedia.NoPage:
+    except pywikibot.NoPage:
         return 1
     else:
         history = page.getVersionHistory()

@@ -1,13 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import wikipedia
+import pywikibot
 from klasa import *
 import datetime
 import time
     
 def main():
-    site = wikipedia.getSite()
+    site = pywikibot.getSite()
     
     jakie = u'bengalskie'
     catname = u'Język bengalski'
@@ -27,24 +27,24 @@ def main():
     
     textCategory = u'[[Kategoria:%s| ]]\n[[Kategoria:Przysłowia]]\n{{język linków|%s}}' % (catname, linkLang)
  
-    pageTemplate = wikipedia.Page(site, u'Szablon:przysłowie %s' % jakie)
+    pageTemplate = pywikibot.Page(site, u'Szablon:przysłowie %s' % jakie)
     try: pageTemplate.get()
-    except wikipedia.NoPage:
+    except pywikibot.NoPage:
         pageTemplate.put(textTemplate, comment=u"Dodanie szablonu dla przysłowia")
     else:
         print u'Szablon dla języka "%s" już istnieje!' % jakie
         
-    pageCategory = wikipedia.Page(site, u'Kategoria:%s' % newCat)
+    pageCategory = pywikibot.Page(site, u'Kategoria:%s' % newCat)
     try: pageCategory.get()
-    except wikipedia.NoPage:
+    except pywikibot.NoPage:
         pageCategory.put(textCategory, comment=u"Dodanie kategorii dla przysłów")
     else:
         print u'Kategoria dla języka "%s" już istnieje!' % jakie
         
         
-    langCategory = wikipedia.Page(site, u'Kategoria:%s' % catname)
+    langCategory = pywikibot.Page(site, u'Kategoria:%s' % catname)
     try: temp = langCategory.get()
-    except wikipedia.NoPage:
+    except pywikibot.NoPage:
         print u'Error: no such category: %s' % catname
     else:
         if u'\n|przysłowia=\n|' in temp:
@@ -58,5 +58,5 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()
 

@@ -1,10 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import wikipedia
-import catlib
+import pywikibot
+from pywikibot import Category
 import codecs
-import pagegenerators
+from pywikibot import pagegenerators
 import re
 from klasa import *
 from os import environ
@@ -40,7 +40,7 @@ def retrieveEnPlusCommons(a):
     canj_abort = 0
     cr_abort = 0
    
-    ang = wikipedia.Page(site_en, a)
+    ang = pywikibot.Page(site_en, a)
     ang_text = ang.get()
     han_char_s = re.search(han_char, ang_text)
     
@@ -122,14 +122,14 @@ def retrieveEnPlusCommons(a):
     trad = u''
     shin = u''
     
-    try: wikipedia.ImagePage(site_en, u'File:%s-clerical.svg' % a).fileIsOnCommons()
-    except wikipedia.NoPage or wikipedia.IsRedirectPage:
-        try: wikipedia.ImagePage(site_en, u'File:%s-clerical.png' % a).fileIsOnCommons()
-        except wikipedia.NoPage or wikipedia.IsRedirectPage:
-            try: wikipedia.ImagePage(site_en, u'File:%s-clerical.gif' % a).fileIsOnCommons()
-            except wikipedia.NoPage:
+    try: pywikibot.ImagePage(site_en, u'File:%s-clerical.svg' % a).fileIsShared()
+    except pywikibot.NoPage or pywikibot.IsRedirectPage:
+        try: pywikibot.ImagePage(site_en, u'File:%s-clerical.png' % a).fileIsShared()
+        except pywikibot.NoPage or pywikibot.IsRedirectPage:
+            try: pywikibot.ImagePage(site_en, u'File:%s-clerical.gif' % a).fileIsShared()
+            except pywikibot.NoPage:
                 pass
-            except wikipedia.IsRedirectPage:
+            except pywikibot.IsRedirectPage:
                 pass
             else:
                 new.addWariant('c', '|g')
@@ -138,14 +138,14 @@ def retrieveEnPlusCommons(a):
     else:
         new.addWariant('c', '')             
 
-    try: wikipedia.ImagePage(site_en, u'File:%s-xinshu.svg' % a).fileIsOnCommons()
-    except wikipedia.NoPage or wikipedia.IsRedirectPage:
-        try: wikipedia.ImagePage(site_en, u'File:%s-xinshu.png' % a).fileIsOnCommons()
-        except wikipedia.NoPage or wikipedia.IsRedirectPage:
-            try: wikipedia.ImagePage(site_en, u'File:%s-xinshu.gif' % a).fileIsOnCommons()
-            except wikipedia.NoPage:
+    try: pywikibot.ImagePage(site_en, u'File:%s-xinshu.svg' % a).fileIsShared()
+    except pywikibot.NoPage or pywikibot.IsRedirectPage:
+        try: pywikibot.ImagePage(site_en, u'File:%s-xinshu.png' % a).fileIsShared()
+        except pywikibot.NoPage or pywikibot.IsRedirectPage:
+            try: pywikibot.ImagePage(site_en, u'File:%s-xinshu.gif' % a).fileIsShared()
+            except pywikibot.NoPage:
                 pass
-            except wikipedia.IsRedirectPage:
+            except pywikibot.IsRedirectPage:
                 pass
             else:
                 new.addWariant('xt', '|g')
@@ -154,20 +154,20 @@ def retrieveEnPlusCommons(a):
     else:
         new.addWariant('xt', '')      
 
-    try: wikipedia.ImagePage(site_en, u'File:%s-still.svg' % a).fileIsOnCommons()
-    except wikipedia.NoPage or wikipedia.IsRedirectPage:
-        try: wikipedia.ImagePage(site_en, u'File:%s-caoshu.svg' % a).fileIsOnCommons()
-        except wikipedia.NoPage or wikipedia.IsRedirectPage:
-            try: wikipedia.ImagePage(site_en, u'File:%s-still.png' % a).fileIsOnCommons()
-            except wikipedia.NoPage or wikipedia.IsRedirectPage:
-                try: wikipedia.ImagePage(site_en, u'File:%s-caoshu.png' % a).fileIsOnCommons()
-                except wikipedia.NoPage or wikipedia.IsRedirectPage:
-                    try: wikipedia.ImagePage(site_en, u'File:%s-still.gif' % a).fileIsOnCommons()
-                    except wikipedia.NoPage or wikipedia.IsRedirectPage:
-                        try: wikipedia.ImagePage(site_en, u'File:%s-caoshu.gif' % a).fileIsOnCommons()
-                        except wikipedia.NoPage:
+    try: pywikibot.ImagePage(site_en, u'File:%s-still.svg' % a).fileIsShared()
+    except pywikibot.NoPage or pywikibot.IsRedirectPage:
+        try: pywikibot.ImagePage(site_en, u'File:%s-caoshu.svg' % a).fileIsShared()
+        except pywikibot.NoPage or pywikibot.IsRedirectPage:
+            try: pywikibot.ImagePage(site_en, u'File:%s-still.png' % a).fileIsShared()
+            except pywikibot.NoPage or pywikibot.IsRedirectPage:
+                try: pywikibot.ImagePage(site_en, u'File:%s-caoshu.png' % a).fileIsShared()
+                except pywikibot.NoPage or pywikibot.IsRedirectPage:
+                    try: pywikibot.ImagePage(site_en, u'File:%s-still.gif' % a).fileIsShared()
+                    except pywikibot.NoPage or pywikibot.IsRedirectPage:
+                        try: pywikibot.ImagePage(site_en, u'File:%s-caoshu.gif' % a).fileIsShared()
+                        except pywikibot.NoPage:
                             pass
-                        except wikipedia.IsRedirectPage:
+                        except pywikibot.IsRedirectPage:
                             pass
                         else:
                             new.addWariant('ca', '|g')
@@ -183,14 +183,14 @@ def retrieveEnPlusCommons(a):
         new.addWariant('st', '') 
 
                                     
-    try: wikipedia.ImagePage(site_en, u'File:%s-kaishu.svg' % a).fileIsOnCommons()
-    except wikipedia.NoPage or wikipedia.IsRedirectPage:
-        try: wikipedia.ImagePage(site_en, u'File:%s-kaishu.png' % a).fileIsOnCommons()
-        except wikipedia.NoPage or wikipedia.IsRedirectPage:
-            try: wikipedia.ImagePage(site_en, u'File:%s-kaishu.gif' % a).fileIsOnCommons()
-            except wikipedia.NoPage:
+    try: pywikibot.ImagePage(site_en, u'File:%s-kaishu.svg' % a).fileIsShared()
+    except pywikibot.NoPage or pywikibot.IsRedirectPage:
+        try: pywikibot.ImagePage(site_en, u'File:%s-kaishu.png' % a).fileIsShared()
+        except pywikibot.NoPage or pywikibot.IsRedirectPage:
+            try: pywikibot.ImagePage(site_en, u'File:%s-kaishu.gif' % a).fileIsShared()
+            except pywikibot.NoPage:
                 pass
-            except wikipedia.IsRedirectPage:
+            except pywikibot.IsRedirectPage:
                 pass
             else:
                 new.addWariant('kt', '|g')
@@ -199,14 +199,14 @@ def retrieveEnPlusCommons(a):
     else:
         new.addWariant('kt', '')    
 
-    try: wikipedia.ImagePage(site_en, u'File:%s-songti.svg' % a).fileIsOnCommons()
-    except wikipedia.NoPage or wikipedia.IsRedirectPage:
-        try: wikipedia.ImagePage(site_en, u'File:%s-songti.png' % a).fileIsOnCommons()
-        except wikipedia.NoPage or wikipedia.IsRedirectPage:
-            try: wikipedia.ImagePage(site_en, u'File:%s-songti.gif' % a).fileIsOnCommons()
-            except wikipedia.NoPage:
+    try: pywikibot.ImagePage(site_en, u'File:%s-songti.svg' % a).fileIsShared()
+    except pywikibot.NoPage or pywikibot.IsRedirectPage:
+        try: pywikibot.ImagePage(site_en, u'File:%s-songti.png' % a).fileIsShared()
+        except pywikibot.NoPage or pywikibot.IsRedirectPage:
+            try: pywikibot.ImagePage(site_en, u'File:%s-songti.gif' % a).fileIsShared()
+            except pywikibot.NoPage:
                 pass
-            except wikipedia.IsRedirectPage:
+            except pywikibot.IsRedirectPage:
                 pass
             else:
                 new.addWariant('sot', '|g')
@@ -215,20 +215,20 @@ def retrieveEnPlusCommons(a):
     else:
         new.addWariant('sot', '')
         
-    try: wikipedia.ImagePage(site_en, u'File:%s-bw.png' % a).fileIsOnCommons()
-    except wikipedia.NoPage or wikipedia.IsRedirectPage:
-        try: wikipedia.ImagePage(site_en, u'File:%s-red.png' % a).fileIsOnCommons()
-        except wikipedia.NoPage or wikipedia.IsRedirectPage:
-            try: wikipedia.ImagePage(site_en, u'File:%s-order.gif' % a).fileIsOnCommons()
-            except wikipedia.NoPage:
+    try: pywikibot.ImagePage(site_en, u'File:%s-bw.png' % a).fileIsShared()
+    except pywikibot.NoPage or pywikibot.IsRedirectPage:
+        try: pywikibot.ImagePage(site_en, u'File:%s-red.png' % a).fileIsShared()
+        except pywikibot.NoPage or pywikibot.IsRedirectPage:
+            try: pywikibot.ImagePage(site_en, u'File:%s-order.gif' % a).fileIsShared()
+            except pywikibot.NoPage:
                 pass
-            except wikipedia.IsRedirectPage:
+            except pywikibot.IsRedirectPage:
                 pass
             else:
-                try: tmpget = wikipedia.ImagePage(commons, u'File:%s-order.gif' % a).get()
-                except wikipedia.NoPage or wikipedia.IsRedirectPage:
+                try: tmpget = pywikibot.ImagePage(commons, u'File:%s-order.gif' % a).get()
+                except pywikibot.NoPage or pywikibot.IsRedirectPage:
                     pass
-                except wikipedia.IsRedirectPage:
+                except pywikibot.IsRedirectPage:
                     pass
                 else:
                     if not '{{ARlicense' in tmpget:
@@ -238,20 +238,20 @@ def retrieveEnPlusCommons(a):
     else:
         new.addKolejnosc('', u'{{zch-komiks')
                     
-    try: wikipedia.ImagePage(site_en, u'File:%s-jbw.png' % a).fileIsOnCommons()
-    except wikipedia.NoPage or wikipedia.IsRedirectPage:
-        try: wikipedia.ImagePage(site_en, u'File:%s-jred.png' % a).fileIsOnCommons()
-        except wikipedia.NoPage or wikipedia.IsRedirectPage:
-            try: wikipedia.ImagePage(site_en, u'File:%s-jorder.gif' % a).fileIsOnCommons()
-            except wikipedia.NoPage:
+    try: pywikibot.ImagePage(site_en, u'File:%s-jbw.png' % a).fileIsShared()
+    except pywikibot.NoPage or pywikibot.IsRedirectPage:
+        try: pywikibot.ImagePage(site_en, u'File:%s-jred.png' % a).fileIsShared()
+        except pywikibot.NoPage or pywikibot.IsRedirectPage:
+            try: pywikibot.ImagePage(site_en, u'File:%s-jorder.gif' % a).fileIsShared()
+            except pywikibot.NoPage:
                 pass
-            except wikipedia.IsRedirectPage:
+            except pywikibot.IsRedirectPage:
                 pass
             else:
-                try: tmpget = wikipedia.ImagePage(commons, u'File:%s-jorder.gif' % a).get()
-                except wikipedia.NoPage or wikipedia.IsRedirectPage:
+                try: tmpget = pywikibot.ImagePage(commons, u'File:%s-jorder.gif' % a).get()
+                except pywikibot.NoPage or pywikibot.IsRedirectPage:
                     pass
-                except wikipedia.IsRedirectPage:
+                except pywikibot.IsRedirectPage:
                     pass
                 else:
                     if not '{{ARlicense' in tmpget:
@@ -261,20 +261,20 @@ def retrieveEnPlusCommons(a):
     else:
         new.addKolejnosc('j', u'{{zch-komiks')  
     
-    try: wikipedia.ImagePage(site_en, u'File:%s-tbw.png' % a).fileIsOnCommons()
-    except wikipedia.NoPage or wikipedia.IsRedirectPage:
-        try: wikipedia.ImagePage(site_en, u'File:%s-tred.png' % a).fileIsOnCommons()
-        except wikipedia.NoPage or wikipedia.IsRedirectPage:
-            try: wikipedia.ImagePage(site_en, u'File:%s-torder.gif' % a).fileIsOnCommons()
-            except wikipedia.NoPage:
+    try: pywikibot.ImagePage(site_en, u'File:%s-tbw.png' % a).fileIsShared()
+    except pywikibot.NoPage or pywikibot.IsRedirectPage:
+        try: pywikibot.ImagePage(site_en, u'File:%s-tred.png' % a).fileIsShared()
+        except pywikibot.NoPage or pywikibot.IsRedirectPage:
+            try: pywikibot.ImagePage(site_en, u'File:%s-torder.gif' % a).fileIsShared()
+            except pywikibot.NoPage:
                 pass
-            except wikipedia.IsRedirectPage:
+            except pywikibot.IsRedirectPage:
                 pass
             else:
-                try: tmpget = wikipedia.ImagePage(commons, u'File:%s-torder.gif' % a).get()
-                except wikipedia.NoPage or wikipedia.IsRedirectPage:
+                try: tmpget = pywikibot.ImagePage(commons, u'File:%s-torder.gif' % a).get()
+                except pywikibot.NoPage or pywikibot.IsRedirectPage:
                     pass
-                except wikipedia.IsRedirectPage:
+                except pywikibot.IsRedirectPage:
                     pass
                 else:
                     if not '{{ARlicense' in tmpget:
@@ -284,20 +284,20 @@ def retrieveEnPlusCommons(a):
     else:
         new.addKolejnosc('t', u'{{zch-komiks')       
         
-    try: wikipedia.ImagePage(site_en, u'File:%s-abw.png' % a).fileIsOnCommons()
-    except wikipedia.NoPage or wikipedia.IsRedirectPage:
-        try: wikipedia.ImagePage(site_en, u'File:%s-ared.png' % a).fileIsOnCommons()
-        except wikipedia.NoPage or wikipedia.IsRedirectPage:
-            try: wikipedia.ImagePage(site_en, u'File:%s-aorder.gif' % a).fileIsOnCommons()
-            except wikipedia.NoPage:
+    try: pywikibot.ImagePage(site_en, u'File:%s-abw.png' % a).fileIsShared()
+    except pywikibot.NoPage or pywikibot.IsRedirectPage:
+        try: pywikibot.ImagePage(site_en, u'File:%s-ared.png' % a).fileIsShared()
+        except pywikibot.NoPage or pywikibot.IsRedirectPage:
+            try: pywikibot.ImagePage(site_en, u'File:%s-aorder.gif' % a).fileIsShared()
+            except pywikibot.NoPage:
                 pass
-            except wikipedia.IsRedirectPage:
+            except pywikibot.IsRedirectPage:
                 pass
             else:
-                try: tmpget = wikipedia.ImagePage(commons, u'File:%s-aorder.gif' % a).get()
-                except wikipedia.NoPage or wikipedia.IsRedirectPage:
+                try: tmpget = pywikibot.ImagePage(commons, u'File:%s-aorder.gif' % a).get()
+                except pywikibot.NoPage or pywikibot.IsRedirectPage:
                     pass
-                except wikipedia.IsRedirectPage:
+                except pywikibot.IsRedirectPage:
                     pass
                 else:
                     if not '{{ARlicense' in tmpget:
@@ -307,12 +307,12 @@ def retrieveEnPlusCommons(a):
     else:
         new.addKolejnosc('a', u'{{zch-komiks')
         
-    try: wikipedia.ImagePage(site_en, u'File:%s-oracle.svg' % a).fileIsOnCommons()
-    except wikipedia.NoPage or wikipedia.IsRedirectPage:
-        try: wikipedia.ImagePage(site_en, u'File:%s-oracle.png' % a).fileIsOnCommons()
-        except wikipedia.NoPage:
+    try: pywikibot.ImagePage(site_en, u'File:%s-oracle.svg' % a).fileIsShared()
+    except pywikibot.NoPage or pywikibot.IsRedirectPage:
+        try: pywikibot.ImagePage(site_en, u'File:%s-oracle.png' % a).fileIsShared()
+        except pywikibot.NoPage:
             pass
-        except wikipedia.IsRedirectPage:
+        except pywikibot.IsRedirectPage:
             pass
         else:
             new.addEtym('o', u'%s|p' % a)
@@ -320,36 +320,36 @@ def retrieveEnPlusCommons(a):
         new.addEtym('o', u'%s' % a)
     
 
-    try: wikipedia.ImagePage(site_en, u'File:%s-bronze.svg' % a).fileIsOnCommons()
-    except wikipedia.NoPage or wikipedia.IsRedirectPage:
-        try: wikipedia.ImagePage(site_en, u'File:%s-bronze.png' % a).fileIsOnCommons()
-        except wikipedia.NoPage:
+    try: pywikibot.ImagePage(site_en, u'File:%s-bronze.svg' % a).fileIsShared()
+    except pywikibot.NoPage or pywikibot.IsRedirectPage:
+        try: pywikibot.ImagePage(site_en, u'File:%s-bronze.png' % a).fileIsShared()
+        except pywikibot.NoPage:
             pass
-        except wikipedia.IsRedirectPage:
+        except pywikibot.IsRedirectPage:
             pass
         else:
             new.addEtym('br', u'%s|p' % a)
     else:
         new.addEtym('br', u'%s' % a)
         
-    try: wikipedia.ImagePage(site_en, u'File:%s-bigseal.svg' % a).fileIsOnCommons()
-    except wikipedia.NoPage or wikipedia.IsRedirectPage:
-        try: wikipedia.ImagePage(site_en, u'File:%s-bigseal.png' % a).fileIsOnCommons()
-        except wikipedia.NoPage:
+    try: pywikibot.ImagePage(site_en, u'File:%s-bigseal.svg' % a).fileIsShared()
+    except pywikibot.NoPage or pywikibot.IsRedirectPage:
+        try: pywikibot.ImagePage(site_en, u'File:%s-bigseal.png' % a).fileIsShared()
+        except pywikibot.NoPage:
             pass
-        except wikipedia.IsRedirectPage:
+        except pywikibot.IsRedirectPage:
             pass
         else:
             new.addEtym('bs', u'%s|p' % a)
     else:
         new.addEtym('bs', u'%s' % a)
     
-    try: wikipedia.ImagePage(site_en, u'File:%s-seal.svg' % a).fileIsOnCommons()
-    except wikipedia.NoPage or wikipedia.IsRedirectPage:
-        try: wikipedia.ImagePage(site_en, u'File:%s-seal.png' % a).fileIsOnCommons()
-        except wikipedia.NoPage:
+    try: pywikibot.ImagePage(site_en, u'File:%s-seal.svg' % a).fileIsShared()
+    except pywikibot.NoPage or pywikibot.IsRedirectPage:
+        try: pywikibot.ImagePage(site_en, u'File:%s-seal.png' % a).fileIsShared()
+        except pywikibot.NoPage:
             pass
-        except wikipedia.IsRedirectPage:
+        except pywikibot.IsRedirectPage:
             pass
         else:
             new.addEtym('ss', u'%s|p' % a)
@@ -613,16 +613,16 @@ def main():
     
     list = makeConversionList()
     global site_pl
-    site_pl = wikipedia.getSite()
+    site_pl = pywikibot.getSite()
     global site_en
-    site_en = wikipedia.getSite('en', 'wiktionary')
+    site_en = pywikibot.getSite('en', 'wiktionary')
     global commons
-    commons = wikipedia.getSite('commons', 'commons')
+    commons = pywikibot.getSite('commons', 'commons')
     global test_mode
     test_mode = 0
     global data_en
     data_en = '20120125'
-    cat_en = catlib.Category(site_en, u'Category:Han_characters')
+    cat_en = Category(site_en, u'Category:Han_characters')
     lista_stron_en = pagegenerators.CategorizedPageGenerator(cat_en)
     
     file = open("%s/wikt/moje/log/zch.txt" % environ['HOME'], 'w')
@@ -683,7 +683,7 @@ def main():
                     
                     pl.push(False, myComment = u'aktualizacja danych o znaku chińskim; źródła: [[:en:%s]], http://simplify.codeplex.com/, commons' % title, new=True)
 
-    logPage = wikipedia.Page(site_pl, u'Wikipedysta:AlkamidBot/listy/znak chiński')
+    logPage = pywikibot.Page(site_pl, u'Wikipedysta:AlkamidBot/listy/znak chiński')
     logPageText = u'AlkamidBot cyklicznie sprawdza, czy w angielskim Wikisłowniku lub na commons pojawiły się nowe informacje o znakach chińskich (np. warianty pisania, zapisy etymologiczne itp.). Na tej liście zapisuje problemy, jakie napotkał: ("tabela" oznacza dane z http://simplify.codeplex.com/)\n\n'
     file = codecs.open("%s/wikt/moje/log/zch.txt" % environ['HOME'], 'r', 'utf-8')
     logPageText += file.read()
@@ -694,4 +694,4 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()

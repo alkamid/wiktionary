@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import pywikibot
-from pywikibot import catlib
+from pywikibot import Category
 from pywikibot import pagegenerators
 import re
 from pywikibot import xmlreader

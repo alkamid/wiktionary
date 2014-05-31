@@ -4,15 +4,15 @@
 # wstawia odpowiedni parametr w językach używających znaków diaktrycznych
 
 import codecs
-import catlib
-import wikipedia
-import pagegenerators
+from pywikibot import Category
+import pywikibot
+from pywikibot import pagegenerators
 import re
 from klasa import *
 
 def main():
     
-    site = wikipedia.getSite()
+    site = pywikibot.getSite()
     
     # mode = 1 - updating pages from recent changes; 2 - after adding new languages to the script, all the words in that language have to be checked
     mode = 1
@@ -25,7 +25,7 @@ def main():
     if mode == 2:
         newlangs = [u'arabski', u'perski', u'paszto', u'dari', u'urdu', u'osmańsko-turecki']
         for elem in newlangs:
-            cat = catlib.Category(site, u'Kategoria:%s (indeks)' % elem)
+            cat = Category(site, u'Kategoria:%s (indeks)' % elem)
             pageSet = set(pagegenerators.CategorizedPageGenerator(cat))
             for page in pageSet:
                 mylist.add(page.title())
@@ -76,4 +76,4 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()

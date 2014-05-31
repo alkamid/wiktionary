@@ -4,7 +4,7 @@
 # robienie listy haseł polskich bez wymowy
 
 import codecs
-from pywikibot import catlib
+from pywikibot import Category
 import pywikibot
 from pywikibot import pagegenerators
 import re
@@ -16,8 +16,8 @@ def main():
 	
 	site = pywikibot.getSite()
 	
-	cat_main = catlib.Category(site,u'Kategoria:polski (indeks)')
-	cat_gwary = catlib.Category(site, u'Kategoria:Polski_(dialekty_i_gwary)')
+	cat_main = Category(site,u'Kategoria:polski (indeks)')
+	cat_gwary = Category(site, u'Kategoria:Polski_(dialekty_i_gwary)')
 
 	output_main = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/porzucone')
 	

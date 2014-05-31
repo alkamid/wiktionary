@@ -4,7 +4,7 @@
 # statystyka długości haseł - pobiera ja z xml
 
 import codecs
-from pywikibot import catlib
+from pywikibot import Category
 import pywikibot
 from pywikibot import pagegenerators
 import re

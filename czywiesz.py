@@ -4,9 +4,8 @@
 # robienie listy haseł polskich bez wymowy
 
 import codecs
-import catlib
-import wikipedia
-import pagegenerators
+import pywikibot
+from pywikibot import pagegenerators
 import re
 import math
 import datetime
@@ -16,10 +15,10 @@ def main():
 	
 	logging.basicConfig()
 	
-	wiki = wikipedia.getSite('pl', 'wikipedia')
-	wikt = wikipedia.getSite('pl', 'wiktionary')
+	wiki = pywikibot.getSite('pl', 'wikipedia')
+	wikt = pywikibot.getSite('pl', 'wiktionary')
 	
-	output = wikipedia.Page(wikt, u'Wikipedysta:AlkamidBot/SG_Wikipedia')
+	output = pywikibot.Page(wikt, u'Wikipedysta:AlkamidBot/SG_Wikipedia')
 	
 	data = [] # tablica z datami: dzisiejszą, jutrzejszą i pojutrzejszą
 	
@@ -40,14 +39,14 @@ def main():
 	re_liczby = re.compile(u'^[0-9]*$') #odfiltrowanie haseł składających się tylko z cyfr
 	re_daty = re.compile(u'^[0-9]* (stycznia|lutego|marca|kwietnia|maja|czerwca|lipca|sierpnia|września|października|listopada|grudnia)$') #odfiltrowanie haseł w stylu "3 października" czy "11 listopada"
 	
-	# początek zbierania linków z: Czy wiesz, Aktualności, Artykuł na medal, Dobry artykuł
+	# collect hyperlinks from the following pages: Czy wiesz, Aktualności, Artykuł na medal, Dobry artykuł
 	lista_linki = []
 	
 	for i in data:
 		try:
-			czywiesz = wikipedia.Page(wiki, u'Szablon:Czy_wiesz/%s' % i).get()
-		except wikipedia.NoPage:
-			print u'nie ma czywiesza!'
+			czywiesz = pywikibot.Page(wiki, u'Wikiprojekt:Czy_wiesz/ekspozycje/%s' % i).get()
+		except pywikibot.NoPage:
+			print u'Warning: page Wikiprojekt:Czy_wiesz/ekspozycje/%s doesn\'t exist' % i
 		else:
 			s_czywiesz = re.search(re_czywiesz, czywiesz)
 			if s_czywiesz:
@@ -57,9 +56,9 @@ def main():
 					
 					
 	try:
-		aktualnosci = wikipedia.Page(wiki, u'Szablon:Aktualności').get()
-	except wikipedia.NoPage:
-		print u'nie ma aktualności!'
+		aktualnosci = pywikibot.Page(wiki, u'Szablon:Aktualności').get()
+	except pywikibot.NoPage:
+		print u'Warning: page Szablon:Aktualności does not exist'
 	else:
 		s_aktualnosci = re.search(re_aktualnosci, aktualnosci)
 		if s_aktualnosci:
@@ -69,9 +68,9 @@ def main():
 					lista_linki.append(a[0])
 					
 	try:
-		namedal = wikipedia.Page(wiki, u'Szablon:Artykuł na medal').get()
-	except wikipedia.NoPage:
-		print u'nie ma medalu!'
+		namedal = pywikibot.Page(wiki, u'Szablon:Artykuł na medal').get()
+	except pywikibot.NoPage:
+		print u'Warning: page Szablon:Artykuł na nie ma medalu!'
 	else:
 		s_namedal = re.search(re_namedal, namedal)
 		if s_namedal:
@@ -81,9 +80,9 @@ def main():
 					lista_linki.append(a[0])
 					
 	try:
-		dobry = wikipedia.Page(wiki, u'Szablon:Dobry artykuł').get()
-	except wikipedia.NoPage:
-		print u'nie ma dobrego!'
+		dobry = pywikibot.Page(wiki, u'Szablon:Dobry artykuł').get()
+	except pywikibot.NoPage:
+		print u'Warning: page Szablon:Dobry artykuł does not exist'
 	else:
 		s_dobry = re.search(re_dobry, dobry)
 		if s_dobry:
@@ -92,19 +91,19 @@ def main():
 				if u'#' not in a[0] and u'Plik:' not in a[0]:
 					lista_linki.append(a[0])
 					
-	#koniec zbierania linków
+	#finished collecting hyperlinks
 					
 	nazwiska = u'\n\n== prawdopodobne nazwy własne =='
 	szablon = u'Jest to lista haseł, które aktualnie (dziś i w najbliższych dniach) pojawiają się na stronie głównej Wikipedii i nie mają tam szablonu kierującego do Wikisłownika. Oznacza to, że albo hasła u nas nie ma, albo wystarczy wstawić szablon (zazwyczaj {{s|wikisłownik}}, ale trzeba zwracać uwagę na infoboksy, które mogą przyjmować parametr "wikisłownik" lub "słownik"). Jeśli tworzysz u nas hasło z tej listy, nie zapomnij dodać szablonu {{s|wikipedia}}. Sekcja "prawdopodobne nazwy własne" ma mniejszy priorytet, ale i tak warto ją przejrzeć. Listę można edytować, bot i tak codziennie rano tworzy nową. Wszelkie uwagi dotyczące listy i pomysły na ulepszenie jej mile widziane na mojej [[Dyskusja Wikipedysty:Alkamid|stronie dyskusji]]. %s\n\n== wstawić szablon na Wikipedii ==' % data_tekst
 	potrzebne = u'\n\n== potrzebne =='
 	
 	for c in lista_linki:
-		czyjest = wikipedia.Page(wiki, c)
+		czyjest = pywikibot.Page(wiki, c)
 		try:
 			tekst = czyjest.get()
-		except wikipedia.NoPage:
+		except pywikibot.NoPage:
 			print u'nie ma na wiki'
-		except wikipedia.IsRedirectPage:
+		except pywikibot.IsRedirectPage:
 			print u'przekierowanie na wiki'
 		else:
 			re_wikislownik = re.compile(u'(wikisłownik\s*=\s*%s|słownik\s*=\s*%s|{{[wW]ikisłownik)' % (c, c))
@@ -122,10 +121,10 @@ def main():
 						upcase = u'\n* WP: [[w:%s]]\t WS: [[%s]]' % (c, c)
 						upcase_switch = 0
 						try:
-							czyjest_wikt = wikipedia.Page(wikt, c).get()
-						except wikipedia.NoPage:
+							czyjest_wikt = pywikibot.Page(wikt, c).get()
+						except pywikibot.NoPage:
 							upcase_switch = 0
-						except wikipedia.IsRedirectPage:
+						except pywikibot.IsRedirectPage:
 							upcase_switch = 0
 						else:
 							upcase_switch = 1
@@ -135,10 +134,10 @@ def main():
 						if c[0].isupper():
 							lowcase = u' (lub [[%s]])' % c_lower
 							try:
-								czyjest_wikt = wikipedia.Page(wikt, c_lower).get()
-							except wikipedia.NoPage:
+								czyjest_wikt = pywikibot.Page(wikt, c_lower).get()
+							except pywikibot.NoPage:
 								lowcase_switch = 0
-							except wikipedia.IsRedirectPage:
+							except pywikibot.IsRedirectPage:
 								lowcase_switch = 0
 							else:
 								lowcase_switch = 1							
@@ -150,10 +149,10 @@ def main():
 						if noParens_link != c:
 							noParens = u' (lub [[%s]])' % noParens_link
 							try:
-								czyjest_wikt = wikipedia.Page(wikt, noParens_link).get()
-							except wikipedia.NoPage:
+								czyjest_wikt = pywikibot.Page(wikt, noParens_link).get()
+							except pywikibot.NoPage:
 								noParens_switch = 0
-							except wikipedia.IsRedirectPage:
+							except pywikibot.IsRedirectPage:
 								noParens_switch = 0
 							else:
 								noParens_switch = 1
@@ -164,10 +163,10 @@ def main():
 						if noParens_link[0].isupper():
 							lowcase_noParens = u' (lub [[%s]])' % noParens_link_lower
 							try:
-								czyjest_wikt = wikipedia.Page(wikt, noParens_link_lower).get()
-							except wikipedia.NoPage:
+								czyjest_wikt = pywikibot.Page(wikt, noParens_link_lower).get()
+							except pywikibot.NoPage:
 								lowcase_noParens_switch = 0
-							except wikipedia.IsRedirectPage:
+							except pywikibot.IsRedirectPage:
 								lowcase_noParens_switch = 0
 							else:
 								lowcase_noParens_switch = 1
@@ -189,4 +188,4 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()

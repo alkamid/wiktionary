@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import wikipedia
-import catlib
-import pagegenerators
+import pywikibot
+from pywikibot import Category
+from pywikibot import pagegenerators
 import re
 from klasa import *
 from main import *
@@ -41,9 +41,9 @@ def addOdczas(title):
                                 if not enieaniestop:
                                     nowaSekcja.antonimy.text = u'\n: (1.1) [[nie%s]]' % odczasownikowy
                                     nowaSekcja.saveChanges()
-                                    page = wikipedia.Page(site, odczasownikowy)
+                                    page = pywikibot.Page(site, odczasownikowy)
                                     try: page.get()
-                                    except wikipedia.NoPage:
+                                    except pywikibot.NoPage:
                                         page.put(nowaSekcja.content, comment=u'dodanie hasła o rzeczowniku odczasownikowym na podstawie [[%s]]' % czasownik)
                             nieodczasownikowy = u'nie' + odczasownikowy
                             nowe = Haslo(nieodczasownikowy)
@@ -57,17 +57,17 @@ def addOdczas(title):
                                     nowaSekcja.odmiana.text = u'\n: (1.1) {{odmiana-rzeczownik-polski\n|Mianownik lp = %snie\n|Dopełniacz lp = %snia\n|Celownik lp = %sniu\n|Biernik lp = %snie\n|Narzędnik lp = %sniem\n|Miejscownik lp = %sniu\n|Wołacz lp = %snie\n}}' % (pre, pre, pre, pre, pre, pre, pre)
                                     nowaSekcja.antonimy.text = u'\n: (1.1) [[%s]]' % odczasownikowy
                                     nowaSekcja.saveChanges()
-                                    page = wikipedia.Page(site, nieodczasownikowy)
+                                    page = pywikibot.Page(site, nieodczasownikowy)
                                     try: page.get()
-                                    except wikipedia.NoPage:
+                                    except pywikibot.NoPage:
                                         page.put(nowaSekcja.content, comment=u'dodanie hasła o rzeczowniku odczasownikowym na podstawie [[%s]]' % czasownik)
      
 def main():
     global odmOlafa
     odmOlafa = OdmianaOlafa()
     global site
-    site = wikipedia.getSite()
-    templatePage = wikipedia.Page(site, u'Szablon:ndk')
+    site = pywikibot.getSite()
+    templatePage = pywikibot.Page(site, u'Szablon:ndk')
     #lista = pagegenerators.ReferringPageGenerator(templatePage, True, True, True)
     lista = [u'poszukać']
     for a in lista:
@@ -77,4 +77,4 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()               
+        pywikibot.stopme()               

@@ -4,9 +4,9 @@
 # zmiany w esperanto: rozbicie na dwa języki, eo i eom
 
 import codecs
-import catlib
-import wikipedia
-import pagegenerators
+from pywikibot import Category
+import pywikibot
+from pywikibot import pagegenerators
 import re
 import math
 import datetime
@@ -14,15 +14,15 @@ from klasa import *
 
 def main():
 	
-	site = wikipedia.getSite()
-	cat = catlib.Category(site,u'Kategoria:esperanto (indeks)')
+	site = pywikibot.getSite()
+	cat = Category(site,u'Kategoria:esperanto (indeks)')
 	lista = pagegenerators.CategorizedPageGenerator(cat, start='anemi')
 	#, start=u'abduktoro'
 	re_etymn = re.compile(ur'\{\{etymn\|eo\|(.*?)\}\}')
 	re_etymn_nr = re.compile(ur'(\:\s*?\([0-9]\.[0-9]\))\s*?\{\{etymn\|eo\|(.*?)\}\}(.*?)\n')
 	
 	czesciMowy = [u'rzeczownik', u'czasownik', u'przymiotnik', u'przysłówek', u'spójnik', u'liczebnik', u'zaimek', u'wykrzyknik', u'partykuła']
-	#lista = [wikipedia.Page(site, u'aboc')]
+	#lista = [pywikibot.Page(site, u'aboc')]
 	for word in lista:
 		a = word.title()
 		
@@ -107,4 +107,4 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()

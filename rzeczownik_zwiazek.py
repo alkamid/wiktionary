@@ -4,19 +4,19 @@
 import sys
 sys.path.append('/home/adam/wikt/pywikipedia')
 #sys.path.append('/home/alkamid/wikt/pywikipedia')
-import wikipedia
-import catlib
-import pagegenerators
+import pywikibot
+from pywikibot import Category
+from pywikibot import pagegenerators
 import re
-import xmlreader
+from pywikibot import xmlreader
 from klasa import *
 	
 def main():
 
 	data = u'20110310'
 
-	site = wikipedia.getSite()
-	cat = catlib.Category(site,u'Kategoria:francuski (indeks)')
+	site = pywikibot.getSite()
+	cat = Category(site,u'Kategoria:francuski (indeks)')
 	lista = pagegenerators.CategorizedPageGenerator(cat)
 	#lista_stron1 = xmlreader.XmlDump('plwiktionary-%s-pages-articles.xml' % data)
 	
@@ -41,4 +41,4 @@ if __name__ == '__main__':
 	try:
 		main()
 	finally:
-		wikipedia.stopme()
+		pywikibot.stopme()

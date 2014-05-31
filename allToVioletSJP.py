@@ -6,13 +6,13 @@
 import codecs
 import urllib2
 import urllib
-import wikipedia
+import pywikibot
 from lxml import html
 from klasa import *
 
 def main():
 	
-	site = wikipedia.getSite()
+	site = pywikibot.getSite()
 	lista = []
 	
 	filename_input = u'potrzebne.txt'
@@ -56,7 +56,7 @@ def main():
 		text = u''
 		line = line.strip()
 		
-		page = wikipedia.Page(site, line)
+		page = pywikibot.Page(site, line)
 
 		haslo = Haslo(line)
 		
@@ -84,5 +84,5 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()
 

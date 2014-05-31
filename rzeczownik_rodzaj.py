@@ -1,10 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import wikipedia
-import pagegenerators
+import pywikibot
+from pywikibot import pagegenerators
 import re
-import xmlreader
+from pywikibot import xmlreader
 import collections
 from klasa import *
 
@@ -12,10 +12,10 @@ def rzeczownikRodzaj(data):
 
 	data_slownie = data[6] + data[7] + u'.' + data[4] + data[5] + u'.' + data[0] + data[1] + data[2] + data[3]
 	lista_stron = getListFromXML(data)
-	wikt = wikipedia.Site('pl', 'wiktionary')
-	outputPage1 = wikipedia.Page(wikt, u'Wikipedysta:AlkamidBot/listy/rodzaj/1')
-	outputPage2 = wikipedia.Page(wikt, u'Wikipedysta:AlkamidBot/listy/rodzaj/2')
-	noGenderPage = wikipedia.Page(wikt, u'Wikipedysta:AlkamidBot/listy/rodzaj/wykluczone')
+	wikt = pywikibot.Site('pl', 'wiktionary')
+	outputPage1 = pywikibot.Page(wikt, u'Wikipedysta:AlkamidBot/listy/rodzaj/1')
+	outputPage2 = pywikibot.Page(wikt, u'Wikipedysta:AlkamidBot/listy/rodzaj/2')
+	noGenderPage = pywikibot.Page(wikt, u'Wikipedysta:AlkamidBot/listy/rodzaj/wykluczone')
 	
 	forbidden = noGenderPage.get()
 	forbiddenList = forbidden.split(u'\n')

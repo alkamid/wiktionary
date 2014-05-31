@@ -6,9 +6,9 @@
 import sys
 sys.path.append('/home/adam/pywiki/pywikipedia')
 import codecs
-import catlib
-import wikipedia
-import pagegenerators
+from pywikibot import Category
+import pywikibot
+from pywikibot import pagegenerators
 import re
 
 def dodaj_jezyk(lang):
@@ -17,19 +17,19 @@ def dodaj_jezyk(lang):
 		short = lang		
 	else:
 		short = u'język %s' % (lang)
-	site = wikipedia.getSite()
-	cat = catlib.Category(site,u'Kategoria:%s_(indeks)' % (lang))
+	site = pywikibot.getSite()
+	cat = Category(site,u'Kategoria:%s_(indeks)' % (lang))
 	lista_stron = pagegenerators.CategorizedPageGenerator(cat)
 
 	text = u''
 	for page in lista_stron:
 		try:
 			exists = page.title()
-		except wikipedia.NoPage:
+		except pywikibot.NoPage:
 			print u'strona nie istnieje'
-		except wikipedia.IsRedirectPage:
+		except pywikibot.IsRedirectPage:
 			print u'%s - przekierowanie' % (page.title())
-		except wikipedia.Error:
+		except pywikibot.Error:
 			print u'nieznany błąd'
 	
 		text = text + u'\n%s' % exists
@@ -101,4 +101,4 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()

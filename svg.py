@@ -5,10 +5,10 @@
 import sys
 sys.path.append('/home/adam/pywiki/pywikipedia')
 #sys.path.append('/home/alkamid/wikt/pywikipedia')
-import wikipedia
+import pywikibot
 import re
 import time
-import pagegenerators
+from pywikibot import pagegenerators
 
 def main():
 	#lista = pagegenerators.AllpagesPageGenerator()
@@ -26,4 +26,4 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()

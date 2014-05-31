@@ -6,15 +6,15 @@
 import sys
 sys.path.append('/home/adam/pywiki/pywikipedia')
 import codecs
-import wikipedia
+import pywikibot
 
 def main():
 
 	offline_mode = 0
-	site = wikipedia.getSite()
-	page_dlugosc = wikipedia.Page(site, u'Wikipedysta:Alkamid/statystyka/długość')
-	page_srednia = wikipedia.Page(site, u'Wikipedysta:Alkamid/statystyka/długość_średnia')
-	page_multimedia = wikipedia.Page(site, u'Wikipedysta:Alkamid/statystyka/multimedia')
+	site = pywikibot.getSite()
+	page_dlugosc = pywikibot.Page(site, u'Wikipedysta:Alkamid/statystyka/długość')
+	page_srednia = pywikibot.Page(site, u'Wikipedysta:Alkamid/statystyka/długość_średnia')
+	page_multimedia = pywikibot.Page(site, u'Wikipedysta:Alkamid/statystyka/multimedia')
 
 	lista = []
 	inp = codecs.open('outputstat11.txt', encoding='utf-8')

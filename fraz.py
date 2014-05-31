@@ -1,10 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import wikipedia
-import pagegenerators
+import pywikibot
+from pywikibot import pagegenerators
 import re
-import xmlreader
+from pywikibot import xmlreader
 import datetime
 import collections
 from klasa import *
@@ -13,8 +13,8 @@ def fraz(data):
 
     data_slownie = data[6] + data[7] + u'.' + data[4] + data[5] + u'.' + data[0] + data[1] + data[2] + data[3]
     lista_stron = getListFromXML(data)
-    wikt = wikipedia.Site('pl', 'wiktionary')
-    outputPage = wikipedia.Page(wikt, u'Wikipedysta:AlkamidBot/listy/związki_frazeologiczne')
+    wikt = pywikibot.Site('pl', 'wiktionary')
+    outputPage = pywikibot.Page(wikt, u'Wikipedysta:AlkamidBot/listy/związki_frazeologiczne')
     
     tempLangs = []
     
@@ -26,13 +26,13 @@ def fraz(data):
     LangsMediaWiki = getAllLanguages()
 
     for a in LangsMediaWiki:
-        print a.shortName
+        #print a.shortName
         indexPageName = u'Indeks:%s_-_Związki_frazeologiczne' % a.upperName
         try:
-            ifExists = wikipedia.Page(wikt, indexPageName).get()
-        except wikipedia.NoPage:
+            ifExists = pywikibot.Page(wikt, indexPageName).get()
+        except pywikibot.NoPage:
             phraseList[u'%s' % a.shortName] = u''
-        except wikipedia.IsRedirectPage:
+        except pywikibot.IsRedirectPage:
             print u'redirect'
         else:
             phraseList[u'%s' % a.shortName] = ifExists

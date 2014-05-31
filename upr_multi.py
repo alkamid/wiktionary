@@ -4,9 +4,9 @@
 import sys
 #sys.path.append('/home/adam/wikt/pywikipedia')
 sys.path.append('/home/alkamid/wikt/pywikipedia')
-import wikipedia
-import catlib
-import pagegenerators
+import pywikibot
+from pywikibot import Category
+from pywikibot import pagegenerators
 import re
 import codecs
 
@@ -23,9 +23,9 @@ def main():
 	global test_mode
 	test_mode = 0
 	global site
-	site = wikipedia.getSite()
+	site = pywikibot.getSite()
 	global site_en
-	site_en = wikipedia.getSite('en', 'wiktionary')
+	site_en = pywikibot.getSite('en', 'wiktionary')
 	
 	inp = codecs.open('utftable.txt', encoding='utf-8')
 	
@@ -69,15 +69,15 @@ def main():
 					nowy = nowy + u' | {{zch-w|ct|%s}}' % b[2]
 				nowy = nowy + u' | {{zch-w|cu|%s}}}}' % upr
 				
-				page = wikipedia.Page(site, u'%s' % upr)
+				page = pywikibot.Page(site, u'%s' % upr)
 
 				try:
 					exists = page.get()
-				except wikipedia.NoPage:
+				except pywikibot.NoPage:
 					log += '[[%s]] - nie istnieje na pl.wikt' % (upr)
-				except wikipedia.IsRedirectPage:
+				except pywikibot.IsRedirectPage:
 					log += '[[%s]] - przekierowanie na pl.wikt' % (upr)
-				except wikipedia.Error:
+				except pywikibot.Error:
 					print 'nieznany błąd'
 				else:
 					s_text_przed = re.search(re_text_przed, exists)
@@ -126,4 +126,4 @@ if __name__ == '__main__':
 	try:
 		main()
 	finally:
-		wikipedia.stopme()
+		pywikibot.stopme()

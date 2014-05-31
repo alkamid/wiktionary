@@ -6,11 +6,11 @@
 import sys
 sys.path.append('/home/adam/wikt/pywikipedia')
 import codecs
-import catlib
-import wikipedia
-import pagegenerators
+from pywikibot import Category
+import pywikibot
+from pywikibot import pagegenerators
 import re
-import xmlreader
+from pywikibot import xmlreader
 from klasa import *
 
 def countMean():
@@ -56,4 +56,4 @@ if __name__ == '__main__':
     try:
         countMean()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()

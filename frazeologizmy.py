@@ -3,17 +3,17 @@
 
 import sys
 sys.path.append('/home/adam/pywiki/pywikipedia')
-import catlib
-import pagegenerators
-import wikipedia
+from pywikibot import Category
+from pywikibot import pagegenerators
+import pywikibot
 import re
 
 def main():
-	site = wikipedia.getSite()
-	indeks = wikipedia.Page(site, u'Indeks:Francuski_-_Związki_frazeologiczne')
-	cat = catlib.Category(site,u'Kategoria:francuski_(indeks)')
+	site = pywikibot.getSite()
+	indeks = pywikibot.Page(site, u'Indeks:Francuski_-_Związki_frazeologiczne')
+	cat = Category(site,u'Kategoria:francuski_(indeks)')
 	gen1 = pagegenerators.CategorizedPageGenerator(cat)
-	ex = wikipedia.Page(site, u'Wikipedysta:AlkamidBot/wykluczone')
+	ex = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/wykluczone')
 	re_obj = re.compile(ur"''związek frazeologiczny''\n:\s*\(1\.1\) (\[\[[^]]*\]\])(\n|<ref)")
 	tekst_dodaj = u" zobacz też [[Indeks:Francuski - Związki frazeologiczne]]"
 
@@ -63,4 +63,4 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()

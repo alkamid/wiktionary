@@ -4,21 +4,21 @@
 import sys
 #sys.path.append('/home/adam/pywiki/pywikipedia')
 sys.path.append('/home/alkamid/wikt/pywikipedia')
-import wikipedia
-import catlib
-import pagegenerators
+import pywikibot
+from pywikibot import Category
+from pywikibot import pagegenerators
 import re
 
 def main():
 	test_mode = 0;
-	site = wikipedia.getSite()
-	site_en = wikipedia.getSite('en', 'wiktionary')
-	site_com = wikipedia.getSite('commons', 'commons')
-	cat = catlib.Category(site,u'Kategoria:chiński standardowy (indeks)')
-	cat_com = catlib.Category(site, u'Chinese kanji stroke order')
+	site = pywikibot.getSite()
+	site_en = pywikibot.getSite('en', 'wiktionary')
+	site_com = pywikibot.getSite('commons', 'commons')
+	cat = Category(site,u'Kategoria:chiński standardowy (indeks)')
+	cat_com = Category(site, u'Chinese kanji stroke order')
 	lista_stron = pagegenerators.CategorizedPageGenerator(cat)
 	lista_com = pagegenerators.CategorizedPageGenerator(cat_com)
-	log_site = wikipedia.Page(site, u'Wikipedysta:AlkamidBot/zch/log')
+	log_site = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/zch/log')
 	
 	lista = []
 	istnieje = []
@@ -60,10 +60,10 @@ def main():
 		
 		try:
 			strona = a.get()
-		except wikipedia.IsRedirectPage:
+		except pywikibot.IsRedirectPage:
 			print u'[[%s]] - przekierowanie' % a.title()
 			log = log + u'\n*[[%s]] - przekierowanie' % a.title()
-		except wikipedia.Error:
+		except pywikibot.Error:
 			print u'[[%s]] - błąd' % a.title()
 			log = log + u'\n*[[%s]] - błąd' % a.title()
 		else:
@@ -83,7 +83,7 @@ def main():
 				log = log + u'\n*[[%s]] - istnieje już sekcja {{s|znak chiński}}' % a.title()
 				istnieje.append(a)
 			else:
-				ang = wikipedia.Page(site_en, a.title())
+				ang = pywikibot.Page(site_en, a.title())
 				han_char_s = re.search(han_char, ang.get())
 			
 				grafika_s = re.search(grafika, a.get())
@@ -158,49 +158,49 @@ def main():
 				
 						kolejnosc_koncowa_c = u''
 						
-						if wikipedia.ImagePage(site_en, u'%s-bw.png' % a.title()).fileIsOnCommons():
+						if pywikibot.ImagePage(site_en, u'%s-bw.png' % a.title()).fileIsShared():
 							kolejnosc_koncowa_c = u'{{zch-komiks}}'
 						else:
-							if wikipedia.ImagePage(site_en, u'%s-red.png' % a.title()).fileIsOnCommons():
+							if pywikibot.ImagePage(site_en, u'%s-red.png' % a.title()).fileIsShared():
 								kolejnosc_koncowa_c = u'{{zch-cienie}}'
 							else:
-								if wikipedia.ImagePage(site_en, u'%s-order.gif' % a.title()).fileIsOnCommons():
+								if pywikibot.ImagePage(site_en, u'%s-order.gif' % a.title()).fileIsShared():
 									kolejnosc_koncowa_c = u'{{zch-animacja}}'
 
 						
 						kolejnosc_koncowa_j = u''
 						
-						if wikipedia.ImagePage(site_en, u'%s-jbw.png' % a.title()).fileIsOnCommons():
+						if pywikibot.ImagePage(site_en, u'%s-jbw.png' % a.title()).fileIsShared():
 							kolejnosc_koncowa_j = u'{{zch-komiks|j}}'
 						else:
-							if wikipedia.ImagePage(site_en, u'%s-jred.png' % a.title()).fileIsOnCommons():
+							if pywikibot.ImagePage(site_en, u'%s-jred.png' % a.title()).fileIsShared():
 								kolejnosc_koncowa_j = u'{{zch-cienie|j}}'
 							else:
-								if wikipedia.ImagePage(site_en, u'%s-jorder.gif' % a.title()).fileIsOnCommons():
+								if pywikibot.ImagePage(site_en, u'%s-jorder.gif' % a.title()).fileIsShared():
 									kolejnosc_koncowa_j = u'{{zch-animacja|j}}'
 
 						
 						kolejnosc_koncowa_t = u''
 						
-						if wikipedia.ImagePage(site_en, u'%s-tbw.png' % a.title()).fileIsOnCommons():
+						if pywikibot.ImagePage(site_en, u'%s-tbw.png' % a.title()).fileIsShared():
 							kolejnosc_koncowa_t = u'{{zch-komiks|t}}'
 						else:
-							if wikipedia.ImagePage(site_en, u'%s-tred.png' % a.title()).fileIsOnCommons():
+							if pywikibot.ImagePage(site_en, u'%s-tred.png' % a.title()).fileIsShared():
 								kolejnosc_koncowa_t = u'{{zch-cienie|t}}'
 							else:
-								if wikipedia.ImagePage(site_en, u'%s-torder.gif' % a.title()).fileIsOnCommons():
+								if pywikibot.ImagePage(site_en, u'%s-torder.gif' % a.title()).fileIsShared():
 									kolejnosc_koncowa_t = u'{{zch-animacja|t}}'
 								
 									
 						kolejnosc_koncowa_a = u''
 						
-						if wikipedia.ImagePage(site_en, u'%s-abw.png' % a.title()).fileIsOnCommons():
+						if pywikibot.ImagePage(site_en, u'%s-abw.png' % a.title()).fileIsShared():
 							kolejnosc_koncowa_a = u'{{zch-komiks|a}}'
 						else:
-							if wikipedia.ImagePage(site_en, u'%s-ared.png' % a.title()).fileIsOnCommons():
+							if pywikibot.ImagePage(site_en, u'%s-ared.png' % a.title()).fileIsShared():
 								kolejnosc_koncowa_a = u'{{zch-cienie|a}}'
 							else:
-								if wikipedia.ImagePage(site_en, u'%s-aorder.gif' % a.title()).fileIsOnCommons():
+								if pywikibot.ImagePage(site_en, u'%s-aorder.gif' % a.title()).fileIsShared():
 									kolejnosc_koncowa_a = u'{{zch-animacja|a}}'
 						
 																						
@@ -240,31 +240,31 @@ def main():
 							warianty = warianty + u' | {{zch-w|ct|%s}} | {{zch-w|cu|%s}}' % (zh_osobno[1], zh_osobno[0])
 
 							'''
-							if wikipedia.ImagePage(site_en, u'%s-kaishu.svg' % zh_osobno[0]).fileIsOnCommons():
+							if pywikibot.ImagePage(site_en, u'%s-kaishu.svg' % zh_osobno[0]).fileIsShared():
 								ku = u' | {{zch-obrazek|ku|%s}}' % zh_osobno[0]
 							else:
-								if wikipedia.ImagePage(site_en, u'%s-kaishu.png' % zh_osobno[0]).fileIsOnCommons():
+								if pywikibot.ImagePage(site_en, u'%s-kaishu.png' % zh_osobno[0]).fileIsShared():
 									ku = u' | {{zch-obrazek|ku|%s|p}}' % zh_osobno[0]
 								else:
-									if wikipedia.ImagePage(site_en, u'%s-kaishu.gif' % zh_osobno[0]).fileIsOnCommons():
+									if pywikibot.ImagePage(site_en, u'%s-kaishu.gif' % zh_osobno[0]).fileIsShared():
 										ku = u' | {{zch-obrazek|ku|%s|g}}' % zh_osobno[0]
 						
-							if wikipedia.ImagePage(site_en, u'%s-xinshu.svg' % zh_osobno[0]).fileIsOnCommons():
+							if pywikibot.ImagePage(site_en, u'%s-xinshu.svg' % zh_osobno[0]).fileIsShared():
 								xu = u' | {{zch-obrazek|xu|%s}}' % zh_osobno[0]
 							else:
-								if wikipedia.ImagePage(site_en, u'%s-xinshu.png' % zh_osobno[0]).fileIsOnCommons():
+								if pywikibot.ImagePage(site_en, u'%s-xinshu.png' % zh_osobno[0]).fileIsShared():
 									xu = u' | {{zch-obrazek|xu|%s|p}}' % zh_osobno[0]
 								else:
-									if wikipedia.ImagePage(site_en, u'%s-xinshu.gif' % zh_osobno[0]).fileIsOnCommons():
+									if pywikibot.ImagePage(site_en, u'%s-xinshu.gif' % zh_osobno[0]).fileIsShared():
 										xu = u' | {{zch-obrazek|xu|%s|g}}' % zh_osobno[0]
 
-							if wikipedia.ImagePage(site_en, u'%s-songti.svg' % zh_osobno[0]).fileIsOnCommons():
+							if pywikibot.ImagePage(site_en, u'%s-songti.svg' % zh_osobno[0]).fileIsShared():
 								sou = u' | {{zch-obrazek|sou|%s}}' % zh_osobno[0]
 							else:
-								if wikipedia.ImagePage(site_en, u'%s-songti.png' % zh_osobno[0]).fileIsOnCommons():
+								if pywikibot.ImagePage(site_en, u'%s-songti.png' % zh_osobno[0]).fileIsShared():
 									sou = u' | {{zch-obrazek|sou|%s|p}}' % zh_osobno[0]
 								else:
-									if wikipedia.ImagePage(site_en, u'%s-songti.gif' % zh_osobno[0]).fileIsOnCommons():
+									if pywikibot.ImagePage(site_en, u'%s-songti.gif' % zh_osobno[0]).fileIsShared():
 										sou = u' | {{zch-obrazek|sou|%s|g}}' % zh_osobno[0]
 							
 							if ku != u'' or xu !=u'' or sou !=u'':
@@ -286,31 +286,31 @@ def main():
 							upr = ja_osobno[1]
 							shin = ja_osobno[0]							
 							
-							'''if wikipedia.ImagePage(site_en, u'%s-kaishu.svg' % ja_osobno[1]).fileIsOnCommons():
+							'''if pywikibot.ImagePage(site_en, u'%s-kaishu.svg' % ja_osobno[1]).fileIsShared():
 								ku = u' | {{zch-obrazek|ku|%s}}' % ja_osobno[1]
 							else:
-								if wikipedia.ImagePage(site_en, u'%s-kaishu.png' % ja_osobno[1]).fileIsOnCommons():
+								if pywikibot.ImagePage(site_en, u'%s-kaishu.png' % ja_osobno[1]).fileIsShared():
 									ku = u' | {{zch-obrazek|ku|%s|p}}' % ja_osobno[1]
 								else:
-									if wikipedia.ImagePage(site_en, u'%s-kaishu.gif' % ja_osobno[1]).fileIsOnCommons():
+									if pywikibot.ImagePage(site_en, u'%s-kaishu.gif' % ja_osobno[1]).fileIsShared():
 										ku = u' | {{zch-obrazek|ku|%s|g}}' % ja_osobno[1]
 						
-							if wikipedia.ImagePage(site_en, u'%s-xinshu.svg' % ja_osobno[1]).fileIsOnCommons():
+							if pywikibot.ImagePage(site_en, u'%s-xinshu.svg' % ja_osobno[1]).fileIsShared():
 								xu = u' | {{zch-obrazek|xu|%s}}' % ja_osobno[1]
 							else:
-								if wikipedia.ImagePage(site_en, u'%s-xinshu.png' % ja_osobno[1]).fileIsOnCommons():
+								if pywikibot.ImagePage(site_en, u'%s-xinshu.png' % ja_osobno[1]).fileIsShared():
 									xu = u' | {{zch-obrazek|xu|%s|p}}' % ja_osobno[1]
 								else:
-									if wikipedia.ImagePage(site_en, u'%s-xinshu.gif' % ja_osobno[1]).fileIsOnCommons():
+									if pywikibot.ImagePage(site_en, u'%s-xinshu.gif' % ja_osobno[1]).fileIsShared():
 										xu = u' | {{zch-obrazek|xu|%s|g}}' % ja_osobno[1]
 
-							if wikipedia.ImagePage(site_en, u'%s-songti.svg' % ja_osobno[1]).fileIsOnCommons():
+							if pywikibot.ImagePage(site_en, u'%s-songti.svg' % ja_osobno[1]).fileIsShared():
 								sou = u' | {{zch-obrazek|sou|%s}}' % ja_osobno[1]
 							else:
-								if wikipedia.ImagePage(site_en, u'%s-songti.png' % ja_osobno[1]).fileIsOnCommons():
+								if pywikibot.ImagePage(site_en, u'%s-songti.png' % ja_osobno[1]).fileIsShared():
 									sou = u' | {{zch-obrazek|sou|%s|p}}' % ja_osobno[1]
 								else:
-									if wikipedia.ImagePage(site_en, u'%s-songti.gif' % ja_osobno[1]).fileIsOnCommons():
+									if pywikibot.ImagePage(site_en, u'%s-songti.gif' % ja_osobno[1]).fileIsShared():
 										sou = u' | {{zch-obrazek|sou|%s|g}}' % ja_osobno[1]
 							
 							if ku != u'' or xu !=u'' or sou !=u'':
@@ -325,63 +325,63 @@ def main():
 
 						
 						
-						if wikipedia.ImagePage(site_en, u'%s-clerical.svg' % a.title()).fileIsOnCommons():
+						if pywikibot.ImagePage(site_en, u'%s-clerical.svg' % a.title()).fileIsShared():
 							warianty_obr = warianty_obr + u' | {{zch-obrazek|c|%s}}' % a.title()
 						else:
-							if wikipedia.ImagePage(site_en, u'%s-clerical.png' % a.title()).fileIsOnCommons():
+							if pywikibot.ImagePage(site_en, u'%s-clerical.png' % a.title()).fileIsShared():
 								warianty_obr = warianty_obr + u' | {{zch-obrazek|c|%s|p}}' % a.title()
 							else:
-								if wikipedia.ImagePage(site_en, u'%s-clerical.gif' % a.title()).fileIsOnCommons():
+								if pywikibot.ImagePage(site_en, u'%s-clerical.gif' % a.title()).fileIsShared():
 									warianty_obr = warianty_obr + u' | {{zch-obrazek|c|%s|g}}' % a.title()
 				
 					
 					
-						if wikipedia.ImagePage(site_en, u'%s-xinshu.svg' % a.title()).fileIsOnCommons():
+						if pywikibot.ImagePage(site_en, u'%s-xinshu.svg' % a.title()).fileIsShared():
 							warianty_obr = warianty_obr + u' | {{zch-obrazek|xt|%s}}' % a.title()
 						else:
-							if wikipedia.ImagePage(site_en, u'%s-xinshu.png' % a.title()).fileIsOnCommons():
+							if pywikibot.ImagePage(site_en, u'%s-xinshu.png' % a.title()).fileIsShared():
 								warianty_obr = warianty_obr + u' | {{zch-obrazek|xt|%s|p}}' % a.title()
 							else:
-								if wikipedia.ImagePage(site_en, u'%s-xinshu.gif' % a.title()).fileIsOnCommons():
+								if pywikibot.ImagePage(site_en, u'%s-xinshu.gif' % a.title()).fileIsShared():
 									warianty_obr = warianty_obr + u' | {{zch-obrazek|xt|%s|g}}' % a.title()
 					
 														
-						if wikipedia.ImagePage(site_en, u'%s-still.svg' % a.title()).fileIsOnCommons():
+						if pywikibot.ImagePage(site_en, u'%s-still.svg' % a.title()).fileIsShared():
 							warianty_obr = warianty_obr + u' | {{zch-obrazek|st|%s}}' % a.title()
 						else:
-							if wikipedia.ImagePage(site_en, u'%s-caoshu.svg' % a.title()).fileIsOnCommons():
+							if pywikibot.ImagePage(site_en, u'%s-caoshu.svg' % a.title()).fileIsShared():
 								warianty_obr = warianty_obr + u' | {{zch-obrazek|ca|%s}}' % a.title()
 							else:
-								if wikipedia.ImagePage(site_en, u'%s-still.png' % a.title()).fileIsOnCommons():
+								if pywikibot.ImagePage(site_en, u'%s-still.png' % a.title()).fileIsShared():
 									warianty_obr = warianty_obr + u' | {{zch-obrazek|st|%s|p}}' % a.title()
 								else:
-									if wikipedia.ImagePage(site_en, u'%s-caoshu.png' % a.title()).fileIsOnCommons():
+									if pywikibot.ImagePage(site_en, u'%s-caoshu.png' % a.title()).fileIsShared():
 										warianty_obr = warianty_obr + u' | {{zch-obrazek|ca|%s|p}}' % a.title()
 									else:
-										if wikipedia.ImagePage(site_en, u'%s-still.gif' % a.title()).fileIsOnCommons():
+										if pywikibot.ImagePage(site_en, u'%s-still.gif' % a.title()).fileIsShared():
 											warianty_obr = warianty_obr + u' | {{zch-obrazek|st|%s|g}}' % a.title()
 										else:
-											if wikipedia.ImagePage(site_en, u'%s-caoshu.gif' % a.title()).fileIsOnCommons():
+											if pywikibot.ImagePage(site_en, u'%s-caoshu.gif' % a.title()).fileIsShared():
 												warianty_obr = warianty_obr + u' | {{zch-obrazek|ca|%s|g}}' % a.title()
 
 								
-						if wikipedia.ImagePage(site_en, u'%s-kaishu.svg' % a.title()).fileIsOnCommons():
+						if pywikibot.ImagePage(site_en, u'%s-kaishu.svg' % a.title()).fileIsShared():
 							warianty_obr = warianty_obr + u' | {{zch-obrazek|kt|%s}}' % a.title()
 						else:
-							if wikipedia.ImagePage(site_en, u'%s-kaishu.png' % a.title()).fileIsOnCommons():
+							if pywikibot.ImagePage(site_en, u'%s-kaishu.png' % a.title()).fileIsShared():
 								warianty_obr = warianty_obr + u' | {{zch-obrazek|kt|%s|p}}' % a.title()
 							else:
-								if wikipedia.ImagePage(site_en, u'%s-kaishu.gif' % a.title()).fileIsOnCommons():
+								if pywikibot.ImagePage(site_en, u'%s-kaishu.gif' % a.title()).fileIsShared():
 									warianty_obr = warianty_obr + u' | {{zch-obrazek|kt|%s|g}}' % a.title()
 												
 													
-						if wikipedia.ImagePage(site_en, u'%s-songti.svg' % a.title()).fileIsOnCommons():
+						if pywikibot.ImagePage(site_en, u'%s-songti.svg' % a.title()).fileIsShared():
 							warianty_obr = warianty_obr + u' | {{zch-obrazek|sot|%s}}' % a.title()
 						else:
-							if wikipedia.ImagePage(site_en, u'%s-songti.png' % a.title()).fileIsOnCommons():
+							if pywikibot.ImagePage(site_en, u'%s-songti.png' % a.title()).fileIsShared():
 								warianty_obr = warianty_obr + u' | {{zch-obrazek|sot|%s|p}}' % a.title()
 							else:
-								if wikipedia.ImagePage(site_en, u'%s-songti.gif' % a.title()).fileIsOnCommons():
+								if pywikibot.ImagePage(site_en, u'%s-songti.gif' % a.title()).fileIsShared():
 									warianty_obr = warianty_obr + u' | {{zch-obrazek|sot|%s|g}}' % a.title()
 					
 						
@@ -433,28 +433,28 @@ def main():
 						tekst = tekst + u'\n{{znaczenia}}\n{{etymologia}}'
 						
 						etym = u' {{warianty-obrazek'
-						if wikipedia.ImagePage(site_en, u'%s-oracle.svg' % a.title()).fileIsOnCommons():
+						if pywikibot.ImagePage(site_en, u'%s-oracle.svg' % a.title()).fileIsShared():
 							etym = etym + u' | {{zch-obrazek|o|%s}}' % a.title()
 						else:
-							if wikipedia.ImagePage(site_en, u'%s-oracle.png' % a.title()).fileIsOnCommons():
+							if pywikibot.ImagePage(site_en, u'%s-oracle.png' % a.title()).fileIsShared():
 								etym = etym + u' | {{zch-obrazek|o|%s|p}}' % a.title()
 								
-						if wikipedia.ImagePage(site_en, u'%s-bronze.svg' % a.title()).fileIsOnCommons():
+						if pywikibot.ImagePage(site_en, u'%s-bronze.svg' % a.title()).fileIsShared():
 							etym = etym + u' | {{zch-obrazek|br|%s}}' % a.title()
 						else:
-							if wikipedia.ImagePage(site_en, u'%s-bronze.png' % a.title()).fileIsOnCommons():
+							if pywikibot.ImagePage(site_en, u'%s-bronze.png' % a.title()).fileIsShared():
 								etym = etym + u' | {{zch-obrazek|br|%s|p}}' % a.title()
 								
-						if wikipedia.ImagePage(site_en, u'%s-bigseal.svg' % a.title()).fileIsOnCommons():
+						if pywikibot.ImagePage(site_en, u'%s-bigseal.svg' % a.title()).fileIsShared():
 							etym = etym + u' | {{zch-obrazek|bs|%s}}' % a.title()
 						else:
-							if wikipedia.ImagePage(site_en, u'%s-bigseal.png' % a.title()).fileIsOnCommons():
+							if pywikibot.ImagePage(site_en, u'%s-bigseal.png' % a.title()).fileIsShared():
 								etym = etym + u' | {{zch-obrazek|bs|%s|p}}' % a.title()
 								
-						if wikipedia.ImagePage(site_en, u'%s-seal.svg' % a.title()).fileIsOnCommons():
+						if pywikibot.ImagePage(site_en, u'%s-seal.svg' % a.title()).fileIsShared():
 							etym = etym + u' | {{zch-obrazek|ss|%s}}' % a.title()
 						else:
-							if wikipedia.ImagePage(site_en, u'%s-seal.png' % a.title()).fileIsOnCommons():
+							if pywikibot.ImagePage(site_en, u'%s-seal.png' % a.title()).fileIsShared():
 								etym = etym + u' | {{zch-obrazek|ss|%s|p}}' % a.title()
 						
 						etym = etym + u'}}'
@@ -515,7 +515,7 @@ def main():
 					print u'[[%s]] - Nie znaleziono szablonu {{Han char}}' % a.title()
 					log = log + u'\n*[[%s]] - Nie znaleziono szablonu {{s|Han char}}, pomijam' % a.title()
 			
-			log_site = wikipedia.Page(site, u'Wikipedysta:AlkamidBot/zch/log')	
+			log_site = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/zch/log')	
 			log_stary = log_site.get()
 			
 			if test_mode == 1:
@@ -530,4 +530,4 @@ if __name__ == '__main__':
 	try:
 		main()
 	finally:
-		wikipedia.stopme()
+		pywikibot.stopme()

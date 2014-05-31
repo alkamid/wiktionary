@@ -1,10 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import wikipedia
-import pagegenerators
+import pywikibot
+from pywikibot import pagegenerators
 import re
-import xmlreader
+from pywikibot import xmlreader
 import collections
 from klasa import *
 	
@@ -12,9 +12,9 @@ def rzeczownikRodzajNiepotrzebny(data):
 
 	data_slownie = data[6] + data[7] + u'.' + data[4] + data[5] + u'.' + data[0] + data[1] + data[2] + data[3]
 	lista_stron = getListFromXML(data)
-	wikt = wikipedia.Site('pl', 'wiktionary')
-	outputPage = wikipedia.Page(wikt, u'Wikipedysta:AlkamidBot/listy/rodzaj_niepotrzebny')
-	noGenderPage = wikipedia.Page(wikt, u'Wikipedysta:AlkamidBot/listy/rodzaj/wykluczone')
+	wikt = pywikibot.Site('pl', 'wiktionary')
+	outputPage = pywikibot.Page(wikt, u'Wikipedysta:AlkamidBot/listy/rodzaj_niepotrzebny')
+	noGenderPage = pywikibot.Page(wikt, u'Wikipedysta:AlkamidBot/listy/rodzaj/wykluczone')
 	
 	re_excluded = re.compile(ur'Lista języków, w których rzeczowniki nie mają rodzaju. Jeśli wiesz o takim, dopisz go do poniższej listy, a bot nie będzie uwzględniał go w tworzeniu listy:\n\n(.*)', re.DOTALL)
 	s_excluded = re.search(re_excluded, noGenderPage.get())

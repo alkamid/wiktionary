@@ -1098,7 +1098,6 @@ def getListFromXML(data, findLatest=False):
 		
 		if found:
 			filename = tempFilename + '/plwiktionary-%s-pages-articles.xml.bz2' % (tempDate)
-			print filename
 		else:
 			raise DumpNotFound
 	

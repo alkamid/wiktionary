@@ -1,10 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import wikipedia
-import pagegenerators
+import pywikibot
+from pywikibot import pagegenerators
 import re
-import xmlreader
+from pywikibot import xmlreader
 import collections
 from klasa import *
 	
@@ -12,8 +12,8 @@ def brakCzesciMowy(data):
 
 	data_slownie = data[6] + data[7] + u'.' + data[4] + data[5] + u'.' + data[0] + data[1] + data[2] + data[3]
 	lista_stron = getListFromXML(data)
-	wikt = wikipedia.Site('pl', 'wiktionary')
-	outputPage = wikipedia.Page(wikt, u'Wikipedysta:AlkamidBot/listy/części_mowy')
+	wikt = pywikibot.Site('pl', 'wiktionary')
+	outputPage = pywikibot.Page(wikt, u'Wikipedysta:AlkamidBot/listy/części_mowy')
 	
 	tempLangs = []
 	
@@ -34,7 +34,7 @@ def brakCzesciMowy(data):
 		else:
 			if word.type == 3:
 				for lang in word.listLangs:
-					if lang.type != 2:
+					if lang.type != 2 and lang.type != 7:
 						lang.pola()
 						if lang.type == 5:
 							notFoundList[u'%s' % lang.lang].append(lang.title)

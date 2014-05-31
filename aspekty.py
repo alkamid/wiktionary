@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import wikipedia
-import catlib
-import pagegenerators
+import pywikibot
+from pywikibot import Category
+from pywikibot import pagegenerators
 import re
 from klasa import *
 from importsjp import *
@@ -90,23 +90,23 @@ def addAspekt(title):
                                         nowaSekcja.odmiana.text = u'\n: (1.1) %s' % wt
                                     nowaSekcja.saveChanges()
                                     nowe.addSection(nowaSekcja)
-                                    page = wikipedia.Page(site, newTitle)
+                                    page = pywikibot.Page(site, newTitle)
 
                                     try: content = page.get()
-                                    except wikipedia.NoPage:
+                                    except pywikibot.NoPage:
                                         nowe.push(False, u'dodanie hasła o aspekcie na podstawie [[%s]]' % (title), True)
      
 def main():
     global odmOlafa
     odmOlafa = OdmianaOlafa()
     global site
-    site = wikipedia.getSite()
-    templatePageNdk = wikipedia.Page(site, u'Szablon:ndk')
+    site = pywikibot.getSite()
+    templatePageNdk = pywikibot.Page(site, u'Szablon:ndk')
     lista_ndk = pagegenerators.ReferringPageGenerator(templatePageNdk, True, True, True)
-    templatePageDk = wikipedia.Page(site, u'Szablon:dk')
+    templatePageDk = pywikibot.Page(site, u'Szablon:dk')
     lista_dk = pagegenerators.ReferringPageGenerator(templatePageDk, True, True, True)
     lista = set(list(lista_ndk)+list(lista_dk))
-    #lista = [wikipedia.Page(site, u'spróbować')]
+    #lista = [pywikibot.Page(site, u'spróbować')]
     for a in lista:
         addAspekt(a.title())
                         
@@ -114,4 +114,4 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()               
+        pywikibot.stopme()               

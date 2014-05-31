@@ -1,28 +1,28 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import wikipedia
-import pagegenerators
+import pywikibot
+from pywikibot import pagegenerators
 import re
-import xmlreader
+from pywikibot import xmlreader
 import collections
 from klasa import *
 import datetime
 import time
 	
 def main():
-	site = wikipedia.getSite()
+	site = pywikibot.getSite()
 	
 	username = u'Richiski'
-	outputPage = wikipedia.Page(site, u'Wikipedysta:AlkamidBot/zaufani/%s' % username)
+	outputPage = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/zaufani/%s' % username)
 	
 	botNames = [u'Tsca.bot', u'EquadusBot', u'Olafbot', u'MastiBot', u'AlkamidBot', u'Interwicket', u'RobotGMwikt']
 	
 	verified = []
 	output = u'Lista haseł, które edytował tylko Richiski i następujące boty: Tsca.bot, EquadusBot, Olafbot, MastiBot, AlkamidBot, Interwicket, RobotGMwikt. Każde z poniższych, które ma status wersji nieprzejrzanej, można (i należy) przejrzeć bez sprawdzania, ponieważ jest to pozostałość sprzed wprowadzenia wersji przejrzanych i statusu redaktora.\n\n'
 	
-	cat = catlib.Category(site,u'Kategoria:hiszpański (indeks)')
-	cat2 = catlib.Category(site, u'Kategoria:nowogrecki (indeks)')
+	cat = Category(site,u'Kategoria:hiszpański (indeks)')
+	cat2 = Category(site, u'Kategoria:nowogrecki (indeks)')
 	lista_stron = pagegenerators.CategorizedPageGenerator(cat)
 	lista_stron2 = pagegenerators.CategorizedPageGenerator(cat2)
 	
@@ -70,4 +70,4 @@ if __name__ == '__main__':
 	try:
 		main()
 	finally:
-		wikipedia.stopme()
+		pywikibot.stopme()

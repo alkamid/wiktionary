@@ -4,7 +4,7 @@
 # szuka danego przez szukany_tekst wyrażenia w hasłach
 
 import codecs
-from pywikibot import catlib
+from pywikibot import Category
 import pywikibot
 from pywikibot import pagegenerators
 import re

@@ -1,10 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import wikipedia
-import pagegenerators
+import pywikibot
+from pywikibot import pagegenerators
 import re
-import xmlreader
+from pywikibot import xmlreader
 import collections
 from klasa import *
 from statystykanowa import refs
@@ -15,8 +15,8 @@ def main():
 	data_slownie = data[6] + data[7] + u'.' + data[4] + data[5] + u'.' + data[0] + data[1] + data[2] + data[3]
 	lista_stron1 = xmlreader.XmlDump('/mnt/user-store/dumps/plwiktionary/plwiktionary-%s-pages-articles.xml' % data)
 	lista_stron = xmlreader.XmlDump.parse(lista_stron1)
-	wikt = wikipedia.Site('pl', 'wiktionary')
-	outputPage = wikipedia.Page(wikt, u'Wikipedysta:AlkamidBot/listy/bez_źródła')
+	wikt = pywikibot.Site('pl', 'wiktionary')
+	outputPage = pywikibot.Page(wikt, u'Wikipedysta:AlkamidBot/listy/bez_źródła')
 	
 	notFoundList = collections.defaultdict(list)
 	
@@ -52,6 +52,6 @@ if __name__ == '__main__':
 	try:
 		main()
 	finally:
-		wikipedia.stopme()
+		pywikibot.stopme()
 
 

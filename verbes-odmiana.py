@@ -6,14 +6,14 @@
 import sys
 sys.path.append('/home/adam/pywiki/pywikipedia')
 import codecs
-import catlib
-import wikipedia
-import pagegenerators
+from pywikibot import Category
+import pywikibot
+from pywikibot import pagegenerators
 import re
 
 def main():
 	
-	frwikt = wikipedia.getSite('fr', 'wiktionary')
+	frwikt = pywikibot.getSite('fr', 'wiktionary')
 	
 	lista = []
 	inp = codecs.open('lista_odmiana', encoding='utf-8')
@@ -81,4 +81,4 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()

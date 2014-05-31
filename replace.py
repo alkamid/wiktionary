@@ -1,22 +1,22 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import wikipedia
-import catlib
-import pagegenerators
+import pywikibot
+from pywikibot import Category
+from pywikibot import pagegenerators
 import re
 from klasa import *
 
 def main():
     global site
-    site = wikipedia.getSite()
-    templatePage1 = wikipedia.Page(site, u'Szablon:forma czasownika')
-    templatePage2 = wikipedia.Page(site, u'Szablon:forma rzeczownika')
-    templatePage3 = wikipedia.Page(site, u'Szablon:forma przymiotnika')
-    templatePage4 = wikipedia.Page(site, u'Szablon:forma przysłówka')
-    templatePage5 = wikipedia.Page(site, u'Szablon:forma zaimka')
-    templatePage6 = wikipedia.Page(site, u'Szablon:morfem')
-    templatePage7 = wikipedia.Page(site, u'Szablon:szwedzki czasownik frazowy')
+    site = pywikibot.getSite()
+    templatePage1 = pywikibot.Page(site, u'Szablon:forma czasownika')
+    templatePage2 = pywikibot.Page(site, u'Szablon:forma rzeczownika')
+    templatePage3 = pywikibot.Page(site, u'Szablon:forma przymiotnika')
+    templatePage4 = pywikibot.Page(site, u'Szablon:forma przysłówka')
+    templatePage5 = pywikibot.Page(site, u'Szablon:forma zaimka')
+    templatePage6 = pywikibot.Page(site, u'Szablon:morfem')
+    templatePage7 = pywikibot.Page(site, u'Szablon:szwedzki czasownik frazowy')
     lista1 = list(pagegenerators.ReferringPageGenerator(templatePage1, True, True, True))
     lista2 = list(pagegenerators.ReferringPageGenerator(templatePage2, True, True, True))
     lista3 = list(pagegenerators.ReferringPageGenerator(templatePage3, True, True, True))
@@ -77,4 +77,4 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()               
+        pywikibot.stopme()               

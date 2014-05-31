@@ -7,16 +7,16 @@ import sys
 sys.path.append('/home/alkamid/wikt/pywikipedia')
 #sys.path.append('/home/adam/wikt/pywikipedia')
 import codecs
-import catlib
-import wikipedia
-import pagegenerators
+from pywikibot import Category
+import pywikibot
+from pywikibot import pagegenerators
 import re
 import math
 import datetime
 
 def main():
 
-	site = wikipedia.getSite('pl', 'wikinews')
+	site = pywikibot.getSite('pl', 'wikinews')
 	lista_stron = pagegenerators.AllpagesPageGenerator(site=site)
 	
 	re_cytat = re.compile(u'{{[cC]ytat\|(.*?)}}', re.DOTALL)
@@ -32,10 +32,10 @@ def main():
 		log = u''
 		try:
 			strona = a.get()
-		except wikipedia.IsRedirectPage:
+		except pywikibot.IsRedirectPage:
 			#print u'[[%s]] - przekierowanie' % a.title()
 			log = log + u'\n*[[%s]] - przekierowanie' % a.title()
-		except wikipedia.Error:
+		except pywikibot.Error:
 			print u'[[%s]] - błąd' % a.title()
 			log = log + u'\n*[[%s]] - błąd' % a.title()
 		else:
@@ -94,4 +94,4 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()

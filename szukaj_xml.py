@@ -4,11 +4,11 @@
 # szuka danego przez szukany_tekst wyrażenia w hasłach
 
 import codecs
-import catlib
-import wikipedia
-import pagegenerators
+from pywikibot import Category
+import pywikibot
+from pywikibot import pagegenerators
 import re
-import xmlreader
+from pywikibot import xmlreader
 from klasa import *
 
 def main():
@@ -99,4 +99,4 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()

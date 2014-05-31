@@ -7,9 +7,9 @@ import sys
 sys.path.append('/home/alkamid/wikt/pywikipedia')
 #sys.path.append('/home/adam/pywiki/pywikipedia')
 import codecs
-import catlib
-import wikipedia
-import pagegenerators
+from pywikibot import Category
+import pywikibot
+from pywikibot import pagegenerators
 import re
 import math
 import datetime
@@ -29,4 +29,4 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()

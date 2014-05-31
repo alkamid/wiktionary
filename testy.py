@@ -4,11 +4,11 @@
 # szuka danego przez szukany_tekst wyrażenia w hasłach
 
 import codecs
-import catlib
-import wikipedia
-import pagegenerators
+from pywikibot import Category
+import pywikibot
+from pywikibot import pagegenerators
 import re
-import xmlreader
+from pywikibot import xmlreader
 import datetime
 import time
 from klasa import *
@@ -18,21 +18,24 @@ def meanings():
 	global data
 	data = '20110512'
 	#lista_stron1 = xmlreader.XmlDump('plwiktionary-%s-pages-articles.xml' % data)
+	print 'hohoho'
+	file = open('output/ttt.txt', 'w')
+	file.write('aaa'.encode( "utf-8" ))
+	file.close
 	
+	site_en = pywikibot.Site('en', 'wiktionary')
+	commons = pywikibot.Site('commons', 'commons')
 	
-	site_en = wikipedia.Site('en', 'wiktionary')
-	commons = wikipedia.Site('commons', 'commons')
-	
-	try: wikipedia.ImagePage(site_en, u'File:Hacienda Chac, Yucatán (02).JPG').fileIsOnCommons()
-	except wikipedia.NoPage:
+	try: pywikibot.ImagePage(site_en, u'File:Hacienda Chac, Yucatán (02).JPG').fileIsShared()
+	except pywikibot.NoPage:
 		pass
-	except wikipedia.IsRedirectPage:
+	except pywikibot.IsRedirectPage:
 		pass
 	else:
-		try: tmpget = wikipedia.ImagePage(commons, u'File:Hacienda Chac, Yucatán (02).JPG').get()
-		except wikipedia.NoPage or wikipedia.IsRedirectPage:
+		try: tmpget = pywikibot.ImagePage(commons, u'File:Hacienda Chac, Yucatán (02).JPG').get()
+		except pywikibot.NoPage or pywikibot.IsRedirectPage:
 			pass
-		except wikipedia.IsRedirectPage:
+		except pywikibot.IsRedirectPage:
 			pass
 		else:
 			if not '{{ARlicense' in tmpget:
@@ -43,4 +46,4 @@ if __name__ == '__main__':
     try:
         meanings()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()

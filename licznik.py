@@ -6,19 +6,19 @@
 import sys
 sys.path.append('/home/adam/pywiki/pywikipedia')
 import codecs
-import catlib
-import wikipedia
-import pagegenerators
-import xmlreader
+from pywikibot import Category
+import pywikibot
+from pywikibot import pagegenerators
+from pywikibot import xmlreader
 import re
 import math
 
 def main():
 	
-	site = wikipedia.getSite()
+	site = pywikibot.getSite()
 	lista_stron1 = xmlreader.XmlDump('plwiktionary-20100922-pages-articles.xml')
 	lista_stron = xmlreader.XmlDump.parse(lista_stron1)
-	dlaczego_strona = wikipedia.Page(site, u'Wikisłownik:Dlaczego Wikisłownik')
+	dlaczego_strona = pywikibot.Page(site, u'Wikisłownik:Dlaczego Wikisłownik')
 	liczba_znakow = 0.0
 	liczba_slow = 0.0
 	liczba_audio = 0
@@ -41,11 +41,11 @@ def main():
 
 		try:
 			text = page.text
-		except wikipedia.NoPage:
+		except pywikibot.NoPage:
 			print u'strona nie istnieje'
-		except wikipedia.IsRedirectPage:
+		except pywikibot.IsRedirectPage:
 			print u'%s - przekierowanie' % (page.title())
-		except wikipedia.Error:
+		except pywikibot.Error:
 			print u'nieznany błąd'
 			
 		liczba_audio += len(re.findall(audio, text))
@@ -83,4 +83,4 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()

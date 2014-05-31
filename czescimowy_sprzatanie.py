@@ -3,16 +3,16 @@
 
 import sys
 import codecs
-import wikipedia
-import catlib
-import pagegenerators
+import pywikibot
+from pywikibot import Category
+from pywikibot import pagegenerators
 import re
-import xmlreader
+from pywikibot import xmlreader
 from klasa import *
 	
 def main():
 
-	site = wikipedia.getSite()
+	site = pywikibot.getSite()
 
 	inp = codecs.open(u'input/czescimowy_input.txt', encoding=u'utf-8')
 	
@@ -70,4 +70,4 @@ if __name__ == '__main__':
 	try:
 		main()
 	finally:
-		wikipedia.stopme()
+		pywikibot.stopme()

@@ -7,11 +7,11 @@ import subprocess
 import sys
 sys.path.append('/home/adam/pywiki/pywikipedia')
 import codecs
-import catlib
-import wikipedia
-import pagegenerators
+from pywikibot import Category
+import pywikibot
+from pywikibot import pagegenerators
 import re
-import xmlreader
+from pywikibot import xmlreader
 
 def main():
 	
@@ -30,8 +30,8 @@ def main():
 	sekcje.append(u'{{antonimy}}')
 	sekcje.append(u'{{źródła}}')
 	
-	site = wikipedia.getSite()
-	cat = catlib.Category(site,u'Kategoria:łaciński (indeks)')
+	site = pywikibot.getSite()
+	cat = Category(site,u'Kategoria:łaciński (indeks)')
 	lista_stron = pagegenerators.CategorizedPageGenerator(cat)
 	#lista_stron = pagegenerators.AllpagesPageGenerator(namespace = 0, includeredirects = False)
 	
@@ -65,4 +65,4 @@ if __name__ == '__main__':
     try:
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()
