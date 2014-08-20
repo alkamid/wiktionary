@@ -16,12 +16,12 @@ def main():
 	
 	'''Start input - remember to change the variables below!'''
 	
-	shortName = u'czukocki' #short language name, i.e. without "język"
+	shortName = u'maya' #short language name, i.e. without "język"
 	shortOnly = 0 #some languages are referred to by their name only, e.g. "esperanto" (not "esperanto language") - in that case, set shortOnly to 1
-	kod = u'ckt' #wikimedia or ISO code
-	jakie = u'czukockie' #adjective: polski -> polskie, esperanto -> esperanckie, volapuk -> volapuk
-	zjezyka = u'czukockiego' #"z języka polskiego", "z esperanto", "z języka akan"
-	etymSkr = u'czuk' #abbreviation to use in {{etym}} template, chosen arbitrarily
+	kod = u'yua' #wikimedia or ISO code
+	jakie = u'maya' #adjective: polski -> polskie, esperanto -> esperanckie, volapuk -> volapuk
+	zjezyka = u'maya' #"z języka polskiego", "z esperanto", "z języka akan"
+	etymSkr = u'may' #abbreviation to use in {{etym}} template, chosen arbitrarily
 	
 	'''End input'''
 	
@@ -36,7 +36,7 @@ def main():
 	
 	#kolejne czynności z http://pl.wiktionary.org/wiki/Wikis%C5%82ownik:Struktura_j%C4%99zyka_w_Wikis%C5%82owniku
 	
-	#1. kategoria główna
+	'''#1. kategoria główna
 	page1 = pywikibot.Page(site, u'Kategoria:%s' % longNameCapital)
 	try: page1.get()
 	except pywikibot.NoPage:
@@ -180,7 +180,7 @@ def main():
 	#9. MediaWiki:Common.js
 	page10 = pywikibot.Page(site, u'MediaWiki:Common.js')
 	if u'"%s"' % (shortName) not in page10.get():
-		zaczepienie = u'\n	};\n}\n\nvar om$sectionLinksProcessed=false;\nfunction om$sectionLinks()'
+		zaczepienie = u'\n	};\n}\n\nvar om$sectionLinksProcessed = false;'
 		re_before = re.compile(ur'(.*?)%s' % re.escape(zaczepienie), re.DOTALL)
 		re_after = re.compile(ur'.*?(%s.*)' % re.escape(zaczepienie), re.DOTALL)
 		s_before = re.search(re_before, page10.get())
@@ -194,9 +194,21 @@ def main():
 		else:
 			pywikibot.output(u'Nie dodano parametru do strony MediaWiki:Common.js!')
 	else:
-		pywikibot.output(u'Nazwa języka (%s) istnieje już na stronie MediaWiki:Common.js' % shortName)
+		pywikibot.output(u'Nazwa języka (%s) istnieje już na stronie MediaWiki:Common.js' % shortName)'''
 
-	#8. joystick/liczone
+	#8. Moduł:statystyka/dane
+
+        page8 = pywikibot.Page(site, u'Moduł:statystyka/dane')
+        if u' %s ' % shortName not in page8.get():
+                textPage8 = page8.get()[:-1] + page8.get()[-1:].replace("}", "\t{ '%s' },\n}" % shortName)
+                page8.put(textPage8, comment=u"Dodanie języka %s" % zjezyka)
+        else:
+		pywikibot.output(u'Nazwa języka (%s) istnieje już na stronie Moduł:statystyka/dane' % shortName)
+                
+                
+        
+
+        '''#8. joystick/liczone - was used before Peter Bowman wrote Moduł:statystyka, which is much faster than this
 	page8 = pywikibot.Page(site, u'Wikipedysta:Joystick/statystyka/liczone')
 	
 	# new version (without the first column consisting of numbers)
@@ -218,7 +230,7 @@ def main():
 			pywikibot.output(u'Nie dodano parametru do strony Wikipedysta:Joystick/statystyka/liczone! (najprawdopodobniej strona została przez kogoś zmieniona)')
 	else:
 		pywikibot.output(u'Nazwa języka (%s) istnieje już na stronie Wikipedysta:Joystick/statystyka/liczone' % shortName)
-			
+	'''		
 	# old version (with numbered rows)		
 	'''if u' %s ' % shortName not in page8.get():
 		zaczepienie = u'|- class="sortbottom"\n| align=right | \'\'\'Razem:\'\'\'\n| align=right | <small>100%</small> '
