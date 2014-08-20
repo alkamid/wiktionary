@@ -40,7 +40,7 @@ def czescimowy(data):
 	
 
 	re_przyslowie = re.compile(ur'\'\'{{przysłowie .*?}}\'\'$')
-	re_forma = re.compile(ur'\'\'{{forma (czasownika|rzeczownika|przymiotnika)\|[a-z]*?}}\'\'$')
+	re_forma = re.compile(ur'\'\'{{forma (czasownika|rzeczownika|przymiotnika|zaimka|liczebnika|rodzajnika|przysłówka)\|[a-z]*?}}\'\'$')
 	re_morfem = re.compile(ur'\'\'{{morfem\|[a-z]*?(}}|\|(przyrostek|przedrostek|przyrostkowy|przedrostkowy)}})\'\'$')
 	re_ref = re.compile(ur'\s*<ref.*?(</ref>|/>)\s*')
 	re_spacje = re.compile(ur'\'\'(.*?)\'\'$')
