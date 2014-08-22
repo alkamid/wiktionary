@@ -62,7 +62,8 @@ def main():
 									listArchaic.add(word.title)
 
 	site = pywikibot.getSite()
-	
+	siteCommons = pywikibot.getSite('commons', 'commons')
+
 	cat_main = Category(site,u'Kategoria:polski (indeks)')
 	cat_gwary = Category(site, u'Kategoria:Polski_(dialekty_i_gwary)')
 	cat_obce = Category(site, u'Kategoria:polski_-_terminy_obce_(indeks)')
@@ -98,11 +99,11 @@ def main():
 
 		for retry in retryloop(5, timeout=30):
 			try:
-				pywikibot.ImagePage(site, u'Pl-%s.ogg' % page.title()).fileIsShared()
+				pywikibot.ImagePage(siteCommons, u'Pl-%s.ogg' % page.title()).fileIsShared()
 			except (pywikibot.NoPage, KeyError):
 				for retry in retryloop(5,timeout=30):
 					try:
-						pywikibot.ImagePage(site, u'Pl-%s.OGG' % page.title()).fileIsShared()
+						pywikibot.ImagePage(siteCommons, u'Pl-%s.OGG' % page.title()).fileIsShared()
 					except (pywikibot.NoPage, KeyError):
 						if page.title() in lista_gwary:
 							outputGwary.add(page.title())
