@@ -488,6 +488,7 @@ def stat_wikitable(old, new):
 						text8 = text8 + u'\n|-\n! %d' % (i)
 						text7 = text7 + u'|-\n| [[:Kategoria:%s (indeks)|%s]]\n| align="right"| %.0f\n| align="right"| %s\n| align="right"| %.4f\n| align="right"| %s\n' % (new[a].shortName, new[a].shortName, new[a].countMeans, changeText(changes[u'means'], 0), new[a].avgMean, changeText(changes[u'avgMean'], 4))
 			
+        site = pywikibot.getSite()
         page_dane = pywikibot.Page(site, u'Moduł:statystyka/dane')
         text_dane = page_dane.get()
         
@@ -522,7 +523,7 @@ def stat_wikitable(old, new):
         text_dane = re.sub(ur'date = \'[0-9]{2}\.[0-9]{2}\.[0-9]{4}', u'date = \'%s' % data_slownie, text_dane)
 
 	
-	site = pywikibot.getSite()
+	
 	page_dlugosc = pywikibot.Page(site, u'Wikipedysta:Alkamid/statystyka/długość')
 	page_srednia = pywikibot.Page(site, u'Wikipedysta:Alkamid/statystyka/długość_średnia')
 	page_multimedia = pywikibot.Page(site, u'Wikipedysta:Alkamid/statystyka/multimedia')
