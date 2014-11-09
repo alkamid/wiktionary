@@ -488,7 +488,9 @@ def stat_wikitable(old, new):
 						text8 = text8 + u'\n|-\n! %d' % (i)
 						text7 = text7 + u'|-\n| [[:Kategoria:%s (indeks)|%s]]\n| align="right"| %.0f\n| align="right"| %s\n| align="right"| %.4f\n| align="right"| %s\n' % (new[a].shortName, new[a].shortName, new[a].countMeans, changeText(changes[u'means'], 0), new[a].avgMean, changeText(changes[u'avgMean'], 4))
 			
-
+        page_dane = pywikibot.Page(site, u'Moduł:statystyka/dane')
+        text_dane = page_dane.get()
+        
 	for a in new:
 		for b in old:
 			if a == b:
@@ -498,8 +500,9 @@ def stat_wikitable(old, new):
 				text11 = text11 + u'\n|%s=%.0f' % (new[a].shortName, new[a].countAudio)
 				text12 = text12 + u'\n|%s=%.1f' % (new[a].shortName, new[a].percGraph)
 				text13 = text13 + u'\n|%s=%.1f' % (new[a].shortName, new[a].percAudio)
-				text9 = text9 + u'\n|%s=%.0f' % (new[a].shortName.lower(), new[a].countMeans)
-				text16 = text16 + u'\n|%s=%.4f' % (new[a].shortName.lower(), new[a].avgMean)
+				#text9 = text9 + u'\n|%s=%.0f' % (new[a].shortName.lower(), new[a].countMeans)
+				text_dane = meaningsUpdateWikitext(new[a].shortName.lower(), new[a].countMeans, text_dane)
+                                text16 = text16 + u'\n|%s=%.4f' % (new[a].shortName.lower(), new[a].avgMean)
 		
 	
 	all = countAll(new)
@@ -516,6 +519,8 @@ def stat_wikitable(old, new):
 	text_dlugosc_template = text14 + u'\n|=%.0f|data=%s\n|#default=bd.\n}}' % (all[1]/1000, data_slownie)
 	text_srednia_template = text15 + u'\n|=|data=%s\n|#default=bd.\n}}' % (data_slownie)
 	text_znaczenia_srednia_template = text16 + u'\n|=%.4f\n|data=%s\n|#default=bd.\n}}' % (all[8], data_slownie)
+        text_dane = re.sub(ur'date = \'[0-9]{2}\.[0-9]{2}\.[0-9]{4}', u'date = \'%s' % data_slownie, text_dane)
+
 	
 	site = pywikibot.getSite()
 	page_dlugosc = pywikibot.Page(site, u'Wikipedysta:Alkamid/statystyka/długość')
@@ -559,13 +564,10 @@ def stat_wikitable(old, new):
 		page_srednia.put(text_srednia, comment="Aktualizacja statystyk, dane z %s" % data_slownie, botflag=False)
 		page_multimedia.put(text_multimedia, comment="Aktualizacja statystyk, dane z %s" % data_slownie, botflag=False)
 		page_znaczenia.put(text_znaczenia, comment="Aktualizacja statystyk, dane z %s" % data_slownie, botflag=False)
-		#page_dlugosc.put(text_dlugosc, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
-		#page_srednia.put(text_srednia, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
-		#page_multimedia.put(text_multimedia, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
-		#page_znaczenia.put(text_znaczenia, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
-		page_znaczenia_templ.put(text_znaczenia_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
-		page_znaczenia_srednia_templ.put(text_znaczenia_srednia_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
-		page_dlugosc_templ.put(text_dlugosc_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
+		#page_znaczenia_templ.put(text_znaczenia_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
+		#page_znaczenia_srednia_templ.put(text_znaczenia_srednia_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
+		page_dane.put(text_dane, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
+                page_dlugosc_templ.put(text_dlugosc_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
 		page_srednia_templ.put(text_srednia_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
 		page_GraphCount_templ.put(text_GraphCount_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
 		page_GraphPerc_templ.put(text_GraphPerc_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
@@ -702,6 +704,17 @@ def licznik():
 	else:
 		presskit.put(presskit_tekst, comment = u'Aktualizacja z ostatniego zrzutu bazy danych (%s)' % data_slownie, botflag=False)
 		#presskit.put(presskit_tekst, comment = u'Aktualizacja z ostatniego zrzutu bazy danych (%s)' % data_slownie)
+
+def meaningsUpdateWikitext(lang, count, text):
+
+    s_mean = re.search(ur'({\s*\'%s?\',\s*{\s*?)((a|p|r|w).*?,\n)' % lang, text)
+    if s_mean:
+        text = text.replace(s_mean.group(1), s_mean.group(1) + u'z = %d, ' % count)
+    else:
+        s_mean = re.search(ur'({\s*\'%s?\'\s*?)(},\n)' % lang, text)
+        if s_mean:
+            text = text.replace(s_mean.group(1), s_mean.group(1) + u', { z = %d } ' % count)
+    return text
 
 def data_stat():
 	
