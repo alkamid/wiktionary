@@ -36,7 +36,7 @@ def main():
 	
 	#kolejne czynności z http://pl.wiktionary.org/wiki/Wikis%C5%82ownik:Struktura_j%C4%99zyka_w_Wikis%C5%82owniku
 	
-	'''#1. kategoria główna
+	#1. kategoria główna
 	page1 = pywikibot.Page(site, u'Kategoria:%s' % longNameCapital)
 	try: page1.get()
 	except pywikibot.NoPage:
@@ -65,7 +65,9 @@ def main():
 		#print textPage3
 	else:
 		pywikibot.output(u'Szablon języka "%s" już istnieje!' % shortName)
-		
+	
+        
+        '''not used anymore	
 	#4. {{licznik}}
 	page4 = pywikibot.Page(site, u'Szablon:licznik')
 	if u':%s ' % shortName not in page4.get():
@@ -84,7 +86,7 @@ def main():
 			pywikibot.output(u'Nie dodano parametru do szablonu {{licznik}}!')
 	else:
 		pywikibot.output(u'Nazwa języka (%s) istnieje już  w szablonie {{licznik}}' % shortName)
-		
+		'''
 	#5. {{indeks}}
 	page5 = pywikibot.Page(site, u'Szablon:indeks')
 	if u'|%s=' % shortName not in page5.get():
@@ -194,12 +196,12 @@ def main():
 		else:
 			pywikibot.output(u'Nie dodano parametru do strony MediaWiki:Common.js!')
 	else:
-		pywikibot.output(u'Nazwa języka (%s) istnieje już na stronie MediaWiki:Common.js' % shortName)'''
+		pywikibot.output(u'Nazwa języka (%s) istnieje już na stronie MediaWiki:Common.js' % shortName)
 
 	#8. Moduł:statystyka/dane
 
         page8 = pywikibot.Page(site, u'Moduł:statystyka/dane')
-        if u' %s ' % shortName not in page8.get():
+        if u'%s' % shortName not in page8.get():
                 textPage8 = page8.get()[:-1] + page8.get()[-1:].replace("}", "\t{ '%s' },\n}" % shortName)
                 page8.put(textPage8, comment=u"Dodanie języka %s" % zjezyka)
         else:
