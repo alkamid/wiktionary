@@ -708,13 +708,19 @@ def licznik():
 
 def meaningsUpdateWikitext(lang, count, text):
 
-    s_mean = re.search(ur'({\s*\'%s?\',\s*{\s*?)((a|p|r|w).*?,\n)' % lang, text)
-    if s_mean:
-        text = text.replace(s_mean.group(1), s_mean.group(1) + u'z = %d, ' % count)
+    regex = re.compile(ur'({\s*?\'%s\'\s*,\s*{[\w\s,=\']*?)(z\s*=\s*[0-9]*)([\w\s,=\']*?})' % lang, re.UNICODE)
+    s = re.search(regex, text)
+    if s and s.group(2):
+        print 'hohoho'
+        text = re.sub(regex, ur'\1z = %d\3' % count, text)
     else:
-        s_mean = re.search(ur'({\s*\'%s?\'\s*?)(},\n)' % lang, text)
-        if s_mean:
-            text = text.replace(s_mean.group(1), s_mean.group(1) + u', { z = %d } ' % count)
+        regex = re.compile(ur'({\s*?\'%s\')\s*(,\s*{)*' % lang, re.UNICODE)
+        s = re.search(regex, text)
+        if s:
+            if s.group(2):
+                text = re.sub(regex, ur'\1\2 z = %d,' % count, text)
+            else:
+                text = re.sub(regex, ur'\1, { z = %d } ' % count, text)
     return text
 
 def data_stat():
