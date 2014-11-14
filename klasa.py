@@ -15,6 +15,16 @@ import bz2
 import sys
 from pywikibot.data.api import Request
 from os import environ
+import mwparserfromhell
+
+def parseTitle(title):
+    site = pywikibot.getSite()
+    page = pywikibot.Page(site, title)
+    text = page.get()
+    return mwparserfromhell.parse(text)
+
+def parseText(text):
+    return mwparserfromhell.parse(text)
 
 locale.setlocale(locale.LC_COLLATE,"pl_PL.UTF-8")
 #possible types:
@@ -1102,8 +1112,10 @@ def getListFromXML(data, findLatest=False):
 			raise DumpNotFound
 	
 
-    lista_stron = xmlreader.XmlDump.parse(xmlreader.XmlDump(filename))
-    return list(lista_stron)
+    generator = xmlreader.XmlDump.parse(xmlreader.XmlDump(filename))
+    return generator
+    
+    #return list(lista_stron)
 
 def log(text, filename='log_all', test_mode=0):
     if test_mode == 1:
