@@ -47,8 +47,7 @@ class Haslo():
 			self.wstepna = u''
 			self.content = u''
 			self.listLangs = []
-		elif text == 'faoweoucmo3u4210987acskjdh':
-		
+		elif type(title) is str:
 			self.site = pywikibot.getSite('pl', 'wiktionary')
 			self.type = 1
 			self.title = title
@@ -72,11 +71,11 @@ class Haslo():
 				self.langs()
 		
 		else:
-			self.title = title
-			self.content = text
+			self.title = title.title
+			self.content = title.text
 			self.type = 3
 			#checking the namespace
-			if u'Wikipedysta:AlkamidBot/sjp/' not in self.title and (u'Dyskusja:' in self.title or u'Wikipedysta:' in self.title or u'Wikipedystka:' in self.title or u'Dyskusja Wikipedysty:' in self.title or u'Dyskusja Wikipedystki:' in self.title or u'Wikisłownik:' in self.title or u'Wikidyskusja:' in self.title or u'Plik:' in self.title or u'Dyskusja pliku:' in self.title or u'MediaWiki:' in self.title or u'Dyskusja MediaWiki:' in self.title or u'Szablon:' in self.title or u'Dyskusja szablonu:' in self.title or u'Pomoc:' in self.title or u'Dyskusja pomocy:' in self.title or u'Kategoria:' in self.title or u'Dyskusja kategorii:' in self.title or u'Aneks:' in self.title or u'Dyskusja aneksu:' in self.title or u'Indeks:' in self.title or u'Dyskusja indeksu:' in self.title or u'Portal:' in self.title or u'Dyskusja portalu:' in self.title or u'Moduł:' in self.title or u'Dyskusja modułu:' in self.title): #czy to dobry sposób na sprawdzanie?
+                        if title.ns:
 				self.type = 5
 			
 			if self.type == 3:
