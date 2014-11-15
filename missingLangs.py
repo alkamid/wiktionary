@@ -22,7 +22,7 @@ def missingLangs(data):
 
 	for a in lista_stron:
 
-		try: word = Haslo(a.title, a.text)
+		try: word = Haslo(a)
 		except notFromMainNamespace:
 			pass
 		except sectionsNotFound:
@@ -42,7 +42,7 @@ def missingLangs(data):
 	missingText = u''
 	
 	for a in lista_stron:
-		try: word = Haslo(a.title, a.text)
+		try: word = Haslo(a)
 		except notFromMainNamespace:
 			pass
 		except sectionsNotFound:

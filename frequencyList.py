@@ -38,7 +38,7 @@ def frequencyList(data):
     for a in lista_stron2:            
         alltitles.add(a.title)
         if 'Wikipedysta:AlkamidBot' not in a.title:
-            try: h = Haslo(a.title, a.text)
+            try: h = Haslo(a)
             except sectionsNotFound:
                 pass
             except WrongHeader:

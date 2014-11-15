@@ -39,7 +39,7 @@ def rzeczownikRodzaj(data):
 		allNounsCount[a.shortName] = 0
 	
 	for a in lista_stron:
-		try: word = Haslo(a.title, a.text)
+		try: word = Haslo(a)
 		except sectionsNotFound:
 			pass
 		except WrongHeader:

@@ -59,7 +59,7 @@ def czescimowy(data):
 	
 	for a in lista:
 		ifex = 0
-		try: h = Haslo(a.title, a.text)
+		try: h = Haslo(a)
 		except sectionsNotFound:
 			pass
 		except WrongHeader:

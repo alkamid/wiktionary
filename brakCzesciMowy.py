@@ -24,7 +24,7 @@ def brakCzesciMowy(data):
 	LangsMediaWiki = getAllLanguages()
 
 	for a in lista_stron:
-		try: word = Haslo(a.title, a.text)
+		try: word = Haslo(a)
 		except notFromMainNamespace:
 			pass
 		except sectionsNotFound:

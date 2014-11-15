@@ -263,7 +263,7 @@ def licz_jezyki(data):
 	
 	for a in lista_stron2:
 		#if (i<1000):
-		try: haslo = Haslo(a.title, a.text)
+		try: haslo = Haslo(a)
 		except sectionsNotFound:
 			pass
 		except WrongHeader:
