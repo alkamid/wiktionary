@@ -11,7 +11,7 @@ import config
 from klasa import *
 
 def main():
-	site = pywikibot.getSite()
+	site = pywikibot.Site()
 	outputPage = pywikibot.Page(site, u'Portal:Francuski/potrzebne')
         excludedPage = pywikibot.Page(site, u'Portal:Francuski/potrzebne/wykluczone')
 	excludedList = excludedPage.get().split('\n')

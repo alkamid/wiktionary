@@ -71,7 +71,7 @@ def updateTable(katPages, pageCount, tableText):
 							
 def main():
 	global site
-	site = pywikibot.getSite()
+	site = pywikibot.Site()
 	wordsPerPage = 10
 	
 	kategorie = []

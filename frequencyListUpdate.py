@@ -15,7 +15,7 @@ from klasa import *
 
 def main():
     
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     files = {}
     table = {}
     file = codecs.open(u'%soutput/frequencyListPL.txt' % (config.path['scripts']), 'r', 'utf-8')

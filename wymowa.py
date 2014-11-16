@@ -61,8 +61,8 @@ def main():
 								if len(s_arch) == len(s_numMeans):
 									listArchaic.add(word.title)
 
-	site = pywikibot.getSite()
-	siteCommons = pywikibot.getSite('commons', 'commons')
+	site = pywikibot.Site()
+	siteCommons = pywikibot.Site('commons', 'commons')
 
 	cat_main = Category(site,u'Kategoria:polski (indeks)')
 	cat_gwary = Category(site, u'Kategoria:Polski_(dialekty_i_gwary)')

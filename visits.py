@@ -33,7 +33,7 @@ def checkSum(folder, filename, dateString):
 
 def main():
 	#get the default site - the bot is operating on pl.wikt only
-	site = pywikibot.getSite()
+	site = pywikibot.Site()
 		
 	#a list and a dict to handle individual entries
 	lista = []

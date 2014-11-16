@@ -14,7 +14,7 @@ import config
 
 def main():
 	
-	site = pywikibot.getSite()
+	site = pywikibot.Site()
 	
 	cat_main = Category(site,u'Kategoria:polski (indeks)')
 	cat_gwary = Category(site, u'Kategoria:Polski_(dialekty_i_gwary)')
