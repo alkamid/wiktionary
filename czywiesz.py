@@ -15,8 +15,8 @@ def main():
 	
 	logging.basicConfig()
 	
-	wiki = pywikibot.getSite('pl', 'wikipedia')
-	wikt = pywikibot.getSite('pl', 'wiktionary')
+	wiki = pywikibot.Site('pl', 'wikipedia')
+	wikt = pywikibot.Site('pl', 'wiktionary')
 	
 	output = pywikibot.Page(wikt, u'Wikipedysta:AlkamidBot/SG_Wikipedia')
 	
