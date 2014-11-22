@@ -99,7 +99,7 @@ def main():
 
 		for retry in retryloop(5, timeout=30):
 			try:
-				pywikibot.ImagePage(siteCommons, u'Pl-%s.ogg' % page.title()).fileIsShared()
+				pywikibot.page.FilePage(siteCommons, u'Pl-%s.ogg' % page.title()).fileIsShared()
 			except (pywikibot.NoPage, KeyError):
 				for retry in retryloop(5,timeout=30):
 					try:
