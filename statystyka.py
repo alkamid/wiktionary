@@ -708,13 +708,12 @@ def licznik():
 
 def meaningsUpdateWikitext(lang, count, text):
 
-    regex = re.compile(ur'({\s*?\'%s\'\s*,\s*{[\w\s,=\']*?)(z\s*=\s*[0-9]*)([\w\s,=\']*?})' % lang, re.UNICODE)
+    regex = re.compile(ur'({\s*?\'%s\'\s*,\s*{[\w\s,=\']*?)(z\s*=\s*[0-9]*)([\w\s,=\']*?})' % re.escape(lang), re.UNICODE)
     s = re.search(regex, text)
     if s and s.group(2):
-        print 'hohoho'
         text = re.sub(regex, ur'\1z = %d\3' % count, text)
     else:
-        regex = re.compile(ur'({\s*?\'%s\')\s*(,\s*{)*' % lang, re.UNICODE)
+        regex = re.compile(ur'({\s*?\'%s\')\s*(,\s*{)*' % re.escape(lang), re.UNICODE)
         s = re.search(regex, text)
         if s:
             if s.group(2):
