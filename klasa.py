@@ -18,7 +18,7 @@ from os import environ
 import mwparserfromhell
 
 def parseTitle(title):
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     page = pywikibot.Page(site, title)
     text = page.get()
     return mwparserfromhell.parse(text)
@@ -41,14 +41,14 @@ class Haslo():
 	regex['langs-lang'] = re.compile(ur'(== .*?\(\{\{.*?\}\}\) ==.*?)(?=$|[^{{]==)', re.DOTALL)
 	def __init__(self, title, text='faoweoucmo3u4210987acskjdh', new=False):
 		if new == True:
-			self.site = pywikibot.getSite('pl', 'wiktionary')
+			self.site = pywikibot.Site('pl', 'wiktionary')
 			self.type = 3
 			self.title = title
 			self.wstepna = u''
 			self.content = u''
 			self.listLangs = []
 		elif type(title) is str:
-			self.site = pywikibot.getSite('pl', 'wiktionary')
+			self.site = pywikibot.Site('pl', 'wiktionary')
 			self.type = 1
 			self.title = title
 			self.wstepna = u''
@@ -855,7 +855,7 @@ def flagLastRev(site, revid, comment=u''):
 
 #TODO: pobierać z WS:Kody języków
 def getAllLanguages():
-	site = pywikibot.getSite('pl', 'wiktionary')
+	site = pywikibot.Site('pl', 'wiktionary')
 	page = pywikibot.Page(site, u'Mediawiki:Common.js')
 	
 	langTable = []
@@ -885,7 +885,7 @@ def getAllLanguages():
 
 def obrazkiAndrzeja():
 	#wyniki działania funkcji to dictionary w formie dict['slowo'] = [grafika1, grafika2, ...]
-	site = pywikibot.getSite()
+	site = pywikibot.Site()
 	pageImages = pywikibot.Page(site, u'Wikipedysta:Andrzej 22/Ilustracje')
 	re_sekcja = re.compile(ur'\=\=\s*\[\[(.*?)\]\]\s*\=\=(.*?)(?=\=\=)', re.DOTALL)
 	re_img = re.compile(ur'(\[\[Plik\:.*?\]\])(?=\[\[Plik|<br)')
@@ -1127,7 +1127,7 @@ def log(text, filename='log_all', test_mode=0):
 	
 class HasloFr():
 	def __init__(self, a):
-		site = pywikibot.getSite('fr', 'wiktionary')
+		site = pywikibot.Site('fr', 'wiktionary')
 		
 		self.type = 1
 		self.title = a
