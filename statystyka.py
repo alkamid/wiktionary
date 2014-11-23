@@ -743,7 +743,7 @@ def data_stat():
 
 def statystyka(oldDate, newDate):
 	global offline_mode
-	offline_mode = 1
+	offline_mode = 0
 	global filename
 	filename = "output/statystykanowa.txt"
 	global data
