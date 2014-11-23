@@ -502,7 +502,7 @@ def stat_wikitable(old, new):
 				text12 = text12 + u'\n|%s=%.1f' % (new[a].shortName, new[a].percGraph)
 				text13 = text13 + u'\n|%s=%.1f' % (new[a].shortName, new[a].percAudio)
 				#text9 = text9 + u'\n|%s=%.0f' % (new[a].shortName.lower(), new[a].countMeans)
-				text_dane = meaningsUpdateWikitext(new[a].shortName.lower(), new[a].countMeans, text_dane)
+                                text_dane = meaningsUpdateWikitext(new[a].shortName, new[a].countMeans, text_dane)
                                 text16 = text16 + u'\n|%s=%.4f' % (new[a].shortName.lower(), new[a].avgMean)
 		
 	
