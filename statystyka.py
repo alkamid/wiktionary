@@ -263,34 +263,34 @@ def licz_jezyki(data):
 	
 	for a in lista_stron2:
 		#if (i<1000):
-		try: haslo = Haslo(a)
-		except sectionsNotFound:
-			pass
-		except WrongHeader:
-			pass
-		else:
-			if haslo.type != 5:
-				for b in haslo.listLangs:
-					if b.type != 2 and b.type != 3:
-						if b.langLong == u'termin obcy w języku polskim':
-							b.langLong = u'język polski'
-						if b.langLong in statList:
-							statList[u'%s' % b.langLong].addWord()
-							statList[u'%s' % b.langLong].addLength(CountLength(b.content))
-							
-							b.pola()
-							audiotmp = countAudio(b.content)
-							graphtmp = countGraph(b.content)
-							if audiotmp:
-								statList[u'%s' % b.langLong].addAudio()
-								statList[u'%s' % b.langLong].addAudioAll(audiotmp)
-							if graphtmp:
-								statList[u'%s' % b.langLong].addGraph()
-								statList[u'%s' % b.langLong].addGraphAll(graphtmp)
-							if b.type not in (2,3,5,7,11):
-								statList[u'%s' % b.langLong].addMeans(meanings(b.znaczeniaDetail))
-								statList[u'%s' % b.langLong].addRef(refs(b.content, b.zrodla))
-				
+                try: haslo = Haslo(a)
+                except sectionsNotFound:
+                        pass
+                except WrongHeader:
+                        pass
+                else:
+                        if haslo.type != 5:
+                                for b in haslo.listLangs:
+                                        if b.type != 2 and b.type != 3:
+                                                if b.langLong == u'termin obcy w języku polskim':
+                                                        b.langLong = u'język polski'
+                                                if b.langLong in statList:
+                                                        statList[u'%s' % b.langLong].addWord()
+                                                        statList[u'%s' % b.langLong].addLength(CountLength(b.content))
+
+                                                        b.pola()
+                                                        audiotmp = countAudio(b.content)
+                                                        graphtmp = countGraph(b.content)
+                                                        if audiotmp:
+                                                                statList[u'%s' % b.langLong].addAudio()
+                                                                statList[u'%s' % b.langLong].addAudioAll(audiotmp)
+                                                        if graphtmp:
+                                                                statList[u'%s' % b.langLong].addGraph()
+                                                                statList[u'%s' % b.langLong].addGraphAll(graphtmp)
+                                                        if b.type not in (2,3,5,7,11):
+                                                                statList[u'%s' % b.langLong].addMeans(meanings(b.znaczeniaDetail))
+                                                                statList[u'%s' % b.langLong].addRef(refs(b.content, b.zrodla))
+
 	for c in statList:
 		statList[c].countAvgLen()
 		statList[c].countAvgMean()
@@ -743,7 +743,7 @@ def data_stat():
 
 def statystyka(oldDate, newDate):
 	global offline_mode
-	offline_mode = 0
+	offline_mode = 1
 	global filename
 	filename = "output/statystykanowa.txt"
 	global data
