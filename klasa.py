@@ -40,47 +40,47 @@ class Haslo():
 	regex['langs-wstepna'] = re.compile(ur'(.*?)==', re.DOTALL)
 	regex['langs-lang'] = re.compile(ur'(== .*?\(\{\{.*?\}\}\) ==.*?)(?=$|[^{{]==)', re.DOTALL)
 	def __init__(self, title, text='faoweoucmo3u4210987acskjdh', new=False):
-		if new == True:
-			self.site = pywikibot.Site('pl', 'wiktionary')
-			self.type = 3
-			self.title = title
-			self.wstepna = u''
-			self.content = u''
-			self.listLangs = []
-		elif type(title) is str:
-			self.site = pywikibot.Site('pl', 'wiktionary')
-			self.type = 1
-			self.title = title
-			self.wstepna = u''
-			page = pywikibot.Page(self.site, self.title)
+            if new == True:
+                self.site = pywikibot.Site('pl', 'wiktionary')
+                self.type = 3
+                self.title = title
+                self.wstepna = u''
+                self.content = u''
+                self.listLangs = []
+            elif type(title) is str:
+                self.site = pywikibot.Site('pl', 'wiktionary')
+                self.type = 1
+                self.title = title
+                self.wstepna = u''
+                page = pywikibot.Page(self.site, self.title)
+                
+                try:
+                    self.content = page.get()
+                except pywikibot.IsRedirectPage:
+                    self.type = 0
+                except pywikibot.NoPage:
+                    self.type = 1
+                except pywikibot.Error:
+                    self.type = 2
+                else:
+                    self.type = 3
+                    if page.namespace() and u'Wikipedysta:AlkamidBot/sjp/' not in self.title:
+                        self.type = 5
+                         
+                    if self.type == 3:
+                        self.langs()
+                         
+            else:
+                self.title = title.title
+                self.content = title.text
+                self.type = 3
+                #checking the namespace
+                if title.ns != '0':
+                    self.type = 5
+                    
+                if self.type == 3:
+                    self.langs()
 
-			try:
-				self.content = page.get()
-			except pywikibot.IsRedirectPage:
-				self.type = 0
-			except pywikibot.NoPage:
-				self.type = 1
-			except pywikibot.Error:
-				self.type = 2
-			else:
-				self.type = 3
-				if page.namespace() and u'Wikipedysta:AlkamidBot/sjp/' not in self.title:
-					self.type = 5
-				
-			if self.type == 3:
-				self.langs()
-		
-		else:
-			self.title = title.title
-			self.content = title.text
-			self.type = 3
-			#checking the namespace
-                        if title.ns:
-				self.type = 5
-			
-			if self.type == 3:
-				self.langs()
-			
 	def langs(self):
 		self.listLangs = []
 		s_wstepna = re.search(self.regex['langs-wstepna'], self.content)
