@@ -868,7 +868,6 @@ def getAllLanguages():
 
 	if s_langs:
 		tempLangTable = re.findall(re_oneLang, s_langs.group(1))
-                print tempLangTable
 		for a in tempLangTable:
 			if a[0] in shortOnly:
 				tempLong = a[0]
