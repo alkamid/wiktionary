@@ -860,7 +860,7 @@ def getAllLanguages():
 	
 	langTable = []
 	re_langs = re.compile(ur'function om\$initLangDictionaries\(\) \{\n\tom\$Lang2Code={\n(.*?)\n\t\};', re.DOTALL)
-	re_oneLang = re.compile(ur'\s*?"(.*?)"\s*?\:"([a-z-]*?)"')
+	re_oneLang = re.compile(ur'\s*?"(.*?)"\s*?\:\s*"([a-z-]*?)"')
 	
 	s_langs = re.search(re_langs, page.get())
 
@@ -868,6 +868,7 @@ def getAllLanguages():
 
 	if s_langs:
 		tempLangTable = re.findall(re_oneLang, s_langs.group(1))
+                print tempLangTable
 		for a in tempLangTable:
 			if a[0] in shortOnly:
 				tempLong = a[0]
