@@ -56,8 +56,8 @@ def main():
 						if lang.lang == 'polski':
 							lang.pola()
 							if lang.type == 9:
-								s_arch = re.findall(re_arch, lang.znaczeniaWhole.text)
-								s_numMeans = re.findall(re_numMeans, lang.znaczeniaWhole.text)
+								s_arch = re.findall(re_arch, lang.subSections[u'znaczenia'].text)
+								s_numMeans = re.findall(re_numMeans, lang.subSections[u'znaczenia'].text)
 								if len(s_arch) == len(s_numMeans):
 									listArchaic.add(word.title)
 

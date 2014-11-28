@@ -271,6 +271,7 @@ def licz_jezyki(data):
                 else:
                         if haslo.type != 5:
                                 for b in haslo.listLangs:
+                                        #print haslo.title
                                         if b.type != 2 and b.type != 3:
                                                 if b.langLong == u'termin obcy w języku polskim':
                                                         b.langLong = u'język polski'
@@ -289,7 +290,7 @@ def licz_jezyki(data):
                                                                 statList[u'%s' % b.langLong].addGraphAll(graphtmp)
                                                         if b.type not in (2,3,5,7,11):
                                                                 statList[u'%s' % b.langLong].addMeans(meanings(b.znaczeniaDetail))
-                                                                statList[u'%s' % b.langLong].addRef(refs(b.content, b.zrodla))
+                                                                statList[u'%s' % b.langLong].addRef(refs(b.content, b.subSections[u'źródła']))
 
 	for c in statList:
 		statList[c].countAvgLen()
@@ -528,8 +529,6 @@ def stat_wikitable(old, new):
 	page_srednia = pywikibot.Page(site, u'Wikipedysta:Alkamid/statystyka/długość_średnia')
 	page_multimedia = pywikibot.Page(site, u'Wikipedysta:Alkamid/statystyka/multimedia')
 	page_znaczenia = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/statystyka/znaczenia')
-	page_znaczenia_templ = pywikibot.Page(site, u'Szablon:licznikZnaczeń')
-	page_znaczenia_srednia_templ = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/statystyka/znaczenia_średnia/template')
 	page_dlugosc_templ = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/statystyka/długość/template')
 	page_srednia_templ = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/statystyka/długość_średnia/template')
 	page_GraphCount_templ = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/statystyka/liczba_grafik/template')
@@ -561,19 +560,22 @@ def stat_wikitable(old, new):
 
 	
 	if (offline_mode == 0):
-		page_dlugosc.put(text_dlugosc, comment="Aktualizacja statystyk, dane z %s" % data_slownie, botflag=False)
-		page_srednia.put(text_srednia, comment="Aktualizacja statystyk, dane z %s" % data_slownie, botflag=False)
-		page_multimedia.put(text_multimedia, comment="Aktualizacja statystyk, dane z %s" % data_slownie, botflag=False)
-		page_znaczenia.put(text_znaczenia, comment="Aktualizacja statystyk, dane z %s" % data_slownie, botflag=False)
-		#page_znaczenia_templ.put(text_znaczenia_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
-		#page_znaczenia_srednia_templ.put(text_znaczenia_srednia_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
-		page_dane.put(text_dane, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
-                page_dlugosc_templ.put(text_dlugosc_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
-		page_srednia_templ.put(text_srednia_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
-		page_GraphCount_templ.put(text_GraphCount_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
-		page_GraphPerc_templ.put(text_GraphPerc_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
-		page_AudioCount_templ.put(text_AudioCount_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
-		page_AudioPerc_templ.put(text_AudioPerc_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
+		page_dlugosc.save(text_dlugosc, comment="Aktualizacja statystyk, dane z %s" % data_slownie, botflag=False)
+		page_srednia.save(text_srednia, comment="Aktualizacja statystyk, dane z %s" % data_slownie, botflag=False)
+		page_multimedia.save(text_multimedia, comment="Aktualizacja statystyk, dane z %s" % data_slownie, botflag=False)
+		page_znaczenia.save(text_znaczenia, comment="Aktualizacja statystyk, dane z %s" % data_slownie, botflag=False)
+		page_dane.save(text_dane, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
+                page_dlugosc_templ.save(text_dlugosc_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
+		page_srednia_templ.save(text_srednia_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
+		page_GraphCount_templ.save(text_GraphCount_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
+		page_GraphPerc_templ.save(text_GraphPerc_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
+		page_AudioCount_templ.save(text_AudioCount_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
+		page_AudioPerc_templ.save(text_AudioPerc_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
+        else:
+                file = codecs.open('outstat.txt', 'w')
+                myout = text_dlugosc + u'\n\n\n' + text_srednia + u'\n\n\n' + text_multimedia + u'\n\n\n' + text_znaczenia + u'\n\n\n' + text_dane + u'\n\n\n' + text_dlugosc_template + u'\n\n\n' + text_srednia_template + u'\n\n\n' + text_GraphCount_template + u'\n\n\n' + text_GraphPerc_template + u'\n\n\n' + text_AudioCount_template + u'\n\n\n' + text_AudioPerc_template
+                file.write(myout.encode('utf-8'))
+                file.close()
 
 def dlaczego(new):
 	site = pywikibot.getSite()
@@ -612,8 +614,9 @@ def dlaczego(new):
 	presskitText = re.sub(ur'ponad [0-9]* nagrań wymowy', u'ponad %d nagrań wymowy' % audioCount, presskitText)
 	presskitText = re.sub(ur'ponad [0-9]* ilustracji', u'ponad %d ilustracji' % graphCount, presskitText)
 	
-	dlaczego_strona.put(dlaczegoText, comment=u'aktualizacja', botflag=True)
-	presskit.put(presskitText, comment=u'aktualizacja', botflag=True)
+	if offline_mode=0:
+                dlaczego_strona.save(dlaczegoText, comment=u'aktualizacja', botflag=True)
+                presskit.save(presskitText, comment=u'aktualizacja', botflag=True)
 		
 def licznik():
 	site = pywikibot.getSite()
@@ -683,7 +686,7 @@ def licznik():
 		pass
 		#print tekst
 	else:
-		dlaczego_strona.put(tekst, comment = u'Aktualizacja z ostatniego zrzutu bazy danych (%s)' % data_slownie, botflag=False)
+		dlaczego_strona.save(tekst, comment = u'Aktualizacja z ostatniego zrzutu bazy danych (%s)' % data_slownie, botflag=False)
 		#dlaczego_strona.put(tekst, comment = u'Aktualizacja z ostatniego zrzutu bazy danych (%s)' % data_slownie)
 	
 	re_presskit_przed = re.compile(u'(.*\* najwięcej słów jest w języku angielskim; następne pod względem liczby są: język polski i sztuczny język interlingua)', re.DOTALL) 
@@ -703,7 +706,7 @@ def licznik():
 	if offline_mode:
 		print presskit_tekst
 	else:
-		presskit.put(presskit_tekst, comment = u'Aktualizacja z ostatniego zrzutu bazy danych (%s)' % data_slownie, botflag=False)
+		presskit.save(presskit_tekst, comment = u'Aktualizacja z ostatniego zrzutu bazy danych (%s)' % data_slownie, botflag=False)
 		#presskit.put(presskit_tekst, comment = u'Aktualizacja z ostatniego zrzutu bazy danych (%s)' % data_slownie)
 
 def meaningsUpdateWikitext(lang, count, text):
@@ -738,12 +741,12 @@ def data_stat():
 	if offline_mode:
 		print final
 	else:
-		stat.put(final, comment=u'zmiana daty')
+		stat.save(final, comment=u'zmiana daty')
 
 
 def statystyka(oldDate, newDate):
 	global offline_mode
-	offline_mode = 0
+	offline_mode = 1
 	global filename
 	filename = "output/statystykanowa.txt"
 	global data

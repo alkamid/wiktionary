@@ -95,5 +95,5 @@ def rzeczownikRodzaj(data):
 	file.write(text2.encode( "utf-8" ))
 	file.close
 	
-	outputPage1.put(text, comment=u"Aktualizacja listy", botflag=False)
-	outputPage2.put(text2, comment=u"Aktualizacja listy", botflag=False)
+	outputPage1.save(text, comment=u"Aktualizacja listy", botflag=False)
+	outputPage2.save(text2, comment=u"Aktualizacja listy", botflag=False)

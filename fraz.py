@@ -50,11 +50,11 @@ def fraz(data):
 	            for lang in word.listLangs:
 	                if lang.type != 2:
 	                    lang.pola()
-                        try: lang.znaczeniaWhole.text
+                        try: lang.subSections[u'znaczenia'].text
                         except AttributeError:
                             pass
                         else:
-                            if lang.type != 2 and u'związek frazeologiczny' in lang.znaczeniaWhole.text and u'[[%s]]' % word.title not in phraseList[u'%s' % lang.lang]:
+                            if lang.type != 2 and u'związek frazeologiczny' in lang.subSections[u'znaczenia'].text and u'[[%s]]' % word.title not in phraseList[u'%s' % lang.lang]:
     	                            notFoundList[u'%s' % lang.lang].append(word.title)
                                                     
     for a in LangsMediaWiki:
@@ -68,4 +68,4 @@ def fraz(data):
     file.write(text.encode( "utf-8" ))
     file.close
     
-    outputPage.put(text, comment=u"Aktualizacja listy", botflag=False)
+    outputPage.save(text, comment=u"Aktualizacja listy", botflag=False)
