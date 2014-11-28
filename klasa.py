@@ -191,8 +191,15 @@ class WrongHeader(Exception):
 #TODO: numerek dla każdego z typów
 
 class subSection():
-    def __init__(self, name, optional=0):
-        self.name = name
+    def __init__(self, template, optional=False, name=None):
+        if name:
+            self.name = name
+        else:
+            self.name = template
+        if template != u'':
+            self.template = u'{{%s}}' % template
+        else:
+            self.template = u''
         self.optional = optional
 
 		
@@ -236,6 +243,7 @@ class Sekcja():
 	regex['pola-ja-kan-holonimy'] = re.compile(u'{{holonimy}}(.*?)\n({{meronimy}}|{{złożenia}})', re.DOTALL)
 	regex['pola-ja-kan-meronimy'] = re.compile(u'{{meronimy}}(.*?)\n{{złożenia}}', re.DOTALL)
 	regex['pola-ja-kan-zlozenia'] = re.compile(ur'{{złożenia}}(.*?)\n{{pokrewne}}', re.DOTALL)
+
 	
 	#korean kanji words
 	regex['pola-ko-zlozenia'] = re.compile(ur'{{złożenia}}(.*?)\n{{pokrewne}}', re.DOTALL)
@@ -274,7 +282,22 @@ class Sekcja():
 						
 	def __init__(self, text='afeof5imad3sfa5', title = '2o3iremdas', type=666, lang='bumbum'):
                 self.sectionOrder = collections.OrderedDict()
-                self.sectionOrder['default'] = [subSection(u'wymowa'), subSection(u'znaczenia'), subSection(u'odmiana'), subSection(u'przykłady'), subSection(u'składnia'), subSection(u'kolokacje'), subSection(u'synonimy'), subSection(u'antonimy'), subSection(u'hiperonimy', 1), subSection(u'hiponimy', 1), subSection(u'holonimy', 1), subSection(u'meronimy', 1), subSection(u'pokrewne'), subSection(u'frazeologia'), subSection(u'etymologia'), subSection(u'uwagi'), subSection(u'źródła')]
+                self.sectionOrder[u'default'] = [subSection(u'', name='dodatki'), subSection(u'wymowa'), subSection(u'znaczenia'), subSection(u'odmiana'), subSection(u'przykłady'), subSection(u'składnia'), subSection(u'kolokacje'), subSection(u'synonimy'), subSection(u'antonimy'), subSection(u'hiperonimy', True), subSection(u'hiponimy', True), subSection(u'holonimy', True), subSection(u'meronimy', True), subSection(u'pokrewne'), subSection(u'frazeologia'), subSection(u'etymologia'), subSection(u'uwagi'), subSection(u'źródła')]
+                self.sectionOrder[u'znak chiński'] = [subSection(u'klucz'), subSection(u'kreski'), subSection(u'warianty'), subSection(u'kolejność'), subSection(u'znaczenia'), subSection(u'etymologia'), subSection(u'kody'), subSection(u'słowniki'), subSection(u'uwagi')]
+                self.sectionOrder[u'staroegipski'] = [subSection(u'', name='dodatki'), subSection(u'zapis hieroglificzny'), subSection(u'transliteracja'), subSection(u'transkrypcja'), subSection(u'znaczenia'), subSection(u'determinatywy')] + self.sectionOrder['default']
+                self.sectionOrder[u'polski'] = self.sectionOrder['default'][:]
+                self.sectionOrder[u'polski'].insert(-2, subSection(u'tłumaczenia'))
+                self.sectionOrder[u'esperanto (morfem)'] = self.sectionOrder['default'][:]
+                self.sectionOrder[u'esperanto (morfem)'].insert(9, subSection(u'pochodne'))
+                self.sectionOrder[u'esperanto'] = self.sectionOrder['default'][:]
+                self.sectionOrder[u'esperanto'].insert(1, subSection(u'morfologia'))
+                self.sectionOrder[u'japoński'] = self.sectionOrder['default'][:]
+                self.sectionOrder[u'japoński'].insert(1, subSection(u'czytania'))
+                self.sectionOrder[u'japoński'].insert(14, subSection(u'złożenia'))
+                self.sectionOrder[u'koreański'] = self.sectionOrder['default'][:]
+                self.sectionOrder[u'japoński'].insert(13, subSection(u'złożenia'))
+
+
                 self.subSections = collections.OrderedDict()
 		if text == 'afeof5imad3sfa5' and title != '2o3iremdas' and type != 666 and lang != 'bumbum':
 			self.title = title
@@ -364,7 +387,9 @@ class Sekcja():
 				znaczeniaWhole += u'\n' + a[0] + a[1]
 			self.znaczeniaWhole = Pole(znaczeniaWhole)
 		
-		if self.type == 9:
+
+
+                if self.type == 9:
 			self.content = self.dodatki.text + u'\n{{wymowa}}' + self.wymowa.text + u'\n{{znaczenia}}' + self.znaczeniaWhole.text + u'\n{{odmiana}}' + self.odmiana.text + u'\n{{przykłady}}' + self.przyklady.text + u'\n{{składnia}}' + self.skladnia.text + u'\n{{kolokacje}}' + self.kolokacje.text + u'\n{{synonimy}}' + self.synonimy.text + u'\n{{antonimy}}' + self.antonimy.text + u'\n{{hiperonimy}}' + self.hiperonimy.text + u'\n{{hiponimy}}' + self.hiponimy.text + u'\n{{holonimy}}' + self.holonimy.text + u'\n{{meronimy}}' + self.meronimy.text + u'\n{{pokrewne}}' + self.pokrewne.text + u'\n{{frazeologia}}' + self.frazeologia.text + u'\n{{etymologia}}' + self.etymologia.text + u'\n{{uwagi}}' + self.uwagi.text + u'\n{{tłumaczenia}}' + self.tlumaczenia.text + u'\n{{źródła}}' + self.zrodla.text
 		elif self.type == 8:
 			self.content = self.dodatki.text + u'\n{{wymowa}}' + self.wymowa.text + u'\n{{znaczenia}}' + self.znaczeniaWhole.text + u'\n{{przykłady}}' + self.przyklady.text + u'\n{{złożenia}}' + self.zlozenia.text + u'\n{{etymologia}}' + self.etymologia.text + u'\n{{uwagi}}' + self.uwagi.text + u'\n{{źródła}}' + self.zrodla.text
@@ -375,7 +400,14 @@ class Sekcja():
 		elif self.type == 1:
 			self.content = self.dodatki.text + u'\n{{wymowa}}' + self.wymowa.text + u'\n{{znaczenia}}' + self.znaczeniaWhole.text + u'\n{{odmiana}}' + self.odmiana.text + u'\n{{przykłady}}' + self.przyklady.text + u'\n{{składnia}}' + self.skladnia.text + u'\n{{kolokacje}}' + self.kolokacje.text + u'\n{{synonimy}}' + self.synonimy.text + u'\n{{antonimy}}' + u'\n{{hiperonimy}}' + self.hiperonimy.text + u'\n{{hiponimy}}' + self.hiponimy.text + u'\n{{holonimy}}' + self.holonimy.text + u'\n{{meronimy}}' + self.meronimy.text + self.antonimy.text + u'\n{{pokrewne}}' + self.pokrewne.text + u'\n{{frazeologia}}' + self.frazeologia.text + u'\n{{etymologia}}' + self.etymologia.text + u'\n{{uwagi}}' + self.uwagi.text + u'\n{{źródła}}' + self.zrodla.text
 		elif self.type == 10:
-			self.content = self.dodatki.text + u'\n{{wymowa}}' + self.wymowa.text + u'\n{{znaczenia}}' + self.znaczeniaWhole.text + u'\n{{odmiana}}' + self.odmiana.text + u'\n{{przykłady}}' + self.przyklady.text + u'\n{{składnia}}' + self.skladnia.text + u'\n{{kolokacje}}' + self.kolokacje.text + u'\n{{synonimy}}' + self.synonimy.text + u'\n{{antonimy}}' + self.antonimy.text + u'\n{{pochodne}}' + self.pochodne.text + u'\n{{frazeologia}}' + self.frazeologia.text + u'\n{{etymologia}}' + self.etymologia.text + u'\n{{uwagi}}' + self.uwagi.text + u'\n{{źródła}}' + self.zrodla.text	
+			self.content = self.dodatki.text + u'\n{{wymowa}}' + self.wymowa.text + u'\n{{znaczenia}}' + self.znaczeniaWhole.text + u'\n{{odmiana}}' + self.odmiana.text + u'\n{{przykłady}}' + self.przyklady.text + u'\n{{składnia}}' + self.skladnia.text + u'\n{{kolokacje}}' + self.kolokacje.text + u'\n{{synonimy}}' + self.synonimy.text + u'\n{{antonimy}}' + self.antonimy.text + u'\n{{pochodne}}' + self.pochodne.text + u'\n{{frazeologia}}' + self.frazeologia.text + u'\n{{etymologia}}' + self.etymologia.text + u'\n{{uwagi}}' + self.uwagi.text + u'\n{{źródła}}' + self.zrodla.text
+
+                self.content = u''
+                for elem in self.subSections:
+                    if elem == u'dodatki':
+                        self.content += self.subSections[elem].text
+                    else:
+                        self.content += u'\n{{%s}}%s' % (elem, self.subSections[elem].text)	
 		
 	def pola(self):
 		specialLangs = (u'japoński', u'koreański')
@@ -617,20 +649,24 @@ class Sekcja():
 					else:
 						self.type = 7
 				else:
-                                    for i, subsect in enumerate(self.sectionOrder['default']):
-                                        if i == 0:
-                                            reg = re.compile(ur'(.*?)(\n|){{%s}}' % (self.sectionOrder['default'][0].name), re.DOTALL)
-                                        elif i == len(self.sectionOrder['default']) -1:
-                                            reg = re.compile(ur'{{%s}}(.*)' % (self.sectionOrder['default'][i].name), re.DOTALL)
+                                    try: order = self.sectionOrder[self.lang]
+                                    except KeyError:
+                                        order = self.sectionOrder[u'default']
+                                    for i, subsect in enumerate(order):
+                                        if i == len(order) -1:
+                                            reg = re.compile(ur'%s(.*)' % (order[i].template), re.DOTALL)
                                         else:
-                                            reg = re.compile(ur'{{%s}}(.*?){{%s}}' % (self.sectionOrder['default'][i].name, self.sectionOrder['default'][i+1].name) , re.DOTALL)
+                                            print order[i].template
+                                            reg = re.compile(ur'%s(.*?)%s' % (order[i].template, order[i+1].template) , re.DOTALL)
 
                                         s = re.search(reg, self.content)
                                         if s:
-                                            print s.group(1)
                                             self.subSections[subsect.name] = Pole(s.group(1))
-                                        elif self.sectionOrder['default'][i].optional == 1:
+                                        elif self.sectionOrder['default'][i].optional:
                                             self.subSections[subsect.name] = Pole(u'')
+
+                                        else:
+                                            self.type = 7
                                     
                                     for elem in self.subSections:
                                         print u'----- %s -----' % elem
