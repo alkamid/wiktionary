@@ -192,7 +192,6 @@ def generateRegexp(order):
 #8 - korean kanji
 #9 - polish word
 #10 - esperanto morpheme
-#11 - chiński standardowy - przekierowanie do ekwiwalentu uproszczonego
 #12 - esperanto
 #13 - ancient egyptian
 #14 - numbering of meanings is wrong
@@ -258,6 +257,7 @@ class LanguageSection():
         def __init__(self, text='afeof5imad3sfa5', title = '2o3iremdas', type=666, lang='bumbum'):
 
             self.subSections = collections.OrderedDict()
+            self.inflectedOnly = False # denotes entries with inflected words only
             if text == 'afeof5imad3sfa5' and title != '2o3iremdas' and type != 666 and lang != 'bumbum':
                     self.title = title
                     self.langLong = lang
@@ -342,7 +342,8 @@ class LanguageSection():
                             s_znaczeniaDetail = re.findall(LanguageSection.regex['pola-znaczeniaDetail'], self.subSections['znaczenia'].text)
                             if s_znaczeniaDetail:
                                     self.znaczeniaDetail = [list(tup) for tup in s_znaczeniaDetail]
-                                    print self.znaczeniaDetail
+    
+                                    self.checkForInflectedForms(self.znaczeniaDetail)
                                     # checking if the last number [(1.1), (2.1) etc.] matches the length of self.znaczeniaDetail - if it doesn't, it means that the numbering is invalid
                                     s_numer = re.search(LanguageSection.regex['pola-nr'], self.znaczeniaDetail[-1][1])
                                     if int(s_numer.group(1)[0]) != len(self.znaczeniaDetail):
@@ -353,7 +354,17 @@ class LanguageSection():
                                     else:
                                             self.type = 5
 				
-			
+	def checkForInflectedForms(self, meanings):
+            allFlexForms = True
+            
+            forms = set(u'forma ' + affix for affix in (u'czasownika', u'liczebnika', u'przymiotnika', u'przysłówka', u'rodzajnika', u'rzeczownika', u'verbal', u'zaimka'))
+            for mean in meanings:
+                if any(form in mean[0] for form in forms):
+                    pass
+                else:
+                    return False
+
+            self.inflectedOnly = True
 		
 class Pole():
 	regex = {}
