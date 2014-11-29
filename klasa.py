@@ -92,7 +92,7 @@ class Haslo():
 		s_lang = re.findall(self.regex['langs-lang'], self.content)
 		if s_lang:
 			for b in s_lang:
-				self.listLangs.append(Sekcja(b, self.title))
+				self.listLangs.append(LanguageSection(b, self.title))
 		else:
 			self.type = 4
 			raise sectionsNotFound
@@ -210,7 +210,7 @@ class subSection():
         self.optional = optional
         self.regex = regex
 		
-class Sekcja():
+class LanguageSection():
 	regex = {}
 	regex['init-lang'] = re.compile(ur'== (.*?) \(\{\{(język |)(.*?)(?=\|(.*?)\}\}\) ==|\}\}\) ==)')
 	regex['init-langLong'] = re.compile(ur'== (.*?) \(\{\{(.*?)(\|.*?\}\}\) ==|\}\}\) ==)')
@@ -253,9 +253,9 @@ class Sekcja():
 			self.header = u'== %s ({{%s}}) ==' % (title, lang)
                         self.znaczeniaDetail = []
                         if type == 1:
-                            try: order = Sekcja.sectionOrder[self.lang]
+                            try: order = LanguageSection.sectionOrder[self.lang]
                             except KeyError:
-                                order = Sekcja.sectionOrder[u'default']
+                                order = LanguageSection.sectionOrder[u'default']
                             for elem in order:
                                 self.subSections[order[elem]] = Pole(u'')
 
@@ -309,9 +309,9 @@ class Sekcja():
 	def pola(self):
 
 		if self.type == 1:
-                    try: order = Sekcja.sectionOrder[self.lang]
+                    try: order = LanguageSection.sectionOrder[self.lang]
                     except KeyError:
-                        order = Sekcja.sectionOrder[u'default']
+                        order = LanguageSection.sectionOrder[u'default']
                     for sect in order:
 
                         s = re.search(sect.regex, self.content)
@@ -323,34 +323,20 @@ class Sekcja():
                         else:
                             self.type = 7
 
-
-                    for elem in self.subSections:
-                        #print u'----- %s -----' % elem
-                        #print len(self.subSections[elem].text)
- 
-                        '''	
-				elif self.lang == u'chiński standardowy':
-					s_ekwi_zh = re.search(self.regex['pola-zh-ekwi'], self.content)
 				
-	
-				elif self.lang == u'chiński standardowy' and s_ekwi_zh and not s_wymowa and not s_przyklady and not s_odmiana and not s_zrodla and not s_etymologia:
-					self.type = 11
-					self.dodatki = Pole(s_ekwi_zh.group(1))'''
-				
-				
-			if self.type == 1:
-				s_znaczeniaDetail = re.findall(self.regex['pola-znaczeniaDetail'], self.subSections['znaczenia'].text)
-				if s_znaczeniaDetail:
-					self.znaczeniaDetail = [list(tup) for tup in s_znaczeniaDetail]
-					# checking if the last number [(1.1), (2.1) etc.] matches the length of self.znaczeniaDetail - if it doesn't, it means that the numbering is invalid
-					s_numer = re.search(self.regex['pola-nr'], self.znaczeniaDetail[-1][1])
-					if int(s_numer.group(1)[0]) != len(self.znaczeniaDetail):
-						self.type = 14
-				else:
-					if self.lang == u'znak chiński':
-						self.znaczeniaDetail = []
-					else:
-						self.type = 5
+                    if self.type == 1:
+                            s_znaczeniaDetail = re.findall(self.regex['pola-znaczeniaDetail'], self.subSections['znaczenia'].text)
+                            if s_znaczeniaDetail:
+                                    self.znaczeniaDetail = [list(tup) for tup in s_znaczeniaDetail]
+                                    # checking if the last number [(1.1), (2.1) etc.] matches the length of self.znaczeniaDetail - if it doesn't, it means that the numbering is invalid
+                                    s_numer = re.search(self.regex['pola-nr'], self.znaczeniaDetail[-1][1])
+                                    if int(s_numer.group(1)[0]) != len(self.znaczeniaDetail):
+                                            self.type = 14
+                            else:
+                                    if self.lang == u'znak chiński':
+                                            self.znaczeniaDetail = []
+                                    else:
+                                            self.type = 5
 				
 			
 		
