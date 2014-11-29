@@ -174,6 +174,13 @@ class WrongHeader(Exception):
 	def __str__(self):
 		return repr(self.value)
 
+def generateRegexp(order):
+    for i, sect in enumerate(order):
+        if i == len(order) - 1:
+            order[i].regex = re.compile(ur'%s(.*)' % (order[i].template), re.DOTALL)
+        else:
+            order[i].regex = re.compile(ur'%s(.*?)%s' % (order[i].template, order[i+1].template), re.DOTALL)
+
 #possible types:
 #1 - proper section, all normal languages
 #2 - can't find a language in the header
@@ -191,7 +198,7 @@ class WrongHeader(Exception):
 #TODO: numerek dla każdego z typów
 
 class subSection():
-    def __init__(self, template, optional=False, name=None):
+    def __init__(self, template, optional=False, name=None, regex=None):
         if name:
             self.name = name
         else:
@@ -201,7 +208,7 @@ class subSection():
         else:
             self.template = u''
         self.optional = optional
-
+        self.regex = regex
 		
 class Sekcja():
 	regex = {}
@@ -213,27 +220,29 @@ class Sekcja():
 	
 	#others
 	regex['pola-nr'] = re.compile(ur'\(([0-9]\.[0-9]\.*[0-9]*)\)')
-						
-	def __init__(self, text='afeof5imad3sfa5', title = '2o3iremdas', type=666, lang='bumbum'):
-                self.sectionOrder = collections.OrderedDict()
-                self.sectionOrder[u'default'] = [subSection(u'', name='dodatki'), subSection(u'wymowa'), subSection(u'znaczenia'), subSection(u'odmiana'), subSection(u'przykłady'), subSection(u'składnia'), subSection(u'kolokacje'), subSection(u'synonimy'), subSection(u'antonimy'), subSection(u'hiperonimy', True), subSection(u'hiponimy', True), subSection(u'holonimy', True), subSection(u'meronimy', True), subSection(u'pokrewne'), subSection(u'frazeologia'), subSection(u'etymologia'), subSection(u'uwagi'), subSection(u'źródła')]
-                self.sectionOrder[u'znak chiński'] = [subSection(u'klucz'), subSection(u'kreski'), subSection(u'warianty'), subSection(u'kolejność'), subSection(u'znaczenia'), subSection(u'etymologia'), subSection(u'kody'), subSection(u'słowniki'), subSection(u'uwagi')]
-                self.sectionOrder[u'staroegipski'] = [subSection(u'', name='dodatki'), subSection(u'zapis hieroglificzny'), subSection(u'transliteracja'), subSection(u'transkrypcja'), subSection(u'znaczenia'), subSection(u'determinatywy')] + self.sectionOrder['default']
-                self.sectionOrder[u'polski'] = self.sectionOrder['default'][:]
-                self.sectionOrder[u'polski'].insert(-1, subSection(u'tłumaczenia'))
-                self.sectionOrder[u'esperanto (morfem)'] = self.sectionOrder['default'][:]
-                self.sectionOrder[u'esperanto (morfem)'].insert(9, subSection(u'pochodne'))
-                del self.sectionOrder[u'esperanto (morfem)'][10:15]
-                for elem in self.sectionOrder[u'esperanto (morfem)']:
-                    print elem.name
-                self.sectionOrder[u'esperanto'] = self.sectionOrder['default'][:]
-                self.sectionOrder[u'esperanto'].insert(1, subSection(u'morfologia'))
-                self.sectionOrder[u'japoński'] = self.sectionOrder['default'][:]
-                self.sectionOrder[u'japoński'].insert(1, subSection(u'czytania'))
-                self.sectionOrder[u'japoński'].insert(14, subSection(u'złożenia'))
-                self.sectionOrder[u'koreański'] = self.sectionOrder['default'][:]
-                self.sectionOrder[u'japoński'].insert(13, subSection(u'złożenia'))
 
+        sectionOrder = collections.OrderedDict()
+        sectionOrder[u'default'] = [subSection(u'', name='dodatki'), subSection(u'wymowa'), subSection(u'znaczenia'), subSection(u'odmiana'), subSection(u'przykłady'), subSection(u'składnia'), subSection(u'kolokacje'), subSection(u'synonimy'), subSection(u'antonimy'), subSection(u'hiperonimy', True), subSection(u'hiponimy', True), subSection(u'holonimy', True), subSection(u'meronimy', True), subSection(u'pokrewne'), subSection(u'frazeologia'), subSection(u'etymologia'), subSection(u'uwagi'), subSection(u'źródła')]
+        sectionOrder[u'znak chiński'] = [subSection(u'klucz'), subSection(u'kreski'), subSection(u'warianty'), subSection(u'kolejność'), subSection(u'znaczenia'), subSection(u'etymologia'), subSection(u'kody'), subSection(u'słowniki'), subSection(u'uwagi')]
+        sectionOrder[u'staroegipski'] = [subSection(u'', name='dodatki'), subSection(u'zapis hieroglificzny'), subSection(u'transliteracja'), subSection(u'transkrypcja'), subSection(u'znaczenia'), subSection(u'determinatywy')] + sectionOrder['default'][:]
+        sectionOrder[u'polski'] = sectionOrder['default'][:]
+        sectionOrder[u'polski'].insert(-1, subSection(u'tłumaczenia'))
+        sectionOrder[u'esperanto (morfem)'] = sectionOrder['default'][:]
+        sectionOrder[u'esperanto (morfem)'].insert(9, subSection(u'pochodne'))
+        del sectionOrder[u'esperanto (morfem)'][10:15]
+        sectionOrder[u'esperanto'] = sectionOrder['default'][:]
+        sectionOrder[u'esperanto'].insert(1, subSection(u'morfologia'))
+        sectionOrder[u'japoński'] = sectionOrder['default'][:]
+        sectionOrder[u'japoński'].insert(1, subSection(u'czytania'))
+        sectionOrder[u'japoński'].insert(14, subSection(u'złożenia'))
+        sectionOrder[u'koreański'] = sectionOrder['default'][:]
+        sectionOrder[u'japoński'].insert(13, subSection(u'złożenia'))
+	
+
+        for lang in sectionOrder:
+            generateRegexp(sectionOrder[lang])
+					
+	def __init__(self, text='afeof5imad3sfa5', title = '2o3iremdas', type=666, lang='bumbum'):
 
                 self.subSections = collections.OrderedDict()
 		if text == 'afeof5imad3sfa5' and title != '2o3iremdas' and type != 666 and lang != 'bumbum':
@@ -244,9 +253,9 @@ class Sekcja():
 			self.header = u'== %s ({{%s}}) ==' % (title, lang)
                         self.znaczeniaDetail = []
                         if type in (1,4,6,8,9,10,12,13):
-                            try: order = self.sectionOrder[self.lang]
+                            try: order = Sekcja.sectionOrder[self.lang]
                             except KeyError:
-                                order = self.sectionOrder[u'default']
+                                order = Sekcja.sectionOrder[u'default']
                             for elem in order:
                                 self.subSections[order[elem]] = Pole(u'')
 
@@ -304,20 +313,16 @@ class Sekcja():
                     try: self.type = types[self.lang]
                     except KeyError:
                         self.type = 1
-                    try: order = self.sectionOrder[self.lang]
+                    try: order = Sekcja.sectionOrder[self.lang]
                     except KeyError:
-                        order = self.sectionOrder[u'default']
-                    for i, subsect in enumerate(order):
-                        if i == len(order) -1:
-                            reg = re.compile(ur'%s(.*)' % (order[i].template), re.DOTALL)
-                        else:
-                            reg = re.compile(ur'%s(.*?)%s' % (order[i].template, order[i+1].template) , re.DOTALL)
+                        order = Sekcja.sectionOrder[u'default']
+                    for sect in order:
 
-                        s = re.search(reg, self.content)
+                        s = re.search(sect.regex, self.content)
                         if s:
-                            self.subSections[subsect.name] = Pole(s.group(1))
-                        elif self.sectionOrder['default'][i].optional:
-                            self.subSections[subsect.name] = Pole(u'')
+                            self.subSections[sect.name] = Pole(s.group(1))
+                        elif sect.optional:
+                            self.subSections[sect.name] = Pole(u'')
 
                         else:
                             self.type = 7
