@@ -16,6 +16,7 @@ import sys
 from pywikibot.data.api import Request
 from os import environ
 import mwparserfromhell
+from copy import deepcopy
 
 def parseTitle(title):
     site = pywikibot.Site()
@@ -218,68 +219,80 @@ class LanguageSection():
 	
 	regex['pola-znaczeniaDetail'] = re.compile(ur'\n\s*?(\'\'.*?|{{forma rzeczownika.*?|{{forma przymiotnika.*?|{{forma czasownika.*?|{{przysłowie .*?|{{morfem\|.*?)\s*?(\n\s*?\: \([0-9]\.[0-9]\.*[0-9]*\).*?)(?=\n\'\'|\n{{forma rzeczownika|\n{{forma przymiotnika|\n{{forma czasownika|\n{{przysłowie|\n{{morfem\||$)', re.DOTALL)
 	
-	#others
 	regex['pola-nr'] = re.compile(ur'\(([0-9]\.[0-9]\.*[0-9]*)\)')
 
-        sectionOrder = collections.OrderedDict()
+        # define subsection order for different languages. Could be fetched from pl.wikt if we had it written somewhere
+
+        sectionOrder = collections.OrderedDict() # we want to keep subsections ordered
+
+        # first, standard subsections template. The rest is adding/subtracting specific subsections for a few languages
         sectionOrder[u'default'] = [subSection(u'', name='dodatki'), subSection(u'wymowa'), subSection(u'znaczenia'), subSection(u'odmiana'), subSection(u'przykłady'), subSection(u'składnia'), subSection(u'kolokacje'), subSection(u'synonimy'), subSection(u'antonimy'), subSection(u'hiperonimy', True), subSection(u'hiponimy', True), subSection(u'holonimy', True), subSection(u'meronimy', True), subSection(u'pokrewne'), subSection(u'frazeologia'), subSection(u'etymologia'), subSection(u'uwagi'), subSection(u'źródła')]
+
         sectionOrder[u'znak chiński'] = [subSection(u'klucz'), subSection(u'kreski'), subSection(u'warianty'), subSection(u'kolejność'), subSection(u'znaczenia'), subSection(u'etymologia'), subSection(u'kody'), subSection(u'słowniki'), subSection(u'uwagi')]
-        sectionOrder[u'staroegipski'] = [subSection(u'', name='dodatki'), subSection(u'zapis hieroglificzny'), subSection(u'transliteracja'), subSection(u'transkrypcja'), subSection(u'znaczenia'), subSection(u'determinatywy')] + sectionOrder['default'][:]
-        sectionOrder[u'polski'] = sectionOrder['default'][:]
+
+        sectionOrder[u'staroegipski'] = [subSection(u'', name='dodatki'), subSection(u'zapis hieroglificzny'), subSection(u'transliteracja'), subSection(u'transkrypcja'), subSection(u'znaczenia'), subSection(u'determinatywy')] + deepcopy(sectionOrder['default'])
+        del sectionOrder[u'staroegipski'][6:9]
+
+        sectionOrder[u'polski'] = deepcopy(sectionOrder['default'])
         sectionOrder[u'polski'].insert(-1, subSection(u'tłumaczenia'))
-        sectionOrder[u'esperanto (morfem)'] = sectionOrder['default'][:]
+
+        sectionOrder[u'esperanto (morfem)'] = deepcopy(sectionOrder['default'])
         sectionOrder[u'esperanto (morfem)'].insert(9, subSection(u'pochodne'))
         del sectionOrder[u'esperanto (morfem)'][10:15]
-        sectionOrder[u'esperanto'] = sectionOrder['default'][:]
+
+        sectionOrder[u'esperanto'] = deepcopy(sectionOrder['default'])
         sectionOrder[u'esperanto'].insert(1, subSection(u'morfologia'))
-        sectionOrder[u'japoński'] = sectionOrder['default'][:]
+
+        sectionOrder[u'japoński'] = deepcopy(sectionOrder['default'])
         sectionOrder[u'japoński'].insert(1, subSection(u'czytania'))
-        sectionOrder[u'japoński'].insert(14, subSection(u'złożenia'))
-        sectionOrder[u'koreański'] = sectionOrder['default'][:]
         sectionOrder[u'japoński'].insert(13, subSection(u'złożenia'))
+
+        sectionOrder[u'koreański'] = deepcopy(sectionOrder['default'])
+        sectionOrder[u'koreański'].insert(16, subSection(u'hanja'))
 	
 
-        for lang in sectionOrder:
-            generateRegexp(sectionOrder[lang])
-					
-	def __init__(self, text='afeof5imad3sfa5', title = '2o3iremdas', type=666, lang='bumbum'):
+        # generate regexp for each template - we will use them for parsing every LanguageSection
+        for order in sectionOrder:
+            generateRegexp(sectionOrder[order])
 
-                self.subSections = collections.OrderedDict()
-		if text == 'afeof5imad3sfa5' and title != '2o3iremdas' and type != 666 and lang != 'bumbum':
-			self.title = title
-			self.langLong = lang
-			self.lang = lang.replace(u'język ', u'')
-			self.type = type
-			self.header = u'== %s ({{%s}}) ==' % (title, lang)
-                        self.znaczeniaDetail = []
-                        if type == 1:
-                            try: order = LanguageSection.sectionOrder[self.lang]
-                            except KeyError:
-                                order = LanguageSection.sectionOrder[u'default']
-                            for elem in order:
-                                self.subSections[order[elem]] = Pole(u'')
+        def __init__(self, text='afeof5imad3sfa5', title = '2o3iremdas', type=666, lang='bumbum'):
 
-		elif text != 'afeof5imad3sfa5' and type == 666 and lang == 'bumbum':
+            self.subSections = collections.OrderedDict()
+            if text == 'afeof5imad3sfa5' and title != '2o3iremdas' and type != 666 and lang != 'bumbum':
+                    self.title = title
+                    self.langLong = lang
+                    self.lang = lang.replace(u'język ', u'')
+                    self.type = type
+                    self.header = u'== %s ({{%s}}) ==' % (title, lang)
+                    self.znaczeniaDetail = []
+                    if type == 1:
+                        try: order = LanguageSection.sectionOrder[self.lang]
+                        except KeyError:
+                            order = LanguageSection.sectionOrder[u'default']
+                        for elem in order:
+                            self.subSections[order[elem]] = Pole(u'')
 
-			s_lang = re.search(LanguageSection.regex['init-lang'], text)
-			s_langLong = re.search(LanguageSection.regex['init-langLong'], text)
-			s_headerAndContent = re.search(LanguageSection.regex['init-headerAndContent'], text)
-			if s_lang and s_langLong and s_headerAndContent:
-				self.title = title
-				self.titleHeader = s_lang.group(1)
-				if s_lang.group(4):
-					self.headerArg = s_lang.group(4)
-				else:
-					self.headerArg = u''
-				self.header = s_headerAndContent.group(1).strip()
-				self.lang = s_lang.group(3)
-				self.langUpper = self.lang[0].upper() + self.lang[1:]
-				self.langLong = s_langLong.group(2)
-				self.content = s_headerAndContent.group(2)
-				self.type = 1
-			else:
-				self.type = 2
-				raise WrongHeader
+            elif text != 'afeof5imad3sfa5' and type == 666 and lang == 'bumbum':
+
+                    s_lang = re.search(LanguageSection.regex['init-lang'], text)
+                    s_langLong = re.search(LanguageSection.regex['init-langLong'], text)
+                    s_headerAndContent = re.search(LanguageSection.regex['init-headerAndContent'], text)
+                    if s_lang and s_langLong and s_headerAndContent:
+                            self.title = title
+                            self.titleHeader = s_lang.group(1)
+                            if s_lang.group(4):
+                                    self.headerArg = s_lang.group(4)
+                            else:
+                                    self.headerArg = u''
+                            self.header = s_headerAndContent.group(1).strip()
+                            self.lang = s_lang.group(3)
+                            self.langUpper = self.lang[0].upper() + self.lang[1:]
+                            self.langLong = s_langLong.group(2)
+                            self.content = s_headerAndContent.group(2)
+                            self.type = 1
+                    else:
+                            self.type = 2
+                            raise WrongHeader
 	
 	def updateHeader(self):
 		
@@ -309,18 +322,19 @@ class LanguageSection():
 	def pola(self):
 
 		if self.type == 1:
-                    try: order = LanguageSection.sectionOrder[self.lang]
+                    print self.lang
+                    try: order = LanguageSection.sectionOrder[self.lang] # look for subsection order templates for specific languages
                     except KeyError:
                         order = LanguageSection.sectionOrder[u'default']
                     for sect in order:
-
                         s = re.search(sect.regex, self.content)
                         if s:
                             self.subSections[sect.name] = Pole(s.group(1))
                         elif sect.optional:
                             self.subSections[sect.name] = Pole(u'')
-
                         else:
+                            print sect.regex.pattern
+                            print sect.name
                             self.type = 7
 
 				
@@ -328,6 +342,7 @@ class LanguageSection():
                             s_znaczeniaDetail = re.findall(LanguageSection.regex['pola-znaczeniaDetail'], self.subSections['znaczenia'].text)
                             if s_znaczeniaDetail:
                                     self.znaczeniaDetail = [list(tup) for tup in s_znaczeniaDetail]
+                                    print self.znaczeniaDetail
                                     # checking if the last number [(1.1), (2.1) etc.] matches the length of self.znaczeniaDetail - if it doesn't, it means that the numbering is invalid
                                     s_numer = re.search(LanguageSection.regex['pola-nr'], self.znaczeniaDetail[-1][1])
                                     if int(s_numer.group(1)[0]) != len(self.znaczeniaDetail):
