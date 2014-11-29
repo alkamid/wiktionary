@@ -83,13 +83,13 @@ class Haslo():
 
 	def langs(self):
 		self.listLangs = []
-		s_wstepna = re.search(self.regex['langs-wstepna'], self.content)
+		s_wstepna = re.search(Haslo.regex['langs-wstepna'], self.content)
 		if s_wstepna:
 			self.wstepna = s_wstepna.group(1)
 		else:
 			self.wstepna = u''
 		
-		s_lang = re.findall(self.regex['langs-lang'], self.content)
+		s_lang = re.findall(Haslo.regex['langs-lang'], self.content)
 		if s_lang:
 			for b in s_lang:
 				self.listLangs.append(LanguageSection(b, self.title))
@@ -118,12 +118,12 @@ class Haslo():
 					print u'%s - konflikt edycji' % self.title
 				except pywikibot.NoPage:
 					if new:
-						page.put(toPush, comment=myComment)
+						page.save(toPush, comment=myComment)
 				except pywikibot.Error:
 					print u'%s - konflikt edycji' % self.title
 				else:
 					if content == self.content and content != toPush:
-						page.put(toPush, comment=myComment)
+						page.save(toPush, comment=myComment)
 					elif content != self.content:
 						print u'%s - konflikt edycji' % self.title
 	def addSection(self, section):
@@ -261,9 +261,9 @@ class LanguageSection():
 
 		elif text != 'afeof5imad3sfa5' and type == 666 and lang == 'bumbum':
 
-			s_lang = re.search(self.regex['init-lang'], text)
-			s_langLong = re.search(self.regex['init-langLong'], text)
-			s_headerAndContent = re.search(self.regex['init-headerAndContent'], text)
+			s_lang = re.search(LanguageSection.regex['init-lang'], text)
+			s_langLong = re.search(LanguageSection.regex['init-langLong'], text)
+			s_headerAndContent = re.search(LanguageSection.regex['init-headerAndContent'], text)
 			if s_lang and s_langLong and s_headerAndContent:
 				self.title = title
 				self.titleHeader = s_lang.group(1)
@@ -325,11 +325,11 @@ class LanguageSection():
 
 				
                     if self.type == 1:
-                            s_znaczeniaDetail = re.findall(self.regex['pola-znaczeniaDetail'], self.subSections['znaczenia'].text)
+                            s_znaczeniaDetail = re.findall(LanguageSection.regex['pola-znaczeniaDetail'], self.subSections['znaczenia'].text)
                             if s_znaczeniaDetail:
                                     self.znaczeniaDetail = [list(tup) for tup in s_znaczeniaDetail]
                                     # checking if the last number [(1.1), (2.1) etc.] matches the length of self.znaczeniaDetail - if it doesn't, it means that the numbering is invalid
-                                    s_numer = re.search(self.regex['pola-nr'], self.znaczeniaDetail[-1][1])
+                                    s_numer = re.search(LanguageSection.regex['pola-nr'], self.znaczeniaDetail[-1][1])
                                     if int(s_numer.group(1)[0]) != len(self.znaczeniaDetail):
                                             self.type = 14
                             else:
@@ -355,24 +355,24 @@ class Pole():
 		self.list = []
 		self.dict = {}
 		if type == u'warianty':
-			warianty = re.findall(self.regex['init-warianty-details'], self.text)
+			warianty = re.findall(Pole.regex['init-warianty-details'], self.text)
 			for b in warianty:
 				if not self.dict.has_key(b[0]):
 					self.dict[b[0]] = []
 				self.dict[b[0]].append(b[1])
-			warianty_obrazek = re.findall(self.regex['init-obrazek'], self.text)
+			warianty_obrazek = re.findall(Pole.regex['init-obrazek'], self.text)
 			for b in warianty_obrazek:
 				self.dict[b[0]] = b[1]
 		if type == u'zch-etym':
-			etymologia = re.findall(self.regex['init-obrazek'], self.text)
+			etymologia = re.findall(Pole.regex['init-obrazek'], self.text)
 			for b in etymologia:
 				self.dict[b[0]] = b[1]
 		if type == u'kolejnosc':
-			kolejnosc = re.findall(self.regex['init-kolejnosc'], self.text)
+			kolejnosc = re.findall(Pole.regex['init-kolejnosc'], self.text)
 			for b in kolejnosc:
 				self.dict[b[1]] = b[0]
 		if type == u'kody' or type == u'slowniki':
-			kody = re.findall(self.regex['init-kodySlowniki-details'], self.text)
+			kody = re.findall(Pole.regex['init-kodySlowniki-details'], self.text)
 			for b in kody:
 				self.dict[b[0]] = b[1]
 	def merge(self, mode=2): #mode = 1 - test for a proper field, return 0 if invalid; mode=2 - merge a list/dict into a string
@@ -458,7 +458,7 @@ class Pole():
 			self.text = text
 			return text
 	def numer(self):
-		s_nr_whole = re.findall(self.regex['numer-nr-whole'], self.text)
+		s_nr_whole = re.findall(Pole.regex['numer-nr-whole'], self.text)
 		testString = u''
 		if s_nr_whole:
 			self.list = [list(tup) for tup in s_nr_whole]
