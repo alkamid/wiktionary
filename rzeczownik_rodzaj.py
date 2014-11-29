@@ -49,7 +49,7 @@ def rzeczownikRodzaj(data):
 				for lang in word.listLangs:
 					if lang.type != 2 and lang.lang not in forbiddenList:
 						lang.pola()
-						if lang.type not in (2,3,4,5,7,11):
+						if lang.type == 1:
 							for d in lang.znaczeniaDetail:
 								if u'rzeczownik' in d[0] and u'{{forma rzeczownika' not in d[0]:
 									try: allNounsCount[u'%s' % lang.lang] += 1

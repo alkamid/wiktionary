@@ -55,7 +55,7 @@ def main():
 					for lang in word.listLangs:
 						if lang.lang == 'polski':
 							lang.pola()
-							if lang.type == 9:
+							if lang.type == 1:
 								s_arch = re.findall(re_arch, lang.subSections[u'znaczenia'].text)
 								s_numMeans = re.findall(re_numMeans, lang.subSections[u'znaczenia'].text)
 								if len(s_arch) == len(s_numMeans):

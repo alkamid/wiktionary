@@ -288,7 +288,7 @@ def licz_jezyki(data):
                                                         if graphtmp:
                                                                 statList[u'%s' % b.langLong].addGraph()
                                                                 statList[u'%s' % b.langLong].addGraphAll(graphtmp)
-                                                        if b.type not in (2,3,5,7,11):
+                                                        if b.type == 1:
                                                                 statList[u'%s' % b.langLong].addMeans(meanings(b.znaczeniaDetail))
                                                                 statList[u'%s' % b.langLong].addRef(refs(b.content, b.subSections[u'źródła']))
 

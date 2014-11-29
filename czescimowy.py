@@ -68,7 +68,7 @@ def czescimowy(data):
 			if h.type == 3:	
 				for c in h.listLangs:
 					c.pola()
-					if c.type not in (2,3,4,5,7,11):
+					if c.type == 1:
 						for d in c.znaczeniaDetail:
 							found = 0
 							d[0] = re.sub(re_ref, u'', d[0])
