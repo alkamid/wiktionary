@@ -252,7 +252,7 @@ class Sekcja():
 			self.type = type
 			self.header = u'== %s ({{%s}}) ==' % (title, lang)
                         self.znaczeniaDetail = []
-                        if type in (1,4,6,8,9,10,12,13):
+                        if type == 1:
                             try: order = Sekcja.sectionOrder[self.lang]
                             except KeyError:
                                 order = Sekcja.sectionOrder[u'default']
@@ -309,10 +309,6 @@ class Sekcja():
 	def pola(self):
 
 		if self.type == 1:
-                    types = {u'japoński': 6, u'koreański': 8, u'znak chiński': 4, u'polski': 9, u'esperanto (morfem)': 10, u'esperanto': 12, u'staroegipski': 13}
-                    try: self.type = types[self.lang]
-                    except KeyError:
-                        self.type = 1
                     try: order = Sekcja.sectionOrder[self.lang]
                     except KeyError:
                         order = Sekcja.sectionOrder[u'default']
@@ -342,7 +338,7 @@ class Sekcja():
 					self.dodatki = Pole(s_ekwi_zh.group(1))'''
 				
 				
-			if self.type not in (2,3,7,11):
+			if self.type == 1:
 				s_znaczeniaDetail = re.findall(self.regex['pola-znaczeniaDetail'], self.subSections['znaczenia'].text)
 				if s_znaczeniaDetail:
 					self.znaczeniaDetail = [list(tup) for tup in s_znaczeniaDetail]
@@ -351,7 +347,7 @@ class Sekcja():
 					if int(s_numer.group(1)[0]) != len(self.znaczeniaDetail):
 						self.type = 14
 				else:
-					if self.type == 4:
+					if self.lang == u'znak chiński':
 						self.znaczeniaDetail = []
 					else:
 						self.type = 5
