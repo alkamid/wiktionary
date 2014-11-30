@@ -48,7 +48,7 @@ def frequencyList(data):
                     to_search = ''
                     for sekcja in h.listLangs:
                         sekcja.pola()
-                        if sekcja.type == 1:
+                        if sekcja.type not in (2,4,5,7,11):
                             if sekcja.lang == 'polski' or sekcja.lang == u'termin obcy w języku polskim':
                                 for elem in (u'dodatki', u'znaczenia', u'przykłady', u'składnia', u'kolokacje', u'synonimy', u'antonimy', u'pokrewne', u'frazeologia', u'etymologia', u'uwagi'):
                                     to_search += sekcja.subSections[elem].text
@@ -118,8 +118,8 @@ def frequencyList(data):
         elem = elem.strip()
         outputPage = pywikibot.Page(site, u'Indeks:Polski - Najpopularniejsze słowa %d-%d' % (num*2000+1, (num+1)*2000))
         elem = u'Lista frekwencyjna języka polskiego na podstawie odnośników na stronach Wikisłownika.\n\n{{język linków|polski}}\n' + elem + u'\n[[Kategoria:Polski (słowniki tematyczne)]]\n[[Kategoria:Listy frekwencyjne|polski]]'
-        #outputPage.save(elem, comment='aktualizacja')
-    '''
+        outputPage.save(elem, comment='aktualizacja')
+    
     htmllist += u'</body></html>'
     file = open('%spublic_html/frequencyListPL.html' % (config.path['home']), 'w')
     file.write(htmllist.encode( "utf-8" ))
@@ -128,7 +128,7 @@ def frequencyList(data):
     file = open('%soutput/frequencyListPL.txt' % (config.path['scripts']), 'w')
     file.write(nonExistingText.encode( "utf-8" ))
     file.close
-    '''
+    
 
-if __name__ == "__main__":
-    frequencyList('20141024')
+#if __name__ == "__main__":
+#    frequencyList('20141024')
