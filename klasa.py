@@ -47,7 +47,7 @@ class Haslo():
                 self.wstepna = u''
                 self.content = u''
                 self.listLangs = []
-            elif type(title) is str:
+            elif type(title) is str or type(title) is unicode:
                 self.site = pywikibot.Site('pl', 'wiktionary')
                 self.type = 1
                 self.title = title
