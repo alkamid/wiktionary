@@ -429,16 +429,16 @@ def changeText(input, round):
 def stat_wikitable(old, new):
 	
 	text1 = u'{| border=0 cellspacing=0 cellpadding=0\n|\n{| class="wikitable" style="margin: 0px; text-align:right;"\n! miejsce !! zmiana'
-	text2 = u'{| class="wikitable sortable" style="margin: 0 auto; white-space: nowrap"\n! język !! suma długości haseł (w tys.) !! zmiana (w tys.) !! liczba haseł\n'
+	text2 = u'{| class="wikitable sortable autonumber" style="margin: 0 auto; white-space: nowrap"\n! język !! suma długości haseł (w tys.) !! zmiana (w tys.) !! liczba haseł\n'
 	#poniżej text2 jeśli ma być miejsce w rankingu i zmiana tego miejsca
 	#text2 = u'\n|}\n|\n{| class="wikitable sortable" style="margin: 0 auto; white-space: nowrap"\n! język !! suma długości haseł (w tys.) !! zmiana (w tys.) !! liczba haseł\n'
 	text3 = text1
-	text4 = u'{| class="wikitable sortable" style="margin: 0 auto; white-space: nowrap"\n! język !! średnia długość hasła !! zmiana średniej !! liczba haseł\n'
+	text4 = u'{| class="wikitable sortable autonumber" style="margin: 0 auto; white-space: nowrap"\n! język !! średnia długość hasła !! zmiana średniej !! liczba haseł\n'
 	#text4 = u'\n|}\n|\n{| class="wikitable sortable" style="margin: 0 auto; white-space: nowrap"\n! język !! średnia długość hasła !! zmiana średniej !! liczba haseł\n'
 	text5 = u'{| border=0 cellspacing=0 cellpadding=0\n|\n{| class="wikitable" style="margin: 0px; text-align:right;"\n! miejsce'
-	text6 = u'{| class="wikitable sortable" style="margin: 0 auto; white-space: nowrap"\n! język !! % z grafiką !! zmiana ([[w:Punkt_procentowy|p.p.]]) !! z grafiką !! % z nagraniem !! zmiana ([[w:Punkt_procentowy|p.p.]]) !! z nagraniem !! % ze źródłem !! zmiana ([[w:Punkt_procentowy|p.p.]]) !! ze źródłem !! liczba haseł\n'
+	text6 = u'{| class="wikitable sortable autonumber" style="margin: 0 auto; white-space: nowrap"\n! język !! % z grafiką !! zmiana ([[w:Punkt_procentowy|p.p.]]) !! z grafiką !! % z nagraniem !! zmiana ([[w:Punkt_procentowy|p.p.]]) !! z nagraniem !! % ze źródłem !! zmiana ([[w:Punkt_procentowy|p.p.]]) !! ze źródłem !! liczba haseł\n'
 	#text6 = u'\n|}\n|\n{| class="wikitable sortable" style="margin: 0 auto; white-space: nowrap"\n! język !! % z grafiką !! zmiana % !! z grafiką !! % z nagraniem !! zmiana % !! z nagraniem !! % ze źródłem !! zmiana % !! ze źródłem !! liczba haseł\n'
-	text7 = u'{| class="wikitable sortable" style="margin: 0 auto; white-space: nowrap"\n! język !! znaczeń ogółem !! zmiana !! średnia znaczeń w haśle!! zmiana średniej\n'
+	text7 = u'{| class="wikitable sortable autonumber" style="margin: 0 auto; white-space: nowrap"\n! język !! znaczeń ogółem !! zmiana !! średnia znaczeń w haśle!! zmiana średniej\n'
 	#text7 = u'\n|}\n|\n{| class="wikitable sortable" style="margin: 0 auto; white-space: nowrap"\n! język !! znaczeń ogółem !! zmiana !! średnia znaczeń w haśle!! zmiana średniej\n'
 	text8 = text5
 	text9 = u'{{#switch:{{lc:{{{1|}}}}}'
