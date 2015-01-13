@@ -856,18 +856,23 @@ def flagLastRev(site, revid, comment=u''):
 #TODO: pobierać z WS:Kody języków
 def getAllLanguages():
 	site = pywikibot.Site('pl', 'wiktionary')
-	page = pywikibot.Page(site, u'Mediawiki:Common.js')
+	page = pywikibot.Page(site, u'Mediawiki:Gadget-langdata.js')
+	pageText = page.get()
 	
 	langTable = []
-	re_langs = re.compile(ur'function om\$initLangDictionaries\(\) \{\n\tom\$Lang2Code={\n(.*?)\n\t\};', re.DOTALL)
-	re_oneLang = re.compile(ur'\s*?"(.*?)"\s*?\:\s*"([a-z-]*?)"')
+	shortOnly = []
+	re_langs = re.compile(ur'lang2code: \{\n(.*?)\n\t\},', re.DOTALL)
+	re_oneLang = re.compile(ur'\s*?"(.*?)"\s*?\:\s*"([a-z-]*?)")'
+	re_shorts = re.compile(ur'shortLangs: \[\n(.*?)\n\t\]', re.DOTALL)
+	re_oneShort = re.compile(ur'\s*?"(.*?)"(,\s*)?')
 	
-	s_langs = re.search(re_langs, page.get())
-
-	shortOnly = [u'interlingua', u'jidysz', u'ido', u'esperanto', u'esperanto (morfem)', u'slovio', u'tetum', u'hindi', u'użycie międzynarodowe', u'znak chiński', u'volapük', u'inuktitut', u'tok pisin', u'ladino', u'sanskryt', u'tupinambá', u'lojban', u'novial', u'papiamento', u'ewe', u'lingala', u'pitjantjatjara', u'dżuhuri', u'sranan tongo', u'termin obcy w języku polskim', u'quenya', u'brithenig', u'Lingua Franca Nova', u'wenedyk', u'romániço', u'jèrriais']
+	s_langs = re.search(re_langs, pageText)
 
 	if s_langs:
 		tempLangTable = re.findall(re_oneLang, s_langs.group(1))
+		s_shorts = re.search(re_shorts, pageText)
+		if s_shorts:
+			shortOnly = re.findall(re_oneShort, s_shorts.group(1))
 		for a in tempLangTable:
 			if a[0] in shortOnly:
 				tempLong = a[0]

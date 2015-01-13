@@ -179,10 +179,10 @@ def main():
 	
 
 
-	#9. MediaWiki:Common.js
-	page10 = pywikibot.Page(site, u'MediaWiki:Common.js')
+	#9. MediaWiki:Gadget-langdata.js
+	page10 = pywikibot.Page(site, u'MediaWiki:Gadget-langdata.js')
 	if u'"%s"' % (shortName) not in page10.get():
-		zaczepienie = u'\n	};\n}\n\nvar om$sectionLinksProcessed = false;'
+		zaczepienie = u'\n	},\n	shortLangs:'
 		re_before = re.compile(ur'(.*?)%s' % re.escape(zaczepienie), re.DOTALL)
 		re_after = re.compile(ur'.*?(%s.*)' % re.escape(zaczepienie), re.DOTALL)
 		s_before = re.search(re_before, page10.get())
@@ -194,9 +194,9 @@ def main():
 			page10.put(textPage10, comment=u"Dodanie języka %s" % zjezyka, as_group='sysop')
 			#print textPage10
 		else:
-			pywikibot.output(u'Nie dodano parametru do strony MediaWiki:Common.js!')
+			pywikibot.output(u'Nie dodano parametru do strony MediaWiki:Gadget-langdata.js!')
 	else:
-		pywikibot.output(u'Nazwa języka (%s) istnieje już na stronie MediaWiki:Common.js' % shortName)
+		pywikibot.output(u'Nazwa języka (%s) istnieje już na stronie MediaWiki:Gadget-langdata.js' % shortName)
 
 	#8. Moduł:statystyka/dane
 
