@@ -16,12 +16,12 @@ def main():
 	
 	'''Start input - remember to change the variables below!'''
 	
-	shortName = u'marwari' #short language name, i.e. without "język"
+	shortName = u'eweński' #short language name, i.e. without "język"
 	shortOnly = 0 #some languages are referred to by their name only, e.g. "esperanto" (not "esperanto language") - in that case, set shortOnly to 1
-	kod = u'mwr' #wikimedia or ISO code
-	jakie = u'marwari' #adjective: polski -> polskie, esperanto -> esperanckie, volapuk -> volapuk
-	zjezyka = u'marwari' #"z języka polskiego", "z esperanto", "z języka akan"
-	etymSkr = u'marw' #abbreviation to use in {{etym}} template, chosen arbitrarily
+	kod = u'eve' #wikimedia or ISO code
+	jakie = u'eweńskie' #adjective: polski -> polskie, esperanto -> esperanckie, volapuk -> volapuk
+	zjezyka = u'eweńskiego' #"z języka polskiego", "z esperanto", "z języka akan"
+	etymSkr = u'eweń' #abbreviation to use in {{etym}} template, chosen arbitrarily
 	
 	'''End input'''
 	
@@ -202,7 +202,8 @@ def main():
 
         page8 = pywikibot.Page(site, u'Moduł:statystyka/dane')
         if u'%s' % shortName not in page8.get():
-                textPage8 = page8.get()[:-1] + page8.get()[-1:].replace("}", "\t{ '%s' },\n}" % shortName)
+                textPage8 = page8.get()[:-40] + page8.get()[-40:].replace("\tdate =", "\t{ '%s' },\n\tdate =" % shortName)
+                print textPage8
                 page8.put(textPage8, comment=u"Dodanie języka %s" % zjezyka)
         else:
 		pywikibot.output(u'Nazwa języka (%s) istnieje już na stronie Moduł:statystyka/dane' % shortName)
