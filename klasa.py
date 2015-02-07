@@ -862,7 +862,7 @@ def getAllLanguages():
 	langTable = []
 	shortOnly = []
 	re_langs = re.compile(ur'lang2code: \{\n(.*?)\n\t\},', re.DOTALL)
-	re_oneLang = re.compile(ur'\s*?"(.*?)"\s*?\:\s*"([a-z-]*?)")'
+	re_oneLang = re.compile(ur'\s*?"(.*?)"\s*?\:\s*"([a-z-]*?)')
 	re_shorts = re.compile(ur'shortLangs: \[\n(.*?)\n\t\]', re.DOTALL)
 	re_oneShort = re.compile(ur'\s*?"(.*?)"(,\s*)?')
 	
