@@ -2,6 +2,9 @@
 ###################
 *.pyc
 
+# config file #
+config.py
+
 # Directories #
 /importsjp/
 /inne/
@@ -11,3 +14,4 @@
 /src/
 /szablony/
 /wikt-listy/
+/rclimits/
