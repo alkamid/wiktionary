@@ -502,7 +502,7 @@ def stat_wikitable(old, new):
 				text12 = text12 + u'\n|%s=%.1f' % (new[a].shortName, new[a].percGraph)
 				text13 = text13 + u'\n|%s=%.1f' % (new[a].shortName, new[a].percAudio)
 				#text9 = text9 + u'\n|%s=%.0f' % (new[a].shortName.lower(), new[a].countMeans)
-                                text_dane = meaningsUpdateWikitext(new[a].shortName, new[a].countMeans, text_dane)
+                                text_dane = meaningsUpdateWikitext(new[a].shortName, new[a].avgMean, text_dane)
                                 text16 = text16 + u'\n|%s=%.4f' % (new[a].shortName.lower(), new[a].avgMean)
 		
 	
@@ -706,20 +706,20 @@ def licznik():
 		presskit.put(presskit_tekst, comment = u'Aktualizacja z ostatniego zrzutu bazy danych (%s)' % data_slownie, botflag=False)
 		#presskit.put(presskit_tekst, comment = u'Aktualizacja z ostatniego zrzutu bazy danych (%s)' % data_slownie)
 
-def meaningsUpdateWikitext(lang, count, text):
+def meaningsUpdateWikitext(lang, mean, text):
 
-    regex = re.compile(ur'({\s*?\'%s\'\s*,\s*{[\w\s,=\']*?)(z\s*=\s*[0-9]*)([\w\s,=\']*?})' % re.escape(lang), re.UNICODE)
+    regex = re.compile(ur'({\s*?\'%s\'\s*,\s*{[\w\s,=\']*?)(z\s*=\s*[0-9\.]*)([\w\s,=\']*?})' % re.escape(lang), re.UNICODE)
     s = re.search(regex, text)
     if s and s.group(2):
-        text = re.sub(regex, ur'\1z = %d\3' % count, text)
+        text = re.sub(regex, ur'\1z = %.4f\3' % mean, text)
     else:
         regex = re.compile(ur'({\s*?\'%s\')\s*(,\s*{)*' % re.escape(lang), re.UNICODE)
         s = re.search(regex, text)
         if s:
             if s.group(2):
-                text = re.sub(regex, ur'\1\2 z = %d,' % count, text)
+                text = re.sub(regex, ur'\1\2 z = %.4f,' % mean, text)
             else:
-                text = re.sub(regex, ur'\1, { z = %d } ' % count, text)
+                text = re.sub(regex, ur'\1, { z = %.4f } ' % mean, text)
     return text
 
 def data_stat():
