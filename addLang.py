@@ -12,7 +12,7 @@ import datetime
 import time
 	
 def main():
-	site = pywikibot.getSite()
+	site = pywikibot.Site()
 	
 	'''Start input - remember to change the variables below!'''
 	
@@ -66,27 +66,7 @@ def main():
 	else:
 		pywikibot.output(u'Szablon języka "%s" już istnieje!' % shortName)
 	
-        
-        '''not used anymore	
-	#4. {{licznik}}
-	page4 = pywikibot.Page(site, u'Szablon:licznik')
-	if u':%s ' % shortName not in page4.get():
-		zaczepienie = u'0\n}}}}<noinclude>'
-		re_before = re.compile(ur'(.*?)%s' % re.escape(zaczepienie), re.DOTALL)
-		re_after = re.compile(ur'.*?(%s.*)' % re.escape(zaczepienie), re.DOTALL)
-		s_before = re.search(re_before, page4.get())
-		s_after = re.search(re_after, page4.get())
-		if s_before and s_after:
-			textPage4 = s_before.group(1)
-			textPage4 += u'{{PAGESINCAT:%s (indeks)|R}}+\n' % shortName
-			textPage4 += s_after.group(1)
-			page4.put(textPage4, comment=u"Dodanie języka %s" % zjezyka, as_group='sysop')
-			#print textPage4
-		else:
-			pywikibot.output(u'Nie dodano parametru do szablonu {{licznik}}!')
-	else:
-		pywikibot.output(u'Nazwa języka (%s) istnieje już  w szablonie {{licznik}}' % shortName)
-		'''
+ 
 	#5. {{indeks}}
 	page5 = pywikibot.Page(site, u'Szablon:indeks')
 	if u'|%s=' % shortName not in page5.get():
@@ -203,71 +183,10 @@ def main():
         page8 = pywikibot.Page(site, u'Moduł:statystyka/dane')
         if u'%s' % shortName not in page8.get():
                 textPage8 = page8.get()[:-40] + page8.get()[-40:].replace("\tdate =", "\t{ '%s' },\n\tdate =" % shortName)
-                print textPage8
                 page8.put(textPage8, comment=u"Dodanie języka %s" % zjezyka)
         else:
 		pywikibot.output(u'Nazwa języka (%s) istnieje już na stronie Moduł:statystyka/dane' % shortName)
                 
-                
-        
-
-        '''#8. joystick/liczone - was used before Peter Bowman wrote Moduł:statystyka, which is much faster than this
-	page8 = pywikibot.Page(site, u'Wikipedysta:Joystick/statystyka/liczone')
-	
-	# new version (without the first column consisting of numbers)
-	if u' %s ' % shortName not in page8.get():
-		zaczepienie = u'}}\n<tr class="sortbottom">\n<td/>\n<td align=right>\'\'\'Razem:\'\'\'</td>\n<td align=right><small>100%</small></td>'
-		re_before = re.compile(ur'(.*?)%s' % re.escape(zaczepienie), re.DOTALL)
-		re_after = re.compile(ur'.*?(%s.*)' % re.escape(zaczepienie), re.DOTALL)
-		s_before = re.search(re_before, page8.get())
-		s_after = re.search(re_after, page8.get())
-		if s_before and s_after:
-			textPage8 = s_before.group(1)
-			if shortOnly:
-				textPage8 += u'|{{Wikisłownik:STAT/ramka| %s | w=x | }}\n' % shortName
-			else:
-				textPage8 += u'|{{Wikisłownik:STAT/ramka| %s | }}\n' % shortName
-			textPage8 += s_after.group(1)
-			page8.put(textPage8, comment=u"Dodanie języka %s" % zjezyka, as_group='sysop')
-		else:
-			pywikibot.output(u'Nie dodano parametru do strony Wikipedysta:Joystick/statystyka/liczone! (najprawdopodobniej strona została przez kogoś zmieniona)')
-	else:
-		pywikibot.output(u'Nazwa języka (%s) istnieje już na stronie Wikipedysta:Joystick/statystyka/liczone' % shortName)
-	'''		
-	# old version (with numbered rows)		
-	'''if u' %s ' % shortName not in page8.get():
-		zaczepienie = u'|- class="sortbottom"\n| align=right | \'\'\'Razem:\'\'\'\n| align=right | <small>100%</small> '
-
-		re_before1 = re.compile(ur'(.*?! [0-9]{3}\n)\|- class="sortbottom" \n\| &nbsp;', re.DOTALL)
-		re_after1 = re.compile(ur'.*?! [0-9]{3}\n(\|- class="sortbottom" \n\| &nbsp;.*)', re.DOTALL)
-		re_int = re.compile(ur'.*?! ([0-9]{3})\n\|- class="sortbottom" \n\| &nbsp;', re.DOTALL)
-		s_int = re.search(re_int, page8.get())
-		s_before1 = re.search(re_before1, page8.get())
-		s_after1 = re.search(re_after1, page8.get())
-		if s_before1 and s_after1:	
-			nextInt = int(s_int.group(1)) + 1
-			re_before = re.compile(ur'(.*?)%s' % re.escape(zaczepienie), re.DOTALL)
-			re_after = re.compile(ur'.*?(%s.*)' % re.escape(zaczepienie), re.DOTALL)
-			s_after1.group(1)
-			s_before = re.search(re_before, s_after1.group(1))
-			s_after = re.search(re_after, s_after1.group(1))
-			if s_before and s_after:
-				textPage8 = s_before1.group(1)
-				textPage8 += u'|-\n! %d\n' % nextInt
-				textPage8 += s_before.group(1)
-				if shortOnly:
-					textPage8 += u'{{User:Joystick/statystyka/ramka| %s | w=x | }}\n' % shortName
-				else:
-					textPage8 += u'{{User:Joystick/statystyka/ramka| %s | }}\n' % shortName
-				textPage8 += s_after.group(1)
-				page8.put(textPage8, comment=u"Dodanie języka %s" % zjezyka)
-				#print textPage8
-			else:
-				print u'Nie dodano parametru do strony Wikipedysta:Joystick/statystyka/liczone! (najprawdopodobniej strona została przez kogoś zmieniona)'
-		else:
-			print u'Nie dodano parametru do strony Wikipedysta:Joystick/statystyka/liczone! (najprawdopodobniej strona została przez kogoś zmieniona)'
-	else:
-		print u'Nazwa języka (%s) istnieje już na stronie Wikipedysta:Joystick/statystyka/liczone' % shortName'''
 	
 if __name__ == '__main__':
 	try:
