@@ -16,12 +16,12 @@ def main():
 	
 	'''Start input - remember to change the variables below!'''
 	
-	shortName = u'eweński' #short language name, i.e. without "język"
+	shortName = 'koriacki' #short language name, i.e. without "język"
 	shortOnly = 0 #some languages are referred to by their name only, e.g. "esperanto" (not "esperanto language") - in that case, set shortOnly to 1
-	kod = u'eve' #wikimedia or ISO code
-	jakie = u'eweńskie' #adjective: polski -> polskie, esperanto -> esperanckie, volapuk -> volapuk
-	zjezyka = u'eweńskiego' #"z języka polskiego", "z esperanto", "z języka akan"
-	etymSkr = u'eweń' #abbreviation to use in {{etym}} template, chosen arbitrarily
+	kod = 'kpy' #wikimedia or ISO code
+	jakie = u'koriackie' #adjective: polski -> polskie, esperanto -> esperanckie, volapuk -> volapuk
+	zjezyka = u'koriackiego' #"z języka polskiego", "z esperanto", "z języka akan"
+	etymSkr = u'kor' #abbreviation to use in {{etym}} template, chosen arbitrarily
 	
 	'''End input'''
 	
