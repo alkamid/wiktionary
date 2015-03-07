@@ -45,7 +45,7 @@ def main():
 	#below we search for all the words that are purely archaic, i.e. all its meanings have {{przest}} template. I don't know if it's not an overkill -- we could just fetch a Category?
 	for page in pageList:
 		if u'{{przest}}' in page.text:
-			try: word = Haslo(page.title, page.text)
+			try: word = Haslo(page)
 			except sectionsNotFound:
 				pass
 			except WrongHeader:
