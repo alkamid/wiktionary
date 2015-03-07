@@ -614,7 +614,7 @@ def dlaczego(new):
 	presskitText = re.sub(ur'ponad [0-9]* nagrań wymowy', u'ponad %d nagrań wymowy' % audioCount, presskitText)
 	presskitText = re.sub(ur'ponad [0-9]* ilustracji', u'ponad %d ilustracji' % graphCount, presskitText)
 	
-	if offline_mode=0:
+	if offline_mode == 0:
                 dlaczego_strona.save(dlaczegoText, comment=u'aktualizacja', botflag=True)
                 presskit.save(presskitText, comment=u'aktualizacja', botflag=True)
 		
@@ -746,7 +746,7 @@ def data_stat():
 
 def statystyka(oldDate, newDate):
 	global offline_mode
-	offline_mode = 1
+	offline_mode = 0
 	global filename
 	filename = "output/statystykanowa.txt"
 	global data
