@@ -8,6 +8,7 @@ import pywikibot
 import datetime
 import re
 import config
+import urllib2
 from klasa import *
 
 def main():
