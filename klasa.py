@@ -48,7 +48,8 @@ class Haslo():
                 self.wstepna = u''
                 self.content = u''
                 self.listLangs = []
-            elif type(title) is str:
+            #title should be unicode only? will change in python 3 version
+            elif type(title) is str or type(title) is unicode:
                 self.site = pywikibot.Site('pl', 'wiktionary')
                 self.type = 1
                 self.title = title
@@ -322,7 +323,6 @@ class LanguageSection():
 	def pola(self):
 
 		if self.type == 1:
-                    print self.lang
                     try: order = LanguageSection.sectionOrder[self.lang] # look for subsection order templates for specific languages
                     except KeyError:
                         order = LanguageSection.sectionOrder[u'default']
