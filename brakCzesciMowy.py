@@ -50,5 +50,5 @@ def brakCzesciMowy(data):
 	file.write(text.encode( "utf-8" ))
 	file.close
 	
-        outputPage.text(text)
+        outputPage.text = text
 	outputPage.save(comment=u"Aktualizacja listy", botflag=False)

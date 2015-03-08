@@ -118,7 +118,7 @@ def frequencyList(data):
         elem = elem.strip()
         outputPage = pywikibot.Page(site, u'Indeks:Polski - Najpopularniejsze słowa %d-%d' % (num*2000+1, (num+1)*2000))
         elem = u'Lista frekwencyjna języka polskiego na podstawie odnośników na stronach Wikisłownika.\n\n{{język linków|polski}}\n' + elem + u'\n[[Kategoria:Polski (słowniki tematyczne)]]\n[[Kategoria:Listy frekwencyjne|polski]]'
-        outputPage.text(elem)
+        outputPage.text = elem
         outputPage.save(comment='aktualizacja')
     
     htmllist += u'</body></html>'

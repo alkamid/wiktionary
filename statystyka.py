@@ -559,17 +559,17 @@ def stat_wikitable(old, new):
 	file.close
 
 	
-        page_dlugosc.text(text_dlugosc)
-        page_srednia.text(text_srednia)
-        page_multimedia.text(text_multimedia)
-        page_znaczenia.text(text_znaczenia)
-        page_dane.text(text_dane)
-        page_dlugosc_templ.text(text_dlugosc_template)
-        page_srednia_templ.text(text_srednia_template)
-        page_GraphCount_templ.text(text_GraphCount_template)
-        page_GraphPerc_templ.text(text_GraphPerc_template)
-        page_AudioCount_templ.text(text_AudioCount_template)
-        page_AudioPerc_templ.text(text_AudioPerc_template)
+        page_dlugosc.text = text_dlugosc
+        page_srednia.text = text_srednia
+        page_multimedia.text = text_multimedia
+        page_znaczenia.text = text_znaczenia
+        page_dane.text = text_dane
+        page_dlugosc_templ.text = text_dlugosc_template
+        page_srednia_templ.text = text_srednia_template
+        page_GraphCount_templ.text = text_GraphCount_template
+        page_GraphPerc_templ.text = text_GraphPerc_template
+        page_AudioCount_templ.text = text_AudioCount_template
+        page_AudioPerc_templ.text = text_AudioPerc_template
 
 	if (offline_mode == 0):
 		page_dlugosc.save(comment="Aktualizacja statystyk, dane z %s" % data_slownie, botflag=False)
@@ -627,9 +627,9 @@ def dlaczego(new):
 	presskitText = re.sub(ur'ponad [0-9]* ilustracji', u'ponad %d ilustracji' % graphCount, presskitText)
 	
 	if offline_mode == 0:
-                dlaczego_strona.text(dlaczegoText)
+                dlaczego_strona.text = dlaczegoText
                 dlaczego_strona.save(comment=u'aktualizacja', botflag=True)
-                presskit.text(presskitText)
+                presskit.text = presskitText
                 presskit.save(comment=u'aktualizacja', botflag=True)
 		
 def licznik():
@@ -700,7 +700,7 @@ def licznik():
 		pass
 		#print tekst
 	else:
-                dlaczego_strona.text(tekst)
+                dlaczego_strona.text = tekst
 		dlaczego_strona.save(comment = u'Aktualizacja z ostatniego zrzutu bazy danych (%s)' % data_slownie, botflag=False)
 		#dlaczego_strona.put(tekst, comment = u'Aktualizacja z ostatniego zrzutu bazy danych (%s)' % data_slownie)
 	
@@ -721,7 +721,7 @@ def licznik():
 	if offline_mode:
 		print presskit_tekst
 	else:
-                presskit.text(presskit_tekst)
+                presskit.text = presskit_tekst
 		presskit.save(comment = u'Aktualizacja z ostatniego zrzutu bazy danych (%s)' % data_slownie, botflag=False)
 		#presskit.put(presskit_tekst, comment = u'Aktualizacja z ostatniego zrzutu bazy danych (%s)' % data_slownie)
 
@@ -757,7 +757,7 @@ def data_stat():
 	if offline_mode:
 		print final
 	else:
-                stat.text(final)
+                stat.text = final
 		stat.save(comment=u'zmiana daty')
 
 
