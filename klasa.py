@@ -245,15 +245,17 @@ class LanguageSection():
 
         sectionOrder[u'japoński'] = deepcopy(sectionOrder['default'])
         sectionOrder[u'japoński'].insert(1, subSection(u'czytania'))
-        sectionOrder[u'japoński'].insert(13, subSection(u'złożenia'))
+        sectionOrder[u'japoński'].insert(14, subSection(u'złożenia'))
 
         sectionOrder[u'koreański'] = deepcopy(sectionOrder['default'])
         sectionOrder[u'koreański'].insert(16, subSection(u'hanja'))
 	
 
+
         # generate regexp for each template - we will use them for parsing every LanguageSection
         for order in sectionOrder:
             generateRegexp(sectionOrder[order])
+
 
         def __init__(self, text='afeof5imad3sfa5', title = '2o3iremdas', type=666, lang='bumbum'):
 
