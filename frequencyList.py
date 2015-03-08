@@ -24,7 +24,7 @@ def getDeletedList():
 
 def frequencyList(data):
     
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     lista_stron2 = getListFromXML(data)
     ranking = {}
     re_example_translation = re.compile(u'→(.*?)(?=\<ref|\n|$)')
@@ -50,23 +50,25 @@ def frequencyList(data):
                         sekcja.pola()
                         if sekcja.type not in (2,4,5,7,11):
                             if sekcja.lang == 'polski' or sekcja.lang == u'termin obcy w języku polskim':
-                                to_search = to_search + sekcja.dodatki.text + sekcja.znaczeniaWhole.text + sekcja.przyklady.text + sekcja.skladnia.text + sekcja.kolokacje.text + sekcja.synonimy.text + sekcja.antonimy.text + sekcja.pokrewne.text + sekcja.frazeologia.text + sekcja.etymologia.text + sekcja.uwagi.text
+                                for elem in (u'dodatki', u'znaczenia', u'przykłady', u'składnia', u'kolokacje', u'synonimy', u'antonimy', u'pokrewne', u'frazeologia', u'etymologia', u'uwagi'):
+                                    to_search += sekcja.subSections[elem].text
+                    
                             else:
                                 s_example_translation = None
                                 s_colloc_translation = None
                                 
-                                if u'→' in sekcja.przyklady.text:
-                                    s_example_translation = re.findall(re_example_translation, sekcja.przyklady.text)
+                                if u'→' in sekcja.subSections[u'przykłady'].text:
+                                    s_example_translation = re.findall(re_example_translation, sekcja.subSections[u'przykłady'].text)
                                 if s_example_translation:
                                     for a in s_example_translation:
                                         to_search += a
-                                if u'→' in sekcja.kolokacje.text:
-                                    s_colloc_translation = re.findall(re_colloc_translation, sekcja.kolokacje.text)
+                                if u'→' in sekcja.subSections[u'kolokacje'].text:
+                                    s_colloc_translation = re.findall(re_colloc_translation, sekcja.subSections['kolokacje'].text)
                                 if s_colloc_translation:
                                     for a in s_colloc_translation:
                                         to_search += a
                                         
-                                to_search = to_search + sekcja.znaczeniaWhole.text
+                                to_search = to_search + sekcja.subSections['znaczenia'].text
                     
                     s_link = re.findall(re_link, to_search)     
                     for link in s_link:
@@ -116,7 +118,8 @@ def frequencyList(data):
         elem = elem.strip()
         outputPage = pywikibot.Page(site, u'Indeks:Polski - Najpopularniejsze słowa %d-%d' % (num*2000+1, (num+1)*2000))
         elem = u'Lista frekwencyjna języka polskiego na podstawie odnośników na stronach Wikisłownika.\n\n{{język linków|polski}}\n' + elem + u'\n[[Kategoria:Polski (słowniki tematyczne)]]\n[[Kategoria:Listy frekwencyjne|polski]]'
-        outputPage.put(elem, comment='aktualizacja')
+        outputPage.text = elem
+        outputPage.save(comment='aktualizacja')
     
     htmllist += u'</body></html>'
     file = open('%spublic_html/frequencyListPL.html' % (config.path['home']), 'w')
@@ -126,3 +129,7 @@ def frequencyList(data):
     file = open('%soutput/frequencyListPL.txt' % (config.path['scripts']), 'w')
     file.write(nonExistingText.encode( "utf-8" ))
     file.close
+    
+
+#if __name__ == "__main__":
+#    frequencyList('20141024')

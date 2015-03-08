@@ -124,7 +124,7 @@ def main():
 	file.write(textFile.encode('utf-8'))
 	file.close
 	
-	statSite.put(text, comment = 'aktualizacja', botflag=False)
+	statSite.save(text, comment = 'aktualizacja', botflag=False)
 	
 	#cleanup  - only if you download files along the way
 	'''os.chdir('/mnt/user-store/alkamid/stats/')
@@ -137,30 +137,3 @@ if __name__ == '__main__':
         main()
     finally:
         pywikibot.stopme()
-
-
-
-	'''//This was used when I had to download pagecounts. As they are stored on Wikimedia Labs servers, there is no need to download them now // for j in range(9):
-			folder = '/mnt/user-store/alkamid/stats/'
-			filename = 'pagecounts-%s-%s000%d.gz' % (date_string, hour, j)
-			try: inp = gzip.open(folder + filename)
-			except IOError:
-				url = 'http://dumps.wikimedia.org/other/pagecounts-raw/%s/%s-%s/pagecounts-%s-%s000%d.gz' % (date_string[:4], date_string[:4], date_string[4:6], date_string, hour, j)
-				while True:
-					try: urllib2.urlopen(url)
-					except urllib2.HTTPError:
-						break
-					else:
-						urllib.urlretrieve(url, folder + filename)
-						try: open(folder+filename)
-						except IOError:
-							break
-						if checkSum(folder, filename, date_string):
-							break
-				try: inp = gzip.open(folder + filename)
-				except IOError:
-					pass
-				else:
-					break
-			else:
-				break'''
