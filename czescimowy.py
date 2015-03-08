@@ -127,7 +127,8 @@ def czescimowy(data):
 			
 	tabelka += u'\n|}'
 	
-	outputPage.save(pretext + u'\n' + tabelka, comment=u"Aktualizacja listy", botflag=False)
+        outputPage.text(pretext + u'\n' + tabelka)
+	outputPage.save(comment=u"Aktualizacja listy", botflag=False)
 	
 	file = open("output/czescimowy_tabelka.txt", 'w')
 	file.write(tabelka.encode("utf-8"))

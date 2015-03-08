@@ -120,12 +120,14 @@ class Haslo():
 					print u'%s - konflikt edycji' % self.title
 				except pywikibot.NoPage:
 					if new:
-						page.save(toPush, comment=myComment)
+                                                page.text(toPush)
+						page.save(comment=myComment)
 				except pywikibot.Error:
 					print u'%s - konflikt edycji' % self.title
 				else:
 					if content == self.content and content != toPush:
-						page.save(toPush, comment=myComment)
+                                            page.text(toPush)
+                                            page.save(comment=myComment)
 					elif content != self.content:
 						print u'%s - konflikt edycji' % self.title
 	def addSection(self, section):

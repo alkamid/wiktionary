@@ -559,18 +559,30 @@ def stat_wikitable(old, new):
 	file.close
 
 	
+        page_dlugosc.text(text_dlugosc)
+        page_srednia.text(text_srednia)
+        page_multimedia.text(text_multimedia)
+        page_znaczenia.text(text_znaczenia)
+        page_dane.text(text_dane)
+        page_dlugosc_templ.text(text_dlugosc_template)
+        page_srednia_templ.text(text_srednia_template)
+        page_GraphCount_templ.text(text_GraphCount_template)
+        page_GraphPerc_templ.text(text_GraphPerc_template)
+        page_AudioCount_templ.text(text_AudioCount_template)
+        page_AudioPerc_templ.text(text_AudioPerc_template)
+
 	if (offline_mode == 0):
-		page_dlugosc.save(text_dlugosc, comment="Aktualizacja statystyk, dane z %s" % data_slownie, botflag=False)
-		page_srednia.save(text_srednia, comment="Aktualizacja statystyk, dane z %s" % data_slownie, botflag=False)
-		page_multimedia.save(text_multimedia, comment="Aktualizacja statystyk, dane z %s" % data_slownie, botflag=False)
-		page_znaczenia.save(text_znaczenia, comment="Aktualizacja statystyk, dane z %s" % data_slownie, botflag=False)
-		page_dane.save(text_dane, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
-                page_dlugosc_templ.save(text_dlugosc_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
-		page_srednia_templ.save(text_srednia_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
-		page_GraphCount_templ.save(text_GraphCount_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
-		page_GraphPerc_templ.save(text_GraphPerc_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
-		page_AudioCount_templ.save(text_AudioCount_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
-		page_AudioPerc_templ.save(text_AudioPerc_template, comment="Aktualizacja statystyk, dane z %s" % data_slownie)
+		page_dlugosc.save(comment="Aktualizacja statystyk, dane z %s" % data_slownie, botflag=False)
+		page_srednia.save(comment="Aktualizacja statystyk, dane z %s" % data_slownie, botflag=False)
+		page_multimedia.save(comment="Aktualizacja statystyk, dane z %s" % data_slownie, botflag=False)
+		page_znaczenia.save(comment="Aktualizacja statystyk, dane z %s" % data_slownie, botflag=False)
+		page_dane.save(comment="Aktualizacja statystyk, dane z %s" % data_slownie)
+                page_dlugosc_templ.save(comment="Aktualizacja statystyk, dane z %s" % data_slownie)
+		page_srednia_templ.save(comment="Aktualizacja statystyk, dane z %s" % data_slownie)
+		page_GraphCount_templ.save(comment="Aktualizacja statystyk, dane z %s" % data_slownie)
+		page_GraphPerc_templ.save(comment="Aktualizacja statystyk, dane z %s" % data_slownie)
+		page_AudioCount_templ.save(comment="Aktualizacja statystyk, dane z %s" % data_slownie)
+		page_AudioPerc_templ.save(comment="Aktualizacja statystyk, dane z %s" % data_slownie)
         else:
                 file = codecs.open('outstat.txt', 'w')
                 myout = text_dlugosc + u'\n\n\n' + text_srednia + u'\n\n\n' + text_multimedia + u'\n\n\n' + text_znaczenia + u'\n\n\n' + text_dane + u'\n\n\n' + text_dlugosc_template + u'\n\n\n' + text_srednia_template + u'\n\n\n' + text_GraphCount_template + u'\n\n\n' + text_GraphPerc_template + u'\n\n\n' + text_AudioCount_template + u'\n\n\n' + text_AudioPerc_template
@@ -615,8 +627,10 @@ def dlaczego(new):
 	presskitText = re.sub(ur'ponad [0-9]* ilustracji', u'ponad %d ilustracji' % graphCount, presskitText)
 	
 	if offline_mode == 0:
-                dlaczego_strona.save(dlaczegoText, comment=u'aktualizacja', botflag=True)
-                presskit.save(presskitText, comment=u'aktualizacja', botflag=True)
+                dlaczego_strona.text(dlaczegoText)
+                dlaczego_strona.save(comment=u'aktualizacja', botflag=True)
+                presskit.text(presskitText)
+                presskit.save(comment=u'aktualizacja', botflag=True)
 		
 def licznik():
 	site = pywikibot.getSite()
@@ -686,7 +700,8 @@ def licznik():
 		pass
 		#print tekst
 	else:
-		dlaczego_strona.save(tekst, comment = u'Aktualizacja z ostatniego zrzutu bazy danych (%s)' % data_slownie, botflag=False)
+                dlaczego_strona.text(tekst)
+		dlaczego_strona.save(comment = u'Aktualizacja z ostatniego zrzutu bazy danych (%s)' % data_slownie, botflag=False)
 		#dlaczego_strona.put(tekst, comment = u'Aktualizacja z ostatniego zrzutu bazy danych (%s)' % data_slownie)
 	
 	re_presskit_przed = re.compile(u'(.*\* najwięcej słów jest w języku angielskim; następne pod względem liczby są: język polski i sztuczny język interlingua)', re.DOTALL) 
@@ -706,7 +721,8 @@ def licznik():
 	if offline_mode:
 		print presskit_tekst
 	else:
-		presskit.save(presskit_tekst, comment = u'Aktualizacja z ostatniego zrzutu bazy danych (%s)' % data_slownie, botflag=False)
+                presskit.text(presskit_tekst)
+		presskit.save(comment = u'Aktualizacja z ostatniego zrzutu bazy danych (%s)' % data_slownie, botflag=False)
 		#presskit.put(presskit_tekst, comment = u'Aktualizacja z ostatniego zrzutu bazy danych (%s)' % data_slownie)
 
 def meaningsUpdateWikitext(lang, count, text):
@@ -741,7 +757,8 @@ def data_stat():
 	if offline_mode:
 		print final
 	else:
-		stat.save(final, comment=u'zmiana daty')
+                stat.text(final)
+		stat.save(comment=u'zmiana daty')
 
 
 def statystyka(oldDate, newDate):
