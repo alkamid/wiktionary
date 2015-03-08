@@ -59,4 +59,5 @@ def rzeczownikRodzajNiepotrzebny(data):
 	file.write(text.encode( "utf-8" ))
 	file.close
 	
-	outputPage.put(text, comment=u"Aktualizacja listy", botflag=False)
+        outputPage.text = text
+	outputPage.save(comment=u"Aktualizacja listy", botflag=False)

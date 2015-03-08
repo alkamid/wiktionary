@@ -45,7 +45,7 @@ def main():
 	#below we search for all the words that are purely archaic, i.e. all its meanings have {{przest}} template. I don't know if it's not an overkill -- we could just fetch a Category?
 	for page in pageList:
 		if u'{{przest}}' in page.text:
-			try: word = Haslo(page.title, page.text)
+			try: word = Haslo(page)
 			except sectionsNotFound:
 				pass
 			except WrongHeader:
@@ -55,9 +55,9 @@ def main():
 					for lang in word.listLangs:
 						if lang.lang == 'polski':
 							lang.pola()
-							if lang.type == 9:
-								s_arch = re.findall(re_arch, lang.znaczeniaWhole.text)
-								s_numMeans = re.findall(re_numMeans, lang.znaczeniaWhole.text)
+							if lang.type == 1:
+								s_arch = re.findall(re_arch, lang.subSections[u'znaczenia'].text)
+								s_numMeans = re.findall(re_numMeans, lang.subSections[u'znaczenia'].text)
 								if len(s_arch) == len(s_numMeans):
 									listArchaic.add(word.title)
 

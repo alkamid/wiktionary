@@ -31,7 +31,7 @@ def addOdczas(title):
                             if nowe.type == 0:
                                 log += u'*[[%s]] - redirect' % (odczasownikowy)
                             elif nowe.type == 1 and u' ' not in odczasownikowy:
-                                nowaSekcja = Sekcja(title=odczasownikowy, type=9, lang=u'język polski')
+                                nowaSekcja = LanguageSection(title=odczasownikowy, type=9, lang=u'język polski')
                                 nowaSekcja.znaczeniaDetail.append([u'\'\'rzeczownik, rodzaj nijaki\'\'', u'\n: (1.1) {{rzecz}} {{odczas}} \'\'od\'\' [[%s]]' % czasownik])
                                 if odczasownikowy[-4:] == u'enie' or odczasownikowy[-4:] == u'anie' or odczasownikowy[-3:] == u'cie':
                                     pre = odczasownikowy[:-2]
@@ -50,7 +50,7 @@ def addOdczas(title):
                             if nowe.type == 0:
                                 log += u'*[[%s]] - redirect' % (nieodczasownikowy)
                             elif nowe.type == 1 and u' ' not in nieodczasownikowy:
-                                nowaSekcja = Sekcja(title=nieodczasownikowy, type=9, lang=u'język polski')
+                                nowaSekcja = LanguageSection(title=nieodczasownikowy, type=9, lang=u'język polski')
                                 nowaSekcja.znaczeniaDetail.append([u'\'\'rzeczownik, rodzaj nijaki\'\'', u'\n: (1.1) {{rzecz}} {{odczas}} \'\'od\'\' [[nie]] [[%s]]' % czasownik])
                                 if not enieaniestop:
                                     pre = nieodczasownikowy[:-3]
