@@ -12,4 +12,5 @@
 path = dict(
     home = '/home/adam/wikt/',
     scripts = '/home/adam/wikt/moje/',
+    dumps = '/home/adam/Downloads/'
 )
