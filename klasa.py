@@ -542,7 +542,6 @@ def getAllLanguages():
 		tempLangTable = re.findall(re_oneLang, s_langs.group(1))
 		s_shorts = re.search(re_shorts, pageText)
 		if s_shorts:
-                        print s_shorts.group(1)
 			shortOnly = re.findall(re_oneShort, s_shorts.group(1))
 		for a in tempLangTable:
 			if a[0] in shortOnly:
