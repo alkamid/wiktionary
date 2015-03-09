@@ -124,7 +124,8 @@ def main():
 	file.write(textFile.encode('utf-8'))
 	file.close
 	
-	statSite.save(text, comment = 'aktualizacja', botflag=False)
+        statSite.text = text
+	statSite.save(comment = 'aktualizacja', botflag=False)
 	
 	#cleanup  - only if you download files along the way
 	'''os.chdir('/mnt/user-store/alkamid/stats/')
