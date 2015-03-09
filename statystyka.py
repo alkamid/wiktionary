@@ -271,13 +271,14 @@ def licz_jezyki(data):
                 else:
                         if haslo.type != 5:
                                 for b in haslo.listLangs:
-                                        #print haslo.title
+                                        print haslo.title
                                         if b.type != 2 and b.type != 3:
                                                 if b.langLong == u'termin obcy w języku polskim':
                                                         b.langLong = u'język polski'
                                                 if b.langLong in statList:
                                                         b.pola()
                                                         if not b.inflectedOnly:
+                                                                
                                                                 statList[u'%s' % b.langLong].addWord()
                                                                 statList[u'%s' % b.langLong].addLength(CountLength(b.content))
 
