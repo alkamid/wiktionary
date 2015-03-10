@@ -276,21 +276,23 @@ def licz_jezyki(data):
                                                 if b.langLong == u'termin obcy w języku polskim':
                                                         b.langLong = u'język polski'
                                                 if b.langLong in statList:
-                                                        statList[u'%s' % b.langLong].addWord()
-                                                        statList[u'%s' % b.langLong].addLength(CountLength(b.content))
-
                                                         b.pola()
-                                                        audiotmp = countAudio(b.content)
-                                                        graphtmp = countGraph(b.content)
-                                                        if audiotmp:
-                                                                statList[u'%s' % b.langLong].addAudio()
-                                                                statList[u'%s' % b.langLong].addAudioAll(audiotmp)
-                                                        if graphtmp:
-                                                                statList[u'%s' % b.langLong].addGraph()
-                                                                statList[u'%s' % b.langLong].addGraphAll(graphtmp)
-                                                        if b.type == 1:
-                                                                statList[u'%s' % b.langLong].addMeans(meanings(b.znaczeniaDetail))
-                                                                statList[u'%s' % b.langLong].addRef(refs(b.content, b.subSections[u'źródła']))
+                                                        if not b.inflectedOnly:
+                                                                
+                                                                statList[u'%s' % b.langLong].addWord()
+                                                                statList[u'%s' % b.langLong].addLength(CountLength(b.content))
+
+                                                                audiotmp = countAudio(b.content)
+                                                                graphtmp = countGraph(b.content)
+                                                                if audiotmp:
+                                                                        statList[u'%s' % b.langLong].addAudio()
+                                                                        statList[u'%s' % b.langLong].addAudioAll(audiotmp)
+                                                                if graphtmp:
+                                                                        statList[u'%s' % b.langLong].addGraph()
+                                                                        statList[u'%s' % b.langLong].addGraphAll(graphtmp)
+                                                                if b.type == 1:
+                                                                        statList[u'%s' % b.langLong].addMeans(meanings(b.znaczeniaDetail))
+                                                                        statList[u'%s' % b.langLong].addRef(refs(b.content, b.subSections[u'źródła']))
 
 	for c in statList:
 		statList[c].countAvgLen()
