@@ -105,47 +105,7 @@ class LangStats():
 def CountLength(input):
 	
 	usun = []
-	usun.append(u'{{odmiana}}')
-	usun.append(u'{{etymologia}}')
-	usun.append(u'{{wymowa}}')
-	usun.append(u'{{znaczenia}}')
-	usun.append(u'{{przykłady}}')
-	usun.append(u'{{składnia}}')
-	usun.append(u'{{kolokacje}}')
-	usun.append(u'{{pokrewne}}')
-	usun.append(u'{{frazeologia}}')
-	usun.append(u'{{uwagi}}')
-	usun.append(u'{{synonimy}}')
-	usun.append(u'{{antonimy}}')
-	usun.append(u'{{hiperonimy}}')
-	usun.append(u'{{hiponimy}}')
-	usun.append(u'{{holonimy}}')
-	usun.append(u'{{meronimy}}')
-	usun.append(u'{{źródła}}')
-	usun.append(u'{{czytania}}')
-	usun.append(u'{{determinatywy}}')
-	usun.append(u'{{hanja}}')
-	usun.append(u'{{hanja-kreski}}')
-	usun.append(u'{{klucz}}')
-	usun.append(u'{{kreski}}')
-	usun.append(u'{{pochodne}}')
-	usun.append(u'{{pole}}')
-	usun.append(u'{{trans}}')
-	usun.append(u'{{transkr}}')
-	usun.append(u'{{transliteracja}}')
-	usun.append(u'{{transkrypcja}}')
-	usun.append(u'{{warianty}}')
-	usun.append(u'{{zapis hieroglificzny}}')
-	usun.append(u'{{zch-etymologia}}')
-	usun.append(u'{{zch-klucz}}')
-	usun.append(u'{{zch-kody}}')
-	usun.append(u'{{zch-kolejność}}')
-	usun.append(u'{{zch-kreski}}')
-	usun.append(u'{{zch-uwagi}}')
-	usun.append(u'{{zch-warianty}}')
-	usun.append(u'{{zch-znaczenia}}')
-	usun.append(u'{{znak-zch}}')
-	usun.append(u'{{złożenia}}')
+
 	usun.append(u'<references/>')
 	usun.append(u'==')
 	usun.append(u'{{IPA([0-9]|)\|}}')
@@ -155,6 +115,14 @@ def CountLength(input):
 	usun.append(u'\'\'przykład\'\'.*?→ tłumaczenie')
 	usun.append(u'\* angielski\: \[\[ \]\]')
 	usun.append(u'\n')
+
+        #add all subsection templates 
+	site = pywikibot.Site()
+        subsectionCategory = pywikibot.Category(site, u'Kategoria:Szablony szablonów haseł')
+        subsectionCategoryGen = pagegenerators.CategorizedPageGenerator(subsectionCategory)
+        for template in subsectionCategoryGen:
+                if template.namespace() == 'Template:':
+                        usun.append(u'{{%s}}' % template.title(withNamespace=False))
         
         #add all import templates 
 	site = pywikibot.Site()
