@@ -155,22 +155,16 @@ def CountLength(input):
 	usun.append(u'\'\'przykład\'\'.*?→ tłumaczenie')
 	usun.append(u'\* angielski\: \[\[ \]\]')
 	usun.append(u'\n')
-	usun.append(u'{{importCStematyczny}}')
-	usun.append(u'{{importEO}}')
-	usun.append(u'{{ImportEO19}}')
-	usun.append(u'{{importFR}}')
-	usun.append(u'{{importEL}}')
-	usun.append(u'{{importES}}')
-	usun.append(u'{{jidyszbot}}')
-	usun.append(u'{{importRU}}')
-	usun.append(u'{{importSV}}')
-	usun.append(u'{{importUK}}')
-	usun.append(u'{{importKA}}')
-	usun.append(u'{{importAZ}}')
-	usun.append(u'{{importIDO}}')
-	usun.append(u'{{importEOV}}')
-	usun.append(u'{{importIT}}')
-	usun.append(u'{{importEnWikt}}')
+        
+        #add all import templates 
+	site = pywikibot.Site()
+        importCategory = pywikibot.Category(site, u'Kategoria:Szablony automatycznych importów')
+        importCategoryGen = pagegenerators.CategorizedPageGenerator(importCategory)
+        for template in importCategoryGen:
+                if template.namespace() == 'Template:':
+                        usun.append(u'{{%s}}' % template.title(withNamespace=False))
+
+       
 	usun.append(u'{{niesprawdzona odmiana}}')
 	usun.append(u'({{termin obcy w języku polskim}})')
 	usun.append(u'{{Rzeczownik języka polskiego')
@@ -208,6 +202,7 @@ def CountLength(input):
 	znaczenia = re.compile(ur':(\s*|)\(1\.1\)(\s*|)\n')
 	niesprawdzonaOdmiana = re.compile(ur'{{niesprawdzona odmiana.*?\n')
 	importIA = re.compile(ur'{{[iI]mportIA\|[^}]*}}')
+        importEnWikt = re.compile(ur'{{importEnWikt\|[^}]*}}')
 	jidysz = re.compile(ur'{{jidysz\|[^}]*}}')
 	greka = re.compile(ur'{{greka\|[^}]*}}')
 	linki = re.compile(ur'\[\[[^]]*?\|')
@@ -223,6 +218,7 @@ def CountLength(input):
 	temp = re.sub(u'(\[\[(\s*|)((P|p)lik|(F|f)ile|(M|m)edia|(I|i)mage|(G|g)rafika)(\s*|):.[^\|]*|(thumb\||[0-9]*px\||right\||left\||)|{{litera)', '', temp)
 
 	temp = re.sub(importIA, u'', temp)
+	temp = re.sub(importEnWikt, u'', temp)
 	temp = re.sub(jidysz, u'', temp)
 	temp = re.sub(greka, u'', temp)		
 	temp = re.sub(linki, u'[[', temp)
@@ -292,7 +288,7 @@ def licz_jezyki(data):
                                                                         statList[u'%s' % b.langLong].addGraphAll(graphtmp)
                                                                 if b.type == 1:
                                                                         statList[u'%s' % b.langLong].addMeans(meanings(b.znaczeniaDetail))
-                                                                        statList[u'%s' % b.langLong].addRef(refs(b.content, b.subSections[u'źródła']))
+                                                                        statList[u'%s' % b.langLong].addRef(refs(b.subSections[u'źródła']))
 
 	for c in statList:
 		statList[c].countAvgLen()
@@ -338,24 +334,17 @@ def meanings(input):
 	return counter
 
 
-def refs(inputWhole, inputZrodla):
+def refs(inputZrodla):
 	#counting references
 	
-	counter = 0.0
-	re_refs = re.compile('(<ref.*?</ref>)')
 	re_az = re.compile('[a-z]')
 
-	s_refs = re.search(re_refs, inputWhole)
-	if s_refs:
-		return 1.0
-	else:
-		if inputZrodla:
-			temp = inputZrodla.text.replace(u'references', u'')
-			s_temp = re.search(re_az, temp)
-			if s_temp:
-				return 1.0
-			else:
-				return 0.0
+	s_temp = re.search(re_az, inputZrodla)
+        if s_temp:
+                return 1.0
+        else:
+                return 0.0
+
 	return 0
 
 
