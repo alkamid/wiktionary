@@ -288,7 +288,7 @@ def licz_jezyki(data):
                                                                         statList[u'%s' % b.langLong].addGraphAll(graphtmp)
                                                                 if b.type == 1:
                                                                         statList[u'%s' % b.langLong].addMeans(meanings(b.znaczeniaDetail))
-                                                                        statList[u'%s' % b.langLong].addRef(refs(b.subSections[u'źródła']))
+                                                                        statList[u'%s' % b.langLong].addRef(refs(b.subSections[u'źródła'].text))
 
 	for c in statList:
 		statList[c].countAvgLen()
