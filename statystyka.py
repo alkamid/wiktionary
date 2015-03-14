@@ -102,9 +102,8 @@ class LangStats():
 		if self.countWords:
 			self.percRef = self.countRef/self.countWords*100	 
 
-def CountLength(input):
-	
-	usun = []
+def deletedTemplates():
+        usun = []
 
 	usun.append(u'<references/>')
 	usun.append(u'==')
@@ -151,6 +150,13 @@ def CountLength(input):
 	usun.append(u'\|Wołacz lp \=')
 	usun.append(u'\|Wołacz lm \=')
 	usun.append(u'{{podobne\|')
+
+	usun_join ='|'.join(map(re.escape, usun))
+        return usun_join
+
+
+def CountLength(input, templates):
+	usun_join = templates
 	
 	sekcja = re.compile(u'==\s*.*?\(\{\{.*?(\|.*?\}\}\)|\}\}\))\s*?==')
 	
@@ -175,7 +181,6 @@ def CountLength(input):
 	greka = re.compile(ur'{{greka\|[^}]*}}')
 	linki = re.compile(ur'\[\[[^]]*?\|')
 	
-	usun_join ='|'.join(map(re.escape, usun))
 
 #TODO: zobaczyć czy usuwa nagłówki z parametrem	
 	temp = re.sub(sekcja, u'', input)
@@ -224,6 +229,8 @@ def licz_jezyki(data):
 			statList[u'%s' % a.longName] = LangStats(a.longName, a.shortName)
 	
 	i = 1
+
+        templatesToDelete = deletedTemplates()
 	
 	for a in lista_stron2:
 		#if (i<1000):
@@ -244,7 +251,7 @@ def licz_jezyki(data):
                                                         if not b.inflectedOnly:
                                                                 
                                                                 statList[u'%s' % b.langLong].addWord()
-                                                                statList[u'%s' % b.langLong].addLength(CountLength(b.content))
+                                                                statList[u'%s' % b.langLong].addLength(CountLength(b.content, templatesToDelete))
 
                                                                 audiotmp = countAudio(b.content)
                                                                 graphtmp = countGraph(b.content)
