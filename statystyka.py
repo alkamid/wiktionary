@@ -195,7 +195,7 @@ def CountLength(input, templates):
 	temp = re.sub(jidysz, u'', temp)
 	temp = re.sub(greka, u'', temp)		
 	temp = re.sub(linki, u'[[', temp)
-	
+
 	return len(temp)
 
 def countAudio(input):
