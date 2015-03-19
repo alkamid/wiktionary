@@ -14,7 +14,6 @@ import collections
 from klasa import *
 import mwparserfromhell
 
-
 def countRanks(langStats):
 
     fields = [u'countWords', u'countMeans', u'countLen', u'avgLen', u'percAudio', u'percGraph', u'percRef']
