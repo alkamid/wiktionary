@@ -575,11 +575,11 @@ def stat_wikitable(old, new):
         page_GraphPerc_templ.save(comment="Aktualizacja statystyk, dane z %s" % data_slownie)
         page_AudioCount_templ.save(comment="Aktualizacja statystyk, dane z %s" % data_slownie)
         page_AudioPerc_templ.save(comment="Aktualizacja statystyk, dane z %s" % data_slownie)
-        else:
-            file = codecs.open('outstat.txt', 'w')
-            myout = text_dlugosc + u'\n\n\n' + text_srednia + u'\n\n\n' + text_multimedia + u'\n\n\n' + text_znaczenia + u'\n\n\n' + text_dane + u'\n\n\n' + text_dlugosc_template + u'\n\n\n' + text_srednia_template + u'\n\n\n' + text_GraphCount_template + u'\n\n\n' + text_GraphPerc_template + u'\n\n\n' + text_AudioCount_template + u'\n\n\n' + text_AudioPerc_template
-            file.write(myout.encode('utf-8'))
-            file.close()
+    else:
+        file = codecs.open('outstat.txt', 'w')
+        myout = text_dlugosc + u'\n\n\n' + text_srednia + u'\n\n\n' + text_multimedia + u'\n\n\n' + text_znaczenia + u'\n\n\n' + text_dane + u'\n\n\n' + text_dlugosc_template + u'\n\n\n' + text_srednia_template + u'\n\n\n' + text_GraphCount_template + u'\n\n\n' + text_GraphPerc_template + u'\n\n\n' + text_AudioCount_template + u'\n\n\n' + text_AudioPerc_template
+        file.write(myout.encode('utf-8'))
+        file.close()
 
 
 def dlaczego(new):
