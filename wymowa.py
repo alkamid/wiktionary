@@ -119,6 +119,8 @@ def main():
 										pass
                                                                         except pywikibot.exceptions.NoPage:
                                                                                 pass
+                                                                        except pywikibot.exceptions.IsRedirectPage:
+                                                                                pass
 									else:
 										if s_ipa == None:
 											lista_ipa.add(page.title())
