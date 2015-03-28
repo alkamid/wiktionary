@@ -90,7 +90,7 @@ def main():
 	tabelkaPage = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/sjp/tabelka')
 	tabText = tabelkaPage.get()
 	for kat in kategorie:
-                s_limits = re.search(ur'([0-9]{1,2}?)\|[0-9]{1,2}]]\n\|(?=-|\})' % kat.pages, tabText)
+                s_limits = re.search(ur'%s([0-9]{1,2}?)\|[0-9]{1,2}]]\n\|(?=-|\})' % kat.pages, tabText)
 		if s_limits:
 			kat.addLimit(int(s_limits.group(1)))
 	obrazki = obrazkiAndrzeja()
