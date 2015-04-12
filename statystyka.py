@@ -657,7 +657,7 @@ def data_stat():
     if offline_mode:
         print final
     else:
-                stat.text = final
+        stat.text = final
         stat.save(comment=u'zmiana daty')
 
 
