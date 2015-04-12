@@ -98,8 +98,6 @@ def main():
 	mapping = {}		
 	
 	for kat in kategorie:
-                print kat.limit
-
 		for i in range(kat.limit):
 			try: haslo = Haslo(u'%s%d' % (kat.pages, i+1))
 			except sectionsNotFound:
