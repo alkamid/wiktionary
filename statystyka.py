@@ -452,7 +452,7 @@ def stat_wikitable(old, new):
                     if a == b:
                         changes = compareTwo(old[b], new[a])
                         text1 = text1 + u'\n|-\n! %d\n! %s' % (i, changeText(changes[u'rankLen'], 0))
-                        text2 = text2 + u'|-\n| [[:Kategoria:%s (indeks)|%s]]\n| align="right"| %.0f\n| align="right"| %s\n| align="right"| %.0f\n' % (new[a].shortName, new[a].shortName, new[a].countLen/1000, changeText(changes[u'len']/1000, 0), new[a].countWords)
+                        text2 = text2 + u'|-\n| [[:Kategoria:%s (indeks)|%s]]\n| align="right"| %.0f\n| align="right"| %s\n| align="right"| %.0f\n' % (new[a].shortName, new[a].shortName, new[a].countLen/1000, changeText(changes[u'length']/1000, 0), new[a].countWords)
 
 
     for i in range(51):
