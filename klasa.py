@@ -15,9 +15,10 @@ import bz2
 import sys
 from pywikibot.data.api import Request
 from os import environ
-import mwparserfromhell
+#import mwparserfromhell
 from copy import deepcopy
 
+'''experimental: think about using mwparserfromhell
 def parseTitle(title):
     site = pywikibot.Site()
     page = pywikibot.Page(site, title)
@@ -26,7 +27,7 @@ def parseTitle(title):
 
 def parseText(text):
     return mwparserfromhell.parse(text)
-
+'''
 locale.setlocale(locale.LC_COLLATE,"pl_PL.UTF-8")
 #possible types:
 #0 - redirect
@@ -184,7 +185,7 @@ def generateRegexp(order):
         if i == len(order) - 1:
             order[i].regex = re.compile(ur'%s(.*)' % (order[i].template), re.DOTALL)
         else:
-            order[i].regex = re.compile(ur'%s(.*?)%s' % (order[i].template, order[i+1].template), re.DOTALL)
+            order[i].regex = re.compile(ur'%s(.*?)\n%s' % (order[i].template, order[i+1].template), re.DOTALL)
 
 #possible types:
 #1 - proper section, all normal languages
