@@ -230,11 +230,11 @@ class LanguageSection():
         sectionOrder = collections.OrderedDict() # we want to keep subsections ordered
 
         # first, standard subsections template. The rest is adding/subtracting specific subsections for a few languages
-        sectionOrder[u'default'] = [subSection(u'', name='dodatki'), subSection(u'wymowa'), subSection(u'znaczenia'), subSection(u'odmiana'), subSection(u'przykłady'), subSection(u'składnia'), subSection(u'kolokacje'), subSection(u'synonimy'), subSection(u'antonimy'), subSection(u'hiperonimy', True), subSection(u'hiponimy', True), subSection(u'holonimy', True), subSection(u'meronimy', True), subSection(u'pokrewne'), subSection(u'frazeologia'), subSection(u'etymologia'), subSection(u'uwagi'), subSection(u'źródła')]
+        sectionOrder[u'default'] = [subSection(u'', True, name='dodatki'), subSection(u'wymowa'), subSection(u'znaczenia'), subSection(u'odmiana'), subSection(u'przykłady'), subSection(u'składnia'), subSection(u'kolokacje'), subSection(u'synonimy'), subSection(u'antonimy'), subSection(u'hiperonimy', True), subSection(u'hiponimy', True), subSection(u'holonimy', True), subSection(u'meronimy', True), subSection(u'pokrewne'), subSection(u'frazeologia'), subSection(u'etymologia'), subSection(u'uwagi'), subSection(u'źródła')]
 
         sectionOrder[u'znak chiński'] = [subSection(u'klucz'), subSection(u'kreski'), subSection(u'warianty'), subSection(u'kolejność'), subSection(u'znaczenia'), subSection(u'etymologia'), subSection(u'kody'), subSection(u'słowniki'), subSection(u'uwagi')]
 
-        sectionOrder[u'staroegipski'] = [subSection(u'', name='dodatki'), subSection(u'zapis hieroglificzny'), subSection(u'transliteracja'), subSection(u'transkrypcja'), subSection(u'znaczenia'), subSection(u'determinatywy')] + deepcopy(sectionOrder['default'])
+        sectionOrder[u'staroegipski'] = [subSection(u'', True, name='dodatki'), subSection(u'zapis hieroglificzny'), subSection(u'transliteracja'), subSection(u'transkrypcja'), subSection(u'znaczenia'), subSection(u'determinatywy')] + deepcopy(sectionOrder['default'])
         del sectionOrder[u'staroegipski'][6:9]
 
         sectionOrder[u'polski'] = deepcopy(sectionOrder['default'])
