@@ -18,13 +18,13 @@ def czescimowyReplace():
 
     site = pywikibot.getSite()
     inp = codecs.open('%soutput/czescimowy_input.txt' % config.path['scripts'], encoding='utf-8')
-    replacePage = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/części_mowy/zamiana')
+    replacePage = pywikibot.Page(site, 'Wikipedysta:AlkamidBot/części_mowy/zamiana')
     replacePageText = replacePage.get()
-    tempListReplace = replacePageText.split(u'\n')
+    tempListReplace = replacePageText.split('\n')
     replaceList = []
     cnt = 0
     for elem in tempListReplace:
-        if elem == u'|-':
+        if elem == '|-':
             old = ''
             new = ''
             cnt = 1
@@ -67,4 +67,4 @@ def czescimowyReplace():
                                 if d[0] != temp:
                                     changed = 1
                     if changed:
-                        h.push(myComment=u'automatyczne porządkowanie części mowy wg [[Wikipedysta:AlkamidBot/części_mowy/zamiana]]')
+                        h.push(myComment='automatyczne porządkowanie części mowy wg [[Wikipedysta:AlkamidBot/części_mowy/zamiana]]')

@@ -13,18 +13,18 @@ from klasa import *
 def main():
 
 	site = pywikibot.getSite()
-	cat = Category(site,u'Kategoria:francuski (indeks)')
-	lista = pagegenerators.CategorizedPageGenerator(cat, start=u'tænia')
+	cat = Category(site,'Kategoria:francuski (indeks)')
+	lista = pagegenerators.CategorizedPageGenerator(cat, start='tænia')
 	
 	for a in lista:
 		h = Haslo(a.title())
 		if h.typ == 3:
 			h.sekcje()
 			for c in h.lista_sekcje:
-				if u'francuski' in c.jezyk:
-					print u'\n' + h.tytul
+				if 'francuski' in c.jezyk:
+					print('\n' + h.tytul)
 					c.pola()
-					print c.wymowa.tresc
+					print(c.wymowa.tresc)
 
 if __name__ == '__main__':
 	try:

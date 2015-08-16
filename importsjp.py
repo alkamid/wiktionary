@@ -3,9 +3,9 @@
 
 import codecs
 import pywikibot
-import urllib
-import urllib2
-import httplib
+import urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.error, urllib.parse
+import http.client
 import re
 import collections
 import locale
@@ -17,13 +17,13 @@ from sjpClass import kategoriaSlowa, checkHistory
 
 
 def checkFlexSJP(forma):
-	enie = [[u'enia', u'enie', u'eniu'], [u'eniem', u'eniom'], [u'eniach', u'eniami']]
-	anie = [[u'ania', u'anie', u'aniu'], [u'aniem', u'aniom'], [u'aniach', u'aniami']]
-	cie = [[u'cia', u'cie', u'ciu'], [u'ciem', u'ciom'], [u'ciach', u'ciami']]
+	enie = [['enia', 'enie', 'eniu'], ['eniem', 'eniom'], ['eniach', 'eniami']]
+	anie = [['ania', 'anie', 'aniu'], ['aniem', 'aniom'], ['aniach', 'aniami']]
+	cie = [['cia', 'cie', 'ciu'], ['ciem', 'ciom'], ['ciach', 'ciami']]
 	#parser = etree.HTMLParser()
 	while True:
 		try:
-			web = html.parse('http://www.sjp.pl/%s' % urllib.quote(forma.encode('utf-8')))
+			web = html.parse('http://www.sjp.pl/%s' % urllib.parse.quote(forma.encode('utf-8')))
 		except IOError:
 			return None
 		break
@@ -38,28 +38,28 @@ def checkFlexSJP(forma):
 	search = None
 
 	for elem in analyzed:
-		if elem[2][2] and u'ger:' in elem[2][2]:
+		if elem[2][2] and 'ger:' in elem[2][2]:
 			search = 1
 	
 	if search and any('j' in s for s in flagi) or any('UV' in s for s in flagi) or any('i' in s for s in flagi):
 		if forma[-3:] in cie[0]:
-			return forma[:-3] + u'cie'
+			return forma[:-3] + 'cie'
 		elif forma[-4:] in anie[0]:
-			return forma[:-4] + u'anie'
+			return forma[:-4] + 'anie'
 		elif forma[-4:] in enie[0]:
-			return forma[:-4] + u'enie'
+			return forma[:-4] + 'enie'
 		elif forma[-4:] in cie[1]:
-			return forma[:-4] + u'cie'
+			return forma[:-4] + 'cie'
 		elif forma[-5:] in anie[1]:
-			return forma[:-5] + u'anie'
+			return forma[:-5] + 'anie'
 		elif forma[-5:] in enie[1]:
-			return forma[:-5] + u'enie'
+			return forma[:-5] + 'enie'
 		elif forma[-5:] in cie[2]:
-			return forma[:-5] + u'cie'
+			return forma[:-5] + 'cie'
 		elif forma[-6:] in anie[2]:
-			return forma[:-6] + u'anie'
+			return forma[:-6] + 'anie'
 		elif forma[-6:] in enie[2]:
-			return forma[:-6] + u'enie'
+			return forma[:-6] + 'enie'
 	elif len(podstawowa) == 1:
 		return podstawowa[0]
 	else:
@@ -71,7 +71,7 @@ class HasloSJP():
 		self.words = []
 		self.numWords = 0
 		self.type = 1
-		self.problems = {u'kilka_znaczen' : 0, u'kilka_form_odmiany' : 0, u'synonimy' : 0, u'obcy' : 0, u'ndm' : 0, u'rodzaj' : 0, u'brak_znaczenia' : 0, u'przymiotnik_od' : 0}
+		self.problems = {'kilka_znaczen' : 0, 'kilka_form_odmiany' : 0, 'synonimy' : 0, 'obcy' : 0, 'ndm' : 0, 'rodzaj' : 0, 'brak_znaczenia' : 0, 'przymiotnik_od' : 0}
 		
 		if not grabExisting:	
 			try: ifExists = Haslo(a)
@@ -80,7 +80,7 @@ class HasloSJP():
 			else:
 				if ifExists.type == 3:
 					for b in ifExists.listLangs:
-						if u'jêzyk polski' in b.langLong or u'termin obcy' in b.langLong or u'u¿ycie miêdzynarodowe' in b.langLong:
+						if 'jêzyk polski' in b.langLong or 'termin obcy' in b.langLong or 'u¿ycie miêdzynarodowe' in b.langLong:
 							self.type = 0
 					
 		if self.type:
@@ -95,13 +95,13 @@ class HasloSJP():
 		parser = etree.HTMLParser()
 
 		while True:
-			try: sjpsite = urllib2.urlopen('http://www.sjp.pl/%s' % urllib.quote(a.encode('utf-8')))
-			except urllib2.HTTPError:
-				print u'httperror'
+			try: sjpsite = urllib.request.urlopen('http://www.sjp.pl/%s' % urllib.parse.quote(a.encode('utf-8')))
+			except urllib.error.HTTPError:
+				print('httperror')
 				return 0
-			except urllib2.URLError:
+			except urllib.error.URLError:
 				continue
-			except httplib.BadStatusLine:
+			except http.client.BadStatusLine:
 				continue
 			break
 	
@@ -122,8 +122,8 @@ class HasloSJP():
 		self.numWords = len(naglowek)
         	
 		if tables == []:
-			print u'jestem'
-			print u'nie znaleziono strony na sjp.pl'
+			print('jestem')
+			print('nie znaleziono strony na sjp.pl')
 			return 0
 		
                 
@@ -131,9 +131,9 @@ class HasloSJP():
 			xp_title = naglowek[j]
 			
 			if xp_title == a:
-				temp = Word(unicode(xp_title))
+				temp = Word(str(xp_title))
 				temp_mean = web.xpath("//p[@style='margin-top: .5em; font-size: medium; max-width: 32em; '][%d]/text()" % (j+1))
-				mean = u'<br />'.join(temp_mean)
+				mean = '<br />'.join(temp_mean)
 				temp.addTempMean(mean)
 				#temp.addInGames(xp_inGames[j].text)
 				temp.addDictionary(xp_dictionary[j].text)
@@ -159,19 +159,19 @@ class HasloSJP():
 		#poniï¿½ej lista znaczeï¿½ odrzucanych od razu - moï¿½na siï¿½ zastanowiï¿½ nad imionami
 		for a in self.words:
 			s_osoba = re.search(re_osoba, a.tempMean)
-			if a.tempMean == u'' or a.tempMean == u'(brak znaczenia)':
-				a.tempMean = u''
+			if a.tempMean == '' or a.tempMean == '(brak znaczenia)':
+				a.tempMean = ''
 				self.problems['brak_znaczenia'] = 1
-			if s_osoba or u'nazwisko' in a.tempMean or u'wie¶ w' in a.tempMean or u'imiê mêskie' in a.tempMean or u'imiê ¿eñskie' in a.tempMean:
+			if s_osoba or 'nazwisko' in a.tempMean or 'wie¶ w' in a.tempMean or 'imiê mêskie' in a.tempMean or 'imiê ¿eñskie' in a.tempMean:
 				a.addMean(None)
 				a.noMean = 1
 			else:
-				re_czytaj = re.compile(ur'\[czytaj\:(.*?)\]\s*')
+				re_czytaj = re.compile(r'\[czytaj\:(.*?)\]\s*')
 				s_czytaj = re.search(re_czytaj, a.tempMean)
 				if s_czytaj:
 					a.obcy = 1
 					a.wymowa = s_czytaj.group(1).strip()
-					a.tempMean = re.sub(re_czytaj, u'', a.tempMean)
+					a.tempMean = re.sub(re_czytaj, '', a.tempMean)
 				s_mean = re.findall(re_mean, a.tempMean)
 				if s_mean:
 					for b in range(len(s_mean)):
@@ -184,25 +184,25 @@ class HasloSJP():
 					a.addMean(tempMean)
 		
 	def checkProblems(self):
-		self.problems[u'np'] = 0
-		self.problems[u'zwrotny'] = 0
+		self.problems['np'] = 0
+		self.problems['zwrotny'] = 0
 		for a in self.words:
 			if len(a.meanings) > 1:
-				self.problems[u'kilka_znaczen'] = 1
-			elif len(a.meanings) == 1 and a.meanings[0] and u'{{przym}} od [[' in a.meanings[0].definition:
-				self.problems[u'przymiotnik_od'] = 1
+				self.problems['kilka_znaczen'] = 1
+			elif len(a.meanings) == 1 and a.meanings[0] and '{{przym}} od [[' in a.meanings[0].definition:
+				self.problems['przymiotnik_od'] = 1
 			for b in a.meanings:
-				if b and u'np.' in b.definition:
-					self.problems[u'np'] = 1
-				if b and 'czasownik' in a.typeText and (u'[[%s]] [[siê]]' % (a.title) in b.definition or u'[[%s siê]]' % (a.title) in b.definition):
-					self.problems[u'zwrotny'] = 1
-					print u'problems zwrotny'
+				if b and 'np.' in b.definition:
+					self.problems['np'] = 1
+				if b and 'czasownik' in a.typeText and ('[[%s]] [[siê]]' % (a.title) in b.definition or '[[%s siê]]' % (a.title) in b.definition):
+					self.problems['zwrotny'] = 1
+					print('problems zwrotny')
 				if b and b.synonyms:
-					self.problems[u'synonimy'] = 1
+					self.problems['synonimy'] = 1
 			if a.obcy:
-				self.problems[u'obcy'] = 1
+				self.problems['obcy'] = 1
 			if a.czescMowy == 2:
-				self.problems[u'ndm'] = 1	
+				self.problems['ndm'] = 1	
 
 		
 class Word():
@@ -211,15 +211,15 @@ class Word():
 		self.flags = []
 		self.meanings = []
 		self.czescMowy = 0 # mo¿liwo¶ci: 1 rzeczownik, 2 ndm (nie wiadomo), 3 przymiotnik, 4 czasownik
-		self.wikitable = u''
-		self.typeText = u'{{brak|czê¶æ mowy}}'
+		self.wikitable = ''
+		self.typeText = '{{brak|czê¶æ mowy}}'
 		self.blpm = 0
 		self.noMean = 0
 		self.morfeusz = 0
-		self.morfeuszType = u''
+		self.morfeuszType = ''
 		self.morfeuszAmbig = 0
 		self.added = 0 # zmienna kontroluj±ca pojawienie siê flagi "rêcznie dodane"
-		self.wymowa = u''
+		self.wymowa = ''
 		self.obcy = 0
 		
 		
@@ -244,37 +244,37 @@ class Word():
 	def flexTable(self, odmianaOlafa):
 		tablesg = {"nom": [], "gen": [], "dat": [], "acc": [], "inst": [], "loc": [], "voc": []}
 		tablepl = {"nom": [], "gen": [], "dat": [], "acc": [], "inst": [], "loc": [], "voc": []}
-		flagsSubs = [u'M', u'N', u'T', u'U', u'V', 'O', 'Q', 'D', 'o', 'q', 's', 'P', 'R', 'S', 'C', 'Z', 'w', 't', 'z', 'm', 'n']
-		flagsAdj = [u'XYbx', u'Xbx', u'XYbxy', u'XYbx~', u'XYb(-b) cx', u'Xbx~', u'XYbxy~']
-		flagsVerb = [u'B', u'H']
+		flagsSubs = ['M', 'N', 'T', 'U', 'V', 'O', 'Q', 'D', 'o', 'q', 's', 'P', 'R', 'S', 'C', 'Z', 'w', 't', 'z', 'm', 'n']
+		flagsAdj = ['XYbx', 'Xbx', 'XYbxy', 'XYbx~', 'XYb(-b) cx', 'Xbx~', 'XYbxy~']
+		flagsVerb = ['B', 'H']
 		blp = 0
 		blm = 1 # kontrola liczby mnogiej - domy¶lnie jej nie ma
 		ambig = 0 # kontrola formy podstawowej - je¿eli mo¿e byæ wiêcej ni¿ jedn± czê¶ci± mowy, pomijamy generowanie odmiany
 		type = None
 		
-		if self.flex == u'nie':
-			self.wikitable = u'{{nieodm}}'
-			self.typeText = u'{{brak|czê¶æ mowy}}'
+		if self.flex == 'nie':
+			self.wikitable = '{{nieodm}}'
+			self.typeText = '{{brak|czê¶æ mowy}}'
 			self.czescMowy = 2
 		else:
-			tempFlag = u''
+			tempFlag = ''
 			for a in self.flags:
 				tempFlag += a[0]
 				
 			for a in flagsSubs:
 				if a in tempFlag:
-					type = u'subst'
-					print a					
+					type = 'subst'
+					print(a)					
 					break
 			
 			for a in flagsAdj:
 				if tempFlag == a:
-					type = u'adj'
+					type = 'adj'
 					break
 					
 			for a in flagsVerb:
 				if a in tempFlag:
-					type = u'verb'
+					type = 'verb'
 					break
 			
 			primaryTest = analyse(self.title, dag=1)
@@ -291,18 +291,18 @@ class Word():
 				if not ambig:
 					self.morfeuszType = prev
 				else:
-					print u'morfeusz ambig'
+					print('morfeusz ambig')
 
 			else:
 				self.morfeusz = 0
-				print u'morfeusz nie zna'
+				print('morfeusz nie zna')
 				
 			for a in self.flags:
-				if u'~' in a[0]:
+				if '~' in a[0]:
 					self.added = 1
 			
-			if type == u'':
-				brak = b.title + u'\n'
+			if type == '':
+				brak = b.title + '\n'
 				file = open('braki.txt', 'a')
 				file.write(brak.encode( "utf-8" ))
 				file.close
@@ -310,7 +310,7 @@ class Word():
 			if type == 'subst' and not self.morfeuszAmbig and self.morfeusz: 
 				self.czescMowy = 1
 				if len(self.flags):
-					self.flags.append([u'1', [self.title]]) # dodanie s³owa podstawowego jako flagi "1", ¿eby Morfeusz uwzglêdnia³ te¿ formê podst.
+					self.flags.append(['1', [self.title]]) # dodanie s³owa podstawowego jako flagi "1", ¿eby Morfeusz uwzglêdnia³ te¿ formê podst.
 				
 				lowerCase = self.title[0].lower() + self.title[1:] # morfeusz formê podstawow± zawsze zaczyna od ma³ej litery - ten trik pozwala na szukanie odmiany nazw w³asnych
 				temp = ''
@@ -318,7 +318,7 @@ class Word():
 				depr = ''
 				countGen = {"m1" : 0, "m2" : 0, "m3" : 0, "f" : 0, "n1" : 0, "n2" : 0, "p1" : 0, "p2" : 0, "p3" : 0} # zliczanie rodzajów zwróconych przez Morfeusza
 				
-				genflag = u''
+				genflag = ''
 				genflag = genFromFlags(self)
 				
 				for a in self.flags:
@@ -330,11 +330,11 @@ class Word():
 								morf = c[2][2].split(':')
 								if (morf[0] == 'subst' or morf[0] == 'depr') and (c[2][1] == self.title or c[2][1] == lowerCase):
 									if morf[0] == 'subst' and morf[1] == 'sg':
-										if u'%s' % c[2][0] not in tablesg[u'%s' % morf[2]]:
-											tablesg[u'%s' % morf[2]].append(c[2][0])
+										if '%s' % c[2][0] not in tablesg['%s' % morf[2]]:
+											tablesg['%s' % morf[2]].append(c[2][0])
 									elif morf[0] == 'subst' and morf[1] == 'pl':
-										if u'%s' % c[2][0] not in tablepl[u'%s' % morf[2]]:
-											tablepl[u'%s' % morf[2]].append(c[2][0])
+										if '%s' % c[2][0] not in tablepl['%s' % morf[2]]:
+											tablepl['%s' % morf[2]].append(c[2][0])
 									if morf[0] == 'depr':
 										depr = c[2][0]
 									countGen['%s' % morf[3]] += 1
@@ -352,9 +352,9 @@ class Word():
 
 				if depr != '':
 					if depr not in tablepl['nom']:
-						tablepl['nom'].append(u'{{depr}} ' + depr)
+						tablepl['nom'].append('{{depr}} ' + depr)
 					if depr not in tablepl['voc']:
-						tablepl['voc'].append(u'{{depr}} ' + depr)
+						tablepl['voc'].append('{{depr}} ' + depr)
 				#(w fazie rozwojowej) poni¿ej sprawdzanie, czy w tabelce mo¿e znajdowaæ siê w±tpliwa odmiana
 
 				'''if len(tablepl['nom']) > 1:
@@ -373,7 +373,7 @@ class Word():
 							self.problems['kilka_form_odmiany'] = 1
 					'''
 				cnt = 0 # licznik pokazuj±cy czy znaleziono wiêcej ni¿ 1 rodzaj
-				found = u''
+				found = ''
 				sum = 0
 				for a in countGen:
 					sum += countGen[a]
@@ -384,80 +384,80 @@ class Word():
 						cnt += 1
 				
 				if cnt != 1:
-					self.typeText = u'\'\'rzeczownik, \'\'{{brak|rodzaj}}'
+					self.typeText = '\'\'rzeczownik, \'\'{{brak|rodzaj}}'
 					#self.problems[u'rodzaj'] = 1
 					
 				else:
-					if found == u'm1':
-						self.typeText = u'\'\'rzeczownik, rodzaj mêskoosobowy\'\''
-					elif found == u'm2':
-						self.typeText = u'\'\'rzeczownik, rodzaj mêskozwierzêcy\'\''
-					elif found == u'm3':
-						self.typeText = u'\'\'rzeczownik, rodzaj mêskorzeczowy\'\''
-					elif found == u'f':
-						self.typeText = u'\'\'rzeczownik, rodzaj ¿eñski\'\''
-					elif found == u'n2':
-						self.typeText = u'\'\'rzeczownik, rodzaj nijaki\'\''
+					if found == 'm1':
+						self.typeText = '\'\'rzeczownik, rodzaj mêskoosobowy\'\''
+					elif found == 'm2':
+						self.typeText = '\'\'rzeczownik, rodzaj mêskozwierzêcy\'\''
+					elif found == 'm3':
+						self.typeText = '\'\'rzeczownik, rodzaj mêskorzeczowy\'\''
+					elif found == 'f':
+						self.typeText = '\'\'rzeczownik, rodzaj ¿eñski\'\''
+					elif found == 'n2':
+						self.typeText = '\'\'rzeczownik, rodzaj nijaki\'\''
 							
 				
-				self.wikitable += u'{{odmiana-rzeczownik-polski\n'
+				self.wikitable += '{{odmiana-rzeczownik-polski\n'
 				if not blp:
-					self.wikitable += u'|Mianownik lp = %s\n|Dope³niacz lp = %s\n|Celownik lp = %s\n|Biernik lp = %s\n|Narzêdnik lp = %s\n|Miejscownik lp = %s\n|Wo³acz lp = %s\n' % ("/".join(tablesg['nom']), "/".join(tablesg['gen']), "/".join(tablesg['dat']), "/".join(tablesg['acc']), "/".join(tablesg['inst']), "/".join(tablesg['loc']), "/".join(tablesg['voc']))
+					self.wikitable += '|Mianownik lp = %s\n|Dope³niacz lp = %s\n|Celownik lp = %s\n|Biernik lp = %s\n|Narzêdnik lp = %s\n|Miejscownik lp = %s\n|Wo³acz lp = %s\n' % ("/".join(tablesg['nom']), "/".join(tablesg['gen']), "/".join(tablesg['dat']), "/".join(tablesg['acc']), "/".join(tablesg['inst']), "/".join(tablesg['loc']), "/".join(tablesg['voc']))
 				else:
 					self.blpm = 1
 				if not blm:
-					self.wikitable += u'|Mianownik lm = %s\n|Dope³niacz lm = %s\n|Celownik lm = %s\n|Biernik lm = %s\n|Narzêdnik lm = %s\n|Miejscownik lm = %s\n|Wo³acz lm = %s\n' % ("/".join(tablepl['nom']), "/".join(tablepl['gen']), "/".join(tablepl['dat']), "/".join(tablepl['acc']),  "/".join(tablepl['inst']), "/".join(tablepl['loc']), "/".join(tablepl['voc']))
+					self.wikitable += '|Mianownik lm = %s\n|Dope³niacz lm = %s\n|Celownik lm = %s\n|Biernik lm = %s\n|Narzêdnik lm = %s\n|Miejscownik lm = %s\n|Wo³acz lm = %s\n' % ("/".join(tablepl['nom']), "/".join(tablepl['gen']), "/".join(tablepl['dat']), "/".join(tablepl['acc']),  "/".join(tablepl['inst']), "/".join(tablepl['loc']), "/".join(tablepl['voc']))
 				else:
 					self.blpm = 2
-				self.wikitable += u'}}'
+				self.wikitable += '}}'
 			
-			elif type == u'subst' and not self.morfeusz:
+			elif type == 'subst' and not self.morfeusz:
 				self.czescMowy = 1
 				gen = genFromFlags(self)
-				if gen == u'm':
-					self.typeText = u'\'\'rzeczownik, rodzaj mêski\'\''
-				elif gen == u'f':
-					self.typeText = u'\'\'rzeczownik, rodzaj ¿eñski\'\''
-				elif gen == u'n':
-					self.typeText = u'\'\'rzeczownik, rodzaj nijaki\'\''
+				if gen == 'm':
+					self.typeText = '\'\'rzeczownik, rodzaj mêski\'\''
+				elif gen == 'f':
+					self.typeText = '\'\'rzeczownik, rodzaj ¿eñski\'\''
+				elif gen == 'n':
+					self.typeText = '\'\'rzeczownik, rodzaj nijaki\'\''
 				else:
-					self.typeText = u'\'\'rzeczownik\'\''
+					self.typeText = '\'\'rzeczownik\'\''
 					
-			elif type == u'adj':
+			elif type == 'adj':
 				self.czescMowy = 3
 				countAdj = 0
-				self.typeText = u'\'\'przymiotnik\'\''
-				if self.title[-1] == u'y' or self.title[-1] == u'i':
-					self.wikitable = u'{{odmiana-przymiotnik-polski|%s|bardziej %s}}' % (self.title, self.title)
-			elif type == u'verb':
+				self.typeText = '\'\'przymiotnik\'\''
+				if self.title[-1] == 'y' or self.title[-1] == 'i':
+					self.wikitable = '{{odmiana-przymiotnik-polski|%s|bardziej %s}}' % (self.title, self.title)
+			elif type == 'verb':
 				self.czescMowy = 4
-				self.typeText = u'\'\'czasownik\'\''
+				self.typeText = '\'\'czasownik\'\''
 				temp = wezOdmiane(self, odmianaOlafa)
 				if temp:
 					self.wikitable += temp[0]
 					if temp[1]:
-						self.typeText = u'\'\'' + temp[1] + u'\'\''
-						if u'czasownik' in temp[1] and u'przechodni' in temp[1]:
-							self.typeText += u' ({{'
-							if u'niedokonany' not in temp[1]:
-								self.typeText += u'n'
-							self.typeText += u'dk}} {{brak|aspekt}})'
+						self.typeText = '\'\'' + temp[1] + '\'\''
+						if 'czasownik' in temp[1] and 'przechodni' in temp[1]:
+							self.typeText += ' ({{'
+							if 'niedokonany' not in temp[1]:
+								self.typeText += 'n'
+							self.typeText += 'dk}} {{brak|aspekt}})'
 							
 				
-			elif type == u'adv':
+			elif type == 'adv':
 				self.czescMowy = 5
-				self.typeText = u'\'\'przys³ówek\'\''
+				self.typeText = '\'\'przys³ówek\'\''
 				
 				
 			else:
-				print u'czesc mowy != rzeczownik or przymiotnik or czasownik'
+				print('czesc mowy != rzeczownik or przymiotnik or czasownik')
 		
 	
 
 class OdmianaOlafa():
 	def __init__(self):
 		site = pywikibot.getSite()
-		wzorceOdmianyWiki=pywikibot.Page(site, u'Wikipedysta:Olafbot/odmiana/wzorce')
+		wzorceOdmianyWiki=pywikibot.Page(site, 'Wikipedysta:Olafbot/odmiana/wzorce')
 		text = wzorceOdmianyWiki.get()
 		self.wzorce = collections.defaultdict()
 		self.wzorce_id = collections.defaultdict()
@@ -467,14 +467,14 @@ class OdmianaOlafa():
 		sjp_pl = None
 		numer = 0
 		lista = []
-		lista = text.split(u'\n')
+		lista = text.split('\n')
 		for a in lista:
 			if len(a)<1:
 				continue
-			if a[0]!=u'|':
+			if a[0]!='|':
 				continue
 			
-			if (len(a)>1 and a[1]==u'-'):
+			if (len(a)>1 and a[1]=='-'):
 				numer = 0
 				id=None
 				sjp_pl=None
@@ -489,10 +489,10 @@ class OdmianaOlafa():
 				slow=a[1:]
 				if len(slow)<1:
 					continue
-				if slow[0] == u'|' and len(slow)>1:
+				if slow[0] == '|' and len(slow)>1:
 					slow=slow[1:]
 				slow=slow.strip()
-				slow = slow.replace(u'\\n', u'\n')
+				slow = slow.replace('\\n', '\n')
 
 				self.wzorce[sjp_pl]=slow
 				self.wzorce_id[sjp_pl]=id
@@ -504,53 +504,53 @@ def wezOdmiane(word, odmOlafa):
 	slowo = word.title
 	odmiana = kodujOdmiane(word)
 	if (odmiana == None):
-		print u'brak w sjp'
+		print('brak w sjp')
 		return None
 	
 	wzorzec = None
 	try:
 		wzorzec = odmOlafa.wzorce[odmiana]
 	except KeyError:
-		print u'brak w tabeli'
+		print('brak w tabeli')
 	try:
 		id = odmOlafa.wzorce_id[odmiana]
 	except KeyError:
-		print u'brak id w tabeli'
+		print('brak id w tabeli')
 	try:
 		czescmowy = odmOlafa.wzorce_czescimowy[odmiana]
 	except KeyError:
-		print u'brak czesci mowy w tabeli'
+		print('brak czesci mowy w tabeli')
 	if wzorzec == None:
-		print u'brak wzorca w tabeli'
+		print('brak wzorca w tabeli')
 		return None
 	elif len(wzorzec)==0:
-		print u'nieuzupelniony wzorzec'
+		print('nieuzupelniony wzorzec')
 		return None
 	
 	odj=0
 	k=0
-	s=odmiana.index(u'~')
+	s=odmiana.index('~')
 	if s>=0:
-		k=odmiana.index(u',')
+		k=odmiana.index(',')
 		k=k-s
 		if k<0:
 			k=len(odmiana)
 		odj=k-s-1
 		
 	if (odj>len(slowo) or s>=0 and not slowo[len(slowo)-odj:]==odmiana[s+1:k]):
-		print slowo
-		print odmiana[s+1:k]
+		print(slowo)
+		print(odmiana[s+1:k])
 		if odj<=len(slowo):
-			print slowo[len(slowo)-odj:]
-		print u'inna koncowka!'
+			print(slowo[len(slowo)-odj:])
+		print('inna koncowka!')
 		return None
 	temat = slowo[:len(slowo)-odj]
-	slowo2=u'			   ' + slowo
+	slowo2='			   ' + slowo
 	temat1=slowo2[:len(slowo2)-odj-1].strip()
 	temat2=slowo2[:len(slowo2)-odj-2].strip()
-	wzorzec = wzorzec.replace(u'Q2', temat2)
-	wzorzec = wzorzec.replace(u'Q1', temat1)
-	wzorzec = wzorzec.replace(u'Q', temat)
+	wzorzec = wzorzec.replace('Q2', temat2)
+	wzorzec = wzorzec.replace('Q1', temat1)
+	wzorzec = wzorzec.replace('Q', temat)
 	wynik = wzorzec
 	return [wynik, czescmowy]
 
@@ -558,7 +558,7 @@ def kodujOdmiane(word,rdzen=0):
 	slowo = word.title
 	if (len(slowo)>1 and not slowo[0] == slowo[0].lower()):
 		return None
-	if (len(slowo)>2 and slowo[:-2] == u'zm'):
+	if (len(slowo)>2 and slowo[:-2] == 'zm'):
 		return "zakonczone na -zm"
     
 	odmianaTemp = []
@@ -580,7 +580,7 @@ def kodujOdmiane(word,rdzen=0):
 	n=0
 	while(n<len(odmiana)):
 		odm = odmiana[n]
-		if (len(odm)>3 and odm[:3] == u'nie'):
+		if (len(odm)>3 and odm[:3] == 'nie'):
 			odmiana.remove(odm)
 			n-=1
 		n+=1
@@ -607,16 +607,16 @@ def kodujOdmiane(word,rdzen=0):
 		wynik.append(wzor[:rdz])
 	for i in range(len(odmiana)):
 		if i>0:
-			wynik.append(u', ')
-		wynik.append(u'~')
+			wynik.append(', ')
+		wynik.append('~')
 		wynik.append(odmiana[i][rdz:])
 	#print u''.join(wynik)
-	return u''.join(wynik)
+	return ''.join(wynik)
 			
 class Meaning():
 	def __init__(self, temp_definition):
 		re_definition = re.compile('(.*?)(;(?! [a-z]\))|$)')
-		if u'a)' in temp_definition or u'b)' in temp_definition or u'c)' in temp_definition:
+		if 'a)' in temp_definition or 'b)' in temp_definition or 'c)' in temp_definition:
 			self.synonyms = None
 			s_definition = temp_definition
 		else:
@@ -640,7 +640,7 @@ class Meaning():
 			for i in range(len(tab_synonyms)):
 				tab_synonyms[i] = tab_synonyms[i].strip()
 				if ' ' not in tab_synonyms[i]:
-					tab_synonyms_temp.append(u'[[%s]]' % tab_synonyms[i])
+					tab_synonyms_temp.append('[[%s]]' % tab_synonyms[i])
 		
 			if tab_synonyms_temp:
 				return tab_synonyms_temp
@@ -653,35 +653,35 @@ def wikipage(hasloSJP, obrazki):
 	
 	ref_sjp = 0
 	
-	wstep = u''
-	wymowa = u''
-	znaczenia = u''
-	odmiana = u''
-	przyklady = u''
-	skladnia = u''
-	kolokacje = u''
-	synonimy = u''
-	antonimy = u''
-	pokrewne = u''
-	frazeologiczne = u''
-	etymologia = u''
-	uwagi = u''
-	zrodla = u''
+	wstep = ''
+	wymowa = ''
+	znaczenia = ''
+	odmiana = ''
+	przyklady = ''
+	skladnia = ''
+	kolokacje = ''
+	synonimy = ''
+	antonimy = ''
+	pokrewne = ''
+	frazeologiczne = ''
+	etymologia = ''
+	uwagi = ''
+	zrodla = ''
 	
-	wymowa_szablon = u'\n{{wymowa}}'
-	znaczenia_szablon = u'\n{{znaczenia}}'
-	odmiana_szablon = u'\n{{odmiana}}'
-	przyklady_szablon = u'\n{{przyk³ady}}\n: (1.1)'
-	skladnia_szablon = u'\n{{sk³adnia}}'
-	kolokacje_szablon = u'\n{{kolokacje}}'
-	synonimy_szablon = u'\n{{synonimy}}'
-	antonimy_szablon = u'\n{{antonimy}}'
-	pokrewne_szablon = u'\n{{pokrewne}}'
-	frazeologiczne_szablon = u'\n{{frazeologia}}'
-	etymologia_szablon = u'\n{{etymologia}}'
-	uwagi_szablon = u'\n{{uwagi}}'
-	tlumaczenia_szablon = u'\n{{t³umaczenia}}'
-	zrodla_szablon = u'\n{{¼ród³a}}'
+	wymowa_szablon = '\n{{wymowa}}'
+	znaczenia_szablon = '\n{{znaczenia}}'
+	odmiana_szablon = '\n{{odmiana}}'
+	przyklady_szablon = '\n{{przyk³ady}}\n: (1.1)'
+	skladnia_szablon = '\n{{sk³adnia}}'
+	kolokacje_szablon = '\n{{kolokacje}}'
+	synonimy_szablon = '\n{{synonimy}}'
+	antonimy_szablon = '\n{{antonimy}}'
+	pokrewne_szablon = '\n{{pokrewne}}'
+	frazeologiczne_szablon = '\n{{frazeologia}}'
+	etymologia_szablon = '\n{{etymologia}}'
+	uwagi_szablon = '\n{{uwagi}}'
+	tlumaczenia_szablon = '\n{{t³umaczenia}}'
+	zrodla_szablon = '\n{{¼ród³a}}'
 	
 	i = 1
 	firstWord = hasloSJP.words[0]
@@ -689,23 +689,23 @@ def wikipage(hasloSJP, obrazki):
 		if word.title == firstWord.title:
 			j = 1
 			if word.meanings[0]:
-				znaczenia += u'\n%s' % (word.typeText)
-				if word.blpm == 1 or word.blpm == 2 or word.wikitable != u'':
-					odmiana += u'\n: (%d) ' % (i)
+				znaczenia += '\n%s' % (word.typeText)
+				if word.blpm == 1 or word.blpm == 2 or word.wikitable != '':
+					odmiana += '\n: (%d) ' % (i)
 				if word.blpm == 1:
-					odmiana += u'{{blp}} '
+					odmiana += '{{blp}} '
 				elif word.blpm == 2:
-					odmiana += u'{{blm}} '
+					odmiana += '{{blm}} '
 				odmiana += word.wikitable
 			for a in word.meanings:
 				if a:
 					a.definition = a.definition.strip()
-					znaczenia += u'\n: (%d.%d) %s' % (i, j, a.definition)
+					znaczenia += '\n: (%d.%d) %s' % (i, j, a.definition)
 					if not hasloSJP.problems['brak_znaczenia'] and not (hasloSJP.problems['przymiotnik_od'] and len(word.meanings) == 1):
-						znaczenia += u'<ref name=sjp.pl/>'
+						znaczenia += '<ref name=sjp.pl/>'
 						ref_sjp = 1
 					if a.synonyms:
-						synonimy += u'\n: (%d.%d) ' % (i, j) + ", ".join(a.synonyms)
+						synonimy += '\n: (%d.%d) ' % (i, j) + ", ".join(a.synonyms)
 					j += 1
 					
 				elif not a and i != 1:
@@ -714,14 +714,14 @@ def wikipage(hasloSJP, obrazki):
 					return 0
 			i += 1
 		
-	if word.obcy and u'±' not in firstWord.title and u'ê' not in firstWord.title and u'ó' not in firstWord.title and u'ñ' not in firstWord.title and u'æ' not in firstWord.title and u'¶' not in firstWord.title:
-		naglowek = u'== %s ({{termin obcy w jêzyku polskim}}) ==' % firstWord.title
-		wymowa = u' {{ortograficzny|%s}}' % firstWord.wymowa
+	if word.obcy and '±' not in firstWord.title and 'ê' not in firstWord.title and 'ó' not in firstWord.title and 'ñ' not in firstWord.title and 'æ' not in firstWord.title and '¶' not in firstWord.title:
+		naglowek = '== %s ({{termin obcy w jêzyku polskim}}) ==' % firstWord.title
+		wymowa = ' {{ortograficzny|%s}}' % firstWord.wymowa
 	elif word.obcy:
-		naglowek = u'== %s ({{jêzyk polski}}) ==' % firstWord.title
-		wymowa = u' {{ortograficzny|%s}}' % firstWord.wymowa
+		naglowek = '== %s ({{jêzyk polski}}) ==' % firstWord.title
+		wymowa = ' {{ortograficzny|%s}}' % firstWord.wymowa
 	else:
-		naglowek = u'== %s ({{jêzyk polski}}) ==' % firstWord.title
+		naglowek = '== %s ({{jêzyk polski}}) ==' % firstWord.title
 		
 	
 	try: obrazki[firstWord.title]
@@ -729,7 +729,7 @@ def wikipage(hasloSJP, obrazki):
 		pass
 	else:
 		for a in obrazki[firstWord.title]:
-			wstep += u'\n' + a
+			wstep += '\n' + a
 	znaczenia = znaczenia_szablon + znaczenia
 	odmiana = odmiana_szablon + odmiana
 
@@ -740,21 +740,21 @@ def wikipage(hasloSJP, obrazki):
         synonimy = synonimy_szablon + synonimy
 	if synonimy == synonimy_szablon and hasloSJP.problems['brak_znaczenia']:
 		hasloSJP.problems['brak_znaczenia'] = 2
-	przyklady = przyklady_szablon + u' [%s szukaj przyk³adów w korpusie]' % (generateConcordationsLink(firstWord.title))
-	kolokacje = kolokacje_szablon + u' [%s sprawd¼ kolokacje w korpusie]' % (generateCollocationsLink(firstWord.title))
+	przyklady = przyklady_szablon + ' [%s szukaj przyk³adów w korpusie]' % (generateConcordationsLink(firstWord.title))
+	kolokacje = kolokacje_szablon + ' [%s sprawd¼ kolokacje w korpusie]' % (generateCollocationsLink(firstWord.title))
 	derived = derivedWordsLink(firstWord.title)
 	pokrewne = pokrewne_szablon
 	if derived:
-		pokrewne = pokrewne + u' [%s sprawd¼ pokrewne w sjp.pl]' % (derived)
+		pokrewne = pokrewne + ' [%s sprawd¼ pokrewne w sjp.pl]' % (derived)
 	wymowa = wymowa_szablon + wymowa
 	zrodla = zrodla_szablon
 	if ref_sjp or synTemp[1]:
-		zrodla += u'\n<references>'
+		zrodla += '\n<references>'
 		if ref_sjp:
-			zrodla += u'\n<ref name=sjp.pl>{{sjp.pl|%s}}</ref>' % (firstWord.title)
+			zrodla += '\n<ref name=sjp.pl>{{sjp.pl|%s}}</ref>' % (firstWord.title)
 		if synTemp[1]:
-			zrodla += u'\n<ref name=synonimy>{{synonimy.ux.pl}}</ref>'
-		zrodla += u'\n</references>'
+			zrodla += '\n<ref name=synonimy>{{synonimy.ux.pl}}</ref>'
+		zrodla += '\n</references>'
 
 		
 	finalText = naglowek + wstep + wymowa + znaczenia + odmiana + przyklady + skladnia_szablon + kolokacje + synonimy + antonimy_szablon + pokrewne + frazeologiczne_szablon + etymologia_szablon + uwagi_szablon + tlumaczenia_szablon + zrodla
@@ -766,15 +766,15 @@ def wikipage(hasloSJP, obrazki):
 		
 
 def morfAnalyse(word):
-	if word == u'':
-		return [None, u'', None]
+	if word == '':
+		return [None, '', None]
 	analiza = analyse(word, dag=1)
 	numWords = analiza[-1][1]
 	count = [] # tablica z zerami do wy³apywania ró¿nic w formach podstawowych
 	count_first = [] # tablica z zerami do ustawiania pierwszego elementu dla danego s³owa
 	found = 0
 	base = None
-	form = u''
+	form = ''
 	text = ''
 	for counter in range(numWords):
 		count.append(0)
@@ -782,7 +782,7 @@ def morfAnalyse(word):
 		seek_last = 0
 		
 		for a in analiza: #Morfeusz rozbija s³owa z "¶" na koñcu na co¶ + by¶ (wtedy w analizie pojawia siê oznakowanie "aglt"
-			if a[2][2] and u'aglt' in a[2][2]:
+			if a[2][2] and 'aglt' in a[2][2]:
 				count[counter] += 1
 		for for_helper, element in enumerate(analiza):		
 			#print element
@@ -833,83 +833,83 @@ def shortLink(base, flex):
 		return flex
 	else:
 		if flex.startswith(base):
-			suffix = flex.replace(base, u'')
-			return u'[[%s]]%s' % (base, suffix)
+			suffix = flex.replace(base, '')
+			return '[[%s]]%s' % (base, suffix)
 		else:
-			return u'[[%s|%s]]' % (base, flex)
+			return '[[%s|%s]]' % (base, flex)
 			
 def wikilink(phrase):
 	phrase = phrase.strip()
-	phraseTab = re.split(ur'\s*', phrase)
+	phraseTab = re.split(r'\s*', phrase)
 
-	dontAnalyse = [u'np.', u'm.in.', u'etc.', u'itd.', u'itp.', u'z', u'w', u'dziêki', u'co', u'po', u'pod', u'o']
+	dontAnalyse = ['np.', 'm.in.', 'etc.', 'itd.', 'itp.', 'z', 'w', 'dziêki', 'co', 'po', 'pod', 'o']
 	dontAnalyseNawias1 = []
 	dontAnalyseNawias2 = []
 	dontAnalyseNawiasy = []
 	dontAnalysePrzecinek = []
-	enieAnie = [u'eñ', u'enia', u'enie', u'eniu', u'eniem', u'eniom', u'eniach', u'eniami', u'añ', u'ania', u'anie', u'aniu', u'aniem', u'aniom', u'aniach', u'aniami']
-	dontAnalyse.append(u'od') # mo¿e byæ te¿ od 'oda'
-	dontAnalyse.append(u'byæ') # alt: "bycie"
-	dontAnalyse.append(u'lub') # alt: "lubiæ"
-	dontAnalyse.append(u'gdzie¶') # rozbija na "gdzie" i "by¶½"
-	dontAnalyse.append(u'albo') # alt: "alba"
-	dontAnalyse.append(u'jak') # alt: "jaka" (okrycie wierzchnie)
-	dontAnalyse.append(u'kawa') # alt: "Kawa" (?)
-	dontAnalyse.append(u'sposób') # alt: "sposobiæ½"
-	dontAnalyse.append(u'i¶æ') # alt: "i¶ciæ
+	enieAnie = ['eñ', 'enia', 'enie', 'eniu', 'eniem', 'eniom', 'eniach', 'eniami', 'añ', 'ania', 'anie', 'aniu', 'aniem', 'aniom', 'aniach', 'aniami']
+	dontAnalyse.append('od') # mo¿e byæ te¿ od 'oda'
+	dontAnalyse.append('byæ') # alt: "bycie"
+	dontAnalyse.append('lub') # alt: "lubiæ"
+	dontAnalyse.append('gdzie¶') # rozbija na "gdzie" i "by¶½"
+	dontAnalyse.append('albo') # alt: "alba"
+	dontAnalyse.append('jak') # alt: "jaka" (okrycie wierzchnie)
+	dontAnalyse.append('kawa') # alt: "Kawa" (?)
+	dontAnalyse.append('sposób') # alt: "sposobiæ½"
+	dontAnalyse.append('i¶æ') # alt: "i¶ciæ
 	for a in dontAnalyse:
-		dontAnalyseNawias1.append(u'(%s' % a)
-		dontAnalyseNawias2.append(u'%s)' % a)
-		dontAnalyseNawiasy.append(u'(%s)' % a)
-		dontAnalysePrzecinek.append(u'%s,' % a)
-	phraseOutput = u''
+		dontAnalyseNawias1.append('(%s' % a)
+		dontAnalyseNawias2.append('%s)' % a)
+		dontAnalyseNawiasy.append('(%s)' % a)
+		dontAnalysePrzecinek.append('%s,' % a)
+	phraseOutput = ''
 	
-	re_przymiotnikOd = re.compile(ur'^przymiotnik od\:\s*(.*?)\s*$')
+	re_przymiotnikOd = re.compile(r'^przymiotnik od\:\s*(.*?)\s*$')
 	s_przymiotnikOd = re.search(re_przymiotnikOd, phrase)
 	if s_przymiotnikOd:
-		phraseOutput += u'{{przym}} ''od'' [[%s]]' % s_przymiotnikOd.group(1)
+		phraseOutput += '{{przym}} ''od'' [[%s]]' % s_przymiotnikOd.group(1)
 	else:
 		n = len(phraseTab)
 		i = 0
 		while (i<n):
 			word = phraseTab[i]
 			if word in dontAnalyse:
-				phraseOutput += u' [[%s]]' % word
+				phraseOutput += ' [[%s]]' % word
 			elif word in dontAnalyseNawiasy:
-				phraseOutput += u' ([[%s]])' % word[1:-1]
+				phraseOutput += ' ([[%s]])' % word[1:-1]
 			elif word in dontAnalyseNawias1:
-				phraseOutput += u' ([[%s]]' % word[1:]
+				phraseOutput += ' ([[%s]]' % word[1:]
 			elif word in dontAnalyseNawias2:
-				phraseOutput += u' [[%s]])' % word[:-1]
+				phraseOutput += ' [[%s]])' % word[:-1]
 			elif word in dontAnalysePrzecinek:
-				phraseOutput += u' [[%s]],' % word[:-1]
-			elif word.endswith((u'enia', u'enie', u'eniu', u'eniem', u'eniom', u'eniach', u'eniami', u'ania', u'anie', u'aniu', u'aniem', u'aniom', u'aniach', u'aniami')):
+				phraseOutput += ' [[%s]],' % word[:-1]
+			elif word.endswith(('enia', 'enie', 'eniu', 'eniem', 'eniom', 'eniach', 'eniami', 'ania', 'anie', 'aniu', 'aniem', 'aniom', 'aniach', 'aniami')):
 				checked = checkFlexSJP(word)
 				if checked:
-					phraseOutput += u' %s' % shortLink(checked, word)
+					phraseOutput += ' %s' % shortLink(checked, word)
 				else:
-					phraseOutput += u' ' + shortLink(morfAnalyse(word)[0], morfAnalyse(word)[1])
-			elif i<n-1 and (phraseTab[i+1] == u'siê' or phraseTab[i+1] == u'siê,' or phraseTab[i+1] == u'siê.' or phraseTab[i+1] == u'siê;' or phraseTab[i+1] == u'siê)' or phraseTab[i+1] == u'siê),' or phraseTab[i+1] == u'siê);' or phraseTab[i+1] == u'siê).') and morfAnalyse(word)[2] and (u'inf:' in morfAnalyse(word)[2] or u'pact:' in morfAnalyse(word)[2]):
-				if phraseTab[i+1][-1] == u',' or phraseTab[i+1][-1] == u'.' or phraseTab[i+1][-1] == u':' or phraseTab[i+1][-1] == u')' or phraseTab[i+1][-1] == u';':
-					phraseOutput += u' %s' % (shortLink(morfAnalyse(word)[0] + u' siê', word + u' siê')) + phraseTab[i+1][-1]
-				elif phraseTab[i+1][-2:] == u'),' or phraseTab[i+1][-2:] == u').' or phraseTab[i+1][-2:] == u'):' or phraseTab[i+1][-2:] == u');':
-					phraseOutput += u' %s' % (shortLink(morfAnalyse(word)[0] + u' siê', word + u' siê')) + phraseTab[i+1][-2:]
+					phraseOutput += ' ' + shortLink(morfAnalyse(word)[0], morfAnalyse(word)[1])
+			elif i<n-1 and (phraseTab[i+1] == 'siê' or phraseTab[i+1] == 'siê,' or phraseTab[i+1] == 'siê.' or phraseTab[i+1] == 'siê;' or phraseTab[i+1] == 'siê)' or phraseTab[i+1] == 'siê),' or phraseTab[i+1] == 'siê);' or phraseTab[i+1] == 'siê).') and morfAnalyse(word)[2] and ('inf:' in morfAnalyse(word)[2] or 'pact:' in morfAnalyse(word)[2]):
+				if phraseTab[i+1][-1] == ',' or phraseTab[i+1][-1] == '.' or phraseTab[i+1][-1] == ':' or phraseTab[i+1][-1] == ')' or phraseTab[i+1][-1] == ';':
+					phraseOutput += ' %s' % (shortLink(morfAnalyse(word)[0] + ' siê', word + ' siê')) + phraseTab[i+1][-1]
+				elif phraseTab[i+1][-2:] == '),' or phraseTab[i+1][-2:] == ').' or phraseTab[i+1][-2:] == '):' or phraseTab[i+1][-2:] == ');':
+					phraseOutput += ' %s' % (shortLink(morfAnalyse(word)[0] + ' siê', word + ' siê')) + phraseTab[i+1][-2:]
 				else:
-					phraseOutput += u' %s' % (shortLink(morfAnalyse(word)[0] + u' siê', word + u' siê'))
+					phraseOutput += ' %s' % (shortLink(morfAnalyse(word)[0] + ' siê', word + ' siê'))
 				i+=1
 			else:
-				if u'{{' in word and u'}}' in word:
-					phraseOutput += u' %s' % word
-				elif len(word) and ((word[0] == u'(' and word[-1] == u')') or (word[0] == u'(' and word[-1] == u',')):
-					phraseOutput += u' (%s)' % shortLink(morfAnalyse(word[1:-1])[0], morfAnalyse(word[1:-1])[1])
-				elif len(word) and word[0] == u'(':
-					phraseOutput += u' (%s' % shortLink(morfAnalyse(word[1:])[0], morfAnalyse(word[1:])[1])
-				elif len(word) and (word[-2:] == u'),' or word[-2:] == u').' or word[-2:] == u'):' or word[-2:] == u');'):
-					phraseOutput += u' ' + shortLink(morfAnalyse(word[:-2])[0], morfAnalyse(word[:-2])[1]) + word[-2:] 
-				elif len(word) and (word[-1] == u',' or word[-1] == u'.' or word[-1] == u':' or word[-1] == u')' or word[-1] == u';'):
-					phraseOutput += u' ' + shortLink(morfAnalyse(word[:-1])[0], morfAnalyse(word[:-1])[1]) + word[-1]
+				if '{{' in word and '}}' in word:
+					phraseOutput += ' %s' % word
+				elif len(word) and ((word[0] == '(' and word[-1] == ')') or (word[0] == '(' and word[-1] == ',')):
+					phraseOutput += ' (%s)' % shortLink(morfAnalyse(word[1:-1])[0], morfAnalyse(word[1:-1])[1])
+				elif len(word) and word[0] == '(':
+					phraseOutput += ' (%s' % shortLink(morfAnalyse(word[1:])[0], morfAnalyse(word[1:])[1])
+				elif len(word) and (word[-2:] == '),' or word[-2:] == ').' or word[-2:] == '):' or word[-2:] == ');'):
+					phraseOutput += ' ' + shortLink(morfAnalyse(word[:-2])[0], morfAnalyse(word[:-2])[1]) + word[-2:] 
+				elif len(word) and (word[-1] == ',' or word[-1] == '.' or word[-1] == ':' or word[-1] == ')' or word[-1] == ';'):
+					phraseOutput += ' ' + shortLink(morfAnalyse(word[:-1])[0], morfAnalyse(word[:-1])[1]) + word[-1]
 				else:
-					phraseOutput += u' ' + shortLink(morfAnalyse(word)[0], morfAnalyse(word)[1])
+					phraseOutput += ' ' + shortLink(morfAnalyse(word)[0], morfAnalyse(word)[1])
 	
 			i+=1
 			phraseOutput = phraseOutput.strip()
@@ -919,61 +919,61 @@ def wikilink(phrase):
 def meanProcess(mean):
 	
 	#obrï¿½bka znaczeï¿½
-	mean = mean.replace(u'<br />', u' ')
-	mean = mean.replace(u'dawniej:', u'{{daw}}')
-	mean = mean.replace(u'zdrobnienie od:', u'{{zdrobn}}')
-	mean = mean.replace(u'w jêzykoznawstwie:', u'{{jêz}}')
-	mean = mean.replace(u'w staro¿ytno¶ci:', u'{{staro¿}}')
-	mean = mean.replace(u'w filozofii i w teologii:', u'{{filoz}} {{teol}}')
-	mean = mean.replace(u'w literaturze:', u'{{liter}}')
-	mean = mean.replace(u'potocznie:', u'{{pot}}')
-	mean = mean.replace(u'pot.', u'{{pot}}')
-	mean = mean.replace(u'w muzyce:', u'{{muz}}')
-	mean = mean.replace(u'ksi±¿kowo:', u'{{ksi±¿k}}')
-	mean = mean.replace(u'podnio¶le:', u'{{podn}}')
-	mean = mean.replace(u'³owiectwo:', u'{{³ow}}')
-	mean = mean.replace(u'w prawie:', u'{{praw}}')
-	mean = mean.replace(u'w sporcie:', u'{{sport}}')
-	mean = mean.replace(u'przeno¶nie:', u'{{przen}}')
-	mean = mean.replace(u'przen.', u'{{przen}}')
-	mean = mean.replace(u'rzadko:', u'{{rzad}}')
-	mean = mean.replace(u'przestarzale:', u'{{przest}}')
+	mean = mean.replace('<br />', ' ')
+	mean = mean.replace('dawniej:', '{{daw}}')
+	mean = mean.replace('zdrobnienie od:', '{{zdrobn}}')
+	mean = mean.replace('w jêzykoznawstwie:', '{{jêz}}')
+	mean = mean.replace('w staro¿ytno¶ci:', '{{staro¿}}')
+	mean = mean.replace('w filozofii i w teologii:', '{{filoz}} {{teol}}')
+	mean = mean.replace('w literaturze:', '{{liter}}')
+	mean = mean.replace('potocznie:', '{{pot}}')
+	mean = mean.replace('pot.', '{{pot}}')
+	mean = mean.replace('w muzyce:', '{{muz}}')
+	mean = mean.replace('ksi±¿kowo:', '{{ksi±¿k}}')
+	mean = mean.replace('podnio¶le:', '{{podn}}')
+	mean = mean.replace('³owiectwo:', '{{³ow}}')
+	mean = mean.replace('w prawie:', '{{praw}}')
+	mean = mean.replace('w sporcie:', '{{sport}}')
+	mean = mean.replace('przeno¶nie:', '{{przen}}')
+	mean = mean.replace('przen.', '{{przen}}')
+	mean = mean.replace('rzadko:', '{{rzad}}')
+	mean = mean.replace('przestarzale:', '{{przest}}')
 	
 	return mean
 
 def genFromFlags(word):
-	temp = u''
-	prev = u''
+	temp = ''
+	prev = ''
 	for a in word.flags: # szukanie rodzaju na podstawie flagi (wg maila Kolaara), byæ mo¿e przydatne gdy Morfeusz nie oznaczy jednoznacznie
 		if 'm' in a[0] or 'n' in a[0] or 'K' in a[0]:
 			temp = 'f'
 			if prev != '' and temp != prev:
-				return u'k'
+				return 'k'
 			else:
 				prev = temp
 		elif ('U' in a[0] and len(word.flags) == 1):
 			temp = 'n'
 			if prev != '' and temp != prev:
-				return u'k'
+				return 'k'
 			else:
 				prev = temp
 		elif 'O' in a[0] or 'Q' in a[0] or 'D' in a[0] or 'o' in a[0] or 'q' in a[0] or 'P' in a[0] or 'R' in a[0] or 'S' in a[0]or 'C' in a[0]  or 'Z' in a[0] or 'w' in a[0] or 't' in a[0] or 'z' in a[0]:
 			temp = 'm'
 			if prev != '' and temp != prev:
-				return u'k'
+				return 'k'
 			else:
 				prev = temp
-	if temp != u'':
+	if temp != '':
 		return temp
 	else:
-		return u'?'
+		return '?'
 
 def generateCollocationsLink(title):
-	url = u'http://www.nkjp.uni.lodz.pl/collocations_meta.jsp?query=%s**&offset=0&limit=10000&span=0&collocationalContextLeft=1&collocationalContextRight=1&minCoocFreq=5&posOfCollocate=any&sort=srodek&preserve_order=true&dummystring=±¡æÆêÊ³£ñÑóÓ¶¦¼¬¿¯&m_nkjpSubcorpus=balanced' % (title)
+	url = 'http://www.nkjp.uni.lodz.pl/collocations_meta.jsp?query=%s**&offset=0&limit=10000&span=0&collocationalContextLeft=1&collocationalContextRight=1&minCoocFreq=5&posOfCollocate=any&sort=srodek&preserve_order=true&dummystring=±¡æÆêÊ³£ñÑóÓ¶¦¼¬¿¯&m_nkjpSubcorpus=balanced' % (title)
 	return url
 
 def generateConcordationsLink(title):
-	url = u'http://www.nkjp.uni.lodz.pl/index_meta.jsp?query=%s**&offset=0&limit=100&span=0&sort=srodek&second_sort=srodek&groupBy=---&groupByLimit=1&preserve_order=true&dummystring=±¡æÆêÊ³£ñÑóÓ¶¦¼¬¿¯&m_nkjpSubcorpus=balanced' % (title)
+	url = 'http://www.nkjp.uni.lodz.pl/index_meta.jsp?query=%s**&offset=0&limit=100&span=0&sort=srodek&second_sort=srodek&groupBy=---&groupByLimit=1&preserve_order=true&dummystring=±¡æÆêÊ³£ñÑóÓ¶¦¼¬¿¯&m_nkjpSubcorpus=balanced' % (title)
 	return url
 
 def ifalreadyexists(title, existing):
@@ -984,7 +984,7 @@ def ifalreadyexists(title, existing):
 	hasloWikt = Haslo(title)
 	if hasloWikt.type == 3:
 		for a in hasloWikt.listLangs:
-			if u'jêzyk polski' in a.langLong or u'termin obcy' in a.langLong or u'u¿ycie miêdzynarodowe' in a.langLong:
+			if 'jêzyk polski' in a.langLong or 'termin obcy' in a.langLong or 'u¿ycie miêdzynarodowe' in a.langLong:
 				return 0
 	
 	return 1
@@ -992,24 +992,24 @@ def ifalreadyexists(title, existing):
 
 def kwalifAndLink(string):
 	#funkcja do obs³ugi synonimy.ux.pl - dostaje jeden string stamt±d, zamienia kwalifikatory na nasze i dodaje wikilink
-	kwal = [[u'[przestarz.]', u'{{przest}}'], [u'[¿art.]', u'{{¿art}}'], [u'[pot.]', u'{{pot}}'], [u'[ksi±¿k.]', u'{{ksi±¿k}}'], [u'[wulg.]', u'{{wulg}}'], [u'[specjalist.]', u'\'\'specjalistycznie\'\''], [u'[nadu¿yw.]', u'\'\'nadu¿ywane\'\''], [u'[poet.]', u'{{poet}}'], [u'[oficj.]', u'{{ofic}}'], [u'[euf.]', u'{{eufem}}'], [u'[obra¼.]', u'{{obra¼}}']]
+	kwal = [['[przestarz.]', '{{przest}}'], ['[¿art.]', '{{¿art}}'], ['[pot.]', '{{pot}}'], ['[ksi±¿k.]', '{{ksi±¿k}}'], ['[wulg.]', '{{wulg}}'], ['[specjalist.]', '\'\'specjalistycznie\'\''], ['[nadu¿yw.]', '\'\'nadu¿ywane\'\''], ['[poet.]', '{{poet}}'], ['[oficj.]', '{{ofic}}'], ['[euf.]', '{{eufem}}'], ['[obra¼.]', '{{obra¼}}']]
 	found = 0
 	for elem in kwal:
-		if u' %s' % (elem[0]) in string:
-			string = string.replace(u' %s' % (elem[0]), u'')
-			string = elem[1] + u' [[' + string + u']]'
+		if ' %s' % (elem[0]) in string:
+			string = string.replace(' %s' % (elem[0]), '')
+			string = elem[1] + ' [[' + string + ']]'
 			found = 1
 	if not found:
-		string = u'[[' + string + u']]'
+		string = '[[' + string + ']]'
 	return string
 
 def synonimyUx(slowo):
 	
-	result = u''
+	result = ''
 	ref_syn = 0
 	while True:
 		try:
-			web = html.parse('http://synonimy.ux.pl/multimatch.php?word=%s&search=1' % urllib.quote(slowo.encode('iso-8859-2')))
+			web = html.parse('http://synonimy.ux.pl/multimatch.php?word=%s&search=1' % urllib.parse.quote(slowo.encode('iso-8859-2')))
 		except IOError:
 			return result
 		break
@@ -1020,21 +1020,21 @@ def synonimyUx(slowo):
 			try:
 				web1 = html.parse('http://synonimy.ux.pl/%s' % elem[1])
 			except IOError:
-				return u''
+				return ''
 			break
 		
 		synonimy = web1.xpath("//table[@border='0']/tr/td/strong")
-		resultPartial = u''
+		resultPartial = ''
 		if len(synonimy)>1:
-			resultPartial = u'\n: {{brak|numer}}'
+			resultPartial = '\n: {{brak|numer}}'
 		for a in synonimy:
 			if a.text != slowo:
-				if resultPartial != u'\n: {{brak|numer}}':
-					resultPartial += u', ' + kwalifAndLink(a.text)
+				if resultPartial != '\n: {{brak|numer}}':
+					resultPartial += ', ' + kwalifAndLink(a.text)
 				else:
-					resultPartial += u' ' + kwalifAndLink(a.text)
+					resultPartial += ' ' + kwalifAndLink(a.text)
 		if len(synonimy)>3:
-			resultPartial += u'<ref name=synonimy/>'
+			resultPartial += '<ref name=synonimy/>'
 			ref_syn = 1
 		
 		result += resultPartial
@@ -1046,12 +1046,12 @@ def inProgress(kategorie):
 	strony = []
 	for kat in kategorie:
 		strony.append(kat.pages)
-	re_words = re.compile(ur'== (.*?) \({{jêzyk polski}}\) ==')
+	re_words = re.compile(r'== (.*?) \({{jêzyk polski}}\) ==')
 	listInProgress = set()
 	
 	for page in strony:
 		for i in range(60):
-			wpage = pywikibot.Page(site, u'%s%d' % (page, i))
+			wpage = pywikibot.Page(site, '%s%d' % (page, i))
 			if not checkHistory(wpage.title()):
 				all = re.findall(re_words, wpage.get())
 				for a in all:
@@ -1061,8 +1061,8 @@ def inProgress(kategorie):
 
 def dontProcess():
 	forbiddenSet = set()
-	forbiddenPage = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/sjp/wykluczone')
-	for line in forbiddenPage.get().split(u'\n'):
+	forbiddenPage = pywikibot.Page(site, 'Wikipedysta:AlkamidBot/sjp/wykluczone')
+	for line in forbiddenPage.get().split('\n'):
 		if line.strip() != '':
 			forbiddenSet.add(line.strip())
 	return forbiddenSet
@@ -1083,13 +1083,13 @@ def derivedWordsLink(title):
 	for i in range(rng):
 		stem = title[:(len(title)-i)]
 		while True:
-			try: sjpsite = urllib2.urlopen('http://www.sjp.pl/slownik/lp.phtml?f_st=%s&f_en=&f_fl=-&f_msfl=-&f_mn=0&f_vl=0' % urllib.quote(stem.encode('utf-8')))
-			except urllib2.HTTPError:
-				print u'httperror'
+			try: sjpsite = urllib.request.urlopen('http://www.sjp.pl/slownik/lp.phtml?f_st=%s&f_en=&f_fl=-&f_msfl=-&f_mn=0&f_vl=0' % urllib.parse.quote(stem.encode('utf-8')))
+			except urllib.error.HTTPError:
+				print('httperror')
 				return 0
-			except urllib2.URLError:
+			except urllib.error.URLError:
 				continue
-			except httplib.BadStatusLine:
+			except http.client.BadStatusLine:
 				continue
 			break
 	
@@ -1101,7 +1101,7 @@ def derivedWordsLink(title):
 		xp_deriv = web.xpath("//table[@class='ktb']//tr[not(@class='kbl')]//td[2]//text()")
 		cnt = xp_deriv.count('tak') #counting the words allowed in word games
 		if cnt>1:
-			return u'http://www.sjp.pl/slownik/lp.phtml?f_st=%s&f_en=&f_fl=-&f_msfl=-&f_mn=0&f_vl=0' % stem
+			return 'http://www.sjp.pl/slownik/lp.phtml?f_st=%s&f_en=&f_fl=-&f_msfl=-&f_mn=0&f_vl=0' % stem
 	return 0
 		
 def main():
@@ -1113,7 +1113,7 @@ def main():
 	
 	images =  obrazkiAndrzeja()
 	odmOlafa = OdmianaOlafa()
-	tabPage = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/sjp/tabelka')
+	tabPage = pywikibot.Page(site, 'Wikipedysta:AlkamidBot/sjp/tabelka')
 		
 	wordsPerPage = 7 # how many pages we want on the output page for verification
 	offline_mode = 0
@@ -1123,30 +1123,30 @@ def main():
 	inp = codecs.open('/home/adam/wikt/moje/importsjp/frequencyListPL.txt', encoding='utf-8')
 	
 	if custom_list == 1:
-		inp = codecs.open(u'/home/adam/wikt/moje/importsjp/ró¿ne.txt', encoding=u'utf-8')
+		inp = codecs.open('/home/adam/wikt/moje/importsjp/ró¿ne.txt', encoding='utf-8')
 	
 	lista = []
 	i=1
 	for line in inp:
 		if i>500:
 			break
-		if line.strip() != u'':
+		if line.strip() != '':
 			lista.append(line.split('=')[0].strip())
 		i+=1
 	
 
 	kategorie = []
-	kategorie.append(kategoriaSlowa(u'custom', wordsPerPage, u'ró¿ne/', u'\n|-\n| ró¿ne', u'custom'))
-	kategorie.append(kategoriaSlowa(u'zwrotne', wordsPerPage, u'zwrotne/', u'\n|-\n| czasowniki zwrotne', u'zwrotne'))
-	kategorie.append(kategoriaSlowa(u'ndm', wordsPerPage, u'ndm/', u'\n|-\n| nieodmienne', u'ndm'))
-	kategorie.append(kategoriaSlowa(u'np', wordsPerPage, u'np/', u'\n|-\n| \"np.\" w znaczeniu', u'np'))
-	kategorie.append(kategoriaSlowa(u'bezproblemu', wordsPerPage, u'³atwe/', u'\n|-\n| ³atwe (jedno znaczenie, bez synonimów)', u'bezproblemu'))
-	kategorie.append(kategoriaSlowa(u'reszta', wordsPerPage, u'wszystkie/', u'\n|-\n| reszta', u'reszta'))
-	kategorie.append(kategoriaSlowa(u'brak_znaczenia', wordsPerPage, u'brak_znaczen/', u'\n|-\n| bez znaczeñ', u'brak_znaczenia'))
-	kategorie.append(kategoriaSlowa(u'przymiotnik_od', wordsPerPage, u'przymiotnik_od/', u'\n|-\n| \"przymiotnik od\"', u'przymiotnik_od'))
+	kategorie.append(kategoriaSlowa('custom', wordsPerPage, 'ró¿ne/', '\n|-\n| ró¿ne', 'custom'))
+	kategorie.append(kategoriaSlowa('zwrotne', wordsPerPage, 'zwrotne/', '\n|-\n| czasowniki zwrotne', 'zwrotne'))
+	kategorie.append(kategoriaSlowa('ndm', wordsPerPage, 'ndm/', '\n|-\n| nieodmienne', 'ndm'))
+	kategorie.append(kategoriaSlowa('np', wordsPerPage, 'np/', '\n|-\n| \"np.\" w znaczeniu', 'np'))
+	kategorie.append(kategoriaSlowa('bezproblemu', wordsPerPage, '³atwe/', '\n|-\n| ³atwe (jedno znaczenie, bez synonimów)', 'bezproblemu'))
+	kategorie.append(kategoriaSlowa('reszta', wordsPerPage, 'wszystkie/', '\n|-\n| reszta', 'reszta'))
+	kategorie.append(kategoriaSlowa('brak_znaczenia', wordsPerPage, 'brak_znaczen/', '\n|-\n| bez znaczeñ', 'brak_znaczenia'))
+	kategorie.append(kategoriaSlowa('przymiotnik_od', wordsPerPage, 'przymiotnik_od/', '\n|-\n| \"przymiotnik od\"', 'przymiotnik_od'))
 	
-	tabelkaStart = u'{| class="wikitable"'
-	tabelkaEnd = u'\n|}'
+	tabelkaStart = '{| class="wikitable"'
+	tabelkaEnd = '\n|}'
 	
 	forbidden = dontProcess()
 	inprogress = inProgress(kategorie) #KONIECZNIE W£¡CZYÆ PRZED IMPORTEM
@@ -1154,7 +1154,7 @@ def main():
 	forbidden.union(inprogress)
 	
 	for i in lista:
-		print i
+		print(i)
 		a = HasloSJP(i)
 		if a.type:
 			for b in a.words:
@@ -1167,60 +1167,60 @@ def main():
 				if b.czescMowy in (1,2,3,4,5):
 					naStrone = wikipage(a, images)
 					if naStrone and ifalreadyexists(b.title, existing) and b.title not in forbidden:
-						print 'tutaj'
-						text = u''
+						print('tutaj')
+						text = ''
 						suma = 0
 						complete = None
 						for c in a.problems:
 							suma += a.problems[c]
 						
 						if custom_list:
-							which = u'custom'
-						elif a.problems[u'zwrotny']:
-							which = u'zwrotne'
-						elif a.problems[u'przymiotnik_od']:
-							which = u'przymiotnik_od'
-						elif a.problems[u'np']:
-							which = u'np'
+							which = 'custom'
+						elif a.problems['zwrotny']:
+							which = 'zwrotne'
+						elif a.problems['przymiotnik_od']:
+							which = 'przymiotnik_od'
+						elif a.problems['np']:
+							which = 'np'
 						elif b.czescMowy == 2:
-							which = u'ndm'
-						elif a.problems[u'brak_znaczenia'] == 1:
-							which = u'brak_znaczenia'
-						elif a.problems[u'brak_znaczenia'] == 2:
-							which = u'niedodawane'
+							which = 'ndm'
+						elif a.problems['brak_znaczenia'] == 1:
+							which = 'brak_znaczenia'
+						elif a.problems['brak_znaczenia'] == 2:
+							which = 'niedodawane'
 						elif not suma:
-							which = u'bezproblemu'
+							which = 'bezproblemu'
 						else:
-							which = u'reszta'
+							which = 'reszta'
 							
 						for kat in kategorie:
 							if which == kat.name:
-								filename = kat.outputFile + u'%d.txt' % (kat.counter/wordsPerPage)
-								outputPage = pywikibot.Page(site, u'%s%d' % (kat.pages, kat.counter/wordsPerPage))
+								filename = kat.outputFile + '%d.txt' % (kat.counter/wordsPerPage)
+								outputPage = pywikibot.Page(site, '%s%d' % (kat.pages, kat.counter/wordsPerPage))
 								if kat.counter%wordsPerPage == 0:
-									text += u'zweryfikowane=nie\nweryfikator=\n\n'
+									text += 'zweryfikowane=nie\nweryfikator=\n\n'
 								if kat.counter%wordsPerPage == wordsPerPage-1:
 									complete = kat.name
 								kat.counter += 1
-								kat.buffer += text + naStrone + u'\n\n'
+								kat.buffer += text + naStrone + '\n\n'
 						
 						if complete:
 							file_words = open(filename, 'w')
 							
 							for kat in kategorie:
 								if complete == kat.name:
-									kat.tabelka += u'\n| [[%s%d|%d]]' % (kat.pages, kat.counter/wordsPerPage-1, kat.counter/wordsPerPage-1)
+									kat.tabelka += '\n| [[%s%d|%d]]' % (kat.pages, kat.counter/wordsPerPage-1, kat.counter/wordsPerPage-1)
 									if not checkHistory(outputPage.title()):
 										kat.counter += wordsPerPage-1
 									else:
 										file_words.write(kat.buffer.encode('utf-8'))
 										if not offline_mode:
-											outputPage.put(kat.buffer, comment=u'has³a zaimportowane z sjp.pl')
+											outputPage.put(kat.buffer, comment='has³a zaimportowane z sjp.pl')
                                                                                 else:
-                                                                                        print kat.buffer
-										kat.buffer = u''
+                                                                                        print(kat.buffer)
+										kat.buffer = ''
 							file_words.close
-							file_tab = open(u'output/tabelka.txt', 'w')
+							file_tab = open('output/tabelka.txt', 'w')
 							tabOutput = tabelkaStart
 							for kat in kategorie:
 								if '[[' in kat.tabelka: #add row only if there are entries (we don't want empty rows here)
@@ -1230,24 +1230,24 @@ def main():
 							file_tab.close
 										
 	
-						print naStrone
-						existing.append(u'%s' % b.title)
+						print(naStrone)
+						existing.append('%s' % b.title)
 	
 					elif not naStrone and ifalreadyexists(b.title, existing):
 						file_niedodane = open('output/niedodane.txt', 'a')
-						dodaj = u'*[[%s]]\n' % b.title
+						dodaj = '*[[%s]]\n' % b.title
 						file_niedodane.write(dodaj.encode("utf-8"))
 						file_niedodane.close
 	
 	if not custom_list:
-		tabPage.put(tabOutput, u'aktualizacja')
+		tabPage.put(tabOutput, 'aktualizacja')
 	
-	if custom_list and filename and kategorie[0].buffer != u'':
+	if custom_list and filename and kategorie[0].buffer != '':
 		file_words = open(filename, 'w')
-		kategorie[0].tabelka += u'\n| [[%s%d|%d]]' % (kategorie[0].pages, kategorie[0].counter/wordsPerPage, kategorie[0].counter/wordsPerPage)
+		kategorie[0].tabelka += '\n| [[%s%d|%d]]' % (kategorie[0].pages, kategorie[0].counter/wordsPerPage, kategorie[0].counter/wordsPerPage)
 		file_words.write(kategorie[0].buffer.encode('utf-8'))
 		if not offline_mode:
-			outputPage.put(kategorie[0].buffer, comment=u'has³a zaimportowane z sjp.pl')
+			outputPage.put(kategorie[0].buffer, comment='has³a zaimportowane z sjp.pl')
 		file_words.close
 
 	inp.close

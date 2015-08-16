@@ -24,7 +24,7 @@ def main():
 		return 0 # new dump not found, do nothing
 
 	else:
-		print 'Found new dump (%s), processing... (old dump was %s)' % (newDump, lastDump)
+		print('Found new dump (%s), processing... (old dump was %s)' % (newDump, lastDump))
 		brakCzesciMowy.brakCzesciMowy(newDump)
 		rzeczownik_rodzaj.rzeczownikRodzaj(newDump)
 		rzeczownik_rodzaj_niepotrzebny.rzeczownikRodzajNiepotrzebny(newDump)

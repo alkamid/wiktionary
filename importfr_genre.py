@@ -25,18 +25,18 @@ def main():
 		if h.type == 3:
 			h.langs()
 			for c in h.list_lang:
-				if c.state == 1 and u'fr' in c.lang:
-					print u'\n' + h.title
+				if c.state == 1 and 'fr' in c.lang:
+					print('\n' + h.title)
 					c.pola()
 					if c.noun.typ:
-						if c.genre == u'm' or c.genre == u'f':
+						if c.genre == 'm' or c.genre == 'f':
 							pl = Haslo(h.title)
 							if pl.type == 3:
 								pl.langs()
 								for d in pl.list_lang:
-									if u'polski' in d.lang:
+									if 'polski' in d.lang:
 										d.pola()
-										print d.czescMowy 
+										print(d.czescMowy) 
 					
 					
 

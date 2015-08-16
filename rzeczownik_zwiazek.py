@@ -13,10 +13,10 @@ from klasa import *
 	
 def main():
 
-	data = u'20110310'
+	data = '20110310'
 
 	site = pywikibot.getSite()
-	cat = Category(site,u'Kategoria:francuski (indeks)')
+	cat = Category(site,'Kategoria:francuski (indeks)')
 	lista = pagegenerators.CategorizedPageGenerator(cat)
 	#lista_stron1 = xmlreader.XmlDump('plwiktionary-%s-pages-articles.xml' % data)
 	
@@ -25,14 +25,14 @@ def main():
 	for a in lista:
 		h = Haslo(a.title())
 		#h = HasloXML(a.title, a.text)
-		if h.type != 4 and u' ' in h.title:
+		if h.type != 4 and ' ' in h.title:
 			h.langs()
 			for c in h.list_lang:
 				c.pola()
-				if c.type != 2 and c.lang == u'hiszpański':
-					if (u'rzeczownik' in c.znaczenia.tresc) and (u'rzeczownika' not in c.znaczenia.tresc):
-						print u'\n' + h.title
-						text = u'*[[%s]]\n' % h.title
+				if c.type != 2 and c.lang == 'hiszpański':
+					if ('rzeczownik' in c.znaczenia.tresc) and ('rzeczownika' not in c.znaczenia.tresc):
+						print('\n' + h.title)
+						text = '*[[%s]]\n' % h.title
 						file = open("log/rzeczownik.txt", 'a')
 						file.write (text.encode("utf-8"))
 						file.close

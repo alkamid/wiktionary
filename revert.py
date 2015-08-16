@@ -34,13 +34,13 @@ class BaseRevertBot(object):
         if max < 500 and max != -1: predata['uclimit'] = str(max)
 
         count = 0
-        iterator = iter(xrange(0))
+        iterator = iter(range(0))
         never_continue = False
         while count != max or never_continue:
             try:
-                item = iterator.next()
+                item = next(iterator)
             except StopIteration:
-                self.log(u'Fetching new batch of contributions')
+                self.log('Fetching new batch of contributions')
                 data = query.GetData(predata, self.site)
                 if 'error' in data:
                     raise RuntimeError(data['error'])
@@ -62,14 +62,14 @@ class BaseRevertBot(object):
         contribs = self.get_contributions()
         for item in contribs:
             try:
-                if 1 and item['title'] != u'Wikipedysta:AlkamidBot/wymowa' and item['title'] != u'Wikipedysta:AlkamidBot/zch/log' and item['title'] != u'Wikipedysta:AlkamidBot/wymowa/gwary' and item['title'] != u'Wikipedysta:Alkamid/statystyka/multimedia' and item['title'] != u'Wikipedysta:Alkamid/statystyka/długość średnia' and item['title'] != u'Wikipedysta:Alkamid/statystyka/długość' and item['title'] != u'Wikisłownik:Dlaczego_Wikisłownik':
+                if 1 and item['title'] != 'Wikipedysta:AlkamidBot/wymowa' and item['title'] != 'Wikipedysta:AlkamidBot/zch/log' and item['title'] != 'Wikipedysta:AlkamidBot/wymowa/gwary' and item['title'] != 'Wikipedysta:Alkamid/statystyka/multimedia' and item['title'] != 'Wikipedysta:Alkamid/statystyka/długość średnia' and item['title'] != 'Wikipedysta:Alkamid/statystyka/długość' and item['title'] != 'Wikisłownik:Dlaczego_Wikisłownik':
                     result = self.revert(item)
                     if result:
-                        self.log(u'%s: %s' % (item['title'], result))
+                        self.log('%s: %s' % (item['title'], result))
                     else:
-                        self.log(u'Skipped %s' % item['title'])
+                        self.log('Skipped %s' % item['title'])
                 else:
-                    self.log(u'Skipped %s by callback' % item['title'])
+                    self.log('Skipped %s by callback' % item['title'])
             except StopIteration:
                 return
 
@@ -93,16 +93,16 @@ class BaseRevertBot(object):
 
         pages = data['query'].get('pages', ())
         if not pages: return False
-        page = pages.itervalues().next()
+        page = next(iter(pages.values()))
         if len(page.get('revisions', ())) != 2: return False
         rev = page['revisions'][1]
 
-        comment = u'Reverted to revision %s by %s on %s' % (rev['revid'],
+        comment = 'Reverted to revision %s by %s on %s' % (rev['revid'],
             rev['user'], rev['timestamp'])
         if self.comment: comment += ': ' + self.comment
 
         page = pywikibot.Page(self.site, item['title'])
-        pywikibot.output(u"\n\n>>> \03{lightpurple}%s\03{default} <<<" % page.aslink(True, True))
+        pywikibot.output("\n\n>>> \03{lightpurple}%s\03{default} <<<" % page.aslink(True, True))
         old = page.get()
         new = rev['*']
         pywikibot.showDiff(old, new)
@@ -120,7 +120,7 @@ class myRevertBot(BaseRevertBot):
         if 'top' in item:
             page = pywikibot.Page(self.site, item['title'])
             text=page.get()
-            pattern = re.compile(u'\[\[.+?:.+?\..+?\]\]', re.UNICODE)
+            pattern = re.compile('\[\[.+?:.+?\..+?\]\]', re.UNICODE)
             return pattern.search(text) >= 0
         return False
 

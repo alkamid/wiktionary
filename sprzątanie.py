@@ -16,22 +16,22 @@ from pywikibot import xmlreader
 def main():
 	
 	sekcje = []
-	sekcje.append(u'{{odmiana')
-	sekcje.append(u'{{etymologia}}')
-	sekcje.append(u'{{wymowa}}')
-	sekcje.append(u'{{znaczenia}}')
-	sekcje.append(u'{{przykłady}}')
-	sekcje.append(u'{{składnia}}')
-	sekcje.append(u'{{kolokacje}}')
-	sekcje.append(u'{{pokrewne}}')
-	sekcje.append(u'{{frazeologia}}')
-	sekcje.append(u'{{uwagi}}')
-	sekcje.append(u'{{synonimy}}')
-	sekcje.append(u'{{antonimy}}')
-	sekcje.append(u'{{źródła}}')
+	sekcje.append('{{odmiana')
+	sekcje.append('{{etymologia}}')
+	sekcje.append('{{wymowa}}')
+	sekcje.append('{{znaczenia}}')
+	sekcje.append('{{przykłady}}')
+	sekcje.append('{{składnia}}')
+	sekcje.append('{{kolokacje}}')
+	sekcje.append('{{pokrewne}}')
+	sekcje.append('{{frazeologia}}')
+	sekcje.append('{{uwagi}}')
+	sekcje.append('{{synonimy}}')
+	sekcje.append('{{antonimy}}')
+	sekcje.append('{{źródła}}')
 	
 	site = pywikibot.getSite()
-	cat = Category(site,u'Kategoria:łaciński (indeks)')
+	cat = Category(site,'Kategoria:łaciński (indeks)')
 	lista_stron = pagegenerators.CategorizedPageGenerator(cat)
 	#lista_stron = pagegenerators.AllpagesPageGenerator(namespace = 0, includeredirects = False)
 	
@@ -44,14 +44,14 @@ def main():
 	sekcje_join ='|'.join(map(re.escape, sekcje))	
 	szukany_tekst = re.compile(u'{{odmiana}}.*\n{{składnia}}')
 	'''
-	out = u''
+	out = ''
 	
 	for page in lista_stron:
 	
 		text = page.get()
 
-		if u'{{przykłady}}' not in text:
-			print '*[[' + page.title() + ']]'
+		if '{{przykłady}}' not in text:
+			print('*[[' + page.title() + ']]')
 			out = out + '*[[' + page.title() + ']]\n'
 			
 			

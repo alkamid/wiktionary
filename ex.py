@@ -13,7 +13,7 @@ from klasa import *
 def main():
 
 	site = pywikibot.getSite()
-	cat = Category(site,u'Kategoria:francuski (indeks)')
+	cat = Category(site,'Kategoria:francuski (indeks)')
 	lista = pagegenerators.CategorizedPageGenerator(cat)
 	
 	
@@ -22,12 +22,12 @@ def main():
 		if h.typ == 3:
 			h.sekcje()
 			for c in h.lista_sekcje:
-				if u'francuski' in c.jezyk:
-					print u'\n' + h.tytul
+				if 'francuski' in c.jezyk:
+					print('\n' + h.tytul)
 					c.pola()
-					print c.przyklady.tresc
-					if (c.przyklady.tresc == u'\n: (1.1)' or c.przyklady.tresc == u'\n: (1.1) ') and (u'rzeczownik' not in c.znaczenia.tresc) and (u'{{forma czasownika|fr}}' not in c.znaczenia.tresc):
-						text = u'*[[%s]]\n' % h.tytul
+					print(c.przyklady.tresc)
+					if (c.przyklady.tresc == '\n: (1.1)' or c.przyklady.tresc == '\n: (1.1) ') and ('rzeczownik' not in c.znaczenia.tresc) and ('{{forma czasownika|fr}}' not in c.znaczenia.tresc):
+						text = '*[[%s]]\n' % h.tytul
 						file = open("log/ex.txt", 'a')
 						file.write (text.encode("utf-8"))
 						file.close

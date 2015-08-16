@@ -26,7 +26,7 @@ def main():
 	for a in lista:
 		if (a[1] == "v"):
 			
-			page = pywikibot.Page(site, u'%s' % (a[0]))
+			page = pywikibot.Page(site, '%s' % (a[0]))
 			try:
 				exists = page.get()
 			except pywikibot.NoPage:
@@ -34,10 +34,10 @@ def main():
 			except pywikibot.IsRedirectPage:
 				text += '*[[' + a[0] + '#fr|' + a[0] + ']] - przekierowanie' + '\n'
 			except pywikibot.Error:
-				print 'nieznany błąd'
+				print('nieznany błąd')
 		
 			i+=1.00
-			print '%.2f' % (i/50) 
+			print('%.2f' % (i/50)) 
 	
 	filename = "outputverbes.txt"
 

@@ -12,11 +12,11 @@ from statystykanowa import refs
 def main():
 
 	data = '20110723'
-	data_slownie = data[6] + data[7] + u'.' + data[4] + data[5] + u'.' + data[0] + data[1] + data[2] + data[3]
+	data_slownie = data[6] + data[7] + '.' + data[4] + data[5] + '.' + data[0] + data[1] + data[2] + data[3]
 	lista_stron1 = xmlreader.XmlDump('/mnt/user-store/dumps/plwiktionary/plwiktionary-%s-pages-articles.xml' % data)
 	lista_stron = xmlreader.XmlDump.parse(lista_stron1)
 	wikt = pywikibot.Site('pl', 'wiktionary')
-	outputPage = pywikibot.Page(wikt, u'Wikipedysta:AlkamidBot/listy/bez_źródła')
+	outputPage = pywikibot.Page(wikt, 'Wikipedysta:AlkamidBot/listy/bez_źródła')
 	
 	notFoundList = collections.defaultdict(list)
 	
@@ -29,24 +29,24 @@ def main():
 		else:
 			if word.type == 3:
 				for lang in word.listLangs:
-					if lang.type != 2 and lang.lang == u'arabski':
+					if lang.type != 2 and lang.lang == 'arabski':
 						lang.pola()
 						if lang.type == 1:
 							if not refs(lang.content, lang.zrodla):
-								notFoundList[u'arabski'].append(lang.title)
+								notFoundList['arabski'].append(lang.title)
 	
-	text = u''												
+	text = ''												
 	for a in notFoundList:
-		text += u'== %s ==' % (a)
+		text += '== %s ==' % (a)
 		for b in notFoundList[a]:
-			text += u'\n*[[%s]]' % (b)
-		text += u'\n'
+			text += '\n*[[%s]]' % (b)
+		text += '\n'
 
 	file = open('output/bez_zrodla.txt', 'w')
 	file.write(text.encode( "utf-8" ))
 	file.close
 	
-	outputPage.put(text, comment=u"Aktualizacja listy")
+	outputPage.put(text, comment="Aktualizacja listy")
 
 if __name__ == '__main__':
 	try:

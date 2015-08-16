@@ -14,11 +14,11 @@ def main():
 	#lista = pagegenerators.AllpagesPageGenerator()
 	#lista_svg = pagegenerators.RegexFilterPageGenerator(lista, u'.*(clerical|kaishu|xinshu|still|caoshu|songti|oracle|bronze|bigseal|seal)\.(svg|SVG|PNG|GIF)')
 	
-	lista = [u'a', u'b', u'c']
+	lista = ['a', 'b', 'c']
 	for a in lista:
-		print a
+		print(a)
 	for b in lista:
-		print b
+		print(b)
 	#for a in lista_svg:
 	#	print a.title()
 	

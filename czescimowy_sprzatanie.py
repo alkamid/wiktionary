@@ -14,34 +14,34 @@ def main():
 
 	site = pywikibot.getSite()
 
-	inp = codecs.open(u'input/czescimowy_input.txt', encoding=u'utf-8')
+	inp = codecs.open('input/czescimowy_input.txt', encoding='utf-8')
 	
-	re_spacje = re.compile(ur'\'\'(.*?)\'\'$')
+	re_spacje = re.compile(r'\'\'(.*?)\'\'$')
 	
 	zamiana = []
-	zamiana.append([u'\'\'rzeczownik własny, rodzaj męski\'\'', u'\'\'rzeczownik, rodzaj męski, nazwa własna\'\''])
-	zamiana.append([u'\'\'rzeczownik własny, rodzaj żeński\'\'', u'\'\'rzeczownik, rodzaj żeński, nazwa własna\'\''])
-	zamiana.append([u'\'\'rzeczownik własny, rodzaj nijaki\'\'', u'\'\'rzeczownik, rodzaj nijaki, nazwa własna\'\''])
-	zamiana.append([u'\'\'rzeczownik, nazwa własna, rodzaj męski\'\'', u'\'\'rzeczownik, rodzaj męski, nazwa własna\'\''])
-	zamiana.append([u'\'\'rzeczownik, nazwa własna, rodzaj żeński\'\'', u'\'\'rzeczownik, rodzaj żeński, nazwa własna\'\''])
-	zamiana.append([u'\'\'rzeczownik, nazwa własna, rodzaj nijaki\'\'', u'\'\'rzeczownik, rodzaj nijaki, nazwa własna\'\''])
-	zamiana.append([u'\'\'rzeczownik, nazwa własna, rodzaj wspólny\'\'', u'\'\'rzeczownik, rodzaj wspólny, nazwa własna\'\''])
-	zamiana.append([u'\'\'związek wyrazów w funkcji rzeczownika w rodzaju nijakim, nazwa własna\'\'', u'\'\'związek wyrazów w funkcji rzeczownika rodzaju nijakiego, nazwa własna\'\''])
-	zamiana.append([u'\'\'związek wyrazów w funkcji rzeczownika w rodzaju męskim, nazwa własna\'\'', u'\'\'związek wyrazów w funkcji rzeczownika rodzaju męskiego, nazwa własna\'\''])
-	zamiana.append([u'\'\'związek wyrazów w funkcji rzeczownika w rodzaju żeńskim, nazwa własna\'\'', u'\'\'związek wyrazów w funkcji rzeczownika rodzaju żeńskiego, nazwa własna\'\''])
-	zamiana.append([u'\'\'zaimek pytający\'\'', u'\'\'zaimek pytajny\'\''])
-	zamiana.append([u'\'\'związek wyrazów w funkcji rzeczownika, rodzaj żeński\'\'', u'\'\'związek wyrazów w funkcji rzeczownika rodzaju żeńskiego\'\''])
-	zamiana.append([u'\'\'związek wyrazów w funkcji rzeczownika, rodzaj męski\'\'', u'\'\'związek wyrazów w funkcji rzeczownika rodzaju męskiego\'\''])
-	zamiana.append([u'\'\'związek wyrazów w funkcji rzeczownika, rodzaj nijaki\'\'', u'\'\'związek wyrazów w funkcji rzeczownika rodzaju nijakiego\'\''])
-	zamiana.append([u'\'\'związek wyrazów w funkcji rzeczownika, rodzaj żeński, nazwa własna\'\'', u'\'\'związek wyrazów w funkcji rzeczownika rodzaju żeńskiego, nazwa własna\'\''])
-	zamiana.append([u'\'\'związek wyrazów w funkcji rzeczownika, rodzaj męski, nazwa własna\'\'', u'\'\'związek wyrazów w funkcji rzeczownika rodzaju męskiego, nazwa własna\'\''])
-	zamiana.append([u'\'\'związek wyrazów w funkcji rzeczownika, rodzaj nijaki, nazwa własna\'\'', u'\'\'związek wyrazów w funkcji rzeczownika rodzaju nijakiego, nazwa własna\'\''])
+	zamiana.append(['\'\'rzeczownik własny, rodzaj męski\'\'', '\'\'rzeczownik, rodzaj męski, nazwa własna\'\''])
+	zamiana.append(['\'\'rzeczownik własny, rodzaj żeński\'\'', '\'\'rzeczownik, rodzaj żeński, nazwa własna\'\''])
+	zamiana.append(['\'\'rzeczownik własny, rodzaj nijaki\'\'', '\'\'rzeczownik, rodzaj nijaki, nazwa własna\'\''])
+	zamiana.append(['\'\'rzeczownik, nazwa własna, rodzaj męski\'\'', '\'\'rzeczownik, rodzaj męski, nazwa własna\'\''])
+	zamiana.append(['\'\'rzeczownik, nazwa własna, rodzaj żeński\'\'', '\'\'rzeczownik, rodzaj żeński, nazwa własna\'\''])
+	zamiana.append(['\'\'rzeczownik, nazwa własna, rodzaj nijaki\'\'', '\'\'rzeczownik, rodzaj nijaki, nazwa własna\'\''])
+	zamiana.append(['\'\'rzeczownik, nazwa własna, rodzaj wspólny\'\'', '\'\'rzeczownik, rodzaj wspólny, nazwa własna\'\''])
+	zamiana.append(['\'\'związek wyrazów w funkcji rzeczownika w rodzaju nijakim, nazwa własna\'\'', '\'\'związek wyrazów w funkcji rzeczownika rodzaju nijakiego, nazwa własna\'\''])
+	zamiana.append(['\'\'związek wyrazów w funkcji rzeczownika w rodzaju męskim, nazwa własna\'\'', '\'\'związek wyrazów w funkcji rzeczownika rodzaju męskiego, nazwa własna\'\''])
+	zamiana.append(['\'\'związek wyrazów w funkcji rzeczownika w rodzaju żeńskim, nazwa własna\'\'', '\'\'związek wyrazów w funkcji rzeczownika rodzaju żeńskiego, nazwa własna\'\''])
+	zamiana.append(['\'\'zaimek pytający\'\'', '\'\'zaimek pytajny\'\''])
+	zamiana.append(['\'\'związek wyrazów w funkcji rzeczownika, rodzaj żeński\'\'', '\'\'związek wyrazów w funkcji rzeczownika rodzaju żeńskiego\'\''])
+	zamiana.append(['\'\'związek wyrazów w funkcji rzeczownika, rodzaj męski\'\'', '\'\'związek wyrazów w funkcji rzeczownika rodzaju męskiego\'\''])
+	zamiana.append(['\'\'związek wyrazów w funkcji rzeczownika, rodzaj nijaki\'\'', '\'\'związek wyrazów w funkcji rzeczownika rodzaju nijakiego\'\''])
+	zamiana.append(['\'\'związek wyrazów w funkcji rzeczownika, rodzaj żeński, nazwa własna\'\'', '\'\'związek wyrazów w funkcji rzeczownika rodzaju żeńskiego, nazwa własna\'\''])
+	zamiana.append(['\'\'związek wyrazów w funkcji rzeczownika, rodzaj męski, nazwa własna\'\'', '\'\'związek wyrazów w funkcji rzeczownika rodzaju męskiego, nazwa własna\'\''])
+	zamiana.append(['\'\'związek wyrazów w funkcji rzeczownika, rodzaj nijaki, nazwa własna\'\'', '\'\'związek wyrazów w funkcji rzeczownika rodzaju nijakiego, nazwa własna\'\''])
 	#zamiana.append([u'\'\'rzeczownik, rodzaj żeński i męski\'\'', u'\'\'rzeczownik, rodzaj męski lub żeński\'\''])
 	#zamiana.append([u'\'\'rzeczownik, rodzaj męski i żeński\'\'', u'\'\'rzeczownik, rodzaj męski lub żeński\'\''])
-	zamiana.append([u'\'\'rzeczownik, rodzaj żeński lub męski\'\'', u'\'\'rzeczownik, rodzaj męski lub żeński\'\''])
+	zamiana.append(['\'\'rzeczownik, rodzaj żeński lub męski\'\'', '\'\'rzeczownik, rodzaj męski lub żeński\'\''])
 	
 	for a in zamiana:
-		print u'|-\n|%s\n|%s' % (a[0], a[1])
+		print('|-\n|%s\n|%s' % (a[0], a[1]))
 	
 	for line in inp:
 		try: h = Haslo(line)
@@ -55,7 +55,7 @@ def main():
 					for d in c.znaczeniaDetail:
 						s_spacje = re.search(re_spacje, d[0])
 						if s_spacje:
-							d[0] = u'\'\'%s\'\'' % (s_spacje.group(1).strip())
+							d[0] = '\'\'%s\'\'' % (s_spacje.group(1).strip())
 							c.saveChanges()
 						for zm in zamiana:
 							if d[0] == zm[0]:
@@ -63,7 +63,7 @@ def main():
 								c.saveChanges()
 						
 
-			h.push(False, u'Porządkowanie nagłówków sekcji znaczenia')
+			h.push(False, 'Porządkowanie nagłówków sekcji znaczenia')
 
 
 if __name__ == '__main__':
