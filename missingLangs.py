@@ -12,7 +12,7 @@ import config
 # the script looks for newly added languages (the languages for which the templates do not exist)	
 def missingLangs(data):
 
-	data_slownie = data[6] + data[7] + u'.' + data[4] + data[5] + u'.' + data[0] + data[1] + data[2] + data[3]
+	data_slownie = data[6] + data[7] + '.' + data[4] + data[5] + '.' + data[0] + data[1] + data[2] + data[3]
 	lista_stron = getListFromXML(data)
 	wikt = pywikibot.Site('pl', 'wiktionary')
 	foundList = set()
@@ -39,7 +39,7 @@ def missingLangs(data):
 	existing = set(a.shortName for a in LangsMediaWiki)
 	diff = foundList - existing
 	
-	missingText = u''
+	missingText = ''
 	
 	for a in lista_stron:
 		try: word = Haslo(a)
@@ -54,8 +54,8 @@ def missingLangs(data):
 				for lang in word.listLangs:
 					if lang.type != 2:
 						if lang.lang in diff:
-							missingText = missingText + u'%s - %s\n' % (lang.lang, word.title)
+							missingText = missingText + '%s - %s\n' % (lang.lang, word.title)
 							
-	file = open(u'%soutput/missingLangs.txt' % (config.path['scripts']), 'w')
+	file = open('%soutput/missingLangs.txt' % (config.path['scripts']), 'w')
 	file.write(missingText.encode("utf-8"))
 	file.close()

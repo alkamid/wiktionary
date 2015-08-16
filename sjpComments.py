@@ -3,9 +3,9 @@
 
 # count comments in sjp.pl
 
-import urllib
-import urllib2
-import httplib
+import urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.error, urllib.parse
+import http.client
 from lxml import etree, html
 
 def main():
@@ -30,14 +30,14 @@ def main():
                 if int(comments[j])>10 and len(words[j])>2 and [words[j], int(comments[j])] not in ranking:
                     ranking.append([words[j], int(comments[j])])
                                     
-    print ranking
+    print(ranking)
     def sortkey(row):
         return float(row[1])
     
     ranking.sort(key=sortkey, reverse=True)
     text = ''
     for i in ranking:
-        text += u'\n%s=%d' % (i[0], i[1])
+        text += '\n%s=%d' % (i[0], i[1])
 
     file = open('output/sjpComments.txt', 'w')
     file.write(text.encode('utf-8'))

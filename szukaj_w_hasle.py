@@ -15,11 +15,11 @@ from klasa import *
 
 def main():
 	
-	h = Haslo(u'ucraina')
+	h = Haslo('ucraina')
 	l = h.listLangs[0]
 	l.pola()
 	for a in l.znaczeniaDetail:
-		print a
+		print(a)
 	
 	#mylist = RecentChanges('2012-02-18T16:30:00Z')
 	'''

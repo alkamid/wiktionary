@@ -13,11 +13,11 @@ from klasa import *
 
 def main():
     
-    data = u'20120216'
+    data = '20120216'
     con = sqlite3.connect('../sqlite.db')
     f = open('/mnt/user-store/dumps/plwiktionary/plwiktionary-%s-pagelinks.sql' % data,'r')
     sql = f.read() # watch out for built-in `str`
-    print sql[:10000]
+    print(sql[:10000])
     cur = con.cursor()
     cur.executescript(sql)
     '''

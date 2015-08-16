@@ -32,15 +32,15 @@ def aTergo(date):
     
     sortedDict['afrykanerski'] = sorted(sortDict['afrykanerski'], key=c.sort_key)
     letter = sortedDict['afrykanerski'][0][0]
-    text = u'{| class=hiddentable style="text-align:right"\n|-'
+    text = '{| class=hiddentable style="text-align:right"\n|-'
     counter = 0
     for i in range(len(sortedDict['afrykanerski'])):
         
         if elem[0] == letter:
-            text = text + u'|[[%s|%s]]|\n' % (elem[::-1], elem)
+            text = text + '|[[%s|%s]]|\n' % (elem[::-1], elem)
         else:
-            pywikibot.Page(site, u'Wikipedysta:Alkamid/atergo/afrykanerski/%s' % letter).put(text)
-            text = u''
+            pywikibot.Page(site, 'Wikipedysta:Alkamid/atergo/afrykanerski/%s' % letter).put(text)
+            text = ''
             letter = elem[0]
-            text = text + u'* %s\n' % elem
+            text = text + '* %s\n' % elem
     

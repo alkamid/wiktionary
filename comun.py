@@ -20,10 +20,10 @@ def main():
 			h.langs()
 			for c in h.listLangs:
 				c.pola()
-				if c.type != 2 and c.lang == u'hiszpański':
-					if u'męski lub żeński' in c.znaczeniaWhole.tresc:
-						print u'\n' + h.title
-						text = u'*[[%s]]\n' % h.title
+				if c.type != 2 and c.lang == 'hiszpański':
+					if 'męski lub żeński' in c.znaczeniaWhole.tresc:
+						print('\n' + h.title)
+						text = '*[[%s]]\n' % h.title
 						file = open("log/comun.txt", 'a')
 						file.write (text.encode("utf-8"))
 						file.close

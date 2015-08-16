@@ -39,23 +39,23 @@ locale.setlocale(locale.LC_COLLATE,"pl_PL.UTF-8")
 
 class Haslo():
 	regex = {}
-	regex['langs-wstepna'] = re.compile(ur'(.*?)==', re.DOTALL)
-	regex['langs-lang'] = re.compile(ur'(== .*?\(\{\{.*?\}\}\) ==.*?)(?=$|[^{{]==)', re.DOTALL)
+	regex['langs-wstepna'] = re.compile(r'(.*?)==', re.DOTALL)
+	regex['langs-lang'] = re.compile(r'(== .*?\(\{\{.*?\}\}\) ==.*?)(?=$|[^{{]==)', re.DOTALL)
 	def __init__(self, title, text='faoweoucmo3u4210987acskjdh', new=False):
             if new == True:
                 self.site = pywikibot.Site('pl', 'wiktionary')
                 self.type = 3
                 self.title = title
-                self.wstepna = u''
-                self.content = u''
+                self.wstepna = ''
+                self.content = ''
                 self.listLangs = []
 
             #title should be unicode only? will change in python 3 version
-            elif type(title) is str or type(title) is unicode:
+            elif type(title) is str or type(title) is str:
                 self.site = pywikibot.Site('pl', 'wiktionary')
                 self.type = 1
                 self.title = title
-                self.wstepna = u''
+                self.wstepna = ''
                 page = pywikibot.Page(self.site, self.title)
                 
                 try:
@@ -68,7 +68,7 @@ class Haslo():
                     self.type = 2
                 else:
                     self.type = 3
-                    if page.namespace() and u'Wikipedysta:AlkamidBot/sjp/' not in self.title:
+                    if page.namespace() and 'Wikipedysta:AlkamidBot/sjp/' not in self.title:
                         self.type = 5
                          
                     if self.type == 3:
@@ -91,7 +91,7 @@ class Haslo():
 		if s_wstepna:
 			self.wstepna = s_wstepna.group(1)
 		else:
-			self.wstepna = u''
+			self.wstepna = ''
 		
 		s_lang = re.findall(Haslo.regex['langs-lang'], self.content)
 		if s_lang:
@@ -101,7 +101,7 @@ class Haslo():
 			self.type = 4
 			raise sectionsNotFound
 		
-	def push(self, offline=False, myComment = u'', new=False):
+	def push(self, offline=False, myComment = '', new=False):
 		
 		toPush = self.wstepna
 		sthWrong = 0
@@ -110,28 +110,28 @@ class Haslo():
 		for a in self.listLangs:
 			if a.type in (2,3,7):
 				sthWrong = 1
-			toPush += a.header + u'\n' + a.content.strip() + u'\n\n'
+			toPush += a.header + '\n' + a.content.strip() + '\n\n'
 		toPush = toPush.strip()
 		if not sthWrong:
 			if offline:
-				print toPush
+				print(toPush)
 			else:
 				page = pywikibot.Page(self.site, self.title)
 				try: content = page.get()
 				except pywikibot.IsRedirectPage:
-					print u'%s - konflikt edycji' % self.title
+					print('%s - konflikt edycji' % self.title)
 				except pywikibot.NoPage:
 					if new:
                                                 page.text = toPush
 						page.save(comment=myComment)
 				except pywikibot.Error:
-					print u'%s - konflikt edycji' % self.title
+					print('%s - konflikt edycji' % self.title)
 				else:
 					if content == self.content and content != toPush:
                                             page.text = toPush
                                             page.save(comment=myComment)
 					elif content != self.content:
-						print u'%s - konflikt edycji' % self.title
+						print('%s - konflikt edycji' % self.title)
 	def addSection(self, section):
 		self.listLangs.append(section)
 							
@@ -139,53 +139,53 @@ def sortSections(sectionList):
 	# sorting sections. The proper order is: 1. "użycie międzynarodowe" 2. "polski" 3. "termin obcy w języku polskim" 4. "znak chiński". The rest is sorted alphabetically with pl_PL locale
 	sectionList = sorted(sectionList, cmp=lambda a, b: locale.strcoll(a.lang, b.lang))
 	for sec in sectionList:
-		if sec.lang == u'znak chiński':
+		if sec.lang == 'znak chiński':
 			ind = sectionList.index(sec)
 			sectionList.insert(0, sectionList.pop(ind))
 	for sec in sectionList:
-		if sec.lang == u'termin obcy w języku polskim':
+		if sec.lang == 'termin obcy w języku polskim':
 			ind = sectionList.index(sec)
 			sectionList.insert(0, sectionList.pop(ind))
 	for sec in sectionList:
-		if sec.lang == u'polski':
+		if sec.lang == 'polski':
 			ind = sectionList.index(sec)
 			sectionList.insert(0, sectionList.pop(ind))
 	for sec in sectionList:
-		if sec.lang == u'użycie międzynarodowe':
+		if sec.lang == 'użycie międzynarodowe':
 			ind = sectionList.index(sec)
 			sectionList.insert(0, sectionList.pop(ind))
 	return sectionList
 		
 class notFromMainNamespace(Exception):
 	def __init__(self):
-	   self.value = u'not from main namespace!'
+	   self.value = 'not from main namespace!'
 	def __str__(self):
 		return repr(self.value)
 	
 class sectionsNotFound(Exception):
 	def __init__(self):
-	   self.value = u'language sections not found!'
+	   self.value = 'language sections not found!'
 	def __str__(self):
 		return repr(self.value)
 	
 class DumpNotFound(Exception):
 	def __init__(self):
-	   self.value = u'the latest dump has not been found'
+	   self.value = 'the latest dump has not been found'
 	def __str__(self):
 		return repr(self.value)	
 	
 class WrongHeader(Exception):
 	def __init__(self):
-	   self.value = u'something is wrong with the header'
+	   self.value = 'something is wrong with the header'
 	def __str__(self):
 		return repr(self.value)
 
 def generateRegexp(order):
     for i, sect in enumerate(order):
         if i == len(order) - 1:
-            order[i].regex = re.compile(ur'%s(.*)' % (order[i].template), re.DOTALL)
+            order[i].regex = re.compile(r'%s(.*)' % (order[i].template), re.DOTALL)
         else:
-            order[i].regex = re.compile(ur'%s(.*?)\n%s' % (order[i].template, order[i+1].template), re.DOTALL)
+            order[i].regex = re.compile(r'%s(.*?)\n%s' % (order[i].template, order[i+1].template), re.DOTALL)
 
 #possible types:
 #1 - proper section, all normal languages
@@ -208,51 +208,51 @@ class subSection():
             self.name = name
         else:
             self.name = template
-        if template != u'':
-            self.template = u'{{%s}}' % template
+        if template != '':
+            self.template = '{{%s}}' % template
         else:
-            self.template = u''
+            self.template = ''
         self.optional = optional
         self.regex = regex
 		
 class LanguageSection():
 	regex = {}
-	regex['init-lang'] = re.compile(ur'== (.*?) \(\{\{(język |)(.*?)(?=\|(.*?)\}\}\) ==|\}\}\) ==)')
-	regex['init-langLong'] = re.compile(ur'== (.*?) \(\{\{(.*?)(\|.*?\}\}\) ==|\}\}\) ==)')
-	regex['init-headerAndContent'] = re.compile(ur'\s*(== .*? \({{.*?}}\) ==)[ ]*\n(.*)', re.DOTALL)
+	regex['init-lang'] = re.compile(r'== (.*?) \(\{\{(język |)(.*?)(?=\|(.*?)\}\}\) ==|\}\}\) ==)')
+	regex['init-langLong'] = re.compile(r'== (.*?) \(\{\{(.*?)(\|.*?\}\}\) ==|\}\}\) ==)')
+	regex['init-headerAndContent'] = re.compile(r'\s*(== .*? \({{.*?}}\) ==)[ ]*\n(.*)', re.DOTALL)
 	
-	regex['pola-znaczeniaDetail'] = re.compile(ur'\n\s*?(\'\'.*?|{{forma rzeczownika.*?|{{forma przymiotnika.*?|{{forma czasownika.*?|{{przysłowie .*?|{{morfem\|.*?)\s*?(\n\s*?\: \([0-9]\.[0-9]\.*[0-9]*\).*?)(?=\n\'\'|\n{{forma rzeczownika|\n{{forma przymiotnika|\n{{forma czasownika|\n{{przysłowie|\n{{morfem\||$)', re.DOTALL)
+	regex['pola-znaczeniaDetail'] = re.compile(r'\n\s*?(\'\'.*?|{{forma rzeczownika.*?|{{forma przymiotnika.*?|{{forma czasownika.*?|{{przysłowie .*?|{{morfem\|.*?)\s*?(\n\s*?\: \([0-9]\.[0-9]\.*[0-9]*\).*?)(?=\n\'\'|\n{{forma rzeczownika|\n{{forma przymiotnika|\n{{forma czasownika|\n{{przysłowie|\n{{morfem\||$)', re.DOTALL)
 	
-	regex['pola-nr'] = re.compile(ur'\(([0-9]\.[0-9]\.*[0-9]*)\)')
+	regex['pola-nr'] = re.compile(r'\(([0-9]\.[0-9]\.*[0-9]*)\)')
 
         # define subsection order for different languages. Could be fetched from pl.wikt if we had it written somewhere
 
         sectionOrder = collections.OrderedDict() # we want to keep subsections ordered
 
         # first, standard subsections template. The rest is adding/subtracting specific subsections for a few languages
-        sectionOrder[u'default'] = [subSection(u'', True, name='dodatki'), subSection(u'wymowa'), subSection(u'znaczenia'), subSection(u'odmiana'), subSection(u'przykłady'), subSection(u'składnia'), subSection(u'kolokacje'), subSection(u'synonimy'), subSection(u'antonimy'), subSection(u'hiperonimy', True), subSection(u'hiponimy', True), subSection(u'holonimy', True), subSection(u'meronimy', True), subSection(u'pokrewne'), subSection(u'frazeologia'), subSection(u'etymologia'), subSection(u'uwagi'), subSection(u'źródła')]
+        sectionOrder['default'] = [subSection('', True, name='dodatki'), subSection('wymowa'), subSection('znaczenia'), subSection('odmiana'), subSection('przykłady'), subSection('składnia'), subSection('kolokacje'), subSection('synonimy'), subSection('antonimy'), subSection('hiperonimy', True), subSection('hiponimy', True), subSection('holonimy', True), subSection('meronimy', True), subSection('pokrewne'), subSection('frazeologia'), subSection('etymologia'), subSection('uwagi'), subSection('źródła')]
 
-        sectionOrder[u'znak chiński'] = [subSection(u'klucz'), subSection(u'kreski'), subSection(u'warianty'), subSection(u'kolejność'), subSection(u'znaczenia'), subSection(u'etymologia'), subSection(u'kody'), subSection(u'słowniki'), subSection(u'uwagi')]
+        sectionOrder['znak chiński'] = [subSection('klucz'), subSection('kreski'), subSection('warianty'), subSection('kolejność'), subSection('znaczenia'), subSection('etymologia'), subSection('kody'), subSection('słowniki'), subSection('uwagi')]
 
-        sectionOrder[u'staroegipski'] = [subSection(u'', True, name='dodatki'), subSection(u'zapis hieroglificzny'), subSection(u'transliteracja'), subSection(u'transkrypcja'), subSection(u'znaczenia'), subSection(u'determinatywy')] + deepcopy(sectionOrder['default'])
-        del sectionOrder[u'staroegipski'][6:9]
+        sectionOrder['staroegipski'] = [subSection('', True, name='dodatki'), subSection('zapis hieroglificzny'), subSection('transliteracja'), subSection('transkrypcja'), subSection('znaczenia'), subSection('determinatywy')] + deepcopy(sectionOrder['default'])
+        del sectionOrder['staroegipski'][6:9]
 
-        sectionOrder[u'polski'] = deepcopy(sectionOrder['default'])
-        sectionOrder[u'polski'].insert(-1, subSection(u'tłumaczenia'))
+        sectionOrder['polski'] = deepcopy(sectionOrder['default'])
+        sectionOrder['polski'].insert(-1, subSection('tłumaczenia'))
 
-        sectionOrder[u'esperanto (morfem)'] = deepcopy(sectionOrder['default'])
-        sectionOrder[u'esperanto (morfem)'].insert(9, subSection(u'pochodne'))
-        del sectionOrder[u'esperanto (morfem)'][10:15]
+        sectionOrder['esperanto (morfem)'] = deepcopy(sectionOrder['default'])
+        sectionOrder['esperanto (morfem)'].insert(9, subSection('pochodne'))
+        del sectionOrder['esperanto (morfem)'][10:15]
 
-        sectionOrder[u'esperanto'] = deepcopy(sectionOrder['default'])
-        sectionOrder[u'esperanto'].insert(1, subSection(u'morfologia'))
+        sectionOrder['esperanto'] = deepcopy(sectionOrder['default'])
+        sectionOrder['esperanto'].insert(1, subSection('morfologia'))
 
-        sectionOrder[u'japoński'] = deepcopy(sectionOrder['default'])
-        sectionOrder[u'japoński'].insert(1, subSection(u'czytania'))
-        sectionOrder[u'japoński'].insert(14, subSection(u'złożenia'))
+        sectionOrder['japoński'] = deepcopy(sectionOrder['default'])
+        sectionOrder['japoński'].insert(1, subSection('czytania'))
+        sectionOrder['japoński'].insert(14, subSection('złożenia'))
 
-        sectionOrder[u'koreański'] = deepcopy(sectionOrder['default'])
-        sectionOrder[u'koreański'].insert(16, subSection(u'hanja'))
+        sectionOrder['koreański'] = deepcopy(sectionOrder['default'])
+        sectionOrder['koreański'].insert(16, subSection('hanja'))
 	
 
 
@@ -268,16 +268,16 @@ class LanguageSection():
             if text == 'afeof5imad3sfa5' and title != '2o3iremdas' and type != 666 and lang != 'bumbum':
                     self.title = title
                     self.langLong = lang
-                    self.lang = lang.replace(u'język ', u'')
+                    self.lang = lang.replace('język ', '')
                     self.type = type
-                    self.header = u'== %s ({{%s}}) ==' % (title, lang)
+                    self.header = '== %s ({{%s}}) ==' % (title, lang)
                     self.znaczeniaDetail = []
                     if type == 1:
                         try: order = LanguageSection.sectionOrder[self.lang]
                         except KeyError:
-                            order = LanguageSection.sectionOrder[u'default']
+                            order = LanguageSection.sectionOrder['default']
                         for elem in order:
-                            self.subSections[order[elem]] = Pole(u'')
+                            self.subSections[order[elem]] = Pole('')
 
             elif text != 'afeof5imad3sfa5' and type == 666 and lang == 'bumbum':
 
@@ -290,7 +290,7 @@ class LanguageSection():
                             if s_lang.group(4):
                                     self.headerArg = s_lang.group(4)
                             else:
-                                    self.headerArg = u''
+                                    self.headerArg = ''
                             self.header = s_headerAndContent.group(1).strip()
                             self.lang = s_lang.group(3)
                             self.langUpper = self.lang[0].upper() + self.lang[1:]
@@ -303,41 +303,41 @@ class LanguageSection():
 	
 	def updateHeader(self):
 		
-		self.header = u'== %s ({{%s' % (self.titleHeader, self.langLong)
+		self.header = '== %s ({{%s' % (self.titleHeader, self.langLong)
 		if self.headerArg:
-			self.header += u'|%s' % self.headerArg
-		self.header += u'}}) =='
+			self.header += '|%s' % self.headerArg
+		self.header += '}}) =='
 	
 	def saveChanges(self):
-		try: self.subSections[u'znaczenia']
+		try: self.subSections['znaczenia']
 		except AttributeError:
 			pass
 		else:
-			znaczeniaWhole = u''
+			znaczeniaWhole = ''
 			for a in self.znaczeniaDetail: # łączy sekcję "znaczenia" (jest wcześniej rozbijana na "część mowy" i znaczenie)
-				znaczeniaWhole += u'\n' + a[0] + a[1]
-			self.subSections[u'znaczenia'] = Pole(znaczeniaWhole)
+				znaczeniaWhole += '\n' + a[0] + a[1]
+			self.subSections['znaczenia'] = Pole(znaczeniaWhole)
 		
 
-                self.content = u''
+                self.content = ''
                 for elem in self.subSections:
-                    if elem == u'dodatki':
+                    if elem == 'dodatki':
                         self.content += self.subSections[elem].text
                     else:
-                        self.content += u'\n{{%s}}%s' % (elem, self.subSections[elem].text)	
+                        self.content += '\n{{%s}}%s' % (elem, self.subSections[elem].text)	
 		
 	def pola(self):
 
 		if self.type == 1:
                     try: order = LanguageSection.sectionOrder[self.lang] # look for subsection order templates for specific languages
                     except KeyError:
-                        order = LanguageSection.sectionOrder[u'default']
+                        order = LanguageSection.sectionOrder['default']
                     for sect in order:
                         s = re.search(sect.regex, self.content)
                         if s:
                             self.subSections[sect.name] = Pole(s.group(1))
                         elif sect.optional:
-                            self.subSections[sect.name] = Pole(u'')
+                            self.subSections[sect.name] = Pole('')
                         else:
                             self.type = 7
 
@@ -353,7 +353,7 @@ class LanguageSection():
                                     if int(s_numer.group(1)[0]) != len(self.znaczeniaDetail):
                                             self.type = 14
                             else:
-                                    if self.lang == u'znak chiński':
+                                    if self.lang == 'znak chiński':
                                             self.znaczeniaDetail = []
                                     else:
                                             self.type = 5
@@ -361,7 +361,7 @@ class LanguageSection():
 	def checkForInflectedForms(self, meanings):
             allFlexForms = True
             
-            forms = set(u'forma ' + affix for affix in (u'czasownika', u'liczebnika', u'przymiotnika', u'przysłówka', u'rodzajnika', u'rzeczownika', u'verbal', u'zaimka'))
+            forms = set('forma ' + affix for affix in ('czasownika', 'liczebnika', 'przymiotnika', 'przysłówka', 'rodzajnika', 'rzeczownika', 'verbal', 'zaimka'))
             for mean in meanings:
                 if any(form in mean[0] for form in forms):
                     pass
@@ -372,11 +372,11 @@ class LanguageSection():
 		
 class Pole():
 	regex = {}
-	regex['init-warianty-details'] = re.compile(ur'{{zch-w\|([a-z]*?)\|(.*?)}}')
-	regex['init-obrazek'] = re.compile(ur'{{zch-obrazek\|([a-z]*?)\|(.*?)}}')
-	regex['init-kodySlowniki-details'] = re.compile(ur'([a-z]*?)=(.*?)(?=\||$)')
-	regex['init-kolejnosc'] = re.compile(ur'({{zch-komiks|{{zch-animacja|{{zch-cienie)[\|]*(.*?)}}')
-	regex['numer-nr-whole'] = re.compile(ur'(\:\s*?\([1-9].*?\))(.*?)(?=\n\:|$)', re.DOTALL)
+	regex['init-warianty-details'] = re.compile(r'{{zch-w\|([a-z]*?)\|(.*?)}}')
+	regex['init-obrazek'] = re.compile(r'{{zch-obrazek\|([a-z]*?)\|(.*?)}}')
+	regex['init-kodySlowniki-details'] = re.compile(r'([a-z]*?)=(.*?)(?=\||$)')
+	regex['init-kolejnosc'] = re.compile(r'({{zch-komiks|{{zch-animacja|{{zch-cienie)[\|]*(.*?)}}')
+	regex['numer-nr-whole'] = re.compile(r'(\:\s*?\([1-9].*?\))(.*?)(?=\n\:|$)', re.DOTALL)
 	
 	def __init__(self, text, type='auto'):
 
@@ -384,101 +384,101 @@ class Pole():
 		self.text = text
 		self.list = []
 		self.dict = {}
-		if type == u'warianty':
+		if type == 'warianty':
 			warianty = re.findall(Pole.regex['init-warianty-details'], self.text)
 			for b in warianty:
-				if not self.dict.has_key(b[0]):
+				if b[0] not in self.dict:
 					self.dict[b[0]] = []
 				self.dict[b[0]].append(b[1])
 			warianty_obrazek = re.findall(Pole.regex['init-obrazek'], self.text)
 			for b in warianty_obrazek:
 				self.dict[b[0]] = b[1]
-		if type == u'zch-etym':
+		if type == 'zch-etym':
 			etymologia = re.findall(Pole.regex['init-obrazek'], self.text)
 			for b in etymologia:
 				self.dict[b[0]] = b[1]
-		if type == u'kolejnosc':
+		if type == 'kolejnosc':
 			kolejnosc = re.findall(Pole.regex['init-kolejnosc'], self.text)
 			for b in kolejnosc:
 				self.dict[b[1]] = b[0]
-		if type == u'kody' or type == u'slowniki':
+		if type == 'kody' or type == 'slowniki':
 			kody = re.findall(Pole.regex['init-kodySlowniki-details'], self.text)
 			for b in kody:
 				self.dict[b[0]] = b[1]
 	def merge(self, mode=2): #mode = 1 - test for a proper field, return 0 if invalid; mode=2 - merge a list/dict into a string
-		text=u''
-		if self.type == u'warianty':
-			text = u' |'
-			if self.dict.has_key(u'ct'):
-				for a in self.dict[u'ct']:
-					text += u' {{zch-w|ct|%s}} |' % a
-			if self.dict.has_key(u'cu'):
-				for a in self.dict[u'cu']:
-					text += u' {{zch-w|cu|%s}} |' % a
-			if self.dict.has_key(u'js'):
-				for a in self.dict[u'js']:
-					text += u' {{zch-w|js|%s}} |' % a
-			if text[-2:] == u' |':
+		text=''
+		if self.type == 'warianty':
+			text = ' |'
+			if 'ct' in self.dict:
+				for a in self.dict['ct']:
+					text += ' {{zch-w|ct|%s}} |' % a
+			if 'cu' in self.dict:
+				for a in self.dict['cu']:
+					text += ' {{zch-w|cu|%s}} |' % a
+			if 'js' in self.dict:
+				for a in self.dict['js']:
+					text += ' {{zch-w|js|%s}} |' % a
+			if text[-2:] == ' |':
 				text = text[:-2]
-			if text == u'':
-				text += u'|{{zch-w}}'
-			if self.dict.has_key(u'c') or self.dict.has_key(u'xt') or self.dict.has_key(u'ca') or self.dict.has_key(u'kt') or self.dict.has_key(u'sot'):
-				text += u'}} {{warianty-obrazek |'
-			if self.dict.has_key(u'c'):
-				text += u' {{zch-obrazek|c|%s}} |' % self.dict[u'c']
-			if self.dict.has_key(u'xt'):
-				text += u' {{zch-obrazek|xt|%s}} |' % self.dict[u'xt']
-			if self.dict.has_key(u'ca'):
-				text += u' {{zch-obrazek|ca|%s}} |' % self.dict[u'ca']
-			if self.dict.has_key(u'kt'):
-				text += u' {{zch-obrazek|kt|%s}} |' % self.dict[u'kt']
-			if self.dict.has_key(u'sot'):
-				text += u' {{zch-obrazek|sot|%s}} |' % self.dict[u'sot']
-			if text[-2:] == u' |':
+			if text == '':
+				text += '|{{zch-w}}'
+			if 'c' in self.dict or 'xt' in self.dict or 'ca' in self.dict or 'kt' in self.dict or 'sot' in self.dict:
+				text += '}} {{warianty-obrazek |'
+			if 'c' in self.dict:
+				text += ' {{zch-obrazek|c|%s}} |' % self.dict['c']
+			if 'xt' in self.dict:
+				text += ' {{zch-obrazek|xt|%s}} |' % self.dict['xt']
+			if 'ca' in self.dict:
+				text += ' {{zch-obrazek|ca|%s}} |' % self.dict['ca']
+			if 'kt' in self.dict:
+				text += ' {{zch-obrazek|kt|%s}} |' % self.dict['kt']
+			if 'sot' in self.dict:
+				text += ' {{zch-obrazek|sot|%s}} |' % self.dict['sot']
+			if text[-2:] == ' |':
 				text = text[:-2]
-		if self.type == u'zch-etym':
-			if self.dict.has_key('o') or self.dict.has_key('br') or self.dict.has_key('bs') or self.dict.has_key('ss'):
-				text += u' {{warianty-obrazek |'
-			if self.dict.has_key('o'):
-				text += u' {{zch-obrazek|o|%s}} |' % self.dict[u'o']
-			if self.dict.has_key('br'):
-				text += u' {{zch-obrazek|br|%s}} |' % self.dict[u'br']
-			if self.dict.has_key('bs'):
-				text += u' {{zch-obrazek|bs|%s}} |' % self.dict[u'bs']
-			if self.dict.has_key('ss'):
-				text += u' {{zch-obrazek|ss|%s}} |' % self.dict[u'ss']
-			if text[-2:] == u' |':
+		if self.type == 'zch-etym':
+			if 'o' in self.dict or 'br' in self.dict or 'bs' in self.dict or 'ss' in self.dict:
+				text += ' {{warianty-obrazek |'
+			if 'o' in self.dict:
+				text += ' {{zch-obrazek|o|%s}} |' % self.dict['o']
+			if 'br' in self.dict:
+				text += ' {{zch-obrazek|br|%s}} |' % self.dict['br']
+			if 'bs' in self.dict:
+				text += ' {{zch-obrazek|bs|%s}} |' % self.dict['bs']
+			if 'ss' in self.dict:
+				text += ' {{zch-obrazek|ss|%s}} |' % self.dict['ss']
+			if text[-2:] == ' |':
 				text = text[:-2]
 			if text:
 				text += '}}'
-		if self.type == u'kolejnosc':
-			if self.dict.has_key(u''):
-				text += u'%s}}' % self.dict[u'']
-			if self.dict.has_key(u'j'):
-				text += u' %s|j}}' % self.dict[u'j']
-			if self.dict.has_key(u't'):
-				text += u' %s|t}}' % self.dict[u't']
-			if self.dict.has_key(u'a'):
-				text += u' %s|a}}' % self.dict[u'a']
+		if self.type == 'kolejnosc':
+			if '' in self.dict:
+				text += '%s}}' % self.dict['']
+			if 'j' in self.dict:
+				text += ' %s|j}}' % self.dict['j']
+			if 't' in self.dict:
+				text += ' %s|t}}' % self.dict['t']
+			if 'a' in self.dict:
+				text += ' %s|a}}' % self.dict['a']
 			text.strip()
 			if text:
-				text = u'\n' + text
-		if self.type == u'kody':
-			if self.dict.has_key(u'cjz'):
-				text += u'|cjz=%s' % self.dict[u'cjz']
-			if self.dict.has_key(u'cr'):
-				text += u'|cr=%s' % self.dict[u'cr']
-			if self.dict.has_key(u'u'):
-				text += u'|u=%s' % self.dict[u'u']
-		if self.type == u'slowniki':
-			if self.dict.has_key(u'kx'):
-				text += u'|kx=%s' % self.dict[u'kx']
-			if self.dict.has_key(u'dkj'):
-				text += u'|dkj=%s' % self.dict[u'dkj']
-			if self.dict.has_key(u'dj'):
-				text += u'|dj=%s' % self.dict[u'dj']
-			if self.dict.has_key(u'hdz'):
-				text += u'|hdz=%s' % self.dict[u'hdz']
+				text = '\n' + text
+		if self.type == 'kody':
+			if 'cjz' in self.dict:
+				text += '|cjz=%s' % self.dict['cjz']
+			if 'cr' in self.dict:
+				text += '|cr=%s' % self.dict['cr']
+			if 'u' in self.dict:
+				text += '|u=%s' % self.dict['u']
+		if self.type == 'slowniki':
+			if 'kx' in self.dict:
+				text += '|kx=%s' % self.dict['kx']
+			if 'dkj' in self.dict:
+				text += '|dkj=%s' % self.dict['dkj']
+			if 'dj' in self.dict:
+				text += '|dj=%s' % self.dict['dj']
+			if 'hdz' in self.dict:
+				text += '|hdz=%s' % self.dict['hdz']
 		if mode == 1:
 			if text != self.text:
 				return 0
@@ -489,13 +489,13 @@ class Pole():
 			return text
 	def numer(self):
 		s_nr_whole = re.findall(Pole.regex['numer-nr-whole'], self.text)
-		testString = u''
+		testString = ''
 		if s_nr_whole:
 			self.list = [list(tup) for tup in s_nr_whole]
 			for elem in self.list:
 				for e in elem:
 					testString += e
-			if testString.strip().replace(u'\n', u'') != self.text.strip().replace(u'\n', u''):
+			if testString.strip().replace('\n', '') != self.text.strip().replace('\n', ''):
 				self.type = 3
 			else:
 				self.type = 2
@@ -505,10 +505,10 @@ def ReadList(filename):
 	list = []
 	inp = codecs.open('%s' % filename, encoding='utf-8')
 	for line in inp:
-		list.append(line.split(u'\n'))
+		list.append(line.split('\n'))
 	return list
 
-def flagLastRev(site, revid, comment=u''):
+def flagLastRev(site, revid, comment=''):
 	
 	token = site.getToken(sysop=False)
 	params = {
@@ -527,15 +527,15 @@ def flagLastRev(site, revid, comment=u''):
 #TODO: pobierać z WS:Kody języków
 def getAllLanguages():
 	site = pywikibot.Site('pl', 'wiktionary')
-	page = pywikibot.Page(site, u'Mediawiki:Gadget-langdata.js')
+	page = pywikibot.Page(site, 'Mediawiki:Gadget-langdata.js')
 	pageText = page.get()
 	
 	langTable = []
 	shortOnly = []
-	re_langs = re.compile(ur'lang2code: \{\n(.*?)\n\t\},', re.DOTALL)
-	re_oneLang = re.compile(ur'\s*?"(.*?)"\s*?\:\s*"([a-z-]*?)')
-	re_shorts = re.compile(ur'shortLangs: \[\n(.*?)\n\t\]', re.DOTALL)
-	re_oneShort = re.compile(ur'\s*?"(.*?)",\s*?')
+	re_langs = re.compile(r'lang2code: \{\n(.*?)\n\t\},', re.DOTALL)
+	re_oneLang = re.compile(r'\s*?"(.*?)"\s*?\:\s*"([a-z-]*?)')
+	re_shorts = re.compile(r'shortLangs: \[\n(.*?)\n\t\]', re.DOTALL)
+	re_oneShort = re.compile(r'\s*?"(.*?)",\s*?')
 	
 	s_langs = re.search(re_langs, pageText)
 
@@ -548,13 +548,13 @@ def getAllLanguages():
 			if a[0] in shortOnly:
 				tempLong = a[0]
 			else:
-				tempLong = u'język %s' % (a[0])
+				tempLong = 'język %s' % (a[0])
 				
 			langUpper = a[0][0].upper() + a[0][1:]
 			
 			langTable.append(Language(a[0], tempLong, langUpper, a[1]))
 	else:
-		print u'Couldn\'t get languages list!'
+		print('Couldn\'t get languages list!')
 		langTable = None
 		
 	return langTable
@@ -562,10 +562,10 @@ def getAllLanguages():
 def obrazkiAndrzeja():
 	#wyniki działania funkcji to dictionary w formie dict['slowo'] = [grafika1, grafika2, ...]
 	site = pywikibot.Site()
-	pageImages = pywikibot.Page(site, u'Wikipedysta:Andrzej 22/Ilustracje')
-	re_sekcja = re.compile(ur'\=\=\s*\[\[(.*?)\]\]\s*\=\=(.*?)(?=\=\=)', re.DOTALL)
-	re_img = re.compile(ur'(\[\[Plik\:.*?\]\])(?=\[\[Plik|<br)')
-	re_subnr = ws = re.compile(ur'\([0-9]\.[0-9]\)') # do zamieniania (1.1) na {{brak|numer}} w obrazkach
+	pageImages = pywikibot.Page(site, 'Wikipedysta:Andrzej 22/Ilustracje')
+	re_sekcja = re.compile(r'\=\=\s*\[\[(.*?)\]\]\s*\=\=(.*?)(?=\=\=)', re.DOTALL)
+	re_img = re.compile(r'(\[\[Plik\:.*?\]\])(?=\[\[Plik|<br)')
+	re_subnr = ws = re.compile(r'\([0-9]\.[0-9]\)') # do zamieniania (1.1) na {{brak|numer}} w obrazkach
 	pageText = pageImages.get()
 	s_sekcja = re.findall(re_sekcja, pageText)
 	result = collections.defaultdict()
@@ -575,7 +575,7 @@ def obrazkiAndrzeja():
 			if s_img and a[0]:
 				result[a[0]] = []
 				for b in s_img:
-					b = re.sub(re_subnr, u'{{brak|numer}}', b)
+					b = re.sub(re_subnr, '{{brak|numer}}', b)
 					result[a[0]].append(b)				
 	return result
 	
@@ -588,7 +588,7 @@ class Language():
 		
 class SectionFr():
 	def __init__(self, b, a):
-		re_lang = re.compile(u'==(| )?{{=(.*?)=}}')
+		re_lang = re.compile('==(| )?{{=(.*?)=}}')
 		s_lang = re.search(re_lang, b)
 		if s_lang:
 			self.title = a
@@ -600,15 +600,15 @@ class SectionFr():
 		
 	def pola(self):
 		if self.type == 1:
-			re_etymology = re.compile(u'{{-étym-}}\n(.*?){{-|$', re.DOTALL)
-			re_variants = re.compile(u'{{-var-ortho-}}\n(.*?){{-|$', re.DOTALL)
-			re_synonyms = re.compile(u'{{-syn-}}\n(.*?){{-|$', re.DOTALL)
-			re_antonyms = re.compile(u'{{-ant-}}\n(.*?){{-|$', re.DOTALL)
-			re_derives = re.compile(u'{{-drv-}}\n(.*?){{-|$', re.DOTALL)
-			re_expressions = re.compile(u'{{-exp-}}\n(.*?){{-|$', re.DOTALL)
-			re_translations = re.compile(u'{{-trad-}}\n(.*?){{-|$', re.DOTALL)
-			re_pronunciation = re.compile(u'{{-pron-}}\n(.*?){{-|$', re.DOTALL)
-			re_noun = re.compile(u'{{-nom-\|(.*?){{-|$', re.DOTALL)
+			re_etymology = re.compile('{{-étym-}}\n(.*?){{-|$', re.DOTALL)
+			re_variants = re.compile('{{-var-ortho-}}\n(.*?){{-|$', re.DOTALL)
+			re_synonyms = re.compile('{{-syn-}}\n(.*?){{-|$', re.DOTALL)
+			re_antonyms = re.compile('{{-ant-}}\n(.*?){{-|$', re.DOTALL)
+			re_derives = re.compile('{{-drv-}}\n(.*?){{-|$', re.DOTALL)
+			re_expressions = re.compile('{{-exp-}}\n(.*?){{-|$', re.DOTALL)
+			re_translations = re.compile('{{-trad-}}\n(.*?){{-|$', re.DOTALL)
+			re_pronunciation = re.compile('{{-pron-}}\n(.*?){{-|$', re.DOTALL)
+			re_noun = re.compile('{{-nom-\|(.*?){{-|$', re.DOTALL)
 			
 			s_etymology = re.search(re_etymology, self.content)
 			s_variants = re.search(re_variants, self.content)
@@ -669,16 +669,16 @@ class SectionFr():
 		
 	def genre(self):
 		
-		if u'{{m}}' in self.noun.tresc:
-			self.genre = u'm'
-		elif u'{{f}}' in self.noun.tresc:
-			self.genre = u'f'
-		elif u'{{mf}}' in self.noun.tresc:
-			self.genre = u'mf'
-		elif u'{{mf?}}' in self.noun.tresc:
-			self.genre = u'mf?'
+		if '{{m}}' in self.noun.tresc:
+			self.genre = 'm'
+		elif '{{f}}' in self.noun.tresc:
+			self.genre = 'f'
+		elif '{{mf}}' in self.noun.tresc:
+			self.genre = 'mf'
+		elif '{{mf?}}' in self.noun.tresc:
+			self.genre = 'mf?'
 		else:
-			self.genre = u'unknown'
+			self.genre = 'unknown'
 
 def pageCounter(language):
 	#returns number of entries for a language
@@ -688,7 +688,7 @@ def pageCounter(language):
 			}
 	req = Request(**params)
 	qr = req.submit()
-	print qr['expandtemplates']['*']
+	print(qr['expandtemplates']['*'])
 		
 def RecentChanges(limit):
 	limitString = limit
@@ -726,11 +726,11 @@ def writeRCLimit(name, limit=666):
 		current = datetime.datetime.now()
 		limit = current.strftime(time_format)
 	
-	file = open(u'%srclimits/%s.txt' % (config.path['scripts'], name), 'w')
+	file = open('%srclimits/%s.txt' % (config.path['scripts'], name), 'w')
 	file.write(limit.encode( "utf-8" ))
 	file.close
 def readRCLimit(name):
-	file = open(u'%srclimits/%s.txt' % (config.path['scripts'], name), 'r')
+	file = open('%srclimits/%s.txt' % (config.path['scripts'], name), 'r')
 	data = file.readlines()
 	return data[0].strip()
 	file.close
@@ -794,9 +794,9 @@ def getListFromXML(data, findLatest=False):
 
 def log(text, filename='log_all', test_mode=0):
     if test_mode == 1:
-        print text
+        print(text)
     else:
-        if text != u'':
+        if text != '':
             file = open("%slog/%s.txt" % (config.path['scripts'], filename), 'a')
             file.write (('\n' + text).encode("utf-8"))
             file.close
@@ -822,7 +822,7 @@ class HasloFr():
 			
 	def langs(self):
 		self.list_lang = []
-		re_lang = re.compile(u'(==\s*?{{=.*?=}}\s*?==\n.*?)$|==', re.DOTALL)
+		re_lang = re.compile('(==\s*?{{=.*?=}}\s*?==\n.*?)$|==', re.DOTALL)
 		s_lang = re.findall(re_lang, self.content)
 		for b in s_lang:
 			self.list_lang.append(SectionFr(b, self.title))
@@ -846,7 +846,7 @@ class HasloFrXML():
 			
 	def langs(self):
 		self.list_lang = []
-		re_lang = re.compile(u'(==\s*?{{=.*?=}}\s*?==\n.*?)$|==', re.DOTALL)
+		re_lang = re.compile('(==\s*?{{=.*?=}}\s*?==\n.*?)$|==', re.DOTALL)
 		s_lang = re.findall(re_lang, self.content)
 		for b in s_lang:
 			self.list_lang.append(SectionFr(b, self.title))	

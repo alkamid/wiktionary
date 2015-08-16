@@ -13,16 +13,16 @@ import time
 def main():
 	site = pywikibot.getSite()
 	
-	username = u'Richiski'
-	outputPage = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/zaufani/%s' % username)
+	username = 'Richiski'
+	outputPage = pywikibot.Page(site, 'Wikipedysta:AlkamidBot/zaufani/%s' % username)
 	
-	botNames = [u'Tsca.bot', u'EquadusBot', u'Olafbot', u'MastiBot', u'AlkamidBot', u'Interwicket', u'RobotGMwikt']
+	botNames = ['Tsca.bot', 'EquadusBot', 'Olafbot', 'MastiBot', 'AlkamidBot', 'Interwicket', 'RobotGMwikt']
 	
 	verified = []
-	output = u'Lista haseł, które edytował tylko Richiski i następujące boty: Tsca.bot, EquadusBot, Olafbot, MastiBot, AlkamidBot, Interwicket, RobotGMwikt. Każde z poniższych, które ma status wersji nieprzejrzanej, można (i należy) przejrzeć bez sprawdzania, ponieważ jest to pozostałość sprzed wprowadzenia wersji przejrzanych i statusu redaktora.\n\n'
+	output = 'Lista haseł, które edytował tylko Richiski i następujące boty: Tsca.bot, EquadusBot, Olafbot, MastiBot, AlkamidBot, Interwicket, RobotGMwikt. Każde z poniższych, które ma status wersji nieprzejrzanej, można (i należy) przejrzeć bez sprawdzania, ponieważ jest to pozostałość sprzed wprowadzenia wersji przejrzanych i statusu redaktora.\n\n'
 	
-	cat = Category(site,u'Kategoria:hiszpański (indeks)')
-	cat2 = Category(site, u'Kategoria:nowogrecki (indeks)')
+	cat = Category(site,'Kategoria:hiszpański (indeks)')
+	cat2 = Category(site, 'Kategoria:nowogrecki (indeks)')
 	lista_stron = pagegenerators.CategorizedPageGenerator(cat)
 	lista_stron2 = pagegenerators.CategorizedPageGenerator(cat2)
 	
@@ -40,8 +40,8 @@ def main():
 					check = 1
 					break
 			if check == 0:
-				flagLastRev(site, a, u'Automatyczne przeglądanie haseł Richiskiego sprzed ery wersji przejrzanych')
-				text = u'\n*[[%s]]' % a.title()
+				flagLastRev(site, a, 'Automatyczne przeglądanie haseł Richiskiego sprzed ery wersji przejrzanych')
+				text = '\n*[[%s]]' % a.title()
 				output += text
 				file = open('output/%s.txt' % username, 'a')
 				file.write(text.encode( "utf-8" ))
@@ -57,14 +57,14 @@ def main():
 					check = 1
 					break
 			if check == 0:
-				text = u'\n*[[%s]]' % a.title()
+				text = '\n*[[%s]]' % a.title()
 				output += text
 				file = open('output/%s.txt' % username, 'a')
 				file.write(text.encode( "utf-8" ))
 				file.close
 	
 	
-	outputPage.put(output, comment=u"Aktualizacja listy (teraz tylko utworzone przed nadaniem uprawnień redaktora")
+	outputPage.put(output, comment="Aktualizacja listy (teraz tylko utworzone przed nadaniem uprawnień redaktora")
 	
 if __name__ == '__main__':
 	try:

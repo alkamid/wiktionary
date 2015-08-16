@@ -44,7 +44,7 @@ def countMean():
 		
 	lista.sort(key=sortkey)
 	for a in lista:
-		text = text + u'* [[%s]] (%s)\n' % (a[1], a[0])
+		text = text + '* [[%s]] (%s)\n' % (a[1], a[0])
 	
 	file = open("output/brak_części_mowy.txt", 'a')
 	file.write (text.encode("utf-8"))

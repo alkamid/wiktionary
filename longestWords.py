@@ -11,7 +11,7 @@ from klasa import *
 
 def main():
     
-    data = u'20120325'
+    data = '20141024'
     lista_stron2 = getListFromXML(data)
     
     ranking = []
@@ -37,7 +37,7 @@ def main():
         
     ranking.sort(key=sortkey, reverse=True)
     for i in range(50):
-        print u'[[%s]]' % ranking[i][0]
+        print('[[%s]]' % ranking[i][0])
 
     
     #for p in lista_stron2:

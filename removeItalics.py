@@ -14,7 +14,7 @@ def main():
     
     site = pywikibot.getSite()
     
-    re_italics = re.compile(ur'(?<!\')\'\'(?!\')(.*?)(?<!\')\'\'(?!\')')
+    re_italics = re.compile(r'(?<!\')\'\'(?!\')(.*?)(?<!\')\'\'(?!\')')
     #replace = {}
     range1 = 1536
     range2 = 1791
@@ -25,8 +25,8 @@ def main():
     replace = ['arabski']
     
     for lang in replace:
-        cat = Category(site, u'Kategoria:%s (indeks)' % lang)
-        lista_stron = pagegenerators.CategorizedPageGenerator(cat, start=u'تونسي')
+        cat = Category(site, 'Kategoria:%s (indeks)' % lang)
+        lista_stron = pagegenerators.CategorizedPageGenerator(cat, start='تونسي')
     
         #lista_stron = [pywikibot.Page(site, u'آيسلندا')]
         for a in lista_stron:
@@ -53,8 +53,8 @@ def main():
                                             if num >= range1 and num <= range2:
                                                 found += 1
                                         if found:
-                                            c.content = c.content.replace(u'\'\'%s\'\'' % elem, elem)
-                    h.push(False, u'usunięcie kursywy w arabskim')
+                                            c.content = c.content.replace('\'\'%s\'\'' % elem, elem)
+                    h.push(False, 'usunięcie kursywy w arabskim')
                                                 
     
     

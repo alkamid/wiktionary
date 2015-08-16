@@ -10,15 +10,15 @@ from klasa import *
 	
 def brakCzesciMowy(data):
 
-	data_slownie = data[6] + data[7] + u'.' + data[4] + data[5] + u'.' + data[0] + data[1] + data[2] + data[3]
+	data_slownie = data[6] + data[7] + '.' + data[4] + data[5] + '.' + data[0] + data[1] + data[2] + data[3]
 	lista_stron = getListFromXML(data)
 	wikt = pywikibot.Site('pl', 'wiktionary')
-	outputPage = pywikibot.Page(wikt, u'Wikipedysta:AlkamidBot/listy/części_mowy')
+	outputPage = pywikibot.Page(wikt, 'Wikipedysta:AlkamidBot/listy/części_mowy')
 	
 	tempLangs = []
 	
 	notFound = []
-	text = u'Do poniższych haseł nie wpisano, jakimi są częściami mowy - jeśli potrafisz, zrób to. Ostatnia aktualizacja wg zrzutu bazy danych z %s.\n' % (data_slownie)
+	text = 'Do poniższych haseł nie wpisano, jakimi są częściami mowy - jeśli potrafisz, zrób to. Ostatnia aktualizacja wg zrzutu bazy danych z %s.\n' % (data_slownie)
 	notFoundList = collections.defaultdict(list)
 	
 	LangsMediaWiki = getAllLanguages()
@@ -37,18 +37,18 @@ def brakCzesciMowy(data):
 					if lang.type != 2 and lang.type != 7:
 						lang.pola()
 						if lang.type == 5:
-							notFoundList[u'%s' % lang.lang].append(lang.title)
+							notFoundList['%s' % lang.lang].append(lang.title)
 													
 	for a in LangsMediaWiki:
-		if notFoundList[u'%s' % a.shortName]:
-			text += u'== %s ==' % (a.longName)
-			for b in notFoundList[u'%s' % a.shortName]:
-				text += u'\n*[[%s]]' % (b)
-			text += u'\n'
+		if notFoundList['%s' % a.shortName]:
+			text += '== %s ==' % (a.longName)
+			for b in notFoundList['%s' % a.shortName]:
+				text += '\n*[[%s]]' % (b)
+			text += '\n'
 
 	file = open('output/bez_części_mowy.txt', 'w')
 	file.write(text.encode( "utf-8" ))
 	file.close
 	
         outputPage.text = text
-	outputPage.save(comment=u"Aktualizacja listy", botflag=False)
+	outputPage.save(comment="Aktualizacja listy", botflag=False)
