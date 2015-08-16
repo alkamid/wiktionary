@@ -13,7 +13,6 @@ import sjpMaintain
 from morfeusz import *
 from klasa import *
 from lxml import etree, html
-from PyICU import Locale, Collator
 from sjpClass import kategoriaSlowa, checkHistory
 
 
@@ -93,7 +92,8 @@ class HasloSJP():
 
 
 	def retrieve(self, a):
-		parser = etree.HTMLParser()	
+		parser = etree.HTMLParser()
+
 		while True:
 			try: sjpsite = urllib2.urlopen('http://www.sjp.pl/%s' % urllib.quote(a.encode('utf-8')))
 			except urllib2.HTTPError:
@@ -110,12 +110,12 @@ class HasloSJP():
 		except IOError:
 			return 0	
 	
-		naglowek = web.xpath("//p/b/a[@class='lc']/text()")
-		xp_dictionary = web.xpath("//table[@class='wf']//tr[2]//td")
-		xp_flex = web.xpath("//table[@class='wf']//tr[3]//td")
+                naglowek = web.xpath("//p/b/a[@class='lc']/text()")
+		xp_dictionary = web.xpath("//table[@class='wtab']//tr[2]/td")
+		xp_flex = web.xpath("//table[@class='wtab']//tr[3]/td")
 
 		tables = []
-		tbs = web.xpath("//table[@class='wf']")
+		tbs = web.xpath("//table[@class='wtab']")
 		for elem in tbs:
 			tables.append(elem.xpath(".//tr//text()"))
 			
@@ -126,12 +126,13 @@ class HasloSJP():
 			print u'nie znaleziono strony na sjp.pl'
 			return 0
 		
+                
 		for j in range(self.numWords):
 			xp_title = naglowek[j]
 			
 			if xp_title == a:
-				temp = Word(xp_title)
-				temp_mean = web.xpath("//p[@style='margin-top: .5em; font-size: medium; max-width: 33em; '][%d]/text()" % (j+1))
+				temp = Word(unicode(xp_title))
+				temp_mean = web.xpath("//p[@style='margin-top: .5em; font-size: medium; max-width: 32em; '][%d]/text()" % (j+1))
 				mean = u'<br />'.join(temp_mean)
 				temp.addTempMean(mean)
 				#temp.addInGames(xp_inGames[j].text)
@@ -209,7 +210,7 @@ class Word():
 		self.title = title
 		self.flags = []
 		self.meanings = []
-		self.czescMowy = 0 # moï¿½liwoï¿½ci: 1 rzeczownik, 2 ndm (nie wiadomo), 3 przymiotnik, 4 czasownik
+		self.czescMowy = 0 # mo¿liwo¶ci: 1 rzeczownik, 2 ndm (nie wiadomo), 3 przymiotnik, 4 czasownik
 		self.wikitable = u''
 		self.typeText = u'{{brak|czê¶æ mowy}}'
 		self.blpm = 0
@@ -217,7 +218,7 @@ class Word():
 		self.morfeusz = 0
 		self.morfeuszType = u''
 		self.morfeuszAmbig = 0
-		self.added = 0 # zmienna kontrolujï¿½ca pojawienie siê flagi "rï¿½cznie dodane"
+		self.added = 0 # zmienna kontroluj±ca pojawienie siê flagi "rêcznie dodane"
 		self.wymowa = u''
 		self.obcy = 0
 		
@@ -247,8 +248,8 @@ class Word():
 		flagsAdj = [u'XYbx', u'Xbx', u'XYbxy', u'XYbx~', u'XYb(-b) cx', u'Xbx~', u'XYbxy~']
 		flagsVerb = [u'B', u'H']
 		blp = 0
-		blm = 1 # kontrola liczby mnogiej - domyï¿½lnie jej nie ma
-		ambig = 0 # kontrola formy podstawowej - jeï¿½li moï¿½e byï¿½ wiï¿½cej niï¿½ jednï¿½ czï¿½ciï¿½ mowy, pomijamy generowanie odmiany
+		blm = 1 # kontrola liczby mnogiej - domy¶lnie jej nie ma
+		ambig = 0 # kontrola formy podstawowej - je¿eli mo¿e byæ wiêcej ni¿ jedn± czê¶ci± mowy, pomijamy generowanie odmiany
 		type = None
 		
 		if self.flex == u'nie':
@@ -309,13 +310,13 @@ class Word():
 			if type == 'subst' and not self.morfeuszAmbig and self.morfeusz: 
 				self.czescMowy = 1
 				if len(self.flags):
-					self.flags.append([u'1', [self.title]]) # dodanie sï¿½owa podstawowego jako flagi "1", ï¿½eby Morfeusz uwzglï¿½dniaï¿½ teï¿½ formï¿½ podst.
+					self.flags.append([u'1', [self.title]]) # dodanie s³owa podstawowego jako flagi "1", ¿eby Morfeusz uwzglêdnia³ te¿ formê podst.
 				
-				lowerCase = self.title[0].lower() + self.title[1:] # morfeusz formï¿½ podstawowï¿½ zawsze zaczyna od maï¿½ej litery - ten trik pozwala na szukanie odmiany nazw wï¿½asnych
+				lowerCase = self.title[0].lower() + self.title[1:] # morfeusz formê podstawow± zawsze zaczyna od ma³ej litery - ten trik pozwala na szukanie odmiany nazw w³asnych
 				temp = ''
 				prev = ''
 				depr = ''
-				countGen = {"m1" : 0, "m2" : 0, "m3" : 0, "f" : 0, "n1" : 0, "n2" : 0, "p1" : 0, "p2" : 0, "p3" : 0} # zliczanie rodzajï¿½w zwrï¿½conych przez Morfeusza
+				countGen = {"m1" : 0, "m2" : 0, "m3" : 0, "f" : 0, "n1" : 0, "n2" : 0, "p1" : 0, "p2" : 0, "p3" : 0} # zliczanie rodzajów zwróconych przez Morfeusza
 				
 				genflag = u''
 				genflag = genFromFlags(self)
@@ -337,8 +338,7 @@ class Word():
 									if morf[0] == 'depr':
 										depr = c[2][0]
 									countGen['%s' % morf[3]] += 1
-
-				# poniewaï¿½ mianownik, biernik i Wo³acz zazwyczaj znajdujï¿½ siê wï¿½rï¿½d odmiany lp, trzeba sprawdziï¿½ resztï¿½ przypadkï¿½w i na tej podstawie okreï¿½liï¿½ blm
+                                # poniewa¿ mianownik, biernik i wo³acz zazwyczaj znajduj± siê w¶ród odmiany lp, trzeba sprawdziæ resztê przypadków i na tej podstawie okre¶liæ blm
 				if len(tablepl['gen']) == 0 and len(tablepl['dat']) == 0 and len(tablepl['inst']) == 0 and len(tablepl['loc']) == 0: 
 					blm = 1
 				
@@ -355,8 +355,8 @@ class Word():
 						tablepl['nom'].append(u'{{depr}} ' + depr)
 					if depr not in tablepl['voc']:
 						tablepl['voc'].append(u'{{depr}} ' + depr)
-						
-				#(w fazie rozwojowej) poniï¿½ej sprawdzanie, czy w tabelce moï¿½e znajdowaï¿½ siê wï¿½tpliwa odmiana
+				#(w fazie rozwojowej) poni¿ej sprawdzanie, czy w tabelce mo¿e znajdowaæ siê w±tpliwa odmiana
+
 				'''if len(tablepl['nom']) > 1:
 					if len(tablepl['nom']) == 2 and u'{{depr}}' in tablepl['nom']:
 						pass
@@ -372,7 +372,7 @@ class Word():
 						if len(tablepl[d]) > 1:
 							self.problems['kilka_form_odmiany'] = 1
 					'''
-				cnt = 0 #licznik pokazujï¿½cy czy znaleziono wiï¿½cej niï¿½ 1 rodzaj
+				cnt = 0 # licznik pokazuj±cy czy znaleziono wiêcej ni¿ 1 rodzaj
 				found = u''
 				sum = 0
 				for a in countGen:
@@ -567,8 +567,8 @@ def kodujOdmiane(word,rdzen=0):
 		for b in a[1]:
 			odmianaTemp.append(b)
 	
-	collator = Collator.createInstance(Locale('pl_PL'))
-	odmianaTemp.sort(cmp=collator.compare)
+        locale.setlocale(locale.LC_ALL, "pl_PL.UTF-8")
+	odmianaTemp.sort(cmp=locale.strcoll)
 	
 	odmiana.append(slowo)
 	for a in odmianaTemp:
@@ -732,8 +732,12 @@ def wikipage(hasloSJP, obrazki):
 			wstep += u'\n' + a
 	znaczenia = znaczenia_szablon + znaczenia
 	odmiana = odmiana_szablon + odmiana
-	synTemp = synonimyUx(firstWord.title)
-	synonimy = synonimy_szablon + synonimy + synTemp[0]
+
+	# synonimy.ux.pl moved to dobryslownik.pl - need to find an alternative or parse dobryslownik
+        # synTemp = synonimyUx(firstWord.title)
+	# synonimy = synonimy_szablon + synonimy + synTemp[0]
+        synTemp = [None, None]
+        synonimy = synonimy_szablon + synonimy
 	if synonimy == synonimy_szablon and hasloSJP.problems['brak_znaczenia']:
 		hasloSJP.problems['brak_znaczenia'] = 2
 	przyklady = przyklady_szablon + u' [%s szukaj przyk³adów w korpusie]' % (generateConcordationsLink(firstWord.title))
@@ -766,8 +770,8 @@ def morfAnalyse(word):
 		return [None, u'', None]
 	analiza = analyse(word, dag=1)
 	numWords = analiza[-1][1]
-	count = [] # tablica z zerami do wyï¿½apywania rï¿½nic w formach podstawowych
-	count_first = [] # tablica z zerami do ustawiania pierwszego elementu dla danego sï¿½owa
+	count = [] # tablica z zerami do wy³apywania ró¿nic w formach podstawowych
+	count_first = [] # tablica z zerami do ustawiania pierwszego elementu dla danego s³owa
 	found = 0
 	base = None
 	form = u''
@@ -777,7 +781,7 @@ def morfAnalyse(word):
 		count_first.append(0)
 		seek_last = 0
 		
-		for a in analiza: #Morfeusz rozbija sï¿½owa z "ï¿½" na koï¿½cu na coï¿½ + byï¿½ (wtedy w analizie pojawia siê oznakowanie "aglt"
+		for a in analiza: #Morfeusz rozbija s³owa z "¶" na koñcu na co¶ + by¶ (wtedy w analizie pojawia siê oznakowanie "aglt"
 			if a[2][2] and u'aglt' in a[2][2]:
 				count[counter] += 1
 		for for_helper, element in enumerate(analiza):		
@@ -799,7 +803,7 @@ def morfAnalyse(word):
 				for_helper -= 1
 				break
 
-		# to jest trochï¿½ ryzykowne: jeï¿½li Morfeusz widzi niejednoznacznoï¿½ï¿½, wtedy skrypt sprawdza czy w sjp.pl to sï¿½owo jest jednoznaczne. Przykï¿½ad: "temu" w sjp.pl ma wskazuje tylko na formï¿½ podstawowï¿½ "ten"
+		# to jest trochê ryzykowne: je¶li Morfeusz widzi niejednoznaczno¶æ, wtedy skrypt sprawdza czy w sjp.pl to s³owo jest jednoznaczne. Przyk³ad: "temu" w sjp.pl ma wskazuje tylko na formê podstawow± "ten"
 		if count[counter] or analiza[for_helper][2][1] == None:
 			check = checkFlexSJP(word)
 			if check:
@@ -844,14 +848,14 @@ def wikilink(phrase):
 	dontAnalyseNawiasy = []
 	dontAnalysePrzecinek = []
 	enieAnie = [u'eñ', u'enia', u'enie', u'eniu', u'eniem', u'eniom', u'eniach', u'eniami', u'añ', u'ania', u'anie', u'aniu', u'aniem', u'aniom', u'aniach', u'aniami']
-	dontAnalyse.append(u'od') # moï¿½e byï¿½ teï¿½ od "oda"
+	dontAnalyse.append(u'od') # mo¿e byæ te¿ od 'oda'
 	dontAnalyse.append(u'byæ') # alt: "bycie"
-	dontAnalyse.append(u'lub') # alt: "lubiï¿½"
-	dontAnalyse.append(u'gdzie¶') # rozbija na "gdzie" i "byï¿½"
+	dontAnalyse.append(u'lub') # alt: "lubiæ"
+	dontAnalyse.append(u'gdzie¶') # rozbija na "gdzie" i "by¶½"
 	dontAnalyse.append(u'albo') # alt: "alba"
 	dontAnalyse.append(u'jak') # alt: "jaka" (okrycie wierzchnie)
 	dontAnalyse.append(u'kawa') # alt: "Kawa" (?)
-	dontAnalyse.append(u'sposób') # alt: "sposobiï¿½"
+	dontAnalyse.append(u'sposób') # alt: "sposobiæ½"
 	dontAnalyse.append(u'i¶æ') # alt: "i¶ciæ
 	for a in dontAnalyse:
 		dontAnalyseNawias1.append(u'(%s' % a)
@@ -940,7 +944,7 @@ def meanProcess(mean):
 def genFromFlags(word):
 	temp = u''
 	prev = u''
-	for a in word.flags: # szukanie rodzaju na podstawie flagi (wg maila Kolaara), byï¿½ moï¿½e przydatne gdy Morfeusz nie oznaczy jednoznacznie
+	for a in word.flags: # szukanie rodzaju na podstawie flagi (wg maila Kolaara), byæ mo¿e przydatne gdy Morfeusz nie oznaczy jednoznacznie
 		if 'm' in a[0] or 'n' in a[0] or 'K' in a[0]:
 			temp = 'f'
 			if prev != '' and temp != prev:
@@ -976,7 +980,7 @@ def ifalreadyexists(title, existing):
 
 	if title in existing:
 		return 0
-	
+
 	hasloWikt = Haslo(title)
 	if hasloWikt.type == 3:
 		for a in hasloWikt.listLangs:
@@ -987,7 +991,7 @@ def ifalreadyexists(title, existing):
 
 
 def kwalifAndLink(string):
-	#funkcja do obsï¿½ugi synonimy.ux.pl - dostaje jeden string stamtï¿½d, zamienia kwalifikatory na nasze i dodaje wikilink
+	#funkcja do obs³ugi synonimy.ux.pl - dostaje jeden string stamt±d, zamienia kwalifikatory na nasze i dodaje wikilink
 	kwal = [[u'[przestarz.]', u'{{przest}}'], [u'[¿art.]', u'{{¿art}}'], [u'[pot.]', u'{{pot}}'], [u'[ksi±¿k.]', u'{{ksi±¿k}}'], [u'[wulg.]', u'{{wulg}}'], [u'[specjalist.]', u'\'\'specjalistycznie\'\''], [u'[nadu¿yw.]', u'\'\'nadu¿ywane\'\''], [u'[poet.]', u'{{poet}}'], [u'[oficj.]', u'{{ofic}}'], [u'[euf.]', u'{{eufem}}'], [u'[obra¼.]', u'{{obra¼}}']]
 	found = 0
 	for elem in kwal:
@@ -1113,7 +1117,7 @@ def main():
 		
 	wordsPerPage = 7 # how many pages we want on the output page for verification
 	offline_mode = 0
-	custom_list = 1
+	custom_list = 0
 
 	#tutaj podaje sie liste slow do wprowadzenia (na poczatku kazdej linii powinno byc nowe slowo)
 	inp = codecs.open('/home/adam/wikt/moje/importsjp/frequencyListPL.txt', encoding='utf-8')
@@ -1145,8 +1149,8 @@ def main():
 	tabelkaEnd = u'\n|}'
 	
 	forbidden = dontProcess()
-	#inprogress = inProgress(kategorie) #KONIECZNIE W£¡CZYÆ PRZED IMPORTEM
-	inprogress = set()
+	inprogress = inProgress(kategorie) #KONIECZNIE W£¡CZYÆ PRZED IMPORTEM
+	#inprogress = set()
 	forbidden.union(inprogress)
 	
 	for i in lista:
@@ -1157,6 +1161,7 @@ def main():
 				b.flexTable(odmOlafa)
 			a.checkProblems()
 			if len(a.words):
+                                
 				b = a.words[0]
 	
 				if b.czescMowy in (1,2,3,4,5):
@@ -1211,6 +1216,8 @@ def main():
 										file_words.write(kat.buffer.encode('utf-8'))
 										if not offline_mode:
 											outputPage.put(kat.buffer, comment=u'has³a zaimportowane z sjp.pl')
+                                                                                else:
+                                                                                        print kat.buffer
 										kat.buffer = u''
 							file_words.close
 							file_tab = open(u'output/tabelka.txt', 'w')
@@ -1253,4 +1260,4 @@ if __name__ == '__main__':
     finally:
         pywikibot.stopme()
         
-#TODO: uwaga na liczebniki, ktï¿½re mogï¿½ mieï¿½ takï¿½ samï¿½ flagï¿½ jak przymiotniki
+#TODO: uwaga na liczebniki, które mog± mieæ tak± sam± flagê jak przymiotniki
