@@ -13,7 +13,7 @@ import config
 #uwagi wstępne
 #nie można zmieniać ''przymiotnik -> ''przymiotnik'', bo będą niepożądane zmiany, ewentualnie można byłoby szukać ''przymiotnik\n i zmieniać, ale struktura hasła w parserze jest taka, że to \n nie wchodzi do zmiennej
 
-        
+
 def czescimowyReplace():
 
     site = pywikibot.getSite()
@@ -37,11 +37,11 @@ def czescimowyReplace():
             new = elem[1:]
             replaceList.append([old, new])
             cnt = 1
-    
+
     #for replaceText in replaceList:
     #    print replaceText[0]
     #    print replaceText[1]
-            
+
     for line in inp:
         if line:
             try: h = Haslo(line)

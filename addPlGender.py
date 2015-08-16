@@ -45,7 +45,7 @@ def addPlGender(iterable):
                     print('jestem')
                     b.flexTable(odmOlafa)
                     tempList.append(b)
-            
+
             if not len(tempList):
                 continue
             else:
@@ -86,25 +86,25 @@ def main():
         else:
             output += line
     file.close
-    
+
     file = open(u'/home/adam/wikt/moje/input/rodzajenowe1.txt', 'w')
     file.write(output.encode( "utf-8" ))
     file.close'''
-    
+
     file = codecs.open('/home/adam/wikt/moje/input/rodzajenowe1.txt', encoding='utf-8')
     listAdam = []
     for line in file:
         tmp = line.strip().split(' → ')
         tmp[1] = '\'\'%s\'\'' % tmp[1]
         listAdam.append(tmp)
-    
+
     addFromList(listAdam)
     '''
     file = codecs.open(u'/home/adam/wikt/moje/input/polskieczesci.txt', encoding='utf-8')
     list = []
     for line in file:
         list.append(line.strip())
-        
+
     addPlGender(list)'''
 
 if __name__ == '__main__':

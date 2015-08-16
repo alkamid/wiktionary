@@ -12,7 +12,7 @@ from pywikibot import xmlreader
 from klasa import *
 
 def main():
-    
+
     data = '20120216'
     con = sqlite3.connect('../sqlite.db')
     f = open('/mnt/user-store/dumps/plwiktionary/plwiktionary-%s-pagelinks.sql' % data,'r')
@@ -21,7 +21,7 @@ def main():
     cur = con.cursor()
     cur.executescript(sql)
     '''
-    lista_stron1 = xmlreader.XmlDump('/mnt/user-store/dumps/plwiktionary/plwiktionary-%s-pages-articles.xml' % data)    
+    lista_stron1 = xmlreader.XmlDump('/mnt/user-store/dumps/plwiktionary/plwiktionary-%s-pages-articles.xml' % data)
     lista_stron2 = xmlreader.XmlDump.parse(lista_stron1)
     text = u''
     rere = re.compile(ur'[0-9]\.[0-9]')
@@ -29,9 +29,9 @@ def main():
     ranking = []
     #for line in t:
     #    ranking.append(line.strip())
-    
-    
-    for a in lista_stron2:            
+
+
+    for a in lista_stron2:
         if int(a.revisionid) > 2646076 and a.username not in ('Olafbot', 'AlkamidBot', 'KamikazeBot', 'MastiBot', 'Luckas-bot', 'Agnese'):
             try: h = Haslo(a.title, a.text)
             except sectionsNotFound:
@@ -39,23 +39,23 @@ def main():
             except WrongHeader:
                 pass
             else:
-                if h.type == 3:    
+                if h.type == 3:
                     for elem in h.listLangs:
                         if elem.lang not in ('polski', 'arabski'):
                             ranking.append([elem.title, len(elem.content)])
-    
+
     def sortkey(row):
         return float(row[1])
-        
+
     ranking.sort(key=sortkey, reverse=True)
     for i in range(50):
         print ranking[i][0]'''
 
-    
+
     #for p in lista_stron2:
     #    if any (item in p.text for item in lista):
     #        print u'*[[%s]]' % p.title
-            
+
 if __name__ == '__main__':
     try:
         main()

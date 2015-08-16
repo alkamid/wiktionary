@@ -11,9 +11,9 @@ import re
 from klasa import *
 
 def main():
-    
+
     site = pywikibot.getSite()
-    
+
     re_italics = re.compile(r'(?<!\')\'\'(?!\')(.*?)(?<!\')\'\'(?!\')')
     #replace = {}
     range1 = 1536
@@ -21,13 +21,13 @@ def main():
     punct1 = 32
     punct2 = 64
     others = ('[', ']', '|')
-    
+
     replace = ['arabski']
-    
+
     for lang in replace:
         cat = Category(site, 'Kategoria:%s (indeks)' % lang)
         lista_stron = pagegenerators.CategorizedPageGenerator(cat, start='تونسي')
-    
+
         #lista_stron = [pywikibot.Page(site, u'آيسلندا')]
         for a in lista_stron:
             try: h = Haslo(a.title())
@@ -36,7 +36,7 @@ def main():
             except WrongHeader:
                 pass
             else:
-                if h.type == 3:    
+                if h.type == 3:
                     for c in h.listLangs:
                         try: c.lang
                         except AttributeError:
@@ -55,13 +55,13 @@ def main():
                                         if found:
                                             c.content = c.content.replace('\'\'%s\'\'' % elem, elem)
                     h.push(False, 'usunięcie kursywy w arabskim')
-                                                
-    
-    
+
+
+
     #for p in lista_stron2:
     #    if any (item in p.text for item in lista):
     #        print u'*[[%s]]' % p.title
-            
+
 if __name__ == '__main__':
     try:
         main()

@@ -8,10 +8,10 @@ from pywikibot import pagegenerators
 import re
 from klasa import *
 from os import environ
-    
+
 def retrieveEnPlusCommons(a):
     new = None
-    
+
     han_char = re.compile('{{Han(_| )char\|(.*?)}', re.DOTALL)
     han_ref = re.compile('{{Han(_| )ref\|(.*})')
     zh_f = re.compile('{{zh-forms\|(.*?)}')
@@ -32,29 +32,29 @@ def retrieveEnPlusCommons(a):
     cr = re.compile('four=(.*?)\|')
     alt = re.compile('alt=(.*?)\|')
     asj = re.compile('asj=(.*?)\|')
-   
+
     rn_abort = 0
     rad_abort = 0
     han_as_abort = 0
     sn_abort = 0
     canj_abort = 0
     cr_abort = 0
-   
+
     ang = pywikibot.Page(site_en, a)
     ang_text = ang.get()
     han_char_s = re.search(han_char, ang_text)
-    
+
     new = NewChar(a)
     if han_char_s:
         szablon_han = han_char_s.group(2)
-                         
+
         rn_s = re.search(rn, szablon_han)
         rad_s = re.search(rad, szablon_han)
         han_as_s = re.search(han_as, szablon_han)
         sn_s = re.search(sn, szablon_han)
         canj_s = re.search(canj, szablon_han)
         cr_s = re.search(cr, szablon_han)
-        
+
         if rn_s == None or not rn_s.group(1).strip():
             #log = log + u'\n*[[%s]] - Nie istnieje argument \'rn\'' % a
             rn_abort = 1
@@ -71,7 +71,7 @@ def retrieveEnPlusCommons(a):
                     as_output = '+ %s' % han_as_s.group(1)
         else:
             han_as_abort = 1
-            
+
         if not (rn_abort or rad_abort or han_as_abort):
             temp = ' %s %s %s' % (rn_s.group(1), rad_s.group(1), as_output)
             new.addKlucz(temp)
@@ -87,25 +87,25 @@ def retrieveEnPlusCommons(a):
             new.addCJZ(cjzText)
         if cr_s and cr_s.group(1).strip():
             new.addCR(cr_s.group(1))
-            
+
         han_ref_s = re.search(han_ref, ang_text)
         if han_ref_s:
             kx_s = re.search(kx, han_ref_s.group(2))
             if kx_s:
                 new.addSlownik('kx', kx_s.group(1))
-            
+
             dkj_s = re.search(dkj, han_ref_s.group(2))
             if dkj_s:
-                 new.addSlownik('dkj', dkj_s.group(1))
-            
+                new.addSlownik('dkj', dkj_s.group(1))
+
             dj_s = re.search(dj, han_ref_s.group(2))
             if dj_s:
-                 new.addSlownik('dj', dj_s.group(1))
-                
+                new.addSlownik('dj', dj_s.group(1))
+
             hdz_s = re.search(hdz, han_ref_s.group(2))
             if hdz_s:
-                 new.addSlownik('hdz', hdz_s.group(1))
-        
+                new.addSlownik('hdz', hdz_s.group(1))
+
         alt_s = re.search(alt, szablon_han)
         asj_s = re.search(asj, szablon_han)
         if alt_s and alt_s.group(1).strip():
@@ -121,7 +121,7 @@ def retrieveEnPlusCommons(a):
     upr = ''
     trad = ''
     shin = ''
-    
+
     try: pywikibot.ImagePage(site_en, 'File:%s-clerical.svg' % a).fileIsShared()
     except pywikibot.NoPage or pywikibot.IsRedirectPage:
         try: pywikibot.ImagePage(site_en, 'File:%s-clerical.png' % a).fileIsShared()
@@ -136,7 +136,7 @@ def retrieveEnPlusCommons(a):
         else:
             new.addWariant('c', '|p')
     else:
-        new.addWariant('c', '')             
+        new.addWariant('c', '')
 
     try: pywikibot.ImagePage(site_en, 'File:%s-xinshu.svg' % a).fileIsShared()
     except pywikibot.NoPage or pywikibot.IsRedirectPage:
@@ -152,7 +152,7 @@ def retrieveEnPlusCommons(a):
         else:
             new.addWariant('xt', '|p')
     else:
-        new.addWariant('xt', '')      
+        new.addWariant('xt', '')
 
     try: pywikibot.ImagePage(site_en, 'File:%s-still.svg' % a).fileIsShared()
     except pywikibot.NoPage or pywikibot.IsRedirectPage:
@@ -180,9 +180,9 @@ def retrieveEnPlusCommons(a):
         else:
             new.addWariant('ca', '')
     else:
-        new.addWariant('st', '') 
+        new.addWariant('st', '')
 
-                                    
+
     try: pywikibot.ImagePage(site_en, 'File:%s-kaishu.svg' % a).fileIsShared()
     except pywikibot.NoPage or pywikibot.IsRedirectPage:
         try: pywikibot.ImagePage(site_en, 'File:%s-kaishu.png' % a).fileIsShared()
@@ -197,7 +197,7 @@ def retrieveEnPlusCommons(a):
         else:
             new.addWariant('kt', '|p')
     else:
-        new.addWariant('kt', '')    
+        new.addWariant('kt', '')
 
     try: pywikibot.ImagePage(site_en, 'File:%s-songti.svg' % a).fileIsShared()
     except pywikibot.NoPage or pywikibot.IsRedirectPage:
@@ -214,7 +214,7 @@ def retrieveEnPlusCommons(a):
             new.addWariant('sot', '|p')
     else:
         new.addWariant('sot', '')
-        
+
     try: pywikibot.ImagePage(site_en, 'File:%s-bw.png' % a).fileIsShared()
     except pywikibot.NoPage or pywikibot.IsRedirectPage:
         try: pywikibot.ImagePage(site_en, 'File:%s-red.png' % a).fileIsShared()
@@ -237,7 +237,7 @@ def retrieveEnPlusCommons(a):
             new.addKolejnosc('', '{{zch-cienie')
     else:
         new.addKolejnosc('', '{{zch-komiks')
-                    
+
     try: pywikibot.ImagePage(site_en, 'File:%s-jbw.png' % a).fileIsShared()
     except pywikibot.NoPage or pywikibot.IsRedirectPage:
         try: pywikibot.ImagePage(site_en, 'File:%s-jred.png' % a).fileIsShared()
@@ -259,8 +259,8 @@ def retrieveEnPlusCommons(a):
         else:
             new.addKolejnosc('j', '{{zch-cienie')
     else:
-        new.addKolejnosc('j', '{{zch-komiks')  
-    
+        new.addKolejnosc('j', '{{zch-komiks')
+
     try: pywikibot.ImagePage(site_en, 'File:%s-tbw.png' % a).fileIsShared()
     except pywikibot.NoPage or pywikibot.IsRedirectPage:
         try: pywikibot.ImagePage(site_en, 'File:%s-tred.png' % a).fileIsShared()
@@ -282,8 +282,8 @@ def retrieveEnPlusCommons(a):
         else:
             new.addKolejnosc('t', '{{zch-cienie')
     else:
-        new.addKolejnosc('t', '{{zch-komiks')       
-        
+        new.addKolejnosc('t', '{{zch-komiks')
+
     try: pywikibot.ImagePage(site_en, 'File:%s-abw.png' % a).fileIsShared()
     except pywikibot.NoPage or pywikibot.IsRedirectPage:
         try: pywikibot.ImagePage(site_en, 'File:%s-ared.png' % a).fileIsShared()
@@ -306,7 +306,7 @@ def retrieveEnPlusCommons(a):
             new.addKolejnosc('a', '{{zch-cienie')
     else:
         new.addKolejnosc('a', '{{zch-komiks')
-        
+
     try: pywikibot.ImagePage(site_en, 'File:%s-oracle.svg' % a).fileIsShared()
     except pywikibot.NoPage or pywikibot.IsRedirectPage:
         try: pywikibot.ImagePage(site_en, 'File:%s-oracle.png' % a).fileIsShared()
@@ -318,7 +318,7 @@ def retrieveEnPlusCommons(a):
             new.addEtym('o', '%s|p' % a)
     else:
         new.addEtym('o', '%s' % a)
-    
+
 
     try: pywikibot.ImagePage(site_en, 'File:%s-bronze.svg' % a).fileIsShared()
     except pywikibot.NoPage or pywikibot.IsRedirectPage:
@@ -331,7 +331,7 @@ def retrieveEnPlusCommons(a):
             new.addEtym('br', '%s|p' % a)
     else:
         new.addEtym('br', '%s' % a)
-        
+
     try: pywikibot.ImagePage(site_en, 'File:%s-bigseal.svg' % a).fileIsShared()
     except pywikibot.NoPage or pywikibot.IsRedirectPage:
         try: pywikibot.ImagePage(site_en, 'File:%s-bigseal.png' % a).fileIsShared()
@@ -343,7 +343,7 @@ def retrieveEnPlusCommons(a):
             new.addEtym('bs', '%s|p' % a)
     else:
         new.addEtym('bs', '%s' % a)
-    
+
     try: pywikibot.ImagePage(site_en, 'File:%s-seal.svg' % a).fileIsShared()
     except pywikibot.NoPage or pywikibot.IsRedirectPage:
         try: pywikibot.ImagePage(site_en, 'File:%s-seal.png' % a).fileIsShared()
@@ -355,12 +355,12 @@ def retrieveEnPlusCommons(a):
             new.addEtym('ss', '%s|p' % a)
     else:
         new.addEtym('ss', '%s' % a)
-    
-    zh_f_s = re.search(zh_f, ang_text)    
+
+    zh_f_s = re.search(zh_f, ang_text)
     ja_f_s = re.search(jap_f, ang_text)
     hani_f_s = re.search(hani_f, ang_text)
     zh_hanzi_s = re.search(zh_hanzi_r, ang_text)
-    
+
     if ja_f_s:
         ja_f_str = ja_f_s.group(1).replace("[","").replace("]","").replace("{{zh-lookup|", "").replace("}", "")
         ja_osobno = ja_f_str.split('|')
@@ -392,9 +392,9 @@ def retrieveEnPlusCommons(a):
         zh_hanzi_str = zh_hanzi_s.group(1).replace("[","").replace("]","").replace("{{zh-lookup|", "").replace("}", "")
         new.addWariant('ct', zh_hanzi_str)
         new.addWariant('cu', zh_hanzi_str)
-        
-    
-        
+
+
+
     return new
 
 def ordinal(pl):
@@ -405,12 +405,12 @@ def ordinal(pl):
     return 0
 
 def compare(en, pl, pole, SimpTrad=666): #a function that compares two fields - for each field there's a different method for comparison. If neither value is empty and if they are different it's written in the log. If pl.wikt field is empty and en.wikt is not, then the Polish one is updated.
-    
+
     if pole == 'klucz':
         if pl.klucz.text.strip():
             if en.klucz != pl.klucz.text:
                 log('*[[%s]] - różnica między en.wikt i pl.wikt w parametrze "klucz"' % (en.title))
-             
+
         elif en.klucz.strip():
             pl.klucz.text = en.klucz
             pl.saveChanges()
@@ -419,7 +419,7 @@ def compare(en, pl, pole, SimpTrad=666): #a function that compares two fields - 
         if pl.kreski.text.strip():
             if en.kreski.strip() != pl.kreski.text.strip():
                 log('*[[%s]] - różnica między en.wikt i pl.wikt w parametrze "kreski"' % (en.title))
-                
+
         elif en.kreski.strip():
             pl.kreski.text = en.kreski
             pl.saveChanges()
@@ -428,7 +428,7 @@ def compare(en, pl, pole, SimpTrad=666): #a function that compares two fields - 
         try: enAttr = getattr(en, pole)
         except AttributeError:
             return 0
-        
+
         try: plAttr = getattr(pl, pole)
         except AttributeError:
             return 0
@@ -443,7 +443,7 @@ def compare(en, pl, pole, SimpTrad=666): #a function that compares two fields - 
             keyset = ('', 'j', 't', 'a')
         elif pole == 'etymologia':
             keyset = ('o', 'br', 'bs', 'ss')
-        
+
         done = 0
         change = 0
 
@@ -451,7 +451,7 @@ def compare(en, pl, pole, SimpTrad=666): #a function that compares two fields - 
             try: enAttr[key]
             except KeyError:
                 pass
-            else:              
+            else:
                 try: plAttr.dict[key]
                 except KeyError:
                     change = 1
@@ -481,14 +481,14 @@ def compare(en, pl, pole, SimpTrad=666): #a function that compares two fields - 
         try: en.warianty
         except AttributeError:
             return 0
-        
+
         try: pl.warianty.dict
         except AttributeError:
             return 0
-        
+
         done = 0
         change = 0
-        
+
         for key in keyset:
             try: en.warianty[key]
             except KeyError:
@@ -505,8 +505,8 @@ def compare(en, pl, pole, SimpTrad=666): #a function that compares two fields - 
                             pass
                         else:
                             log('*[[%s]] - upr/trad różnią się na pl.wikt i w tabeli' % pl.title)
-                    
-            else:              
+
+            else:
                 try: SimpTrad.warianty[key]
                 except KeyError:
                     try: pl.warianty.dict[key]
@@ -531,13 +531,13 @@ def compare(en, pl, pole, SimpTrad=666): #a function that compares two fields - 
                             pass
                         else:
                             log('*[[%s]] - upr/trad istnieją wszędzie (tabela, pl.wikt, en.wikt), ale się między sobą różnią' % pl.title)
-    
+
         if change:
             pl.saveChanges()
             return 1
-    
+
     return 0
-            
+
 class NewChar():
     def __init__(self, title):
         self.title = title
@@ -610,7 +610,7 @@ def log(text):
             file.close
 
 def main():
-    
+
     list = makeConversionList()
     global site_pl
     site_pl = pywikibot.getSite()
@@ -624,14 +624,14 @@ def main():
     data_en = '20120125'
     cat_en = Category(site_en, 'Category:Han_characters')
     lista_stron_en = pagegenerators.CategorizedPageGenerator(cat_en)
-    
+
     file = open("%s/wikt/moje/log/zch.txt" % environ['HOME'], 'w')
     file.write(''.encode("utf-8"))
     file.close
-    
+
     #pagesDump1 = xmlreader.XmlDump('/mnt/user-store/dumps/enwiktionary/enwiktionary-%s-pages-articles.xml' % data_en)
     #pagesDump = xmlreader.XmlDump.parse(pagesDump1)
-    
+
     lista_stron_en = ['㭻']
     for elem in lista_stron_en:
         title = elem.title()
@@ -649,11 +649,11 @@ def main():
                             sec.pola()
                             if sec.type == 4:
                                 sekcja = sec
-            elif en and pl.type == 1:               
+            elif en and pl.type == 1:
                 sekcja = Sekcja(title=title, type=4, lang='znak chiński')
-                
-                            
-            if sekcja:    
+
+
+            if sekcja:
                 push = 0
                 if compare(en, sekcja, 'klucz'):
                     push = 1
@@ -671,7 +671,7 @@ def main():
                     push = 1
                 if ordinal(sekcja):
                     push = 1
-                    
+
                 tab = SimpTrad(title, list)
                 if compare(en, sekcja, 'upr-trad', tab):
                     push = 1
@@ -680,7 +680,7 @@ def main():
                         pl = Haslo(title, new=True)
                         pl.addSection(sekcja)
                         log('*[[%s]] - dodano' % title)
-                    
+
                     pl.push(False, myComment = 'aktualizacja danych o znaku chińskim; źródła: [[:en:%s]], http://simplify.codeplex.com/, commons' % title, new=True)
 
     logPage = pywikibot.Page(site_pl, 'Wikipedysta:AlkamidBot/listy/znak chiński')

@@ -27,7 +27,7 @@ def main():
     lista = set(lista6 + lista7)
     re_forma = re.compile('^{{forma (czasownika|przymiotnika|rzeczownika|przysłówka|zaimka)(|\|[a-z]{2})}}$')
     re_morfem = re.compile('^{{morfem(|\|(eo|esperanto))(|\|(przedrostek|przedrostkowy|przyrostek|przyrostkowy))}}$')
-    
+
     for a in lista:
         try: word = Haslo(a.title())
         except sectionsNotFound:
@@ -51,7 +51,7 @@ def main():
                                     lang.saveChanges()
                 if change:
                     word.push(False, myComment='ujednolicenie zapisu części mowy (dodanie apostrofów przy szablonach)')
-            '''s01 = re.search(re01, text)  
+            '''s01 = re.search(re01, text)
             if s01:
                 text = re01.sub(ur'{{odczasownikowy od|nie|\1}}', text)
             s02 = re.search(re02, text)
@@ -72,9 +72,9 @@ def main():
             #text = text.replace(u'{{odczasownikowy od||', u'{{odczasownikowy od|')
             #if first != text:
                 #a.put(text, comment=u'Wprowadzenie szablonu {{s|odczasownikowy od}}')
-                        
+
 if __name__ == '__main__':
     try:
         main()
     finally:
-        pywikibot.stopme()               
+        pywikibot.stopme()

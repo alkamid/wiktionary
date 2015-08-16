@@ -24,4 +24,3 @@ inp = codecs.open("ymtext.txt", encoding="utf-8")
 text = inp.read()
 
 print(meaningsUpdateWikitext('użycie międzynarodowa', 100, text))
-

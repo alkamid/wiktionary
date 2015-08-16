@@ -75,8 +75,8 @@ class BaseRevertBot(object):
 
     def callback(self, item):
         #return 'top' in item
-		return 1
-		
+        return 1
+
     def revert(self, item):
         predata = {
             'action': 'query',
@@ -115,7 +115,7 @@ class BaseRevertBot(object):
 import re
 
 class myRevertBot(BaseRevertBot):
-        
+
     def callback(self, item):
         if 'top' in item:
             page = pywikibot.Page(self.site, item['title'])

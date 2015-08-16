@@ -7,9 +7,9 @@ import upload
 import pywikibot
 
 def update():
-    
+
     oldMainURL = 'https://pl.wiktionary.org/w/index.php?title=Wikis%C5%82ownik:Strona_g%C5%82%C3%B3wna&oldid=2639658'
-    
+
     toParse = urllib.request.urlopen(oldMainURL)
     doc = etree.parse(toParse)
     toParse.close()
@@ -28,15 +28,15 @@ def update():
         last_line = myfile.readlines()[-1].split()
         if last_line[0] != dateEarlier.strftime('%m-%Y'):
             myfile.write("%s\t%s\t%s\n" % (dateEarlier.strftime("%m-%Y"), page, entry))
-    
+
     call(["gnuplot", "wikislownik.plt"])
-    
+
     targetFilename = 'Wzrost_Wikislownika.svg'
     fname = 'Wzrost_Wikislownika.svg'
     desc = 'update (%s)' % dateEarlier.strftime("%Y/%m")
 
     bot = upload.UploadRobot([targetFilename], description=desc, keepFilename=True, verifyDescription=False, ignoreWarning=True, targetSite=pywikibot.getSite('commons', 'commons'))
     bot.run()
-    
+
 
 update()
