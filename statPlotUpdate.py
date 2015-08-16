@@ -24,10 +24,11 @@ def update():
     dateEarlier = dateToday - timedelta(days=5)
 
     with open("stat-data.dat", "a+") as myfile:
+        myfile.seek(0)
         last_line = myfile.readlines()[-1].split()
         if last_line[0] != dateEarlier.strftime('%m-%Y'):
             myfile.write("%s\t%s\t%s\n" % (dateEarlier.strftime("%m-%Y"), page, entry))
-
+    
     call(["gnuplot", "wikislownik.plt"])
     
     targetFilename = 'Wzrost_Wikislownika.svg'
@@ -36,6 +37,6 @@ def update():
 
     bot = upload.UploadRobot([targetFilename], description=desc, keepFilename=True, verifyDescription=False, ignoreWarning=True, targetSite=pywikibot.getSite('commons', 'commons'))
     bot.run()
-
+    
 
 update()
