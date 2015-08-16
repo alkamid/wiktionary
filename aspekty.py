@@ -16,25 +16,25 @@ def addAspekt(title):
     przech = None # transitive/intransitive
     dk = None # dk = perfective
     ndk = None # ndk = imperfective
-    
+
     if word.type == 3:
         for sekcja in word.listLangs:
             if sekcja.lang == 'polski':
                 sekcja.pola()
                 if sekcja.type != 7: # type 7 means that although 'polski' should be the language, the section structure does not match
                     for mean in sekcja.znaczeniaDetail:
-                        if 'aspekt dokonany' in mean[1] or 'aspekt niedokonany' in mean[1] or '{{dokonany od' in mean[1] or '{{niedokonany od' in mean[1] or '{{zob' in mean[1]:                    
+                        if 'aspekt dokonany' in mean[1] or 'aspekt niedokonany' in mean[1] or '{{dokonany od' in mean[1] or '{{niedokonany od' in mean[1] or '{{zob' in mean[1]:
                             return 0
-                        
+
                         # both templates below shouldn't occur at the same time in the part of speech description
                         if '{{ndk}}' in mean[0] and '{{dk}}' in mean[0]:
-                            log('*[[%s]] - {{dk}} i {{ndk}} w opisie części mowy' % (title), 'aspekty')                 
+                            log('*[[%s]] - {{dk}} i {{ndk}} w opisie części mowy' % (title), 'aspekty')
                             return 0
-                    
+
                     if '{{zobtłum aspekt' in sekcja.tlumaczenia.text:
-                        log('*[[%s]] - możliwe podwójne przekierowanie' % (title), 'aspekty')                       
+                        log('*[[%s]] - możliwe podwójne przekierowanie' % (title), 'aspekty')
                         return 0
-                    
+
                     for mean in sekcja.znaczeniaDetail:
                         s_aspekt = re.search(re_aspekt, mean[0])
 
@@ -59,7 +59,7 @@ def addAspekt(title):
                             opp_list = opp.split('/')
                             for i,v in enumerate(opp_list):
                                 opp_list[i] = opp_list[i].strip().strip('[').strip(']')
-                            
+
                             # if there is no corresponding aspect, skip this iteration
                             if opp_list[0] == '\'\'brak\'\'':
                                 continue
@@ -71,7 +71,7 @@ def addAspekt(title):
                             else:
                                 ndkNew = 'nie'
                                 ndkShort = ''
-                            
+
                             # for each element in corresponding aspect list, create a new page
                             for newTitle in opp_list:
                                 nowe = Haslo(title=newTitle)
@@ -82,7 +82,7 @@ def addAspekt(title):
                                     nowaSekcja = Sekcja(title=newTitle, type=9, lang='język polski')
                                     nowaSekcja.znaczeniaDetail.append(['\'\'czasownik %sprzechodni %sdokonany\'\' ({{%sdk}} [[%s]])' % (przech, ndkNew, ndkShort, title), '\n: (1.1) {{%sdokonany od|%s}}' % (ndkNew, title)])
                                     nowaSekcja.tlumaczenia.text = '\n: (1.1) {{zobtłum aspekt|%s}}' % title
-                                    
+
                                     tempWord = HasloSJP(newTitle) # fetching flex tables from sjp.pl
                                     if len(tempWord.words) == 1:
                                         tempWord.words[0].flexTable(odmOlafa)
@@ -95,7 +95,7 @@ def addAspekt(title):
                                     try: content = page.get()
                                     except pywikibot.NoPage:
                                         nowe.push(False, 'dodanie hasła o aspekcie na podstawie [[%s]]' % (title), True)
-     
+
 def main():
     global odmOlafa
     odmOlafa = OdmianaOlafa()
@@ -109,9 +109,9 @@ def main():
     #lista = [pywikibot.Page(site, u'spróbować')]
     for a in lista:
         addAspekt(a.title())
-                        
+
 if __name__ == '__main__':
     try:
         main()
     finally:
-        pywikibot.stopme()               
+        pywikibot.stopme()

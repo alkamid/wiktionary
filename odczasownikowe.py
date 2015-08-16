@@ -61,7 +61,7 @@ def addOdczas(title):
                                     try: page.get()
                                     except pywikibot.NoPage:
                                         page.put(nowaSekcja.content, comment='dodanie hasła o rzeczowniku odczasownikowym na podstawie [[%s]]' % czasownik)
-     
+
 def main():
     global odmOlafa
     odmOlafa = OdmianaOlafa()
@@ -72,9 +72,9 @@ def main():
     lista = ['poszukać']
     for a in lista:
         addOdczas(a)
-                        
+
 if __name__ == '__main__':
     try:
         main()
     finally:
-        pywikibot.stopme()               
+        pywikibot.stopme()

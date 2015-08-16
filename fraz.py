@@ -15,14 +15,14 @@ def fraz(data):
     lista_stron = getListFromXML(data)
     wikt = pywikibot.Site('pl', 'wiktionary')
     outputPage = pywikibot.Page(wikt, 'Wikipedysta:AlkamidBot/listy/związki_frazeologiczne')
-    
+
     tempLangs = []
-    
+
     notFound = []
     text = 'Hasła, które określone zostały jako związek frazeologiczny, lecz nie widnieją w indeksie związków frazeologicznych odpowiednim dla danego języka. Ostatnia aktualizacja: %s\n' % (data_slownie)
     phraseList = {}
     notFoundList = collections.defaultdict(list)
-    
+
     LangsMediaWiki = getAllLanguages()
 
     for a in LangsMediaWiki:
@@ -40,23 +40,23 @@ def fraz(data):
     for a in lista_stron:
         try: word = Haslo(a)
         except notFromMainNamespace:
-        	pass
+            pass
         except sectionsNotFound:
-        	pass
+            pass
         except WrongHeader:
             pass
         else:
-        	if word.type == 3:
-	            for lang in word.listLangs:
-	                if lang.type != 2:
-	                    lang.pola()
-                        try: lang.subSections['znaczenia'].text
-                        except AttributeError:
-                            pass
-                        else:
-                            if lang.type != 2 and 'związek frazeologiczny' in lang.subSections['znaczenia'].text and '[[%s]]' % word.title not in phraseList['%s' % lang.lang]:
-    	                            notFoundList['%s' % lang.lang].append(word.title)
-                                                    
+            if word.type == 3:
+                for lang in word.listLangs:
+                    if lang.type != 2:
+                        lang.pola()
+                    try: lang.subSections['znaczenia'].text
+                    except AttributeError:
+                        pass
+                    else:
+                        if lang.type != 2 and 'związek frazeologiczny' in lang.subSections['znaczenia'].text and '[[%s]]' % word.title not in phraseList['%s' % lang.lang]:
+                            notFoundList['%s' % lang.lang].append(word.title)
+
     for a in LangsMediaWiki:
         if notFoundList['%s' % a.shortName]:
             text += '== [[Indeks:%s_-_Związki_frazeologiczne|%s]] ==' % (a.upperName, a.longName)
@@ -67,6 +67,6 @@ def fraz(data):
     file = open('output/fraz.txt', 'w')
     file.write(text.encode( "utf-8" ))
     file.close
-    
+
     outputPage.text = text
     outputPage.save(comment="Aktualizacja listy", botflag=False)

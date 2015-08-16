@@ -18,41 +18,41 @@ def licz_jezyki():
 
     for a in lista_stron2:
         #if (i<1000):
-            try: haslo = Haslo(a)
-            except sectionsNotFound:
-                pass
-            except WrongHeader:
-                pass
-            else:
-                if haslo.type != 5:
-                    for b in haslo.listLangs:
-                        if b.type != 2 and b.type != 3:
-                            print(b.langLong)
-                            if b.langLong == 'termin obcy w języku polskim':
-                                b.langLong = 'język polski'
-                            if b.langLong in statList:
-                                b.pola()
-                                
-                                if not b.inflectedOnly:
-                                        
-                                    statList['%s' % b.langLong].addWord()
-                                    #statList[u'%s' % b.langLong].addLength(countLength(b.content, templatesToDelete))
+        try: haslo = Haslo(a)
+        except sectionsNotFound:
+            pass
+        except WrongHeader:
+            pass
+        else:
+            if haslo.type != 5:
+                for b in haslo.listLangs:
+                    if b.type != 2 and b.type != 3:
+                        print(b.langLong)
+                        if b.langLong == 'termin obcy w języku polskim':
+                            b.langLong = 'język polski'
+                        if b.langLong in statList:
+                            b.pola()
 
-                                    #audiotmp = countAudio(b.content)
-                                    #graphtmp = countGraph(b.content)
-                                    #if audiotmp:
-                                    #    statList[u'%s' % b.langLong].addAudio()
-                                    #    statList[u'%s' % b.langLong].addAudioAll(audiotmp)
-                                    #if graphtmp:
-                                    #    statList[u'%s' % b.langLong].addGraph()
-                                    #    statList[u'%s' % b.langLong].addGraphAll(graphtmp)
-                                    if b.type == 1:
-                                        print(meanings(b.znaczeniaDetail))
-                                        print('here')
-                                        statList['%s' % b.langLong].addMeans(meanings(b.znaczeniaDetail))
-                                        #statList[u'%s' % b.langLong].addRef(refs(b.subSections[u'źródła'].text, templatesToDelete))
-                                    else:
-                                            print(b.type)
+                            if not b.inflectedOnly:
+
+                                statList['%s' % b.langLong].addWord()
+                                #statList[u'%s' % b.langLong].addLength(countLength(b.content, templatesToDelete))
+
+                                #audiotmp = countAudio(b.content)
+                                #graphtmp = countGraph(b.content)
+                                #if audiotmp:
+                                #    statList[u'%s' % b.langLong].addAudio()
+                                #    statList[u'%s' % b.langLong].addAudioAll(audiotmp)
+                                #if graphtmp:
+                                #    statList[u'%s' % b.langLong].addGraph()
+                                #    statList[u'%s' % b.langLong].addGraphAll(graphtmp)
+                                if b.type == 1:
+                                    print(meanings(b.znaczeniaDetail))
+                                    print('here')
+                                    statList['%s' % b.langLong].addMeans(meanings(b.znaczeniaDetail))
+                                    #statList[u'%s' % b.langLong].addRef(refs(b.subSections[u'źródła'].text, templatesToDelete))
+                                else:
+                                    print(b.type)
 
     #statList[u"język !Xóõ"].countAvgMean()
     print(statList["język !Xóõ"].countWords)

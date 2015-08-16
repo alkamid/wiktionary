@@ -2,7 +2,7 @@ import upload
 import pywikibot
 
 def update():
-    
+
     targetFilename = 'Wzrost_Wikislownika.svg'
     fname = 'Wzrost_Wikislownika.svg'
     desc = 'update (2015/08)'

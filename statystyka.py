@@ -209,7 +209,7 @@ def countLength(content, templates):
             temp = re.sub(regex, '', temp)
 
     for key in strings:
-         for each in strings[key]:
+        for each in strings[key]:
             temp = temp.replace(each, '')
 
     return len(temp)
@@ -252,35 +252,35 @@ def licz_jezyki(dump_date):
 
     for a in lista_stron2:
         #if (i<1000):
-            try: haslo = Haslo(a)
-            except sectionsNotFound:
-                pass
-            except WrongHeader:
-                pass
-            else:
-                if haslo.type != 5:
-                    for b in haslo.listLangs:
-                        if b.type != 2 and b.type != 3:
-                            if b.langLong == 'termin obcy w języku polskim':
-                                b.langLong = 'język polski'
-                            if b.langLong in statList:
-                                b.pola()
-                                if not b.inflectedOnly:
+        try: haslo = Haslo(a)
+        except sectionsNotFound:
+            pass
+        except WrongHeader:
+            pass
+        else:
+            if haslo.type != 5:
+                for b in haslo.listLangs:
+                    if b.type != 2 and b.type != 3:
+                        if b.langLong == 'termin obcy w języku polskim':
+                            b.langLong = 'język polski'
+                        if b.langLong in statList:
+                            b.pola()
+                            if not b.inflectedOnly:
 
-                                    statList['%s' % b.langLong].addWord()
-                                    statList['%s' % b.langLong].addLength(countLength(b.content, templatesToDelete))
+                                statList['%s' % b.langLong].addWord()
+                                statList['%s' % b.langLong].addLength(countLength(b.content, templatesToDelete))
 
-                                    audiotmp = countAudio(b.content)
-                                    graphtmp = countGraph(b.content)
-                                    if audiotmp:
-                                        statList['%s' % b.langLong].addAudio()
-                                        statList['%s' % b.langLong].addAudioAll(audiotmp)
-                                    if graphtmp:
-                                        statList['%s' % b.langLong].addGraph()
-                                        statList['%s' % b.langLong].addGraphAll(graphtmp)
-                                    if b.type == 1:
-                                        statList['%s' % b.langLong].addMeans(meanings(b.znaczeniaDetail))
-                                        statList['%s' % b.langLong].addRef(refs(b.subSections['źródła'].text, templatesToDelete))
+                                audiotmp = countAudio(b.content)
+                                graphtmp = countGraph(b.content)
+                                if audiotmp:
+                                    statList['%s' % b.langLong].addAudio()
+                                    statList['%s' % b.langLong].addAudioAll(audiotmp)
+                                if graphtmp:
+                                    statList['%s' % b.langLong].addGraph()
+                                    statList['%s' % b.langLong].addGraphAll(graphtmp)
+                                if b.type == 1:
+                                    statList['%s' % b.langLong].addMeans(meanings(b.znaczeniaDetail))
+                                    statList['%s' % b.langLong].addRef(refs(b.subSections['źródła'].text, templatesToDelete))
 
     for c in statList:
         statList[c].countAvgLen()
@@ -618,10 +618,10 @@ def dlaczego(new):
     presskitText = re.sub(r'ponad [0-9]* ilustracji', 'ponad %d ilustracji' % graphCount, presskitText)
 
     if offline_mode == 0:
-                dlaczego_strona.text = dlaczegoText
-                dlaczego_strona.save(comment='aktualizacja', botflag=True)
-                presskit.text = presskitText
-                presskit.save(comment='aktualizacja', botflag=True)
+        dlaczego_strona.text = dlaczegoText
+        dlaczego_strona.save(comment='aktualizacja', botflag=True)
+        presskit.text = presskitText
+        presskit.save(comment='aktualizacja', botflag=True)
 
 
 def meaningsUpdateWikitext(lang, mean, text):

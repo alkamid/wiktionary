@@ -11,12 +11,12 @@ import re
 from klasa import *
 
 def main():
-    
+
     site = pywikibot.getSite()
-    
+
     # mode = 1 - updating pages from recent changes; 2 - after adding new languages to the script, all the words in that language have to be checked
     mode = 1
-    
+
     mylist = set()
     if mode == 1:
         RClimit = readRCLimit('headerIndexing').strip()
@@ -29,8 +29,8 @@ def main():
             pageSet = set(pagegenerators.CategorizedPageGenerator(cat))
             for page in pageSet:
                 mylist.add(page.title())
-    
-    
+
+
     replace = {}
     replace['arabski'] = {'إ': 'ا', 'آ': 'ا', 'ا': 'ا', 'أ': 'ا'}
     replace['dari'] = {'إ': 'ا', 'آ': 'ا', 'ا': 'ا', 'أ': 'ا'}
@@ -43,7 +43,7 @@ def main():
     replace['paszto'] = {'إ': 'ا', 'آ': 'ا', 'ا': 'ا', 'أ': 'ا'}
     replace['urdu'] = {'إ': 'ا', 'آ': 'ا', 'ا': 'ا', 'أ': 'ا'}
     #replace[u'wietnamski'] = {u'Ă': u'A', u'Â': u'A', u'Đ': u'D', u'Ê': u'E', u'Ô': u'O', u'Ơ': u'O', u'Ư': u'U', u'ă': u'a', u'â': u'a', u'đ': u'd', u'ê': u'e', u'ô': u'o', u'ơ': u'o', u'ư': u'u'}
-                               
+
     for mytitle in mylist:
         try: h = Haslo(mytitle)
         except sectionsNotFound:
@@ -51,7 +51,7 @@ def main():
         except WrongHeader:
             pass
         else:
-            if h.type == 3:    
+            if h.type == 3:
                 change = 0
                 for c in h.listLangs:
                     try: c.lang
@@ -67,11 +67,11 @@ def main():
                                 c.headerArg = temp
                                 c.updateHeader()
                                 change = 1
-                    
+
                 if change:
                     h.push(False, 'modyfikacja nagłówka w celu poprawnego indeksowania haseł (usunięcie znaków diakrytycznych)')
-    
-            
+
+
 if __name__ == '__main__':
     try:
         main()
