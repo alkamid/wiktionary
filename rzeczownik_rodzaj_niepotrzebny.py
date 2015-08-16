@@ -18,7 +18,7 @@ def rzeczownikRodzajNiepotrzebny(data):
 	
 	re_excluded = re.compile(ur'Lista języków, w których rzeczowniki nie mają rodzaju. Jeśli wiesz o takim, dopisz go do poniższej listy, a bot nie będzie uwzględniał go w tworzeniu listy:\n\n(.*)', re.DOTALL)
 	s_excluded = re.search(re_excluded, noGenderPage.get())
-	noGenderList = s_excluded.group(1).split(u'\n')
+	noGenderList = set(s_excluded.group(1).split(u'\n'))
 	for a in noGenderList:
 		a = a.strip()
 
