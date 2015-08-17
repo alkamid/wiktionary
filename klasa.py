@@ -758,11 +758,11 @@ def checkForNewDumps(lastUpdate):
     return 1
 
 def getListFromXML(data, findLatest=False):
-        #converts a wikimedia dump to a python list
+    #converts a wikimedia dump to a python generator of xml entries
     #if findLatest True, it will search for the newest dump in dumps folder
 
     filename = config.path['dumps'] + '%s/plwiktionary-%s-pages-articles.xml.bz2' % (data,data)
-
+    
     if findLatest:
         now = datetime.datetime.now()
         today_year = now.year
@@ -780,15 +780,16 @@ def getListFromXML(data, findLatest=False):
 
             if os.path.isdir(tempFilename):
                 found = 1
-
+                
         if found:
             filename = tempFilename + '/plwiktionary-%s-pages-articles.xml.bz2' % (tempDate)
-        else:
-            raise DumpNotFound
-
-
-    generator = xmlreader.XmlDump.parse(xmlreader.XmlDump(filename))
-    return generator
+    
+    if os.path.isfile(filename):
+        generator = xmlreader.XmlDump.parse(xmlreader.XmlDump(filename))
+        return generator
+    else:
+        print(filename)
+        raise DumpNotFound
 
     #return list(lista_stron)
 
