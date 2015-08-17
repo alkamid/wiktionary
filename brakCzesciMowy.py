@@ -46,7 +46,7 @@ def brakCzesciMowy(data):
                 text += '\n*[[%s]]' % (b)
             text += '\n'
 
-    file = open('output/bez_części_mowy.txt', 'w')
+    file = open('output/missing_pos.txt', 'w')
     file.write(text.encode( "utf-8" ))
     file.close
 
