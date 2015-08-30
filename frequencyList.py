@@ -103,7 +103,7 @@ def frequencyList(data):
             break
         htmllist += '\n%s=%d' % (elem[0], elem[1])
         if i<10000:
-            alltext[i/2000] += '\n[[%s]]=%d' % (elem[0], elem[1])
+            alltext[i//2000] += '\n[[%s]]=%d' % (elem[0], elem[1])
         i+= 1
 
     dictlist = [s for s in dictlist if s[0] not in alltitles]
