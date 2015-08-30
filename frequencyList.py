@@ -123,11 +123,11 @@ def frequencyList(data):
 
     htmllist += '</body></html>'
     file = open('%spublic_html/frequencyListPL.html' % (config.path['home']), 'w')
-    file.write(htmllist.encode( "utf-8" ))
+    file.write(htmllist)
     file.close
 
     file = open('%soutput/frequencyListPL.txt' % (config.path['scripts']), 'w')
-    file.write(nonExistingText.encode( "utf-8" ))
+    file.write(nonExistingText)
     file.close
 
 

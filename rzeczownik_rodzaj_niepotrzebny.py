@@ -56,7 +56,7 @@ def rzeczownikRodzajNiepotrzebny(data):
             text += '\n'
 
     file = open('output/rodzaj_niepotrzebny.txt', 'w')
-    file.write(text.encode( "utf-8" ))
+    file.write(text)
     file.close
 
     outputPage.text = text

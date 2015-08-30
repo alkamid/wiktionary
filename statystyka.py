@@ -12,7 +12,7 @@ from pywikibot import xmlreader
 import math
 import collections
 from klasa import *
-import mwparserfromhell
+#import mwparserfromhell
 
 def countRanks(langStats):
 
@@ -298,7 +298,7 @@ def licz_jezyki(dump_date):
             text += '%s\t%.1f\t%.0f\t%.0f\t%.0f\t%.1f\t%.0f\t%.1f\t%.0f\t%.2f\t%.0f\t%.1f\t%d\t%d\t%d\t%d\t%d\t%d\t%d' % (statList[c].shortName, statList[c].avgLen, statList[c].countWords, statList[c].countLen/1000.0, statList[c].countAudio, statList[c].percAudio, statList[c].countGraph, statList[c].percGraph, statList[c].countMeans, statList[c].avgMean, statList[c].countRef, statList[c].percRef, statList[c].rank['countWords'], statList[c].rank['countMeans'], statList[c].rank['countLen'], statList[c].rank['avgLen'], statList[c].rank['percAudio'], statList[c].rank['percGraph'], statList[c].rank['percRef'])
 
     output_file = open(filename, 'w')
-    output_file.write(text.encode("utf-8"))
+    output_file.write(text)
     output_file.close()
 
     return statList
@@ -538,16 +538,16 @@ def stat_wikitable(old, new):
     filename_znacz_old = "output/znacz_old_%s.txt" % (data)
 
     file = open(filename_dlugosc, 'w')
-    file.write(text_dlugosc.encode( "utf-8" ))
+    file.write(text_dlugosc)
     file.close
     file = open(filename_srednia, 'w')
-    file.write(text_srednia.encode("utf-8"))
+    file.write(text_srednia)
     file.close
     file = open(filename_multimedia, 'w')
-    file.write(text_multimedia.encode("utf-8"))
+    file.write(text_multimedia)
     file.close
     file = open(filename_znaczenia, 'w')
-    file.write(text_znaczenia.encode("utf-8"))
+    file.write(text_znaczenia)
     file.close
 
 
@@ -578,7 +578,7 @@ def stat_wikitable(old, new):
     else:
         file = codecs.open('outstat.txt', 'w')
         myout = text_dlugosc + '\n\n\n' + text_srednia + '\n\n\n' + text_multimedia + '\n\n\n' + text_znaczenia + '\n\n\n' + text_dane + '\n\n\n' + text_dlugosc_template + '\n\n\n' + text_srednia_template + '\n\n\n' + text_GraphCount_template + '\n\n\n' + text_GraphPerc_template + '\n\n\n' + text_AudioCount_template + '\n\n\n' + text_AudioPerc_template
-        file.write(myout.encode('utf-8'))
+        file.write(myout)
         file.close()
 
 

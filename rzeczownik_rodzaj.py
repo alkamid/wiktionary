@@ -88,11 +88,11 @@ def rzeczownikRodzaj(data):
                 text2 += '\n'
 
     file = open('output/bez_rodzaju_1.txt', 'w')
-    file.write(text.encode( "utf-8" ))
+    file.write(text)
     file.close
 
     file = open('output/bez_rodzaju_2.txt', 'w')
-    file.write(text2.encode( "utf-8" ))
+    file.write(text2)
     file.close
 
     outputPage1.text = text
