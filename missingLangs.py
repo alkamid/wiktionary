@@ -57,5 +57,5 @@ def missingLangs(data):
                             missingText = missingText + '%s - %s\n' % (lang.lang, word.title)
 
     file = open('%soutput/missingLangs.txt' % (config.path['scripts']), 'w')
-    file.write(missingText.encode("utf-8"))
+    file.write(missingText)
     file.close()

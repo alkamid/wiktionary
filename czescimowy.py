@@ -131,9 +131,9 @@ def czescimowy(data):
     outputPage.save(comment="Aktualizacja listy", botflag=False)
 
     file = open("output/czescimowy_tabelka.txt", 'w')
-    file.write(tabelka.encode("utf-8"))
+    file.write(tabelka)
     file.close
 
     file = open("output/czescimowy_input.txt", 'w')
-    file.write(final_input.encode("utf-8"))
+    file.write(final_input)
     file.close
