@@ -12,7 +12,7 @@ from pywikibot import xmlreader
 import math
 import collections
 from klasa import *
-#import mwparserfromhell
+import mwparserfromhell
 
 def countRanks(langStats):
 
