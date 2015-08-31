@@ -75,13 +75,13 @@ def main():
     filename_multimedia = "wikitable-multimedia.txt"
 
     file = open(filename_dlugosc, 'w')
-    file.write(text_dlugosc.encode( "utf-8" ))
+    file.write(text_dlugosc)
     file.close
     file = open(filename_srednia, 'w')
-    file.write(text_srednia.encode("utf-8"))
+    file.write(text_srednia)
     file.close
     file = open(filename_multimedia, 'w')
-    file.write(text_multimedia.encode("utf-8"))
+    file.write(text_multimedia)
     file.close
 
     if (offline_mode == 0):

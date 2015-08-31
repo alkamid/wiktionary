@@ -229,9 +229,9 @@ def main():
     file = open('%s/public_html/pron_with_r.html' % (os.environ['HOME']), 'w')
     file.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"\n"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\n<html xmlns="http://www.w3.org/1999/xhtml\nxml:lang="pl">\n<head>\n<meta http-equiv="content-type" content="text/html; charset=UTF-8" />\n</head><body>')
 
-    file.write('<br />' + data1.encode('utf-8') + '\n')
+    file.write('<br />' + data1 + '\n')
     for item in with_r:
-        file.write('<br />' + item.encode('utf-8') + '\n')
+        file.write('<br />' + item + '\n')
 
     file.write('</body></html>')
     file.close()

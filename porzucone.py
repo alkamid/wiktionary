@@ -59,7 +59,7 @@ def main():
     final = final + '</body></html>'
 
     file = open('%spublic_html/porzucone.html' % (config.path['home']), 'w')
-    file.write(final.encode( "utf-8" ))
+    file.write(final)
     file.close
 
 if __name__ == '__main__':

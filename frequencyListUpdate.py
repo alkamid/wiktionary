@@ -62,7 +62,7 @@ def main():
     table += '\n|-\n|}'
 
     file = open('%soutput/frequencyProcessedTable.txt' % config.path['scripts'], 'w')
-    file.write(table.encode('utf-8'))
+    file.write(table)
     file.close()
     if dluga:
         outputPage = pywikibot.Page(site, 'Wikipedysta:AlkamidBot/listy/Najbardziej_potrzebne_-_długa_lista')
