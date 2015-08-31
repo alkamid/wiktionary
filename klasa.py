@@ -727,7 +727,7 @@ def writeRCLimit(name, limit=666):
         limit = current.strftime(time_format)
 
     file = open('%srclimits/%s.txt' % (config.path['scripts'], name), 'w')
-    file.write(limit.encode( "utf-8" ))
+    file.write(limit)
     file.close
 def readRCLimit(name):
     file = open('%srclimits/%s.txt' % (config.path['scripts'], name), 'r')
@@ -799,7 +799,7 @@ def log(text, filename='log_all', test_mode=0):
     else:
         if text != '':
             file = open("%slog/%s.txt" % (config.path['scripts'], filename), 'a')
-            file.write (('\n' + text).encode("utf-8"))
+            file.write (('\n' + text))
             file.close
 
 class HasloFr():

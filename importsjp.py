@@ -23,7 +23,7 @@ def checkFlexSJP(forma):
     #parser = etree.HTMLParser()
     while True:
         try:
-            web = html.parse('http://www.sjp.pl/%s' % urllib.parse.quote(forma.encode('utf-8')))
+            web = html.parse('http://www.sjp.pl/%s' % urllib.parse.quote(forma))
         except IOError:
             return None
         break
@@ -95,7 +95,7 @@ class HasloSJP():
         parser = etree.HTMLParser()
 
         while True:
-            try: sjpsite = urllib.request.urlopen('http://www.sjp.pl/%s' % urllib.parse.quote(a.encode('utf-8')))
+            try: sjpsite = urllib.request.urlopen('http://www.sjp.pl/%s' % urllib.parse.quote(a)))
             except urllib.error.HTTPError:
                 print('httperror')
                 return 0
@@ -304,7 +304,7 @@ class Word():
             if type == '':
                 brak = b.title + '\n'
                 file = open('braki.txt', 'a')
-                file.write(brak.encode( "utf-8" ))
+                file.write(brak)
                 file.close
 
             if type == 'subst' and not self.morfeuszAmbig and self.morfeusz:
@@ -1083,7 +1083,7 @@ def derivedWordsLink(title):
     for i in range(rng):
         stem = title[:(len(title)-i)]
         while True:
-            try: sjpsite = urllib.request.urlopen('http://www.sjp.pl/slownik/lp.phtml?f_st=%s&f_en=&f_fl=-&f_msfl=-&f_mn=0&f_vl=0' % urllib.parse.quote(stem.encode('utf-8')))
+            try: sjpsite = urllib.request.urlopen('http://www.sjp.pl/slownik/lp.phtml?f_st=%s&f_en=&f_fl=-&f_msfl=-&f_mn=0&f_vl=0' % urllib.parse.quote(stem))
             except urllib.error.HTTPError:
                 print('httperror')
                 return 0
@@ -1213,7 +1213,7 @@ def main():
                                     if not checkHistory(outputPage.title()):
                                         kat.counter += wordsPerPage-1
                                     else:
-                                        file_words.write(kat.buffer.encode('utf-8'))
+                                        file_words.write(kat.buffer)
                                         if not offline_mode:
                                             outputPage.put(kat.buffer, comment='has³a zaimportowane z sjp.pl')
                                         else:
@@ -1226,7 +1226,7 @@ def main():
                                 if '[[' in kat.tabelka: #add row only if there are entries (we don't want empty rows here)
                                     tabOutput += kat.tabelka
                             tabOutput += tabelkaEnd
-                            file_tab.write(tabOutput.encode( "utf-8" ))
+                            file_tab.write(tabOutput)
                             file_tab.close
 
 
@@ -1236,7 +1236,7 @@ def main():
                     elif not naStrone and ifalreadyexists(b.title, existing):
                         file_niedodane = open('output/niedodane.txt', 'a')
                         dodaj = '*[[%s]]\n' % b.title
-                        file_niedodane.write(dodaj.encode("utf-8"))
+                        file_niedodane.write(dodaj)
                         file_niedodane.close
 
     if not custom_list:
@@ -1245,7 +1245,7 @@ def main():
     if custom_list and filename and kategorie[0].buffer != '':
         file_words = open(filename, 'w')
         kategorie[0].tabelka += '\n| [[%s%d|%d]]' % (kategorie[0].pages, kategorie[0].counter/wordsPerPage, kategorie[0].counter/wordsPerPage)
-        file_words.write(kategorie[0].buffer.encode('utf-8'))
+        file_words.write(kategorie[0].buffer)
         if not offline_mode:
             outputPage.put(kategorie[0].buffer, comment='has³a zaimportowane z sjp.pl')
         file_words.close
