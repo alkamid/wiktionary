@@ -137,7 +137,7 @@ class Haslo():
 
 def sortSections(sectionList):
     # sorting sections. The proper order is: 1. "użycie międzynarodowe" 2. "polski" 3. "termin obcy w języku polskim" 4. "znak chiński". The rest is sorted alphabetically with pl_PL locale
-    sectionList = sorted(sectionList, cmp=lambda a, b: locale.strcoll(a.lang, b.lang))
+    sectionList = sorted(sectionList, key=lambda x: locale.strxfrm(x.lang))
     for sec in sectionList:
         if sec.lang == 'znak chiński':
             ind = sectionList.index(sec)
