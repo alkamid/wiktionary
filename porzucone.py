@@ -16,24 +16,33 @@ def main():
 
     site = pywikibot.Site()
 
-    cat_main = Category(site,'Kategoria:polski (indeks)')
-    cat_gwary = Category(site, 'Kategoria:Polski_(dialekty_i_gwary)')
+    cat_allpages = Category(site,'Kategoria:polski (indeks)')
+    cat_dialects = Category(site, 'Kategoria:Polski_(dialekty_i_gwary)')
 
-    output_main = pywikibot.Page(site, 'Wikipedysta:AlkamidBot/porzucone')
-
-    lista_main = set(pagegenerators.CategorizedPageGenerator(cat_main))
-    lista_gwary = set(pagegenerators.CategorizedPageGenerator(cat_gwary, recurse=True))
+    list_allpages = pagegenerators.CategorizedPageGenerator(cat_allpages)
+    list_dialects = set(pagegenerators.CategorizedPageGenerator(cat_dialects, recurse=True))
 
     lista = []
     count_all = 0
-    final = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"\n"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\n<html xmlns="http://www.w3.org/1999/xhtml\nxml:lang="pl">\n<head>\n<meta http-equiv="content-type" content="text/html; charset=UTF-8" />\n</head><body>'
-    final = final + 'Poniżej znajduje się lista polskich haseł, do których nie linkuje nic oprócz stron z przestrzeni nazw Wikipedysta. Z związku z tym trudno trafić do takiego hasła inaczej niż przez bezpośrednie jego wyszukanie. Jeśli możesz - dodaj w innym haśle odnośnik do porzuconego słowa, np. w przykładach lub pokrewnych. '
+    
+    final = ('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"\n'
+             '"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\n'
+             '<html xmlns="http://www.w3.org/1999/xhtml\nxml:lang="pl">\n'
+             '<head>\n<meta http-equiv="content-type" content="text/html; charset=UTF-8" />\n'
+             '</head><body>')
+    
+    final += ('Poniżej znajduje się lista polskich haseł, do których '
+              'nie linkuje nic oprócz stron z przestrzeni nazw Wikipedysta. W związku '
+              'z tym trudno trafić do takiego hasła inaczej niż przez bezpośrednie jego '
+              'wyszukanie. Jeśli możesz, dodaj w innym haśle odnośnik do porzuconego '
+              'słowa, np. w przykładach lub pokrewnych.')
+    
     final_lista = ''
 
-    wykluczone = set(pagegenerators.AllpagesPageGenerator(namespace=2)) # namespace Wikipedysta
+    wykluczone = set(pagegenerators.AllpagesPageGenerator(namespace=2)) # namespace User
 
-    for page in lista_main:
-        if page not in lista_gwary:
+    for page in list_allpages:
+        if page not in list_dialects:
             try:
                 strona = pywikibot.Page(site, page.title())
             except pywikibot.Error:
@@ -41,8 +50,9 @@ def main():
             else:
                 pages = set(a for a in strona.getReferences())
                 for b in wykluczone:
-                    if b in pages:
-                        pages.remove(b)
+                    try: pages.remove(b)
+                    except ValueError:
+                        continue
                 if strona in pages:
                     pages.remove(strona)
                 if not pages:
