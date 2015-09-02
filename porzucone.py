@@ -1,14 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# robienie listy haseł polskich bez wymowy
+# find Polish orphans - pages that are not linked by other pages from
+# the main namespace
 
-import codecs
 from pywikibot import Category
 import pywikibot
 from pywikibot import pagegenerators
-import re
-import math
 import datetime
 import config
 
@@ -25,52 +23,39 @@ def main():
     lista = []
     count_all = 0
     
-    final = ('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"\n'
+    intro = ('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"\n'
              '"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\n'
              '<html xmlns="http://www.w3.org/1999/xhtml\nxml:lang="pl">\n'
              '<head>\n<meta http-equiv="content-type" content="text/html; charset=UTF-8" />\n'
              '</head><body>')
     
-    final += ('Poniżej znajduje się lista polskich haseł, do których '
-              'nie linkuje nic oprócz stron z przestrzeni nazw Wikipedysta. W związku '
+    intro += ('Poniżej znajduje się lista polskich haseł, do których '
+              'nie linkuje żadne inne hasło z głównej przestrzeni nazw. W związku '
               'z tym trudno trafić do takiego hasła inaczej niż przez bezpośrednie jego '
               'wyszukanie. Jeśli możesz, dodaj w innym haśle odnośnik do porzuconego '
               'słowa, np. w przykładach lub pokrewnych.')
     
-    final_lista = ''
+ 
+    with open('{0}public_html/porzucone.html'.format(config.path['home']), 'w', encoding='utf-8') as f:
+        f.write(intro)
+        for page in list_allpages:
+            if page not in list_dialects:
+                refs = list(page.getReferences(namespaces=0, total=2))
+                try: refs.remove(page)
+                except ValueError:
+                    pass
+            
+            if len(refs) == 0:
+                try: f.write('\n<br /><a href="http://pl.wiktionary.org/wiki/{0}">{0}</a>'.format(page.title()))
+                except UnicodeEncodeError:
+                    print(page.title())
+                    pass
+                count_all += 1
 
-    wykluczone = set(pagegenerators.AllpagesPageGenerator(namespace=2)) # namespace User
-
-    for page in list_allpages:
-        if page not in list_dialects:
-            try:
-                strona = pywikibot.Page(site, page.title())
-            except pywikibot.Error:
-                print('error')
-            else:
-                pages = set(a for a in strona.getReferences())
-                for b in wykluczone:
-                    try: pages.remove(b)
-                    except ValueError:
-                        continue
-                if strona in pages:
-                    pages.remove(strona)
-                if not pages:
-                    dodaj = '\n<br /><a href="http://pl.wiktionary.org/wiki/%s">%s</a>' % (strona.title(), strona.title())
-                    final_lista = final_lista + dodaj
-                    count_all = count_all + 1
-
-
-    data = datetime.datetime.now() + datetime.timedelta(hours=2)
-    data1 = data.strftime("Ostatnia aktualizacja listy: %Y-%m-%d, %H:%M:%S")
-
-    final = final + data1 + '<br />: Licznik porzuconych: %d' % count_all
-    final = final + final_lista
-    final = final + '</body></html>'
-
-    file = open('%spublic_html/porzucone.html' % (config.path['home']), 'w')
-    file.write(final)
-    file.close
+        date_now = datetime.datetime.now() + datetime.timedelta(hours=2)
+        f.write(date_now.strftime("\nOstatnia aktualizacja listy: %Y-%m-%d, %H:%M:%S"))
+        f.write('<br />: Licznik porzuconych: {0}'.format(count_all))
+        f.write('</body></html')
 
 if __name__ == '__main__':
     try:
