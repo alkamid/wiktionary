@@ -54,8 +54,8 @@ def main():
                 count_all += 1
 
         date_now = datetime.datetime.now() + datetime.timedelta(hours=2)
-        f.write(date_now.strftime("\nOstatnia aktualizacja listy: %Y-%m-%d, %H:%M:%S"))
-        f.write('<br />: Licznik porzuconych: {0}'.format(count_all))
+        f.write(date_now.strftime("\n<br />Ostatnia aktualizacja listy: %Y-%m-%d, %H:%M:%S"))
+        f.write('<br />Licznik porzuconych: {0}'.format(count_all))
         f.write('</body></html')
 
     move('{0}public_html/porzucone.html.1'.format(config.path['home']), '{0}public_html/porzucone.html'.format(config.path['home']))
