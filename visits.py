@@ -121,7 +121,7 @@ def main():
     text = text.replace('_', ' ')
 
     file = open("%soutput/visits.txt" % config.path['scripts'], 'w')
-    file.write(textFile.encode('utf-8'))
+    file.write(textFile)
     file.close
 
     statSite.text = text
