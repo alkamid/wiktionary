@@ -31,7 +31,9 @@ def main():
     popularFile = codecs.open('%soutput/visits.txt' % config.path['scripts'], encoding='utf-8')
     for line in popularFile:
         popularList.append(line.split('|')[0])
-    popularList.remove('\n')
+    try: popularList.remove('\n')
+    except ValueError:
+        pass
     #end of get the most popular pages
 
 
