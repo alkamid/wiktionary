@@ -13,18 +13,18 @@ import config
 #uwagi wstępne
 #nie można zmieniać ''przymiotnik -> ''przymiotnik'', bo będą niepożądane zmiany, ewentualnie można byłoby szukać ''przymiotnik\n i zmieniać, ale struktura hasła w parserze jest taka, że to \n nie wchodzi do zmiennej
 
-        
+
 def czescimowyReplace():
 
     site = pywikibot.getSite()
     inp = codecs.open('%soutput/czescimowy_input.txt' % config.path['scripts'], encoding='utf-8')
-    replacePage = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/części_mowy/zamiana')
+    replacePage = pywikibot.Page(site, 'Wikipedysta:AlkamidBot/części_mowy/zamiana')
     replacePageText = replacePage.get()
-    tempListReplace = replacePageText.split(u'\n')
+    tempListReplace = replacePageText.split('\n')
     replaceList = []
     cnt = 0
     for elem in tempListReplace:
-        if elem == u'|-':
+        if elem == '|-':
             old = ''
             new = ''
             cnt = 1
@@ -37,11 +37,11 @@ def czescimowyReplace():
             new = elem[1:]
             replaceList.append([old, new])
             cnt = 1
-    
+
     #for replaceText in replaceList:
     #    print replaceText[0]
     #    print replaceText[1]
-            
+
     for line in inp:
         if line:
             try: h = Haslo(line)
@@ -67,4 +67,4 @@ def czescimowyReplace():
                                 if d[0] != temp:
                                     changed = 1
                     if changed:
-                        h.push(myComment=u'automatyczne porządkowanie części mowy wg [[Wikipedysta:AlkamidBot/części_mowy/zamiana]]')
+                        h.push(myComment='automatyczne porządkowanie części mowy wg [[Wikipedysta:AlkamidBot/części_mowy/zamiana]]')

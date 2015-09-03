@@ -1,0 +1,4120 @@
+{| class="wikitable sortable" style="margin: 0 auto; white-space: nowrap"
+! język !! suma długości haseł (w tys.) !! zmiana (w tys.) !! liczba haseł
+|-
+| [[:Kategoria:polski (indeks)|polski]]
+| align="right"| 32260
+| align="right"| +300
+| align="right"| 47332
+|-
+| [[:Kategoria:angielski (indeks)|angielski]]
+| align="right"| 10626
+| align="right"| +25
+| align="right"| 53687
+|-
+| [[:Kategoria:niemiecki (indeks)|niemiecki]]
+| align="right"| 8659
+| align="right"| +158
+| align="right"| 25667
+|-
+| [[:Kategoria:włoski (indeks)|włoski]]
+| align="right"| 7141
+| align="right"| +5
+| align="right"| 25214
+|-
+| [[:Kategoria:hiszpański (indeks)|hiszpański]]
+| align="right"| 5908
+| align="right"| +37
+| align="right"| 15680
+|-
+| [[:Kategoria:francuski (indeks)|francuski]]
+| align="right"| 4742
+| align="right"| +3
+| align="right"| 19719
+|-
+| [[:Kategoria:znak chiński (indeks)|znak chiński]]
+| align="right"| 3910
+| align="right"| 
+| align="right"| 21329
+|-
+| [[:Kategoria:szwedzki (indeks)|szwedzki]]
+| align="right"| 3814
+| align="right"| +2
+| align="right"| 17516
+|-
+| [[:Kategoria:rosyjski (indeks)|rosyjski]]
+| align="right"| 3288
+| align="right"| +56
+| align="right"| 16945
+|-
+| [[:Kategoria:arabski (indeks)|arabski]]
+| align="right"| 2757
+| align="right"| 
+| align="right"| 8835
+|-
+| [[:Kategoria:esperanto (indeks)|esperanto]]
+| align="right"| 2413
+| align="right"| +15
+| align="right"| 8852
+|-
+| [[:Kategoria:nowogrecki (indeks)|nowogrecki]]
+| align="right"| 2285
+| align="right"| +11
+| align="right"| 7403
+|-
+| [[:Kategoria:czeski (indeks)|czeski]]
+| align="right"| 1726
+| align="right"| +39
+| align="right"| 14527
+|-
+| [[:Kategoria:jidysz (indeks)|jidysz]]
+| align="right"| 1580
+| align="right"| +5
+| align="right"| 8158
+|-
+| [[:Kategoria:interlingua (indeks)|interlingua]]
+| align="right"| 1392
+| align="right"| +2
+| align="right"| 19849
+|-
+| [[:Kategoria:łaciński (indeks)|łaciński]]
+| align="right"| 1081
+| align="right"| +10
+| align="right"| 5721
+|-
+| [[:Kategoria:duński (indeks)|duński]]
+| align="right"| 1069
+| align="right"| 
+| align="right"| 2872
+|-
+| [[:Kategoria:islandzki (indeks)|islandzki]]
+| align="right"| 1053
+| align="right"| 
+| align="right"| 4105
+|-
+| [[:Kategoria:kazachski (indeks)|kazachski]]
+| align="right"| 915
+| align="right"| +5
+| align="right"| 1718
+|-
+| [[:Kategoria:portugalski (indeks)|portugalski]]
+| align="right"| 910
+| align="right"| +2
+| align="right"| 6607
+|-
+| [[:Kategoria:białoruski (indeks)|białoruski]]
+| align="right"| 908
+| align="right"| +90
+| align="right"| 3196
+|-
+| [[:Kategoria:słowacki (indeks)|słowacki]]
+| align="right"| 877
+| align="right"| +63
+| align="right"| 6020
+|-
+| [[:Kategoria:ukraiński (indeks)|ukraiński]]
+| align="right"| 876
+| align="right"| +12
+| align="right"| 3952
+|-
+| [[:Kategoria:bułgarski (indeks)|bułgarski]]
+| align="right"| 800
+| align="right"| +71
+| align="right"| 5323
+|-
+| [[:Kategoria:japoński (indeks)|japoński]]
+| align="right"| 730
+| align="right"| +33
+| align="right"| 4481
+|-
+| [[:Kategoria:fiński (indeks)|fiński]]
+| align="right"| 684
+| align="right"| +8
+| align="right"| 6738
+|-
+| [[:Kategoria:węgierski (indeks)|węgierski]]
+| align="right"| 683
+| align="right"| +4
+| align="right"| 7625
+|-
+| [[:Kategoria:norweski (bokmål) (indeks)|norweski (bokmål)]]
+| align="right"| 680
+| align="right"| -1
+| align="right"| 2811
+|-
+| [[:Kategoria:esperanto (morfem) (indeks)|esperanto (morfem)]]
+| align="right"| 536
+| align="right"| +2
+| align="right"| 3311
+|-
+| [[:Kategoria:holenderski (indeks)|holenderski]]
+| align="right"| 536
+| align="right"| 
+| align="right"| 3550
+|-
+| [[:Kategoria:wilamowski (indeks)|wilamowski]]
+| align="right"| 516
+| align="right"| +70
+| align="right"| 3733
+|-
+| [[:Kategoria:serbsko-chorwacki (indeks)|serbsko-chorwacki]]
+| align="right"| 456
+| align="right"| -1
+| align="right"| 3755
+|-
+| [[:Kategoria:turecki (indeks)|turecki]]
+| align="right"| 448
+| align="right"| +1
+| align="right"| 4659
+|-
+| [[:Kategoria:sanskryt (indeks)|sanskryt]]
+| align="right"| 426
+| align="right"| 
+| align="right"| 1082
+|-
+| [[:Kategoria:koreański (indeks)|koreański]]
+| align="right"| 377
+| align="right"| 
+| align="right"| 1962
+|-
+| [[:Kategoria:baskijski (indeks)|baskijski]]
+| align="right"| 373
+| align="right"| +10
+| align="right"| 3560
+|-
+| [[:Kategoria:litewski (indeks)|litewski]]
+| align="right"| 344
+| align="right"| 
+| align="right"| 2915
+|-
+| [[:Kategoria:chorwacki (indeks)|chorwacki]]
+| align="right"| 315
+| align="right"| +3
+| align="right"| 1548
+|-
+| [[:Kategoria:dolnołużycki (indeks)|dolnołużycki]]
+| align="right"| 288
+| align="right"| 
+| align="right"| 1285
+|-
+| [[:Kategoria:rumuński (indeks)|rumuński]]
+| align="right"| 286
+| align="right"| +1
+| align="right"| 2133
+|-
+| [[:Kategoria:suahili (indeks)|suahili]]
+| align="right"| 267
+| align="right"| 
+| align="right"| 1601
+|-
+| [[:Kategoria:slovio (indeks)|slovio]]
+| align="right"| 267
+| align="right"| 
+| align="right"| 3131
+|-
+| [[:Kategoria:gruziński (indeks)|gruziński]]
+| align="right"| 263
+| align="right"| 
+| align="right"| 2877
+|-
+| [[:Kategoria:kataloński (indeks)|kataloński]]
+| align="right"| 243
+| align="right"| +1
+| align="right"| 2686
+|-
+| [[:Kategoria:hebrajski (indeks)|hebrajski]]
+| align="right"| 228
+| align="right"| 
+| align="right"| 1684
+|-
+| [[:Kategoria:hindi (indeks)|hindi]]
+| align="right"| 226
+| align="right"| 
+| align="right"| 2203
+|-
+| [[:Kategoria:tajski (indeks)|tajski]]
+| align="right"| 219
+| align="right"| 
+| align="right"| 1890
+|-
+| [[:Kategoria:estoński (indeks)|estoński]]
+| align="right"| 215
+| align="right"| 
+| align="right"| 2738
+|-
+| [[:Kategoria:asturyjski (indeks)|asturyjski]]
+| align="right"| 184
+| align="right"| 
+| align="right"| 2175
+|-
+| [[:Kategoria:ormiański (indeks)|ormiański]]
+| align="right"| 181
+| align="right"| 
+| align="right"| 2051
+|}
+
+
+{| class="wikitable sortable" style="margin: 0 auto; white-space: nowrap"
+! język !! średnia długość hasła !! zmiana średniej !! liczba haseł
+|-
+| [[:Kategoria:polski (indeks)|polski]]
+| align="right"| 681.0
+| align="right"| +3.0
+| align="right"| 47332
+|-
+| [[:Kategoria:kazachski (indeks)|kazachski]]
+| align="right"| 532.0
+| align="right"| +1.0
+| align="right"| 1718
+|-
+| [[:Kategoria:sanskryt (indeks)|sanskryt]]
+| align="right"| 393.0
+| align="right"| 
+| align="right"| 1082
+|-
+| [[:Kategoria:hiszpański (indeks)|hiszpański]]
+| align="right"| 376.0
+| align="right"| 
+| align="right"| 15680
+|-
+| [[:Kategoria:duński (indeks)|duński]]
+| align="right"| 372.0
+| align="right"| 
+| align="right"| 2872
+|-
+| [[:Kategoria:niemiecki (indeks)|niemiecki]]
+| align="right"| 337.0
+| align="right"| +4.0
+| align="right"| 25667
+|-
+| [[:Kategoria:arabski (indeks)|arabski]]
+| align="right"| 312.0
+| align="right"| 
+| align="right"| 8835
+|-
+| [[:Kategoria:nowogrecki (indeks)|nowogrecki]]
+| align="right"| 308.0
+| align="right"| 
+| align="right"| 7403
+|-
+| [[:Kategoria:białoruski (indeks)|białoruski]]
+| align="right"| 284.0
+| align="right"| +8.0
+| align="right"| 3196
+|-
+| [[:Kategoria:włoski (indeks)|włoski]]
+| align="right"| 283.0
+| align="right"| 
+| align="right"| 25214
+|-
+| [[:Kategoria:białoruski (taraszkiewica) (indeks)|białoruski (taraszkiewica)]]
+| align="right"| 276.0
+| align="right"| -4.0
+| align="right"| 327
+|-
+| [[:Kategoria:esperanto (indeks)|esperanto]]
+| align="right"| 272.0
+| align="right"| 
+| align="right"| 8852
+|-
+| [[:Kategoria:islandzki (indeks)|islandzki]]
+| align="right"| 256.0
+| align="right"| 
+| align="right"| 4105
+|-
+| [[:Kategoria:chiński standardowy (indeks)|chiński standardowy]]
+| align="right"| 248.0
+| align="right"| -4.0
+| align="right"| 536
+|-
+| [[:Kategoria:norweski (bokmål) (indeks)|norweski (bokmål)]]
+| align="right"| 241.0
+| align="right"| 
+| align="right"| 2811
+|-
+| [[:Kategoria:francuski (indeks)|francuski]]
+| align="right"| 240.0
+| align="right"| 
+| align="right"| 19719
+|-
+| [[:Kategoria:dolnołużycki (indeks)|dolnołużycki]]
+| align="right"| 224.0
+| align="right"| 
+| align="right"| 1285
+|-
+| [[:Kategoria:ukraiński (indeks)|ukraiński]]
+| align="right"| 221.0
+| align="right"| -2.0
+| align="right"| 3952
+|-
+| [[:Kategoria:szwedzki (indeks)|szwedzki]]
+| align="right"| 217.0
+| align="right"| 
+| align="right"| 17516
+|-
+| [[:Kategoria:moksza (indeks)|moksza]]
+| align="right"| 212.0
+| align="right"| 
+| align="right"| 78
+|-
+| [[:Kategoria:chorwacki (indeks)|chorwacki]]
+| align="right"| 204.0
+| align="right"| -1.0
+| align="right"| 1548
+|-
+| [[:Kategoria:pali (indeks)|pali]]
+| align="right"| 202.0
+| align="right"| -3.0
+| align="right"| 521
+|-
+| [[:Kategoria:dari (indeks)|dari]]
+| align="right"| 202.0
+| align="right"| 
+| align="right"| 21
+|-
+| [[:Kategoria:angielski (indeks)|angielski]]
+| align="right"| 197.0
+| align="right"| 
+| align="right"| 53687
+|-
+| [[:Kategoria:rosyjski (indeks)|rosyjski]]
+| align="right"| 194.0
+| align="right"| +2.0
+| align="right"| 16945
+|-
+| [[:Kategoria:jidysz (indeks)|jidysz]]
+| align="right"| 193.0
+| align="right"| 
+| align="right"| 8158
+|-
+| [[:Kategoria:koreański (indeks)|koreański]]
+| align="right"| 192.0
+| align="right"| -1.0
+| align="right"| 1962
+|-
+| [[:Kategoria:hawajski (indeks)|hawajski]]
+| align="right"| 191.0
+| align="right"| 
+| align="right"| 754
+|-
+| [[:Kategoria:łaciński (indeks)|łaciński]]
+| align="right"| 189.0
+| align="right"| +1.0
+| align="right"| 5721
+|-
+| [[:Kategoria:baszkirski (indeks)|baszkirski]]
+| align="right"| 187.0
+| align="right"| 
+| align="right"| 506
+|-
+| [[:Kategoria:sindhi (indeks)|sindhi]]
+| align="right"| 185.0
+| align="right"| +53.0
+| align="right"| 75
+|-
+| [[:Kategoria:malediwski (indeks)|malediwski]]
+| align="right"| 183.0
+| align="right"| 
+| align="right"| 37
+|-
+| [[:Kategoria:znak chiński (indeks)|znak chiński]]
+| align="right"| 183.0
+| align="right"| 
+| align="right"| 21329
+|-
+| [[:Kategoria:tatarski (indeks)|tatarski]]
+| align="right"| 174.0
+| align="right"| 
+| align="right"| 220
+|-
+| [[:Kategoria:macedoński (indeks)|macedoński]]
+| align="right"| 170.0
+| align="right"| -1.0
+| align="right"| 824
+|-
+| [[:Kategoria:suahili (indeks)|suahili]]
+| align="right"| 167.0
+| align="right"| 
+| align="right"| 1601
+|-
+| [[:Kategoria:susu (indeks)|susu]]
+| align="right"| 164.0
+| align="right"| 
+| align="right"| 23
+|-
+| [[:Kategoria:pendżabski (indeks)|pendżabski]]
+| align="right"| 163.0
+| align="right"| -1.0
+| align="right"| 265
+|-
+| [[:Kategoria:japoński (indeks)|japoński]]
+| align="right"| 163.0
+| align="right"| +1.0
+| align="right"| 4481
+|-
+| [[:Kategoria:esperanto (morfem) (indeks)|esperanto (morfem)]]
+| align="right"| 161.0
+| align="right"| 
+| align="right"| 3311
+|-
+| [[:Kategoria:tybetański (indeks)|tybetański]]
+| align="right"| 158.0
+| align="right"| 
+| align="right"| 651
+|-
+| [[:Kategoria:beludżi (indeks)|beludżi]]
+| align="right"| 155.0
+| align="right"| +1.0
+| align="right"| 104
+|-
+| [[:Kategoria:somalijski (indeks)|somalijski]]
+| align="right"| 153.0
+| align="right"| 
+| align="right"| 71
+|-
+| [[:Kategoria:holenderski (indeks)|holenderski]]
+| align="right"| 151.0
+| align="right"| 
+| align="right"| 3550
+|-
+| [[:Kategoria:bułgarski (indeks)|bułgarski]]
+| align="right"| 150.0
+| align="right"| -16.0
+| align="right"| 5323
+|-
+| [[:Kategoria:użycie międzynarodowe (indeks)|użycie międzynarodowe]]
+| align="right"| 148.0
+| align="right"| 
+| align="right"| 593
+|-
+| [[:Kategoria:mikmak (indeks)|mikmak]]
+| align="right"| 146.0
+| align="right"| 
+| align="right"| 20
+|-
+| [[:Kategoria:fenicki (indeks)|fenicki]]
+| align="right"| 146.0
+| align="right"| 
+| align="right"| 112
+|-
+| [[:Kategoria:słowacki (indeks)|słowacki]]
+| align="right"| 145.0
+| align="right"| 
+| align="right"| 6020
+|-
+| [[:Kategoria:zachodnioflamandzki (indeks)|zachodnioflamandzki]]
+| align="right"| 144.0
+| align="right"| 
+| align="right"| 27
+|}
+
+
+{| class="wikitable sortable" style="margin: 0 auto; white-space: nowrap"
+! język !! % z grafiką !! zmiana ([[w:Punkt_procentowy|p.p.]]) !! z grafiką !! % z nagraniem !! zmiana ([[w:Punkt_procentowy|p.p.]]) !! z nagraniem !! % ze źródłem !! zmiana ([[w:Punkt_procentowy|p.p.]]) !! ze źródłem !! liczba haseł
+|-
+| [[:Kategoria:angielski (indeks)|angielski]]
+| align="right"| 12.9
+| align="right"| 
+| align="right"| 6922
+| align="right"| 18.8
+| align="right"| 
+| align="right"| 10070
+| align="right"| 8.7
+| align="right"| 
+| align="right"| 4650
+| align="right"| 53687
+|-
+| [[:Kategoria:polski (indeks)|polski]]
+| align="right"| 24.0
+| align="right"| 
+| align="right"| 11378
+| align="right"| 44.8
+| align="right"| +1.7
+| align="right"| 21220
+| align="right"| 0.7
+| align="right"| 
+| align="right"| 308
+| align="right"| 47332
+|-
+| [[:Kategoria:niemiecki (indeks)|niemiecki]]
+| align="right"| 15.7
+| align="right"| 
+| align="right"| 4020
+| align="right"| 19.1
+| align="right"| +2.3
+| align="right"| 4897
+| align="right"| 16.7
+| align="right"| -0.3
+| align="right"| 4299
+| align="right"| 25667
+|-
+| [[:Kategoria:włoski (indeks)|włoski]]
+| align="right"| 8.7
+| align="right"| 
+| align="right"| 2183
+| align="right"| 2.0
+| align="right"| 
+| align="right"| 506
+| align="right"| 8.5
+| align="right"| 
+| align="right"| 2155
+| align="right"| 25214
+|-
+| [[:Kategoria:znak chiński (indeks)|znak chiński]]
+| align="right"| 0.0
+| align="right"| 
+| align="right"| 0
+| align="right"| 0.0
+| align="right"| 
+| align="right"| 0
+| align="right"| 0.0
+| align="right"| 
+| align="right"| 0
+| align="right"| 21329
+|-
+| [[:Kategoria:interlingua (indeks)|interlingua]]
+| align="right"| 2.6
+| align="right"| 
+| align="right"| 517
+| align="right"| 0.0
+| align="right"| 
+| align="right"| 2
+| align="right"| 0.4
+| align="right"| 
+| align="right"| 85
+| align="right"| 19849
+|-
+| [[:Kategoria:francuski (indeks)|francuski]]
+| align="right"| 11.3
+| align="right"| 
+| align="right"| 2236
+| align="right"| 32.0
+| align="right"| 
+| align="right"| 6311
+| align="right"| 24.5
+| align="right"| 
+| align="right"| 4835
+| align="right"| 19719
+|-
+| [[:Kategoria:szwedzki (indeks)|szwedzki]]
+| align="right"| 19.2
+| align="right"| 
+| align="right"| 3357
+| align="right"| 19.8
+| align="right"| 
+| align="right"| 3475
+| align="right"| 49.6
+| align="right"| 
+| align="right"| 8689
+| align="right"| 17516
+|-
+| [[:Kategoria:rosyjski (indeks)|rosyjski]]
+| align="right"| 10.8
+| align="right"| 
+| align="right"| 1822
+| align="right"| 26.0
+| align="right"| -0.2
+| align="right"| 4400
+| align="right"| 4.0
+| align="right"| 
+| align="right"| 674
+| align="right"| 16945
+|-
+| [[:Kategoria:hiszpański (indeks)|hiszpański]]
+| align="right"| 10.7
+| align="right"| +0.1
+| align="right"| 1684
+| align="right"| 0.4
+| align="right"| 
+| align="right"| 56
+| align="right"| 14.4
+| align="right"| 
+| align="right"| 2251
+| align="right"| 15680
+|-
+| [[:Kategoria:czeski (indeks)|czeski]]
+| align="right"| 6.7
+| align="right"| 
+| align="right"| 967
+| align="right"| 14.9
+| align="right"| -0.1
+| align="right"| 2170
+| align="right"| 9.3
+| align="right"| -0.2
+| align="right"| 1358
+| align="right"| 14527
+|-
+| [[:Kategoria:esperanto (indeks)|esperanto]]
+| align="right"| 19.7
+| align="right"| 
+| align="right"| 1744
+| align="right"| 3.6
+| align="right"| +1.9
+| align="right"| 315
+| align="right"| 16.4
+| align="right"| +0.4
+| align="right"| 1455
+| align="right"| 8852
+|-
+| [[:Kategoria:arabski (indeks)|arabski]]
+| align="right"| 43.7
+| align="right"| 
+| align="right"| 3861
+| align="right"| 12.8
+| align="right"| 
+| align="right"| 1130
+| align="right"| 97.7
+| align="right"| 
+| align="right"| 8633
+| align="right"| 8835
+|-
+| [[:Kategoria:jidysz (indeks)|jidysz]]
+| align="right"| 10.1
+| align="right"| 
+| align="right"| 826
+| align="right"| 0.0
+| align="right"| 
+| align="right"| 0
+| align="right"| 7.8
+| align="right"| 
+| align="right"| 633
+| align="right"| 8158
+|-
+| [[:Kategoria:węgierski (indeks)|węgierski]]
+| align="right"| 10.3
+| align="right"| 
+| align="right"| 782
+| align="right"| 24.9
+| align="right"| +2.0
+| align="right"| 1898
+| align="right"| 20.2
+| align="right"| 
+| align="right"| 1539
+| align="right"| 7625
+|-
+| [[:Kategoria:nowogrecki (indeks)|nowogrecki]]
+| align="right"| 15.0
+| align="right"| 
+| align="right"| 1113
+| align="right"| 0.3
+| align="right"| 
+| align="right"| 22
+| align="right"| 6.2
+| align="right"| 
+| align="right"| 458
+| align="right"| 7403
+|-
+| [[:Kategoria:fiński (indeks)|fiński]]
+| align="right"| 7.2
+| align="right"| 
+| align="right"| 483
+| align="right"| 1.5
+| align="right"| 
+| align="right"| 102
+| align="right"| 49.1
+| align="right"| -0.9
+| align="right"| 3309
+| align="right"| 6738
+|-
+| [[:Kategoria:portugalski (indeks)|portugalski]]
+| align="right"| 8.5
+| align="right"| 
+| align="right"| 561
+| align="right"| 2.0
+| align="right"| 
+| align="right"| 131
+| align="right"| 16.4
+| align="right"| 
+| align="right"| 1086
+| align="right"| 6607
+|-
+| [[:Kategoria:słowacki (indeks)|słowacki]]
+| align="right"| 12.3
+| align="right"| -0.7
+| align="right"| 740
+| align="right"| 0.2
+| align="right"| 
+| align="right"| 12
+| align="right"| 16.8
+| align="right"| 
+| align="right"| 1012
+| align="right"| 6020
+|-
+| [[:Kategoria:łaciński (indeks)|łaciński]]
+| align="right"| 8.1
+| align="right"| 
+| align="right"| 466
+| align="right"| 6.7
+| align="right"| 
+| align="right"| 384
+| align="right"| 26.8
+| align="right"| -0.3
+| align="right"| 1533
+| align="right"| 5721
+|-
+| [[:Kategoria:bułgarski (indeks)|bułgarski]]
+| align="right"| 12.3
+| align="right"| -2.2
+| align="right"| 654
+| align="right"| 0.0
+| align="right"| 
+| align="right"| 1
+| align="right"| 2.6
+| align="right"| -0.6
+| align="right"| 141
+| align="right"| 5323
+|-
+| [[:Kategoria:turecki (indeks)|turecki]]
+| align="right"| 8.2
+| align="right"| 
+| align="right"| 383
+| align="right"| 0.6
+| align="right"| 
+| align="right"| 26
+| align="right"| 55.4
+| align="right"| -0.4
+| align="right"| 2581
+| align="right"| 4659
+|-
+| [[:Kategoria:japoński (indeks)|japoński]]
+| align="right"| 5.9
+| align="right"| 
+| align="right"| 264
+| align="right"| 0.4
+| align="right"| 
+| align="right"| 20
+| align="right"| 0.0
+| align="right"| 
+| align="right"| 0
+| align="right"| 4481
+|-
+| [[:Kategoria:islandzki (indeks)|islandzki]]
+| align="right"| 11.6
+| align="right"| 
+| align="right"| 475
+| align="right"| 1.0
+| align="right"| 
+| align="right"| 42
+| align="right"| 31.1
+| align="right"| 
+| align="right"| 1278
+| align="right"| 4105
+|-
+| [[:Kategoria:ukraiński (indeks)|ukraiński]]
+| align="right"| 18.1
+| align="right"| -0.2
+| align="right"| 717
+| align="right"| 40.4
+| align="right"| +0.2
+| align="right"| 1598
+| align="right"| 18.0
+| align="right"| 
+| align="right"| 712
+| align="right"| 3952
+|-
+| [[:Kategoria:serbsko-chorwacki (indeks)|serbsko-chorwacki]]
+| align="right"| 2.3
+| align="right"| 
+| align="right"| 86
+| align="right"| 0.3
+| align="right"| 
+| align="right"| 13
+| align="right"| 95.8
+| align="right"| -0.2
+| align="right"| 3596
+| align="right"| 3755
+|-
+| [[:Kategoria:wilamowski (indeks)|wilamowski]]
+| align="right"| 18.4
+| align="right"| +1.0
+| align="right"| 688
+| align="right"| 31.3
+| align="right"| +16.6
+| align="right"| 1168
+| align="right"| 32.4
+| align="right"| +4.6
+| align="right"| 1208
+| align="right"| 3733
+|-
+| [[:Kategoria:baskijski (indeks)|baskijski]]
+| align="right"| 19.9
+| align="right"| +0.2
+| align="right"| 708
+| align="right"| 0.1
+| align="right"| 
+| align="right"| 4
+| align="right"| 13.6
+| align="right"| -0.4
+| align="right"| 483
+| align="right"| 3560
+|-
+| [[:Kategoria:holenderski (indeks)|holenderski]]
+| align="right"| 8.1
+| align="right"| 
+| align="right"| 288
+| align="right"| 86.7
+| align="right"| 
+| align="right"| 3078
+| align="right"| 57.8
+| align="right"| 
+| align="right"| 2051
+| align="right"| 3550
+|-
+| [[:Kategoria:esperanto (morfem) (indeks)|esperanto (morfem)]]
+| align="right"| 0.8
+| align="right"| 
+| align="right"| 25
+| align="right"| 0.2
+| align="right"| 
+| align="right"| 8
+| align="right"| 0.0
+| align="right"| 
+| align="right"| 0
+| align="right"| 3311
+|-
+| [[:Kategoria:białoruski (indeks)|białoruski]]
+| align="right"| 13.7
+| align="right"| -1.0
+| align="right"| 438
+| align="right"| 19.7
+| align="right"| -1.2
+| align="right"| 630
+| align="right"| 5.9
+| align="right"| +1.6
+| align="right"| 187
+| align="right"| 3196
+|-
+| [[:Kategoria:slovio (indeks)|slovio]]
+| align="right"| 5.7
+| align="right"| 
+| align="right"| 177
+| align="right"| 0.0
+| align="right"| 
+| align="right"| 1
+| align="right"| 0.0
+| align="right"| 
+| align="right"| 0
+| align="right"| 3131
+|-
+| [[:Kategoria:litewski (indeks)|litewski]]
+| align="right"| 10.9
+| align="right"| 
+| align="right"| 318
+| align="right"| 0.0
+| align="right"| 
+| align="right"| 1
+| align="right"| 10.1
+| align="right"| 
+| align="right"| 293
+| align="right"| 2915
+|-
+| [[:Kategoria:gruziński (indeks)|gruziński]]
+| align="right"| 6.6
+| align="right"| 
+| align="right"| 189
+| align="right"| 0.1
+| align="right"| 
+| align="right"| 2
+| align="right"| 60.5
+| align="right"| -0.1
+| align="right"| 1742
+| align="right"| 2877
+|-
+| [[:Kategoria:duński (indeks)|duński]]
+| align="right"| 23.0
+| align="right"| 
+| align="right"| 661
+| align="right"| 3.3
+| align="right"| 
+| align="right"| 96
+| align="right"| 12.0
+| align="right"| 
+| align="right"| 346
+| align="right"| 2872
+|-
+| [[:Kategoria:norweski (bokmål) (indeks)|norweski (bokmål)]]
+| align="right"| 20.6
+| align="right"| 
+| align="right"| 579
+| align="right"| 0.4
+| align="right"| 
+| align="right"| 11
+| align="right"| 7.8
+| align="right"| 
+| align="right"| 220
+| align="right"| 2811
+|-
+| [[:Kategoria:estoński (indeks)|estoński]]
+| align="right"| 5.9
+| align="right"| 
+| align="right"| 162
+| align="right"| 0.0
+| align="right"| 
+| align="right"| 1
+| align="right"| 38.0
+| align="right"| -0.2
+| align="right"| 1040
+| align="right"| 2738
+|-
+| [[:Kategoria:kataloński (indeks)|kataloński]]
+| align="right"| 4.9
+| align="right"| 
+| align="right"| 131
+| align="right"| 0.0
+| align="right"| 
+| align="right"| 0
+| align="right"| 68.6
+| align="right"| -0.7
+| align="right"| 1843
+| align="right"| 2686
+|-
+| [[:Kategoria:hindi (indeks)|hindi]]
+| align="right"| 9.0
+| align="right"| 
+| align="right"| 199
+| align="right"| 0.0
+| align="right"| 
+| align="right"| 0
+| align="right"| 30.9
+| align="right"| 
+| align="right"| 680
+| align="right"| 2203
+|-
+| [[:Kategoria:asturyjski (indeks)|asturyjski]]
+| align="right"| 18.1
+| align="right"| 
+| align="right"| 394
+| align="right"| 0.0
+| align="right"| 
+| align="right"| 0
+| align="right"| 42.2
+| align="right"| 
+| align="right"| 917
+| align="right"| 2175
+|-
+| [[:Kategoria:rumuński (indeks)|rumuński]]
+| align="right"| 9.5
+| align="right"| +0.1
+| align="right"| 202
+| align="right"| 0.9
+| align="right"| 
+| align="right"| 19
+| align="right"| 57.1
+| align="right"| -0.5
+| align="right"| 1217
+| align="right"| 2133
+|-
+| [[:Kategoria:ormiański (indeks)|ormiański]]
+| align="right"| 10.5
+| align="right"| 
+| align="right"| 216
+| align="right"| 0.1
+| align="right"| 
+| align="right"| 3
+| align="right"| 80.4
+| align="right"| 
+| align="right"| 1648
+| align="right"| 2051
+|-
+| [[:Kategoria:koreański (indeks)|koreański]]
+| align="right"| 38.0
+| align="right"| 
+| align="right"| 745
+| align="right"| 0.3
+| align="right"| 
+| align="right"| 6
+| align="right"| 2.7
+| align="right"| 
+| align="right"| 53
+| align="right"| 1962
+|-
+| [[:Kategoria:tajski (indeks)|tajski]]
+| align="right"| 6.7
+| align="right"| 
+| align="right"| 127
+| align="right"| 1.3
+| align="right"| 
+| align="right"| 25
+| align="right"| 7.5
+| align="right"| 
+| align="right"| 141
+| align="right"| 1890
+|-
+| [[:Kategoria:kazachski (indeks)|kazachski]]
+| align="right"| 27.6
+| align="right"| 
+| align="right"| 475
+| align="right"| 0.0
+| align="right"| 
+| align="right"| 0
+| align="right"| 52.7
+| align="right"| +0.1
+| align="right"| 906
+| align="right"| 1718
+|-
+| [[:Kategoria:hebrajski (indeks)|hebrajski]]
+| align="right"| 13.5
+| align="right"| 
+| align="right"| 228
+| align="right"| 0.7
+| align="right"| 
+| align="right"| 12
+| align="right"| 26.5
+| align="right"| 
+| align="right"| 446
+| align="right"| 1684
+|-
+| [[:Kategoria:słoweński (indeks)|słoweński]]
+| align="right"| 6.8
+| align="right"| 
+| align="right"| 110
+| align="right"| 0.0
+| align="right"| 
+| align="right"| 0
+| align="right"| 45.2
+| align="right"| -0.5
+| align="right"| 727
+| align="right"| 1610
+|-
+| [[:Kategoria:suahili (indeks)|suahili]]
+| align="right"| 3.4
+| align="right"| 
+| align="right"| 54
+| align="right"| 0.0
+| align="right"| 
+| align="right"| 0
+| align="right"| 32.6
+| align="right"| 
+| align="right"| 522
+| align="right"| 1601
+|-
+| [[:Kategoria:chorwacki (indeks)|chorwacki]]
+| align="right"| 22.1
+| align="right"| -0.5
+| align="right"| 342
+| align="right"| 1.6
+| align="right"| 
+| align="right"| 24
+| align="right"| 0.1
+| align="right"| 
+| align="right"| 2
+| align="right"| 1548
+|-
+| [[:Kategoria:jèrriais (indeks)|jèrriais]]
+| align="right"| 1.4
+| align="right"| 
+| align="right"| 21
+| align="right"| 6.9
+| align="right"| 
+| align="right"| 106
+| align="right"| 98.4
+| align="right"| -0.3
+| align="right"| 1508
+| align="right"| 1533
+|}
+
+
+{| class="wikitable sortable" style="margin: 0 auto; white-space: nowrap"
+! język !! znaczeń ogółem !! zmiana !! średnia znaczeń w haśle!! zmiana średniej
+|-
+| [[:Kategoria:angielski (indeks)|angielski]]
+| align="right"| 80468
+| align="right"| +176
+| align="right"| 1.4988
+| align="right"| 
+|-
+| [[:Kategoria:włoski (indeks)|włoski]]
+| align="right"| 37657
+| align="right"| +11
+| align="right"| 1.4935
+| align="right"| -0.0002
+|-
+| [[:Kategoria:niemiecki (indeks)|niemiecki]]
+| align="right"| 31986
+| align="right"| +197
+| align="right"| 1.2462
+| align="right"| -0.0002
+|-
+| [[:Kategoria:francuski (indeks)|francuski]]
+| align="right"| 25469
+| align="right"| +13
+| align="right"| 1.2916
+| align="right"| 
+|-
+| [[:Kategoria:hiszpański (indeks)|hiszpański]]
+| align="right"| 24328
+| align="right"| +114
+| align="right"| 1.5515
+| align="right"| -0.0004
+|-
+| [[:Kategoria:interlingua (indeks)|interlingua]]
+| align="right"| 22519
+| align="right"| +5
+| align="right"| 1.1345
+| align="right"| +0.0003
+|-
+| [[:Kategoria:rosyjski (indeks)|rosyjski]]
+| align="right"| 20820
+| align="right"| +227
+| align="right"| 1.2287
+| align="right"| +0.0009
+|-
+| [[:Kategoria:szwedzki (indeks)|szwedzki]]
+| align="right"| 20367
+| align="right"| +2
+| align="right"| 1.1628
+| align="right"| 
+|-
+| [[:Kategoria:czeski (indeks)|czeski]]
+| align="right"| 15479
+| align="right"| +195
+| align="right"| 1.0655
+| align="right"| +0.0006
+|-
+| [[:Kategoria:arabski (indeks)|arabski]]
+| align="right"| 14320
+| align="right"| 
+| align="right"| 1.6208
+| align="right"| 
+|-
+| [[:Kategoria:nowogrecki (indeks)|nowogrecki]]
+| align="right"| 11013
+| align="right"| +48
+| align="right"| 1.4876
+| align="right"| -0.0014
+|-
+| [[:Kategoria:esperanto (indeks)|esperanto]]
+| align="right"| 10344
+| align="right"| +66
+| align="right"| 1.1685
+| align="right"| -0.0005
+|-
+| [[:Kategoria:jidysz (indeks)|jidysz]]
+| align="right"| 9289
+| align="right"| +9
+| align="right"| 1.1386
+| align="right"| +0.0008
+|-
+| [[:Kategoria:węgierski (indeks)|węgierski]]
+| align="right"| 8157
+| align="right"| +5
+| align="right"| 1.0698
+| align="right"| 
+|-
+| [[:Kategoria:portugalski (indeks)|portugalski]]
+| align="right"| 7995
+| align="right"| +20
+| align="right"| 1.2101
+| align="right"| -0.0006
+|-
+| [[:Kategoria:fiński (indeks)|fiński]]
+| align="right"| 7307
+| align="right"| +128
+| align="right"| 1.0844
+| align="right"| +0.0021
+|-
+| [[:Kategoria:łaciński (indeks)|łaciński]]
+| align="right"| 7211
+| align="right"| +34
+| align="right"| 1.2604
+| align="right"| 
+|-
+| [[:Kategoria:słowacki (indeks)|słowacki]]
+| align="right"| 6810
+| align="right"| +423
+| align="right"| 1.1312
+| align="right"| -0.0054
+|-
+| [[:Kategoria:bułgarski (indeks)|bułgarski]]
+| align="right"| 5721
+| align="right"| +1049
+| align="right"| 1.0748
+| align="right"| +0.0049
+|-
+| [[:Kategoria:turecki (indeks)|turecki]]
+| align="right"| 5262
+| align="right"| +23
+| align="right"| 1.1294
+| align="right"| -0.0002
+|-
+| [[:Kategoria:islandzki (indeks)|islandzki]]
+| align="right"| 4887
+| align="right"| +1
+| align="right"| 1.1905
+| align="right"| +0.0002
+|-
+| [[:Kategoria:ukraiński (indeks)|ukraiński]]
+| align="right"| 4487
+| align="right"| +93
+| align="right"| 1.1354
+| align="right"| -0.0021
+|-
+| [[:Kategoria:wilamowski (indeks)|wilamowski]]
+| align="right"| 4349
+| align="right"| +200
+| align="right"| 1.1650
+| align="right"| -0.0014
+|-
+| [[:Kategoria:baskijski (indeks)|baskijski]]
+| align="right"| 4137
+| align="right"| +123
+| align="right"| 1.1621
+| align="right"| -0.0011
+|-
+| [[:Kategoria:serbsko-chorwacki (indeks)|serbsko-chorwacki]]
+| align="right"| 3878
+| align="right"| 
+| align="right"| 1.0328
+| align="right"| 
+|-
+| [[:Kategoria:holenderski (indeks)|holenderski]]
+| align="right"| 3843
+| align="right"| +1
+| align="right"| 1.0825
+| align="right"| 
+|-
+| [[:Kategoria:duński (indeks)|duński]]
+| align="right"| 3782
+| align="right"| +4
+| align="right"| 1.3169
+| align="right"| -0.0004
+|-
+| [[:Kategoria:białoruski (indeks)|białoruski]]
+| align="right"| 3739
+| align="right"| +289
+| align="right"| 1.1699
+| align="right"| +0.0012
+|-
+| [[:Kategoria:norweski (bokmål) (indeks)|norweski (bokmål)]]
+| align="right"| 3398
+| align="right"| 
+| align="right"| 1.2088
+| align="right"| 
+|-
+| [[:Kategoria:slovio (indeks)|slovio]]
+| align="right"| 3160
+| align="right"| 
+| align="right"| 1.0093
+| align="right"| 
+|-
+| [[:Kategoria:litewski (indeks)|litewski]]
+| align="right"| 3132
+| align="right"| +11
+| align="right"| 1.0744
+| align="right"| +0.0008
+|-
+| [[:Kategoria:sanskryt (indeks)|sanskryt]]
+| align="right"| 2909
+| align="right"| 
+| align="right"| 2.6885
+| align="right"| 
+|-
+| [[:Kategoria:gruziński (indeks)|gruziński]]
+| align="right"| 2884
+| align="right"| +2
+| align="right"| 1.0024
+| align="right"| 
+|-
+| [[:Kategoria:kataloński (indeks)|kataloński]]
+| align="right"| 2824
+| align="right"| +23
+| align="right"| 1.0514
+| align="right"| 
+|-
+| [[:Kategoria:estoński (indeks)|estoński]]
+| align="right"| 2792
+| align="right"| +9
+| align="right"| 1.0197
+| align="right"| 
+|-
+| [[:Kategoria:hindi (indeks)|hindi]]
+| align="right"| 2564
+| align="right"| +1
+| align="right"| 1.1639
+| align="right"| 
+|-
+| [[:Kategoria:asturyjski (indeks)|asturyjski]]
+| align="right"| 2262
+| align="right"| 
+| align="right"| 1.0400
+| align="right"| 
+|-
+| [[:Kategoria:rumuński (indeks)|rumuński]]
+| align="right"| 2247
+| align="right"| +5
+| align="right"| 1.0534
+| align="right"| +0.0004
+|-
+| [[:Kategoria:koreański (indeks)|koreański]]
+| align="right"| 2200
+| align="right"| +8
+| align="right"| 1.1213
+| align="right"| -0.0005
+|-
+| [[:Kategoria:ormiański (indeks)|ormiański]]
+| align="right"| 2151
+| align="right"| 
+| align="right"| 1.0488
+| align="right"| 
+|-
+| [[:Kategoria:kazachski (indeks)|kazachski]]
+| align="right"| 2091
+| align="right"| +8
+| align="right"| 1.2171
+| align="right"| -0.0003
+|-
+| [[:Kategoria:tajski (indeks)|tajski]]
+| align="right"| 2085
+| align="right"| +1
+| align="right"| 1.1032
+| align="right"| 
+|-
+| [[:Kategoria:suahili (indeks)|suahili]]
+| align="right"| 1934
+| align="right"| 
+| align="right"| 1.2080
+| align="right"| 
+|-
+| [[:Kategoria:hebrajski (indeks)|hebrajski]]
+| align="right"| 1862
+| align="right"| +4
+| align="right"| 1.1057
+| align="right"| +0.0011
+|-
+| [[:Kategoria:chorwacki (indeks)|chorwacki]]
+| align="right"| 1708
+| align="right"| +43
+| align="right"| 1.1034
+| align="right"| +0.0051
+|-
+| [[:Kategoria:azerski (indeks)|azerski]]
+| align="right"| 1690
+| align="right"| +3
+| align="right"| 1.2193
+| align="right"| -0.0005
+|-
+| [[:Kategoria:słoweński (indeks)|słoweński]]
+| align="right"| 1627
+| align="right"| +8
+| align="right"| 1.0106
+| align="right"| 
+|-
+| [[:Kategoria:jèrriais (indeks)|jèrriais]]
+| align="right"| 1563
+| align="right"| +1
+| align="right"| 1.0196
+| align="right"| +0.0007
+|-
+| [[:Kategoria:turkmeński (indeks)|turkmeński]]
+| align="right"| 1494
+| align="right"| 
+| align="right"| 1.0633
+| align="right"| 
+|-
+| [[:Kategoria:galicyjski (indeks)|galicyjski]]
+| align="right"| 1493
+| align="right"| 
+| align="right"| 1.0874
+| align="right"| 
+|}
+
+
+return {
+	{ '!Xóõ', { z = 2 } },
+	{ 'abazyński' , { z = 26 } },
+	{ 'abchaski' , { z = 111 } },
+	{ 'abenaki' , { z = 26 } },
+	{ 'abua' , { z = 2 } },
+	{ 'aczoli' , { z = 17 } },
+	{ 'adjukru' , { z = 1 } },
+	{ 'adygejski', { z = 788, a = 1000 } },
+	{ 'afar' , { z = 46 } },
+	{ 'afrykanerski', { z = 1009, a = 1000 } },
+	{ 'ajmara' , { z = 33 } },
+	{ 'akadyjski' , { z = 66 } },
+	{ 'akan' , { z = 17 } },
+	{ 'aklanon' , { z = 16 } },
+	{ 'alabama' , { z = 79 } },
+	{ 'albański', { z = 1465, a = 2000 } },
+	{ 'alemański' , { z = 5 } },
+	{ 'aleucki' , { z = 4 } },
+	{ 'ama' , { z = 15 } },
+	{ 'amharski' , { z = 284 } },
+	{ 'angielski', { z = 80468, a = 60000, p = true } },
+	{ 'a-pucikwar' , { z = 1 } },
+	{ 'arabski', { z = 14320, a = 10000 } },
+	{ 'aragoński' , { z = 154 } },
+	{ 'aramejski' , { z = 56 } },
+	{ 'arapaho' , { z = 9 } },
+	{ 'arczyński' , { z = 22 } },
+	{ 'arumuński' , { z = 425 } },
+	{ 'asamski' , { z = 33 } },
+	{ 'asturyjski', { z = 2262, a = 5000 } },
+	{ 'awarski' , { z = 173 } },
+	{ 'awestyjski' , { z = 0 } },
+	{ 'azerski', { z = 1690, a = 2000 } },
+	{ 'aztecki' , { z = 0 } },
+	{ 'balijski', { z = 37 } },
+	{ 'bambara' , { z = 28 } },
+	{ 'banjumasański' , { z = 3 } },
+	{ 'baskijski', { z = 4137, a = 5000 } },
+	{ 'baszkirski', { z = 664, a = 1000 } },
+	{ 'bawarski' , { z = 59 } },
+	{ 'beludżi' , { z = 121 } },
+	{ 'bengalski', { z = 846, a = 1000 } },
+	{ 'białoruski (taraszkiewica)', { z = 354 } },
+	{ 'białoruski', { z = 3739, a = 5000 } },
+	{ 'birmański' , { z = 339 } },
+	{ 'bislama' , { z = 12 } },
+	{ 'boloński' , { z = 139 } },
+	{ 'bośniacki' , { z = 428 } },
+	{ 'bretoński' , { z = 431 } },
+	{ 'brithenig', { z = 18, w = true } },
+	{ 'bugijski' , { z = 12 } },
+	{ 'bułgarski', { z = 5721, a = 10000 } },
+	{ 'buruszaski', { z = 13 } },
+	{ 'cebuano' , { z = 59 } },
+	{ 'chakaski' , { z = 176 } },
+	{ 'chantyjski (kazymski)', { z = 6 } },
+	{ 'chantyjski (surgucki)', { z = 6 } },
+	{ 'chantyjski (szuryszkarski)', { z = 8 } },
+	{ 'chantyjski (wachowski)', { z = 4 } },
+	{ 'chickasaw' , { z = 200 } },
+	{ 'chiński standardowy', { z = 620, a = 1000 } },
+	{ 'chorwacki', { z = 1708, a = 2000 } },
+	{ 'czagatajski' , { z = 1 } },
+	{ 'czamorro' , { z = 64 } },
+	{ 'czarnogórski' , { z = 1 } },
+	{ 'czeczeński' , { z = 213 } },
+	{ 'czeski', { z = 15479, a = 15000 } },
+	{ 'cziczewa' , { z = 110 } },
+	{ 'czirokeski' , { z = 158 } },
+	{ 'czukocki' , { z = 6 } },
+	{ 'czuwaski' , { z = 163 } },
+	{ 'dalmatyński' , { z = 301 } },
+	{ 'dari' , { z = 26 } },
+	{ 'dolnołużycki', { z = 1474, a = 2000 } },
+	{ 'dolnoniemiecki' , { z = 76 } },
+	{ 'dołgański' , { z = 28 } },
+	{ 'duński', { z = 3782, a = 5000 } },
+	{ 'dzongkha' , { z = 194 } },
+	{ 'dżuhuri', { z = 30, w = true } },
+	{ 'erzja' , { z = 78 } },
+	{ 'esperanto (morfem)', { z = 0, a = 5000, w = true } },
+	{ 'esperanto', { z = 10344, a = 10000, w = true } },
+	{ 'estoński', { z = 2792, a = 5000 } },
+	{ 'estremadurski' , { z = 53 } },
+	{ 'ewe', { z = 261, w = true } },
+	{ 'ewenkijski' , { z = 73 } },
+	{ 'farerski', { z = 1071, a = 2000 } },
+	{ 'fenicki' , { z = 126 } },
+	{ 'fidżyjski' , { z = 86 } },
+	{ 'filipino' , { z = 19 } },
+	{ 'fiński', { z = 7307, a = 10000 } },
+	{ 'francuski', { z = 25469, a = 20000, p = true } },
+	{ 'friulski' , { z = 222 } },
+	{ 'fryzyjski' , { z = 435 } },
+	{ 'fryzyjski saterlandzki' , { z = 69 } },
+	{ 'ful' , { z = 100 } },
+	{ 'ga' , { z = 10 } },
+	{ 'gagauski' , { z = 42 } },
+	{ 'galicyjski', { z = 1493, a = 2000 } },
+	{ 'gaskoński' , { z = 11 } },
+	{ 'giliański' , { z = 10 } },
+	{ 'gocki' , { z = 190 } },
+	{ 'górnołużycki', { z = 645, a = 1000 } },
+	{ 'grenlandzki' , { z = 370 } },
+	{ 'gruziński', { z = 2884, a = 5000 } },
+	{ 'guarani' , { z = 43 } },
+	{ 'gudźarati' , { z = 189 } },
+	{ 'gyyz' , { z = 14 } },
+	{ 'haitański' , { z = 328 } },
+	{ 'hausa' , { z = 93 } },
+	{ 'hawajski', { z = 1400, a = 1000 } },
+	{ 'hebrajski', { z = 1862, a = 2000 } },
+	{ 'herero' , { z = 4 } },
+	{ 'hiligaynon' , { z = 264 } },
+	{ 'hindi', { z = 2564, a = 5000, w = true } },
+	{ 'hiri motu', { z = 0, w = true } },
+	{ 'hiszpański', { z = 24328, a = 15000 } },
+	{ 'holenderski', { z = 3843, a = 5000 } },
+	{ 'hupa' , { z = 21 } },
+	{ 'ido', { z = 1452, a = 2000, w = true } },
+	{ 'ilokano' , { z = 55 } },
+	{ 'inari' , { z = 66 } },
+	{ 'indonezyjski', { z = 1076, a = 2000 } },
+	{ 'inguski' , { z = 31 } },
+	{ 'interlingua', { z = 22519, a = 20000, w = true } },
+	{ 'inuktitut', { z = 119, w = true } },
+	{ 'inupiak' , { z = 172 } },
+	{ 'irlandzki', { z = 1418, a = 2000 } },
+	{ 'islandzki', { z = 4887, a = 5000 } },
+	{ 'istriocki' , { z = 112 } },
+	{ 'jaćwieski' , { z = 51 } },
+	{ 'jakucki' , { z = 310 } },
+	{ 'japoński', { z = 0, a = 5000 } },
+	{ 'jawajski' , { z = 41 } },
+	{ 'jèrriais', { z = 1563, a = 2000, w = true } },
+	{ 'jidysz', { z = 9289, a = 10000, w = true, p = true } },
+	{ 'joruba' , { z = 153 } },
+	{ 'kabardyjski' , { z = 251 } },
+	{ 'kabylski' , { z = 194 } },
+	{ 'kakczikel' , { z = 20 } },
+	{ 'kałmucki' , { z = 29 } },
+	{ 'kannada' , { z = 195 } },
+	{ 'kantoński' , { z = 0 } },
+	{ 'kanuri' , { z = 8 } },
+	{ 'karaczajsko-bałkarski' , { z = 66 } },
+	{ 'karaimski' , { z = 1 } },
+	{ 'karakałpacki' , { z = 18 } },
+	{ 'karatajski' , { z = 2 } },
+	{ 'karelski' , { z = 304 } },
+	{ 'kaszmirski' , { z = 12 } },
+	{ 'kaszubski', { z = 1361, a = 2000 } },
+	{ 'kataloński', { z = 2824, a = 5000 } },
+	{ 'kazachski', { z = 2091, a = 2000 } },
+	{ 'keczua' , { z = 220 } },
+	{ 'ketyjski', { z = 18 } },
+	{ 'khmerski' , { z = 299 } },
+	{ 'kildin', { z = 95 } },
+	{ 'kiliwa' , { z = 1 } },
+	{ 'kirgiski' , { z = 208 } },
+	{ 'klingoński' , { z = 55 } },
+	{ 'komi' , { z = 0 } },
+	{ 'komi-jaźwiński' , { z = 3 } },
+	{ 'komi-permiacki' , { z = 56 } },
+	{ 'komi-zyriański' , { z = 119 } },
+	{ 'konkani' , { z = 11 } },
+	{ 'koptyjski' , { z = 13 } },
+	{ 'koreański', { z = 2200, a = 2000 } },
+	{ 'kornijski' , { z = 250 } },
+	{ 'korsykański' , { z = 188 } },
+	{ 'kri' , { z = 4 } },
+	{ 'krymskotatarski', { z = 734, a = 1000 } },
+	{ 'kumycki' , { z = 108 } },
+	{ 'kurmandżi', { z = 1459, a = 2000 } },
+	{ 'ladino', { z = 83, w = true } },
+	{ 'ladyński' , { z = 304 } },
+	{ 'langwedocki' , { z = 3 } },
+	{ 'laotański' , { z = 499 } },
+	{ 'lazyjski' , { z = 21 } },
+	{ 'lezgiński' , { z = 66 } },
+	{ 'liguryjski' , { z = 35 } },
+	{ 'limburski' , { z = 129 } },
+	{ 'lingala', { z = 75, w = true } },
+	{ 'Lingua Franca Nova', { z = 2, w = true } },
+	{ 'litewski', { z = 3132, a = 5000 } },
+	{ 'lojban', { z = 3, w = true } },
+	{ 'lombardzki' , { z = 123 } },
+	{ 'luganda' , { z = 71 } },
+	{ 'luksemburski', { z = 1401, a = 2000 } },
+	{ 'luo' , { z = 28 } },
+	{ 'łaciński', { z = 7211, a = 10000, s = 'l' } },
+	{ 'łatgalski', { z = 33, s = 'l' } },
+	{ 'łotewski', { z = 1165, a = 2000, s = 'l' } },
+	{ 'macedoński', { z = 850, a = 1000 } },
+	{ 'malajalam' , { z = 127 } },
+	{ 'malajski' , { z = 476 } },
+	{ 'malediwski' , { z = 37 } },
+	{ 'malgaski', { z = 1018, a = 2000 } },
+	{ 'maltański', { z = 987, a = 1000 } },
+	{ 'mansyjski' , { z = 18 } },
+	{ 'manx', { z = 676, a = 1000 } },
+	{ 'maoryski' , { z = 190 } },
+	{ 'marathi' , { z = 175 } },
+	{ 'marszalski' , { z = 91 } },
+	{ 'marwari', { z = 20 } },
+	{ 'maryjski' , { z = 115 } },
+	{ 'maya' , { z = 9 } },
+	{ 'mazanderański' , { z = 2 } },
+	{ 'megrelski' , { z = 3 } },
+	{ 'mikmak' , { z = 26 } },
+	{ 'minangkabau' , { z = 97 } },
+	{ 'minnan' , { z = 3 } },
+	{ 'mirandyjski' , { z = 146 } },
+	{ 'mizo', { z = 3 } },
+	{ 'mohawk' , { z = 25 } },
+	{ 'moksza' , { z = 93 } },
+	{ 'mołdawski' , { z = 12 } },
+	{ 'mon', { z = 20 } },
+	{ 'mongolski', { z = 536, a = 1000 } },
+	{ 'motu' , { z = 24 } },
+	{ 'nahuatl' , { z = 5 } },
+	{ 'nahuatl klasyczny' , { z = 63 } },
+	{ 'nahuatl centralnego Meksyku', { z = 119 } },
+	{ 'nauruański' , { z = 285 } },
+	{ 'nawaho', { z = 704, a = 1000 } },
+	{ 'neapolitański' , { z = 273 } },
+	{ 'neo' , { z = 1 } },
+	{ 'nepalski' , { z = 103 } },
+	{ 'newarski' , { z = 10 } },
+	{ 'niemiecki', { z = 31986, a = 30000 } },
+	{ 'nieniecki' , { z = 42 } },
+	{ 'normandzki' , { z = 56 } },
+	{ 'norweski (bokmål)', { z = 3398, a = 5000 } },
+	{ 'norweski (nynorsk)', { z = 483 } },
+	{ 'novial', { z = 234, w = true } },
+	{ 'nowogrecki', { z = 11013, a = 10000 } },
+	{ 'orija' , { z = 26 } },
+	{ 'ormiański', { z = 2151, a = 5000 } },
+	{ 'oromo' , { z = 15 } },
+	{ 'osetyjski' , { z = 194 } },
+	{ 'osmańsko-turecki' , { z = 39 } },
+	{ 'pali', { z = 712, a = 1000 } },
+	{ 'papiamento', { z = 104, w = true } },
+	{ 'paszto' , { z = 441 } },
+	{ 'pendżabski' , { z = 335 } },
+	{ 'pensylwański' , { z = 15 } },
+	{ 'perski', { z = 1468, a = 2000 } },
+	{ 'piemoncki' , { z = 53 } },
+	{ 'pikardyjski' , { z = 17 } },
+	{ 'pirahã' , { z = 14 } },
+	{ 'pitjantjatjara', { z = 56, w = true } },
+	{ 'plautdietsch' , { z = 7 } },
+	{ 'polski', { z = 1027, a = 50000 } },
+	{ 'polski język migowy', { z = 0, a = 2000, w = true, x = true, r2 = 'polski język migowy' } },
+	{ 'połabski' , { z = 155 } },
+	{ 'pontyjski' , { z = 2 } },
+	{ 'portugalski', { z = 7995, a = 10000 } },
+	{ 'północnofryzyjski' , { z = 27 } },
+	{ 'północnolapoński', { z = 582, a = 1000 } },
+	{ 'północny sotho' , { z = 23 } },
+	{ 'pragermański' , { z = 0 } },
+	{ 'prowansalski' , { z = 353 } },
+	{ 'pruski', { z = 583, a = 1000 } },
+	{ 'quenya', { z = 278, w = true } },
+	{ 'rarotonga' , { z = 5 } },
+	{ 'rohingya' , { z = 128 } },
+	{ 'romániço' , { z = 4 } },
+	{ 'romansz' , { z = 242 } },
+	{ 'romski' , { z = 242 } },
+	{ 'rosyjski', { z = 20820, a = 20000 } },
+	{ 'rumuński', { z = 2247, a = 5000 } },
+	{ 'rundi' , { z = 56 } },
+	{ 'rusiński', { z = 660, a = 1000 } },
+	{ 'russenorsk' , { z = 3 } },
+	{ 'sango' , { z = 34 } },
+	{ 'sanskryt', { z = 2909, a = 2000, w = true } },
+	{ 'sardyński' , { z = 141 } },
+	{ 'serbski', { z = 575, a = 1000 } },
+	{ 'serbsko-chorwacki', { z = 3878, a = 5000 } },
+	{ 'shelta' , { z = 4 } },
+	{ 'shona' , { z = 6 } },
+	{ 'sindhi' , { z = 87 } },
+	{ 'sko' , { z = 2 } },
+	{ 'skolt' , { z = 95 } },
+	{ 'slovio', { z = 3160, a = 5000, w = true } },
+	{ 'słowacki', { z = 6810, a = 10000 } },
+	{ 'słoweński', { z = 1627, a = 2000 } },
+	{ 'słowiński' , { z = 340 } },
+	{ 'somalijski' , { z = 74 } },
+	{ 'sorani' , { z = 28 } },
+	{ 'sranan tongo', { z = 183, w = true } },
+	{ 'staroangielski', { z = 747, a = 1000 } },
+	{ 'staro-cerkiewno-słowiański', { z = 935, a = 1000 } },
+	{ 'staroegipski' , { z = 0 } },
+	{ 'starofrancuski', { z = 700, a = 1000 } },
+	{ 'starogrecki', { z = 928, a = 1000 } },
+	{ 'staroirlandzki' , { z = 259 } },
+	{ 'staronordyjski' , { z = 456 } },
+	{ 'staroormiański' , { z = 390 } },
+	{ 'staroperski' , { z = 43 } },
+	{ 'staroruski' , { z = 4 } },
+	{ 'starosaksoński' , { z = 396 } },
+	{ 'staro-wysoko-niemiecki' , { z = 430 } },
+	{ 'suahili', { z = 1934, a = 2000 } },
+	{ 'sumeryjski' , { z = 38 } },
+	{ 'sundajski' , { z = 23 } },
+	{ 'susu' , { z = 41 } },
+	{ 'sycylijski', { z = 847, a = 1000 } },
+	{ 'syngaleski' , { z = 96 } },
+	{ 'syryjski klasyczny' , { z = 0 } },
+	{ 'szan' , { z = 17 } },
+	{ 'szerpa' , { z = 10 } },
+	{ 'szkocki' , { z = 275 } },
+	{ 'szkocki gaelicki', { z = 1324, a = 2000 } },
+	{ 'szorski' , { z = 35 } },
+	{ 'szwabski' , { z = 6 } },
+	{ 'szwedzki', { z = 20367, a = 20000 } },
+	{ 'średnioangielski', { z = 320, s = 's' } },
+	{ 'średnio-dolno-niemiecki', { z = 23, s = 's' } },
+	{ 'średnio-wysoko-niemiecki', { z = 44, s = 's' } },
+	{ 'tabasarański' , { z = 5 } },
+	{ 'tadżycki' , { z = 465 } },
+	{ 'tagalski' , { z = 360 } },
+	{ 'tahitański' , { z = 299 } },
+	{ 'tajski', { z = 2085, a = 5000 } },
+	{ 'tamaszek' , { z = 1 } },
+	{ 'tamazight' , { z = 81 } },
+	{ 'tamilski', { z = 447, a = 1000 } },
+	{ 'taos' , { z = 120 } },
+	{ 'tarencki' , { z = 272 } },
+	{ 'tashelhiyt' , { z = 4 } },
+	{ 'tatarski' , { z = 287 } },
+	{ 'telugu', { z = 1052, a = 2000 } },
+	{ 'tetum', { z = 641, a = 1000, w = true } },
+	{ 'tigre' , { z = 4 } },
+	{ 'tigrinia' , { z = 192 } },
+	{ 'tok pisin', { z = 296, w = true } },
+	{ 'tonga' , { z = 74 } },
+	{ 'tumbuka' , { z = 129 } },
+	{ 'tupinambá', { z = 18, w = true } },
+	{ 'turecki', { z = 5262, a = 5000 } },
+	{ 'turkmeński', { z = 1494, a = 2000 } },
+	{ 'tuvalu' , { z = 133 } },
+	{ 'tuwiński' , { z = 301 } },
+	{ 'twi' , { z = 16 } },
+	{ 'tybetański', { z = 861, a = 1000 } },
+	{ 'tybetański klasyczny' },
+	{ 'ubychski', { z = 3 } },
+	{ 'udmurcki' , { z = 137 } },
+	{ 'ujgurski', { z = 639, a = 1000 } },
+	{ 'ukraiński', { z = 4487, a = 5000 } },
+	{ 'urdu' , { z = 225 } },
+	{ 'uwea' , { z = 13 } },
+	{ 'uzbecki', { z = 600, a = 1000 } },
+	{ 'użycie międzynarodowe', { z = 690, a = 1000, w = true, r = 'użycie międzynarodowe' } },
+	{ 'volapük', { z = 735, a = 1000, w = true } },
+	{ 'võro' , { z = 107 } },
+	{ 'walijski', { z = 763, a = 1000 } },
+	{ 'waloński' , { z = 185 } },
+	{ 'warajski' , { z = 9 } },
+	{ 'wczesny nowoangielski' , { z = 5 } },
+	{ 'wenecki', { z = 709, a = 1000 } },
+	{ 'wenedyk', { z = 12, w = true } },
+	{ 'wepski' , { z = 171 } },
+	{ 'węgierski', { z = 8157, a = 10000 } },
+	{ 'wietnamski', { z = 1271, a = 2000 } },
+	{ 'wilamowski', { z = 4349, a = 5000 } },
+	{ 'włoski', { z = 37657, a = 30000 } },
+	{ 'wolof' , { z = 66 } },
+	{ 'wotycki' , { z = 134 } },
+	{ 'wysokoislandzki' , { z = 8 } },
+	{ 'xhosa' , { z = 74 } },
+	{ 'yupik środkowy' , { z = 44 } },
+	{ 'zachodnioflamandzki' , { z = 27 } },
+	{ 'zarfatit' , { z = 1 } },
+	{ 'zazaki' , { z = 91 } },
+	{ 'zelandzki' , { z = 26 } },
+	{ 'znak chiński', { z = 0, a = 25000, w = true, r = 'znak chiński' } },
+	{ 'zulu' , { z = 112 } },
+	{ 'żmudzki' , { z = 81 } },
+	date = '24.10.2014'
+}
+
+
+{{#switch:{{lc:{{{1|}}}}}
+|średnio-dolno-niemiecki=1978.0
+|polski język migowy=0.0
+|komi-zyriański=9537.0
+|cziczewa=5692.0
+|jidysz=1580996.0
+|maoryski=14282.0
+|indonezyjski=71594.0
+|górnołużycki=72234.0
+|nahuatl centralnego Meksyku=12629.0
+|starosaksoński=31900.0
+|niemiecki=8659383.0
+|kałmucki=3755.0
+|duński=1069186.0
+|hebrajski=228650.0
+|sorani=2043.0
+|zulu=8247.0
+|adygejski=69796.0
+|haitański=28037.0
+|serbsko-chorwacki=456456.0
+|luksemburski=121202.0
+|estremadurski=4343.0
+|czamorro=3808.0
+|nieniecki=2358.0
+|hawajski=144318.0
+|pendżabski=43419.0
+|tamilski=36644.0
+|szorski=2499.0
+|hausa=7438.0
+|minnan=517.0
+|inari=2933.0
+|chantyjski (kazymski)=416.0
+|ketyjski=880.0
+|norweski (bokmål)=680049.0
+|słowiński=21759.0
+|mon=1277.0
+|żmudzki=6667.0
+|wenecki=54195.0
+|czeski=1726108.0
+|arabski=2757803.0
+|marszalski=7593.0
+|jawajski=4811.0
+|limburski=11912.0
+|staroormiański=29543.0
+|gyyz=990.0
+|wotycki=9173.0
+|ujgurski=74877.0
+|inuktitut=8534.0
+|chantyjski (wachowski)=240.0
+|ladyński=24129.0
+|inguski=1722.0
+|mongolski=40386.0
+|turkmeński=103214.0
+|inupiak=10586.0
+|syryjski klasyczny=0.0
+|bułgarski=800687.0
+|beludżi=16120.0
+|kakczikel=928.0
+|słowacki=877819.0
+|mohawk=2970.0
+|estoński=215226.0
+|dołgański=1930.0
+|sumeryjski=2615.0
+|kurmandżi=102602.0
+|gudźarati=17891.0
+|akan=1354.0
+|chiński standardowy=133386.0
+|afrykanerski=76771.0
+|nepalski=8527.0
+|rundi=3716.0
+|francuski=4742486.0
+|manx=53169.0
+|szan=1011.0
+|nauruański=20180.0
+|ido=88036.0
+|pragermański=0.0
+|skolt=5873.0
+|a-pucikwar=49.0
+|cebuano=3429.0
+|nowogrecki=2285085.0
+|zarfatit=51.0
+|pruski=78292.0
+|tok pisin=22289.0
+|tetum=33752.0
+|malajalam=9157.0
+|marathi=14228.0
+|ewenkijski=5705.0
+|susu=3787.0
+|nahuatl=282.0
+|staroirlandzki=21218.0
+|lezgiński=4618.0
+|yupik środkowy=3220.0
+|slovio=267074.0
+|akadyjski=6304.0
+|staroangielski=73085.0
+|gruziński=263289.0
+|tajski=219606.0
+|papiamento=6765.0
+|gagauski=3373.0
+|ewe=18493.0
+|banjumasański=1197.0
+|walijski=66770.0
+|kiliwa=50.0
+|bawarski=5538.0
+|połabski=12673.0
+|aragoński=14165.0
+|karatajski=218.0
+|tigre=425.0
+|hiri motu=0.0
+|neapolitański=21495.0
+|tamaszek=59.0
+|słoweński=181329.0
+|awarski=12914.0
+|dalmatyński=24662.0
+|aklanon=1015.0
+|balijski=2569.0
+|aleucki=1171.0
+|łotewski=131734.0
+|piemoncki=4557.0
+|kabylski=20111.0
+|staroegipski=14060.0
+|sanskryt=426138.0
+|Lingua Franca Nova=344.0
+|syngaleski=8298.0
+|rumuński=286516.0
+|pali=105275.0
+|północnolapoński=40764.0
+|waloński=14000.0
+|kannada=17637.0
+|malgaski=73713.0
+|holenderski=536296.0
+|russenorsk=143.0
+|abchaski=8055.0
+|aramejski=3550.0
+|średnio-wysoko-niemiecki=4778.0
+|ilokano=2635.0
+|rosyjski=3288783.0
+|gaskoński=1551.0
+|urdu=19821.0
+|langwedocki=112.0
+|szwabski=716.0
+|etruski=0.0
+|prowansalski=30112.0
+|kazachski=915009.0
+|romski=18952.0
+|bośniacki=41154.0
+|dzongkha=15711.0
+|bambara=2093.0
+|lingala=8091.0
+|uwea=1161.0
+|czukocki=317.0
+|twi=2211.0
+|nahuatl klasyczny=5086.0
+|esperanto=2413531.0
+|hupa=1827.0
+|telugu=82996.0
+|islandzki=1053186.0
+|warajski=563.0
+|komi-jaźwiński=373.0
+|tashelhiyt=215.0
+|kabardyjski=21634.0
+|komi=0.0
+|wietnamski=99043.0
+|arczyński=1684.0
+|võro=9089.0
+|północny sotho=1837.0
+|starogrecki=88046.0
+|wilamowski=516172.0
+|serbski=66456.0
+|shona=583.0
+|erzja=5606.0
+|węgierski=683962.0
+|litewski=344042.0
+|szkocki=24758.0
+|amharski=31275.0
+|romansz=25691.0
+|kaszmirski=1245.0
+|tonga=5776.0
+|rohingya=9687.0
+|dolnoniemiecki=7223.0
+|luo=2232.0
+|pitjantjatjara=3637.0
+|joruba=12379.0
+|kanuri=1025.0
+|khmerski=25564.0
+|fryzyjski saterlandzki=5961.0
+|krymskotatarski=67811.0
+|wczesny nowoangielski=491.0
+|starofrancuski=60098.0
+|galicyjski=152682.0
+|sranan tongo=13758.0
+|tagalski=27596.0
+|staro-cerkiewno-słowiański=85403.0
+|mołdawski=841.0
+|koreański=377977.0
+|tarencki=18921.0
+|azerski=146639.0
+|tybetański=103216.0
+|abua=328.0
+|karaimski=129.0
+|pensylwański=1341.0
+|asturyjski=184108.0
+|alabama=5325.0
+|zachodnioflamandzki=3893.0
+|grenlandzki=28170.0
+|irlandzki=139243.0
+|shelta=274.0
+|chickasaw=13372.0
+|hiligaynon=18667.0
+|minangkabau=6016.0
+|turecki=448228.0
+|nawaho=57326.0
+|asamski=2997.0
+|novial=16197.0
+|fiński=684946.0
+|szwedzki=3814952.0
+|baskijski=373105.0
+|megrelski=269.0
+|motu=1239.0
+|sko=542.0
+|macedoński=140619.0
+|chakaski=14401.0
+|tigrinia=13425.0
+|perski=121327.0
+|afar=3067.0
+|guarani=2697.0
+|czagatajski=103.0
+|kirgiski=16209.0
+|polski=32260982.0
+|karakałpacki=1541.0
+|mirandyjski=11923.0
+|mansyjski=1170.0
+|czarnogórski=116.0
+|ful=5923.0
+|abazyński=2353.0
+|moksza=16575.0
+|ama=1139.0
+|keczua=17030.0
+|istriocki=7907.0
+|!Xóõ=278.0
+|neo=254.0
+|konkani=1010.0
+|czirokeski=14131.0
+|wenedyk=1046.0
+|bretoński=38376.0
+|osmańsko-turecki=3465.0
+|tahitański=31257.0
+|marwari=1756.0
+|chantyjski (surgucki)=334.0
+|friulski=17466.0
+|kaszubski=156529.0
+|orija=2222.0
+|hindi=226712.0
+|korsykański=15787.0
+|maltański=87514.0
+|pontyjski=196.0
+|taos=8352.0
+|hiszpański=5908880.0
+|newarski=782.0
+|sindhi=13927.0
+|staronordyjski=38867.0
+|lazyjski=1588.0
+|pikardyjski=1272.0
+|wolof=8487.0
+|szerpa=720.0
+|buruszaski=510.0
+|mikmak=2933.0
+|filipino=2708.0
+|północnofryzyjski=2133.0
+|arapaho=830.0
+|kataloński=243484.0
+|rarotonga=529.0
+|maryjski=10815.0
+|ajmara=2203.0
+|romániço=451.0
+|lojban=198.0
+|boloński=12258.0
+|klingoński=5285.0
+|normandzki=4687.0
+|sundajski=1503.0
+|zelandzki=3582.0
+|quenya=26512.0
+|ga=1028.0
+|awestyjski=0.0
+|alemański=469.0
+|kri=188.0
+|ukraiński=876371.0
+|zazaki=6672.0
+|łaciński=1081792.0
+|tabasarański=381.0
+|giliański=1596.0
+|rusiński=55870.0
+|mizo=736.0
+|tatarski=38321.0
+|interlingua=1392244.0
+|kornijski=20274.0
+|brithenig=1432.0
+|białoruski (taraszkiewica)=90517.0
+|abenaki=1855.0
+|fryzyjski=35587.0
+|chantyjski (szuryszkarski)=506.0
+|oromo=834.0
+|sango=1691.0
+|średnioangielski=24506.0
+|wysokoislandzki=508.0
+|malediwski=6784.0
+|norweski (nynorsk)=51863.0
+|somalijski=10931.0
+|białoruski=908120.0
+|tadżycki=34399.0
+|plautdietsch=798.0
+|angielski=10626183.0
+|ormiański=181595.0
+|farerski=98880.0
+|aczoli=1652.0
+|xhosa=4822.0
+|aztecki=0.0
+|birmański=35999.0
+|kildin=4672.0
+|japoński=730734.0
+|adjukru=270.0
+|albański=131128.0
+|udmurcki=9340.0
+|gocki=23196.0
+|staroruski=461.0
+|pirahã=1800.0
+|fenicki=16389.0
+|tuvalu=18105.0
+|portugalski=910840.0
+|jèrriais=133107.0
+|jaćwieski=4088.0
+|szkocki gaelicki=118841.0
+|kurdyjski=0.0
+|lombardzki=11563.0
+|komi-permiacki=2867.0
+|ubychski=126.0
+|karelski=19509.0
+|jakucki=22615.0
+|staro-wysoko-niemiecki=38706.0
+|staroperski=5516.0
+|włoski=7141323.0
+|bugijski=922.0
+|tuwiński=19276.0
+|karaczajsko-bałkarski=5472.0
+|sardyński=11376.0
+|wepski=11483.0
+|luganda=3969.0
+|malajski=41661.0
+|użycie międzynarodowe=88237.0
+|kumycki=7958.0
+|paszto=45178.0
+|arumuński=31196.0
+|uzbecki=46119.0
+|kantoński=0.0
+|koptyjski=1584.0
+|bislama=1613.0
+|chorwacki=315916.0
+|volapük=65362.0
+|suahili=267639.0
+|liguryjski=3131.0
+|dari=4259.0
+|tamazight=6502.0
+|dżuhuri=2254.0
+|tupinambá=1079.0
+|laotański=40436.0
+|łatgalski=2646.0
+|maya=618.0
+|herero=1018.0
+|tumbuka=5457.0
+|baszkirski=95093.0
+|fidżyjski=9749.0
+|bengalski=70857.0
+|sycylijski=79232.0
+|czeczeński=14609.0
+|dolnołużycki=288724.0
+|znak chiński=3910107.0
+|ladino=7560.0
+|osetyjski=17924.0
+|mazanderański=149.0
+|czuwaski=12438.0
+|esperanto (morfem)=536321.0
+|=118144|data=24.10.2014
+|#default=bd.
+}}
+
+
+{{#switch:{{lc:{{{1|}}}}}
+|średnio-dolno-niemiecki=94.0
+|polski język migowy=0.0
+|komi-zyriański=82.0
+|cziczewa=53.0
+|jidysz=193.0
+|maoryski=84.0
+|indonezyjski=71.0
+|górnołużycki=120.0
+|nahuatl centralnego Meksyku=115.0
+|starosaksoński=84.0
+|niemiecki=337.0
+|kałmucki=139.0
+|duński=372.0
+|hebrajski=135.0
+|sorani=72.0
+|zulu=78.0
+|adygejski=92.0
+|haitański=90.0
+|serbsko-chorwacki=121.0
+|luksemburski=89.0
+|estremadurski=83.0
+|czamorro=62.0
+|nieniecki=56.0
+|hawajski=191.0
+|pendżabski=163.0
+|tamilski=91.0
+|szorski=71.0
+|hausa=81.0
+|minnan=172.0
+|inari=44.0
+|chantyjski (kazymski)=69.0
+|ketyjski=48.0
+|norweski (bokmål)=241.0
+|słowiński=67.0
+|mon=106.0
+|żmudzki=82.0
+|wenecki=84.0
+|czeski=118.0
+|arabski=312.0
+|marszalski=83.0
+|jawajski=137.0
+|limburski=97.0
+|staroormiański=81.0
+|gyyz=76.0
+|wotycki=68.0
+|ujgurski=140.0
+|inuktitut=71.0
+|chantyjski (wachowski)=60.0
+|ladyński=81.0
+|inguski=57.0
+|mongolski=78.0
+|turkmeński=73.0
+|inupiak=61.0
+|syryjski klasyczny=0.0
+|bułgarski=150.0
+|beludżi=155.0
+|kakczikel=46.0
+|słowacki=145.0
+|mohawk=118.0
+|estoński=78.0
+|dołgański=74.0
+|sumeryjski=79.0
+|kurmandżi=85.0
+|gudźarati=99.0
+|akan=79.0
+|chiński standardowy=248.0
+|afrykanerski=79.0
+|nepalski=91.0
+|rundi=71.0
+|francuski=240.0
+|manx=82.0
+|szan=72.0
+|nauruański=79.0
+|ido=59.0
+|pragermański=0.0
+|skolt=62.0
+|a-pucikwar=49.0
+|cebuano=61.0
+|nowogrecki=308.0
+|zarfatit=51.0
+|pruski=140.0
+|tok pisin=79.0
+|tetum=54.0
+|malajalam=78.0
+|marathi=86.0
+|ewenkijski=79.0
+|susu=164.0
+|nahuatl=70.0
+|staroirlandzki=89.0
+|lezgiński=72.0
+|yupik środkowy=78.0
+|slovio=85.0
+|akadyjski=121.0
+|staroangielski=105.0
+|gruziński=91.0
+|tajski=116.0
+|papiamento=66.0
+|gagauski=86.0
+|ewe=76.0
+|banjumasański=598.0
+|walijski=92.0
+|kiliwa=50.0
+|bawarski=95.0
+|połabski=83.0
+|aragoński=92.0
+|karatajski=109.0
+|tigre=106.0
+|hiri motu=0.0
+|neapolitański=87.0
+|tamaszek=59.0
+|słoweński=112.0
+|awarski=80.0
+|dalmatyński=85.0
+|aklanon=63.0
+|balijski=102.0
+|aleucki=292.0
+|łotewski=116.0
+|piemoncki=85.0
+|kabylski=105.0
+|staroegipski=135.0
+|sanskryt=393.0
+|Lingua Franca Nova=172.0
+|syngaleski=86.0
+|rumuński=134.0
+|pali=202.0
+|północnolapoński=72.0
+|waloński=77.0
+|kannada=95.0
+|malgaski=72.0
+|holenderski=151.0
+|russenorsk=47.0
+|abchaski=75.0
+|aramejski=98.0
+|średnio-wysoko-niemiecki=111.0
+|ilokano=47.0
+|rosyjski=194.0
+|gaskoński=155.0
+|urdu=120.0
+|langwedocki=56.0
+|szwabski=119.0
+|etruski=0.0
+|prowansalski=87.0
+|kazachski=532.0
+|romski=81.0
+|bośniacki=101.0
+|dzongkha=94.0
+|bambara=77.0
+|lingala=122.0
+|uwea=89.0
+|czukocki=52.0
+|twi=138.0
+|nahuatl klasyczny=80.0
+|esperanto=272.0
+|hupa=130.0
+|telugu=81.0
+|islandzki=256.0
+|warajski=62.0
+|komi-jaźwiński=124.0
+|tashelhiyt=53.0
+|kabardyjski=91.0
+|komi=0.0
+|wietnamski=83.0
+|arczyński=88.0
+|võro=85.0
+|północny sotho=79.0
+|starogrecki=110.0
+|wilamowski=138.0
+|serbski=122.0
+|shona=97.0
+|erzja=72.0
+|węgierski=89.0
+|litewski=118.0
+|szkocki=94.0
+|amharski=118.0
+|romansz=109.0
+|kaszmirski=113.0
+|tonga=88.0
+|rohingya=76.0
+|dolnoniemiecki=101.0
+|luo=85.0
+|pitjantjatjara=77.0
+|joruba=82.0
+|kanuri=128.0
+|khmerski=91.0
+|fryzyjski saterlandzki=87.0
+|krymskotatarski=96.0
+|wczesny nowoangielski=122.0
+|starofrancuski=87.0
+|galicyjski=111.0
+|sranan tongo=80.0
+|tagalski=80.0
+|staro-cerkiewno-słowiański=102.0
+|mołdawski=70.0
+|koreański=192.0
+|tarencki=72.0
+|azerski=105.0
+|tybetański=158.0
+|abua=164.0
+|karaimski=129.0
+|pensylwański=95.0
+|asturyjski=84.0
+|alabama=72.0
+|zachodnioflamandzki=144.0
+|grenlandzki=80.0
+|irlandzki=102.0
+|shelta=68.0
+|chickasaw=72.0
+|hiligaynon=73.0
+|minangkabau=63.0
+|turecki=96.0
+|nawaho=84.0
+|asamski=88.0
+|novial=69.0
+|fiński=101.0
+|szwedzki=217.0
+|baskijski=104.0
+|megrelski=89.0
+|motu=59.0
+|sko=271.0
+|macedoński=170.0
+|chakaski=90.0
+|tigrinia=71.0
+|perski=98.0
+|afar=68.0
+|guarani=62.0
+|czagatajski=103.0
+|kirgiski=81.0
+|polski=681.0
+|karakałpacki=85.0
+|mirandyjski=83.0
+|mansyjski=68.0
+|czarnogórski=116.0
+|ful=59.0
+|abazyński=90.0
+|moksza=212.0
+|ama=75.0
+|keczua=80.0
+|istriocki=73.0
+|!Xóõ=139.0
+|neo=254.0
+|konkani=91.0
+|czirokeski=91.0
+|wenedyk=87.0
+|bretoński=91.0
+|osmańsko-turecki=111.0
+|tahitański=129.0
+|marwari=87.0
+|chantyjski (surgucki)=66.0
+|friulski=82.0
+|kaszubski=120.0
+|orija=85.0
+|hindi=102.0
+|korsykański=88.0
+|maltański=91.0
+|pontyjski=98.0
+|taos=70.0
+|hiszpański=376.0
+|newarski=78.0
+|sindhi=185.0
+|staronordyjski=90.0
+|lazyjski=75.0
+|pikardyjski=74.0
+|wolof=130.0
+|szerpa=72.0
+|buruszaski=39.0
+|mikmak=146.0
+|filipino=142.0
+|północnofryzyjski=82.0
+|arapaho=118.0
+|kataloński=90.0
+|rarotonga=105.0
+|maryjski=98.0
+|ajmara=68.0
+|romániço=112.0
+|lojban=66.0
+|boloński=98.0
+|klingoński=99.0
+|normandzki=83.0
+|sundajski=71.0
+|zelandzki=137.0
+|quenya=105.0
+|ga=102.0
+|awestyjski=0.0
+|alemański=117.0
+|kri=47.0
+|ukraiński=221.0
+|zazaki=74.0
+|łaciński=189.0
+|tabasarański=76.0
+|giliański=159.0
+|rusiński=85.0
+|mizo=245.0
+|tatarski=174.0
+|interlingua=70.0
+|kornijski=85.0
+|brithenig=79.0
+|białoruski (taraszkiewica)=276.0
+|abenaki=71.0
+|fryzyjski=86.0
+|chantyjski (szuryszkarski)=72.0
+|oromo=55.0
+|sango=49.0
+|średnioangielski=78.0
+|wysokoislandzki=63.0
+|malediwski=183.0
+|norweski (nynorsk)=112.0
+|somalijski=153.0
+|białoruski=284.0
+|tadżycki=81.0
+|plautdietsch=114.0
+|angielski=197.0
+|ormiański=88.0
+|farerski=96.0
+|aczoli=97.0
+|xhosa=66.0
+|aztecki=0.0
+|birmański=138.0
+|kildin=49.0
+|japoński=163.0
+|adjukru=270.0
+|albański=94.0
+|udmurcki=70.0
+|gocki=128.0
+|staroruski=461.0
+|pirahã=64.0
+|fenicki=146.0
+|tuvalu=141.0
+|portugalski=137.0
+|jèrriais=86.0
+|jaćwieski=83.0
+|szkocki gaelicki=94.0
+|kurdyjski=0.0
+|lombardzki=101.0
+|komi-permiacki=51.0
+|ubychski=42.0
+|karelski=65.0
+|jakucki=77.0
+|staro-wysoko-niemiecki=93.0
+|staroperski=128.0
+|włoski=283.0
+|bugijski=83.0
+|tuwiński=77.0
+|karaczajsko-bałkarski=86.0
+|sardyński=85.0
+|wepski=70.0
+|luganda=55.0
+|malajski=99.0
+|użycie międzynarodowe=148.0
+|kumycki=75.0
+|paszto=130.0
+|arumuński=78.0
+|uzbecki=88.0
+|kantoński=0.0
+|koptyjski=121.0
+|bislama=134.0
+|chorwacki=204.0
+|volapük=89.0
+|suahili=167.0
+|liguryjski=89.0
+|dari=202.0
+|tamazight=81.0
+|dżuhuri=77.0
+|tupinambá=77.0
+|laotański=108.0
+|łatgalski=80.0
+|maya=68.0
+|herero=254.0
+|tumbuka=44.0
+|baszkirski=187.0
+|fidżyjski=117.0
+|bengalski=87.0
+|sycylijski=100.0
+|czeczeński=69.0
+|dolnołużycki=224.0
+|znak chiński=183.0
+|ladino=95.0
+|osetyjski=98.0
+|mazanderański=74.0
+|czuwaski=81.0
+|esperanto (morfem)=161.0
+|=|data=24.10.2014
+|#default=bd.
+}}
+
+
+{{#switch:{{lc:{{{1|}}}}}
+|średnio-dolno-niemiecki=1
+|polski język migowy=0
+|komi-zyriański=18
+|cziczewa=15
+|jidysz=826
+|maoryski=18
+|indonezyjski=70
+|górnołużycki=75
+|nahuatl centralnego Meksyku=37
+|starosaksoński=3
+|niemiecki=4020
+|kałmucki=0
+|duński=661
+|hebrajski=228
+|sorani=6
+|zulu=2
+|adygejski=4
+|haitański=14
+|serbsko-chorwacki=86
+|luksemburski=48
+|estremadurski=1
+|czamorro=16
+|nieniecki=3
+|hawajski=222
+|pendżabski=27
+|tamilski=46
+|szorski=6
+|hausa=2
+|minnan=0
+|inari=0
+|chantyjski (kazymski)=3
+|ketyjski=0
+|norweski (bokmål)=579
+|słowiński=4
+|mon=3
+|żmudzki=5
+|wenecki=18
+|czeski=967
+|arabski=3861
+|marszalski=0
+|jawajski=8
+|limburski=17
+|staroormiański=1
+|gyyz=2
+|wotycki=1
+|ujgurski=93
+|inuktitut=33
+|chantyjski (wachowski)=3
+|ladyński=1
+|inguski=9
+|mongolski=54
+|turkmeński=51
+|inupiak=1
+|syryjski klasyczny=0
+|bułgarski=654
+|beludżi=15
+|kakczikel=3
+|słowacki=740
+|mohawk=24
+|estoński=162
+|dołgański=1
+|sumeryjski=0
+|kurmandżi=55
+|gudźarati=4
+|akan=13
+|chiński standardowy=128
+|afrykanerski=200
+|nepalski=9
+|rundi=0
+|francuski=2236
+|manx=6
+|szan=0
+|nauruański=102
+|ido=104
+|pragermański=0
+|skolt=0
+|a-pucikwar=1
+|cebuano=5
+|nowogrecki=1113
+|zarfatit=0
+|pruski=23
+|tok pisin=12
+|tetum=34
+|malajalam=8
+|marathi=29
+|ewenkijski=11
+|susu=0
+|nahuatl=0
+|staroirlandzki=1
+|lezgiński=2
+|yupik środkowy=0
+|slovio=177
+|akadyjski=12
+|staroangielski=10
+|gruziński=189
+|tajski=127
+|papiamento=3
+|gagauski=0
+|ewe=5
+|banjumasański=1
+|walijski=81
+|kiliwa=1
+|bawarski=9
+|połabski=3
+|aragoński=16
+|karatajski=0
+|tigre=1
+|hiri motu=0
+|neapolitański=8
+|tamaszek=0
+|słoweński=110
+|awarski=34
+|dalmatyński=11
+|aklanon=1
+|balijski=4
+|aleucki=3
+|łotewski=74
+|piemoncki=11
+|kabylski=53
+|staroegipski=104
+|sanskryt=323
+|Lingua Franca Nova=0
+|syngaleski=3
+|rumuński=202
+|pali=102
+|północnolapoński=13
+|waloński=1
+|kannada=19
+|malgaski=0
+|holenderski=288
+|russenorsk=0
+|abchaski=22
+|aramejski=8
+|średnio-wysoko-niemiecki=2
+|ilokano=2
+|rosyjski=1822
+|gaskoński=1
+|urdu=19
+|langwedocki=0
+|szwabski=0
+|etruski=0
+|prowansalski=16
+|kazachski=475
+|romski=1
+|bośniacki=144
+|dzongkha=34
+|bambara=16
+|lingala=4
+|uwea=2
+|czukocki=4
+|twi=2
+|nahuatl klasyczny=8
+|esperanto=1744
+|hupa=0
+|telugu=10
+|islandzki=475
+|warajski=4
+|komi-jaźwiński=1
+|tashelhiyt=0
+|kabardyjski=0
+|komi=0
+|wietnamski=62
+|arczyński=8
+|võro=5
+|północny sotho=8
+|starogrecki=56
+|wilamowski=688
+|serbski=50
+|shona=0
+|erzja=18
+|węgierski=782
+|litewski=318
+|szkocki=2
+|amharski=113
+|romansz=19
+|kaszmirski=1
+|tonga=8
+|rohingya=1
+|dolnoniemiecki=9
+|luo=0
+|pitjantjatjara=2
+|joruba=5
+|kanuri=0
+|khmerski=14
+|fryzyjski saterlandzki=0
+|krymskotatarski=48
+|wczesny nowoangielski=0
+|starofrancuski=10
+|galicyjski=71
+|sranan tongo=38
+|tagalski=11
+|staro-cerkiewno-słowiański=7
+|mołdawski=3
+|koreański=745
+|tarencki=3
+|azerski=275
+|tybetański=218
+|abua=0
+|karaimski=0
+|pensylwański=1
+|asturyjski=394
+|alabama=37
+|zachodnioflamandzki=14
+|grenlandzki=5
+|irlandzki=57
+|shelta=0
+|chickasaw=2
+|hiligaynon=2
+|minangkabau=3
+|turecki=383
+|nawaho=27
+|asamski=7
+|novial=5
+|fiński=483
+|szwedzki=3357
+|baskijski=708
+|megrelski=2
+|motu=0
+|sko=0
+|macedoński=67
+|chakaski=24
+|tigrinia=1
+|perski=172
+|afar=16
+|guarani=4
+|czagatajski=0
+|kirgiski=17
+|polski=11378
+|karakałpacki=1
+|mirandyjski=1
+|mansyjski=0
+|czarnogórski=1
+|ful=9
+|abazyński=0
+|moksza=43
+|ama=14
+|keczua=15
+|istriocki=2
+|!Xóõ=1
+|neo=0
+|konkani=1
+|czirokeski=17
+|wenedyk=0
+|bretoński=60
+|osmańsko-turecki=8
+|tahitański=67
+|marwari=0
+|chantyjski (surgucki)=3
+|friulski=15
+|kaszubski=78
+|orija=0
+|hindi=199
+|korsykański=14
+|maltański=73
+|pontyjski=2
+|taos=1
+|hiszpański=1684
+|newarski=1
+|sindhi=16
+|staronordyjski=5
+|lazyjski=1
+|pikardyjski=0
+|wolof=2
+|szerpa=0
+|buruszaski=0
+|mikmak=1
+|filipino=0
+|północnofryzyjski=2
+|arapaho=3
+|kataloński=131
+|rarotonga=1
+|maryjski=14
+|ajmara=9
+|romániço=0
+|lojban=0
+|boloński=14
+|klingoński=2
+|normandzki=0
+|sundajski=1
+|zelandzki=15
+|quenya=5
+|ga=1
+|awestyjski=0
+|alemański=3
+|kri=0
+|ukraiński=717
+|zazaki=10
+|łaciński=466
+|tabasarański=1
+|giliański=1
+|rusiński=20
+|mizo=0
+|tatarski=27
+|interlingua=517
+|kornijski=6
+|brithenig=5
+|białoruski (taraszkiewica)=56
+|abenaki=6
+|fryzyjski=31
+|chantyjski (szuryszkarski)=3
+|oromo=1
+|sango=3
+|średnioangielski=2
+|wysokoislandzki=5
+|malediwski=17
+|norweski (nynorsk)=33
+|somalijski=4
+|białoruski=438
+|tadżycki=19
+|plautdietsch=0
+|angielski=6922
+|ormiański=216
+|farerski=30
+|aczoli=8
+|xhosa=2
+|aztecki=0
+|birmański=33
+|kildin=0
+|japoński=264
+|adjukru=0
+|albański=174
+|udmurcki=42
+|gocki=4
+|staroruski=0
+|pirahã=4
+|fenicki=52
+|tuvalu=31
+|portugalski=561
+|jèrriais=21
+|jaćwieski=0
+|szkocki gaelicki=21
+|kurdyjski=0
+|lombardzki=13
+|komi-permiacki=12
+|ubychski=0
+|karelski=6
+|jakucki=25
+|staro-wysoko-niemiecki=8
+|staroperski=3
+|włoski=2183
+|bugijski=1
+|tuwiński=14
+|karaczajsko-bałkarski=1
+|sardyński=6
+|wepski=20
+|luganda=2
+|malajski=12
+|użycie międzynarodowe=22
+|kumycki=2
+|paszto=31
+|arumuński=6
+|uzbecki=57
+|kantoński=0
+|koptyjski=7
+|bislama=1
+|chorwacki=342
+|volapük=11
+|suahili=54
+|liguryjski=2
+|dari=3
+|tamazight=0
+|dżuhuri=10
+|tupinambá=4
+|laotański=28
+|łatgalski=0
+|maya=7
+|herero=0
+|tumbuka=4
+|baszkirski=75
+|fidżyjski=6
+|bengalski=54
+|sycylijski=45
+|czeczeński=28
+|dolnołużycki=162
+|znak chiński=0
+|ladino=1
+|osetyjski=24
+|mazanderański=2
+|czuwaski=74
+|esperanto (morfem)=25
+|=70516
+|data=24.10.2014
+|#default=bd.
+}}
+
+
+{{#switch:{{lc:{{{1|}}}}}
+|średnio-dolno-niemiecki=4.8
+|polski język migowy=0.0
+|komi-zyriański=15.5
+|cziczewa=14.0
+|jidysz=10.1
+|maoryski=10.6
+|indonezyjski=7.0
+|górnołużycki=12.5
+|nahuatl centralnego Meksyku=33.9
+|starosaksoński=0.8
+|niemiecki=15.7
+|kałmucki=0.0
+|duński=23.0
+|hebrajski=13.5
+|sorani=21.4
+|zulu=1.9
+|adygejski=0.5
+|haitański=4.5
+|serbsko-chorwacki=2.3
+|luksemburski=3.5
+|estremadurski=1.9
+|czamorro=26.2
+|nieniecki=7.1
+|hawajski=29.4
+|pendżabski=10.2
+|tamilski=11.4
+|szorski=17.1
+|hausa=2.2
+|minnan=0.0
+|inari=0.0
+|chantyjski (kazymski)=50.0
+|ketyjski=0.0
+|norweski (bokmål)=20.6
+|słowiński=1.2
+|mon=25.0
+|żmudzki=6.2
+|wenecki=2.8
+|czeski=6.7
+|arabski=43.7
+|marszalski=0.0
+|jawajski=22.9
+|limburski=13.9
+|staroormiański=0.3
+|gyyz=15.4
+|wotycki=0.8
+|ujgurski=17.5
+|inuktitut=27.7
+|chantyjski (wachowski)=75.0
+|ladyński=0.3
+|inguski=30.0
+|mongolski=10.5
+|turkmeński=3.6
+|inupiak=0.6
+|syryjski klasyczny=0.0
+|bułgarski=12.3
+|beludżi=14.4
+|kakczikel=15.0
+|słowacki=12.3
+|mohawk=96.0
+|estoński=5.9
+|dołgański=3.8
+|sumeryjski=0.0
+|kurmandżi=4.6
+|gudźarati=2.2
+|akan=76.5
+|chiński standardowy=23.9
+|afrykanerski=20.6
+|nepalski=9.7
+|rundi=0.0
+|francuski=11.3
+|manx=0.9
+|szan=0.0
+|nauruański=40.2
+|ido=7.1
+|pragermański=0.0
+|skolt=0.0
+|a-pucikwar=100.0
+|cebuano=8.9
+|nowogrecki=15.0
+|zarfatit=0.0
+|pruski=4.1
+|tok pisin=4.3
+|tetum=5.5
+|malajalam=6.9
+|marathi=17.6
+|ewenkijski=15.3
+|susu=0.0
+|nahuatl=0.0
+|staroirlandzki=0.4
+|lezgiński=3.1
+|yupik środkowy=0.0
+|slovio=5.7
+|akadyjski=23.1
+|staroangielski=1.4
+|gruziński=6.6
+|tajski=6.7
+|papiamento=3.0
+|gagauski=0.0
+|ewe=2.1
+|banjumasański=50.0
+|walijski=11.2
+|kiliwa=100.0
+|bawarski=15.5
+|połabski=2.0
+|aragoński=10.5
+|karatajski=0.0
+|tigre=25.0
+|hiri motu=0.0
+|neapolitański=3.3
+|tamaszek=0.0
+|słoweński=6.8
+|awarski=21.1
+|dalmatyński=3.8
+|aklanon=6.2
+|balijski=16.0
+|aleucki=75.0
+|łotewski=6.5
+|piemoncki=20.8
+|kabylski=27.9
+|staroegipski=100.0
+|sanskryt=29.9
+|Lingua Franca Nova=0.0
+|syngaleski=3.1
+|rumuński=9.5
+|pali=19.6
+|północnolapoński=2.3
+|waloński=0.6
+|kannada=10.3
+|malgaski=0.0
+|holenderski=8.1
+|russenorsk=0.0
+|abchaski=20.6
+|aramejski=22.2
+|średnio-wysoko-niemiecki=4.7
+|ilokano=3.6
+|rosyjski=10.8
+|gaskoński=10.0
+|urdu=11.5
+|langwedocki=0.0
+|szwabski=0.0
+|etruski=0.0
+|prowansalski=4.6
+|kazachski=27.6
+|romski=0.4
+|bośniacki=35.5
+|dzongkha=20.4
+|bambara=59.3
+|lingala=6.1
+|uwea=15.4
+|czukocki=66.7
+|twi=12.5
+|nahuatl klasyczny=12.7
+|esperanto=19.7
+|hupa=0.0
+|telugu=1.0
+|islandzki=11.6
+|warajski=44.4
+|komi-jaźwiński=33.3
+|tashelhiyt=0.0
+|kabardyjski=0.0
+|komi=0.0
+|wietnamski=5.2
+|arczyński=42.1
+|võro=4.7
+|północny sotho=34.8
+|starogrecki=7.1
+|wilamowski=18.4
+|serbski=9.2
+|shona=0.0
+|erzja=23.4
+|węgierski=10.3
+|litewski=10.9
+|szkocki=0.8
+|amharski=42.6
+|romansz=8.1
+|kaszmirski=9.1
+|tonga=12.3
+|rohingya=0.8
+|dolnoniemiecki=12.7
+|luo=0.0
+|pitjantjatjara=4.3
+|joruba=3.3
+|kanuri=0.0
+|khmerski=5.0
+|fryzyjski saterlandzki=0.0
+|krymskotatarski=6.8
+|wczesny nowoangielski=0.0
+|starofrancuski=1.5
+|galicyjski=5.2
+|sranan tongo=22.2
+|tagalski=3.2
+|staro-cerkiewno-słowiański=0.8
+|mołdawski=25.0
+|koreański=38.0
+|tarencki=1.1
+|azerski=19.8
+|tybetański=33.5
+|abua=0.0
+|karaimski=0.0
+|pensylwański=7.1
+|asturyjski=18.1
+|alabama=50.7
+|zachodnioflamandzki=51.9
+|grenlandzki=1.4
+|irlandzki=4.2
+|shelta=0.0
+|chickasaw=1.1
+|hiligaynon=0.8
+|minangkabau=3.2
+|turecki=8.2
+|nawaho=4.0
+|asamski=20.6
+|novial=2.1
+|fiński=7.2
+|szwedzki=19.2
+|baskijski=19.9
+|megrelski=66.7
+|motu=0.0
+|sko=0.0
+|macedoński=8.1
+|chakaski=15.0
+|tigrinia=0.5
+|perski=14.0
+|afar=35.6
+|guarani=9.3
+|czagatajski=0.0
+|kirgiski=8.6
+|polski=24.0
+|karakałpacki=5.6
+|mirandyjski=0.7
+|mansyjski=0.0
+|czarnogórski=100.0
+|ful=9.0
+|abazyński=0.0
+|moksza=55.1
+|ama=93.3
+|keczua=7.1
+|istriocki=1.9
+|!Xóõ=50.0
+|neo=0.0
+|konkani=9.1
+|czirokeski=11.0
+|wenedyk=0.0
+|bretoński=14.3
+|osmańsko-turecki=25.8
+|tahitański=27.8
+|marwari=0.0
+|chantyjski (surgucki)=60.0
+|friulski=7.0
+|kaszubski=6.0
+|orija=0.0
+|hindi=9.0
+|korsykański=7.9
+|maltański=7.7
+|pontyjski=100.0
+|taos=0.8
+|hiszpański=10.7
+|newarski=10.0
+|sindhi=21.3
+|staronordyjski=1.2
+|lazyjski=4.8
+|pikardyjski=0.0
+|wolof=3.1
+|szerpa=0.0
+|buruszaski=0.0
+|mikmak=5.0
+|filipino=0.0
+|północnofryzyjski=7.7
+|arapaho=42.9
+|kataloński=4.9
+|rarotonga=20.0
+|maryjski=12.7
+|ajmara=28.1
+|romániço=0.0
+|lojban=0.0
+|boloński=11.2
+|klingoński=3.8
+|normandzki=0.0
+|sundajski=4.8
+|zelandzki=57.7
+|quenya=2.0
+|ga=10.0
+|awestyjski=0.0
+|alemański=75.0
+|kri=0.0
+|ukraiński=18.1
+|zazaki=11.2
+|łaciński=8.1
+|tabasarański=20.0
+|giliański=10.0
+|rusiński=3.1
+|mizo=0.0
+|tatarski=12.3
+|interlingua=2.6
+|kornijski=2.5
+|brithenig=27.8
+|białoruski (taraszkiewica)=17.1
+|abenaki=23.1
+|fryzyjski=7.5
+|chantyjski (szuryszkarski)=42.9
+|oromo=6.7
+|sango=8.8
+|średnioangielski=0.6
+|wysokoislandzki=62.5
+|malediwski=45.9
+|norweski (nynorsk)=7.1
+|somalijski=5.6
+|białoruski=13.7
+|tadżycki=4.5
+|plautdietsch=0.0
+|angielski=12.9
+|ormiański=10.5
+|farerski=2.9
+|aczoli=47.1
+|xhosa=2.8
+|aztecki=0.0
+|birmański=12.7
+|kildin=0.0
+|japoński=5.9
+|adjukru=0.0
+|albański=12.5
+|udmurcki=31.8
+|gocki=2.2
+|staroruski=0.0
+|pirahã=14.3
+|fenicki=46.4
+|tuvalu=24.2
+|portugalski=8.5
+|jèrriais=1.4
+|jaćwieski=0.0
+|szkocki gaelicki=1.7
+|kurdyjski=0.0
+|lombardzki=11.4
+|komi-permiacki=21.4
+|ubychski=0.0
+|karelski=2.0
+|jakucki=8.5
+|staro-wysoko-niemiecki=1.9
+|staroperski=7.0
+|włoski=8.7
+|bugijski=9.1
+|tuwiński=5.6
+|karaczajsko-bałkarski=1.6
+|sardyński=4.5
+|wepski=12.3
+|luganda=2.8
+|malajski=2.9
+|użycie międzynarodowe=3.7
+|kumycki=1.9
+|paszto=8.9
+|arumuński=1.5
+|uzbecki=10.9
+|kantoński=0.0
+|koptyjski=53.8
+|bislama=8.3
+|chorwacki=22.1
+|volapük=1.5
+|suahili=3.4
+|liguryjski=5.7
+|dari=14.3
+|tamazight=0.0
+|dżuhuri=34.5
+|tupinambá=28.6
+|laotański=7.5
+|łatgalski=0.0
+|maya=77.8
+|herero=0.0
+|tumbuka=3.3
+|baszkirski=14.8
+|fidżyjski=7.2
+|bengalski=6.7
+|sycylijski=5.7
+|czeczeński=13.3
+|dolnołużycki=12.6
+|znak chiński=0.0
+|ladino=1.3
+|osetyjski=13.2
+|mazanderański=100.0
+|czuwaski=48.4
+|esperanto (morfem)=0.8
+|=12.4|data=24.10.2014
+|#default=bd.
+}}
+
+
+{{#switch:{{lc:{{{1|}}}}}
+|średnio-dolno-niemiecki=0
+|polski język migowy=0
+|komi-zyriański=0
+|cziczewa=0
+|jidysz=0
+|maoryski=0
+|indonezyjski=4
+|górnołużycki=16
+|nahuatl centralnego Meksyku=0
+|starosaksoński=0
+|niemiecki=4897
+|kałmucki=0
+|duński=96
+|hebrajski=12
+|sorani=0
+|zulu=0
+|adygejski=0
+|haitański=0
+|serbsko-chorwacki=13
+|luksemburski=0
+|estremadurski=0
+|czamorro=0
+|nieniecki=0
+|hawajski=0
+|pendżabski=0
+|tamilski=60
+|szorski=0
+|hausa=0
+|minnan=0
+|inari=0
+|chantyjski (kazymski)=0
+|ketyjski=0
+|norweski (bokmål)=11
+|słowiński=0
+|mon=0
+|żmudzki=0
+|wenecki=0
+|czeski=2170
+|arabski=1130
+|marszalski=0
+|jawajski=0
+|limburski=0
+|staroormiański=0
+|gyyz=0
+|wotycki=0
+|ujgurski=0
+|inuktitut=0
+|chantyjski (wachowski)=0
+|ladyński=0
+|inguski=0
+|mongolski=0
+|turkmeński=1
+|inupiak=0
+|syryjski klasyczny=0
+|bułgarski=1
+|beludżi=0
+|kakczikel=0
+|słowacki=12
+|mohawk=0
+|estoński=1
+|dołgański=0
+|sumeryjski=0
+|kurmandżi=0
+|gudźarati=0
+|akan=0
+|chiński standardowy=97
+|afrykanerski=1
+|nepalski=0
+|rundi=0
+|francuski=6311
+|manx=0
+|szan=0
+|nauruański=0
+|ido=0
+|pragermański=0
+|skolt=0
+|a-pucikwar=0
+|cebuano=0
+|nowogrecki=22
+|zarfatit=0
+|pruski=0
+|tok pisin=0
+|tetum=0
+|malajalam=0
+|marathi=0
+|ewenkijski=0
+|susu=0
+|nahuatl=0
+|staroirlandzki=0
+|lezgiński=0
+|yupik środkowy=0
+|slovio=1
+|akadyjski=0
+|staroangielski=0
+|gruziński=2
+|tajski=25
+|papiamento=0
+|gagauski=0
+|ewe=6
+|banjumasański=0
+|walijski=37
+|kiliwa=0
+|bawarski=0
+|połabski=0
+|aragoński=0
+|karatajski=0
+|tigre=0
+|hiri motu=0
+|neapolitański=0
+|tamaszek=0
+|słoweński=0
+|awarski=0
+|dalmatyński=0
+|aklanon=0
+|balijski=0
+|aleucki=0
+|łotewski=8
+|piemoncki=0
+|kabylski=1
+|staroegipski=0
+|sanskryt=0
+|Lingua Franca Nova=0
+|syngaleski=0
+|rumuński=19
+|pali=0
+|północnolapoński=0
+|waloński=0
+|kannada=0
+|malgaski=7
+|holenderski=3078
+|russenorsk=0
+|abchaski=0
+|aramejski=0
+|średnio-wysoko-niemiecki=0
+|ilokano=0
+|rosyjski=4400
+|gaskoński=0
+|urdu=0
+|langwedocki=0
+|szwabski=0
+|etruski=0
+|prowansalski=0
+|kazachski=0
+|romski=0
+|bośniacki=0
+|dzongkha=0
+|bambara=0
+|lingala=0
+|uwea=0
+|czukocki=0
+|twi=1
+|nahuatl klasyczny=0
+|esperanto=315
+|hupa=0
+|telugu=0
+|islandzki=42
+|warajski=0
+|komi-jaźwiński=0
+|tashelhiyt=0
+|kabardyjski=0
+|komi=0
+|wietnamski=3
+|arczyński=0
+|võro=0
+|północny sotho=0
+|starogrecki=0
+|wilamowski=1168
+|serbski=1
+|shona=0
+|erzja=0
+|węgierski=1898
+|litewski=1
+|szkocki=1
+|amharski=0
+|romansz=3
+|kaszmirski=0
+|tonga=0
+|rohingya=0
+|dolnoniemiecki=1
+|luo=0
+|pitjantjatjara=0
+|joruba=0
+|kanuri=0
+|khmerski=0
+|fryzyjski saterlandzki=0
+|krymskotatarski=1
+|wczesny nowoangielski=0
+|starofrancuski=1
+|galicyjski=36
+|sranan tongo=0
+|tagalski=10
+|staro-cerkiewno-słowiański=0
+|mołdawski=0
+|koreański=6
+|tarencki=0
+|azerski=0
+|tybetański=0
+|abua=0
+|karaimski=0
+|pensylwański=0
+|asturyjski=0
+|alabama=0
+|zachodnioflamandzki=1
+|grenlandzki=0
+|irlandzki=11
+|shelta=0
+|chickasaw=0
+|hiligaynon=0
+|minangkabau=0
+|turecki=26
+|nawaho=6
+|asamski=0
+|novial=0
+|fiński=102
+|szwedzki=3475
+|baskijski=4
+|megrelski=0
+|motu=0
+|sko=0
+|macedoński=0
+|chakaski=0
+|tigrinia=0
+|perski=101
+|afar=0
+|guarani=0
+|czagatajski=0
+|kirgiski=0
+|polski=21220
+|karakałpacki=0
+|mirandyjski=0
+|mansyjski=0
+|czarnogórski=0
+|ful=0
+|abazyński=0
+|moksza=0
+|ama=0
+|keczua=0
+|istriocki=0
+|!Xóõ=0
+|neo=0
+|konkani=0
+|czirokeski=0
+|wenedyk=0
+|bretoński=0
+|osmańsko-turecki=0
+|tahitański=0
+|marwari=0
+|chantyjski (surgucki)=0
+|friulski=0
+|kaszubski=0
+|orija=0
+|hindi=0
+|korsykański=0
+|maltański=0
+|pontyjski=0
+|taos=0
+|hiszpański=56
+|newarski=0
+|sindhi=0
+|staronordyjski=0
+|lazyjski=0
+|pikardyjski=0
+|wolof=15
+|szerpa=0
+|buruszaski=0
+|mikmak=0
+|filipino=0
+|północnofryzyjski=0
+|arapaho=0
+|kataloński=0
+|rarotonga=0
+|maryjski=0
+|ajmara=0
+|romániço=0
+|lojban=0
+|boloński=0
+|klingoński=0
+|normandzki=0
+|sundajski=0
+|zelandzki=0
+|quenya=0
+|ga=0
+|awestyjski=0
+|alemański=0
+|kri=0
+|ukraiński=1598
+|zazaki=0
+|łaciński=384
+|tabasarański=0
+|giliański=0
+|rusiński=0
+|mizo=0
+|tatarski=0
+|interlingua=2
+|kornijski=0
+|brithenig=0
+|białoruski (taraszkiewica)=2
+|abenaki=0
+|fryzyjski=0
+|chantyjski (szuryszkarski)=0
+|oromo=0
+|sango=0
+|średnioangielski=0
+|wysokoislandzki=0
+|malediwski=0
+|norweski (nynorsk)=0
+|somalijski=0
+|białoruski=630
+|tadżycki=0
+|plautdietsch=0
+|angielski=10070
+|ormiański=3
+|farerski=0
+|aczoli=0
+|xhosa=0
+|aztecki=0
+|birmański=0
+|kildin=0
+|japoński=20
+|adjukru=0
+|albański=2
+|udmurcki=0
+|gocki=0
+|staroruski=0
+|pirahã=0
+|fenicki=0
+|tuvalu=0
+|portugalski=131
+|jèrriais=106
+|jaćwieski=0
+|szkocki gaelicki=2
+|kurdyjski=0
+|lombardzki=0
+|komi-permiacki=0
+|ubychski=0
+|karelski=0
+|jakucki=0
+|staro-wysoko-niemiecki=0
+|staroperski=0
+|włoski=506
+|bugijski=0
+|tuwiński=0
+|karaczajsko-bałkarski=0
+|sardyński=0
+|wepski=0
+|luganda=0
+|malajski=0
+|użycie międzynarodowe=1
+|kumycki=0
+|paszto=0
+|arumuński=0
+|uzbecki=0
+|kantoński=0
+|koptyjski=0
+|bislama=0
+|chorwacki=24
+|volapük=0
+|suahili=0
+|liguryjski=0
+|dari=0
+|tamazight=0
+|dżuhuri=0
+|tupinambá=0
+|laotański=0
+|łatgalski=0
+|maya=0
+|herero=0
+|tumbuka=0
+|baszkirski=32
+|fidżyjski=0
+|bengalski=0
+|sycylijski=0
+|czeczeński=1
+|dolnołużycki=1
+|znak chiński=0
+|ladino=0
+|osetyjski=0
+|mazanderański=0
+|czuwaski=0
+|esperanto (morfem)=8
+|=65898
+|data=24.10.2014
+|#default=bd.
+}}
+
+
+{{#switch:{{lc:{{{1|}}}}}
+|średnio-dolno-niemiecki=0.0
+|polski język migowy=0.0
+|komi-zyriański=0.0
+|cziczewa=0.0
+|jidysz=0.0
+|maoryski=0.0
+|indonezyjski=0.4
+|górnołużycki=2.7
+|nahuatl centralnego Meksyku=0.0
+|starosaksoński=0.0
+|niemiecki=19.1
+|kałmucki=0.0
+|duński=3.3
+|hebrajski=0.7
+|sorani=0.0
+|zulu=0.0
+|adygejski=0.0
+|haitański=0.0
+|serbsko-chorwacki=0.3
+|luksemburski=0.0
+|estremadurski=0.0
+|czamorro=0.0
+|nieniecki=0.0
+|hawajski=0.0
+|pendżabski=0.0
+|tamilski=14.9
+|szorski=0.0
+|hausa=0.0
+|minnan=0.0
+|inari=0.0
+|chantyjski (kazymski)=0.0
+|ketyjski=0.0
+|norweski (bokmål)=0.4
+|słowiński=0.0
+|mon=0.0
+|żmudzki=0.0
+|wenecki=0.0
+|czeski=14.9
+|arabski=12.8
+|marszalski=0.0
+|jawajski=0.0
+|limburski=0.0
+|staroormiański=0.0
+|gyyz=0.0
+|wotycki=0.0
+|ujgurski=0.0
+|inuktitut=0.0
+|chantyjski (wachowski)=0.0
+|ladyński=0.0
+|inguski=0.0
+|mongolski=0.0
+|turkmeński=0.1
+|inupiak=0.0
+|syryjski klasyczny=0.0
+|bułgarski=0.0
+|beludżi=0.0
+|kakczikel=0.0
+|słowacki=0.2
+|mohawk=0.0
+|estoński=0.0
+|dołgański=0.0
+|sumeryjski=0.0
+|kurmandżi=0.0
+|gudźarati=0.0
+|akan=0.0
+|chiński standardowy=18.1
+|afrykanerski=0.1
+|nepalski=0.0
+|rundi=0.0
+|francuski=32.0
+|manx=0.0
+|szan=0.0
+|nauruański=0.0
+|ido=0.0
+|pragermański=0.0
+|skolt=0.0
+|a-pucikwar=0.0
+|cebuano=0.0
+|nowogrecki=0.3
+|zarfatit=0.0
+|pruski=0.0
+|tok pisin=0.0
+|tetum=0.0
+|malajalam=0.0
+|marathi=0.0
+|ewenkijski=0.0
+|susu=0.0
+|nahuatl=0.0
+|staroirlandzki=0.0
+|lezgiński=0.0
+|yupik środkowy=0.0
+|slovio=0.0
+|akadyjski=0.0
+|staroangielski=0.0
+|gruziński=0.1
+|tajski=1.3
+|papiamento=0.0
+|gagauski=0.0
+|ewe=2.5
+|banjumasański=0.0
+|walijski=5.1
+|kiliwa=0.0
+|bawarski=0.0
+|połabski=0.0
+|aragoński=0.0
+|karatajski=0.0
+|tigre=0.0
+|hiri motu=0.0
+|neapolitański=0.0
+|tamaszek=0.0
+|słoweński=0.0
+|awarski=0.0
+|dalmatyński=0.0
+|aklanon=0.0
+|balijski=0.0
+|aleucki=0.0
+|łotewski=0.7
+|piemoncki=0.0
+|kabylski=0.5
+|staroegipski=0.0
+|sanskryt=0.0
+|Lingua Franca Nova=0.0
+|syngaleski=0.0
+|rumuński=0.9
+|pali=0.0
+|północnolapoński=0.0
+|waloński=0.0
+|kannada=0.0
+|malgaski=0.7
+|holenderski=86.7
+|russenorsk=0.0
+|abchaski=0.0
+|aramejski=0.0
+|średnio-wysoko-niemiecki=0.0
+|ilokano=0.0
+|rosyjski=26.0
+|gaskoński=0.0
+|urdu=0.0
+|langwedocki=0.0
+|szwabski=0.0
+|etruski=0.0
+|prowansalski=0.0
+|kazachski=0.0
+|romski=0.0
+|bośniacki=0.0
+|dzongkha=0.0
+|bambara=0.0
+|lingala=0.0
+|uwea=0.0
+|czukocki=0.0
+|twi=6.2
+|nahuatl klasyczny=0.0
+|esperanto=3.6
+|hupa=0.0
+|telugu=0.0
+|islandzki=1.0
+|warajski=0.0
+|komi-jaźwiński=0.0
+|tashelhiyt=0.0
+|kabardyjski=0.0
+|komi=0.0
+|wietnamski=0.3
+|arczyński=0.0
+|võro=0.0
+|północny sotho=0.0
+|starogrecki=0.0
+|wilamowski=31.3
+|serbski=0.2
+|shona=0.0
+|erzja=0.0
+|węgierski=24.9
+|litewski=0.0
+|szkocki=0.4
+|amharski=0.0
+|romansz=1.3
+|kaszmirski=0.0
+|tonga=0.0
+|rohingya=0.0
+|dolnoniemiecki=1.4
+|luo=0.0
+|pitjantjatjara=0.0
+|joruba=0.0
+|kanuri=0.0
+|khmerski=0.0
+|fryzyjski saterlandzki=0.0
+|krymskotatarski=0.1
+|wczesny nowoangielski=0.0
+|starofrancuski=0.1
+|galicyjski=2.6
+|sranan tongo=0.0
+|tagalski=2.9
+|staro-cerkiewno-słowiański=0.0
+|mołdawski=0.0
+|koreański=0.3
+|tarencki=0.0
+|azerski=0.0
+|tybetański=0.0
+|abua=0.0
+|karaimski=0.0
+|pensylwański=0.0
+|asturyjski=0.0
+|alabama=0.0
+|zachodnioflamandzki=3.7
+|grenlandzki=0.0
+|irlandzki=0.8
+|shelta=0.0
+|chickasaw=0.0
+|hiligaynon=0.0
+|minangkabau=0.0
+|turecki=0.6
+|nawaho=0.9
+|asamski=0.0
+|novial=0.0
+|fiński=1.5
+|szwedzki=19.8
+|baskijski=0.1
+|megrelski=0.0
+|motu=0.0
+|sko=0.0
+|macedoński=0.0
+|chakaski=0.0
+|tigrinia=0.0
+|perski=8.2
+|afar=0.0
+|guarani=0.0
+|czagatajski=0.0
+|kirgiski=0.0
+|polski=44.8
+|karakałpacki=0.0
+|mirandyjski=0.0
+|mansyjski=0.0
+|czarnogórski=0.0
+|ful=0.0
+|abazyński=0.0
+|moksza=0.0
+|ama=0.0
+|keczua=0.0
+|istriocki=0.0
+|!Xóõ=0.0
+|neo=0.0
+|konkani=0.0
+|czirokeski=0.0
+|wenedyk=0.0
+|bretoński=0.0
+|osmańsko-turecki=0.0
+|tahitański=0.0
+|marwari=0.0
+|chantyjski (surgucki)=0.0
+|friulski=0.0
+|kaszubski=0.0
+|orija=0.0
+|hindi=0.0
+|korsykański=0.0
+|maltański=0.0
+|pontyjski=0.0
+|taos=0.0
+|hiszpański=0.4
+|newarski=0.0
+|sindhi=0.0
+|staronordyjski=0.0
+|lazyjski=0.0
+|pikardyjski=0.0
+|wolof=23.1
+|szerpa=0.0
+|buruszaski=0.0
+|mikmak=0.0
+|filipino=0.0
+|północnofryzyjski=0.0
+|arapaho=0.0
+|kataloński=0.0
+|rarotonga=0.0
+|maryjski=0.0
+|ajmara=0.0
+|romániço=0.0
+|lojban=0.0
+|boloński=0.0
+|klingoński=0.0
+|normandzki=0.0
+|sundajski=0.0
+|zelandzki=0.0
+|quenya=0.0
+|ga=0.0
+|awestyjski=0.0
+|alemański=0.0
+|kri=0.0
+|ukraiński=40.4
+|zazaki=0.0
+|łaciński=6.7
+|tabasarański=0.0
+|giliański=0.0
+|rusiński=0.0
+|mizo=0.0
+|tatarski=0.0
+|interlingua=0.0
+|kornijski=0.0
+|brithenig=0.0
+|białoruski (taraszkiewica)=0.6
+|abenaki=0.0
+|fryzyjski=0.0
+|chantyjski (szuryszkarski)=0.0
+|oromo=0.0
+|sango=0.0
+|średnioangielski=0.0
+|wysokoislandzki=0.0
+|malediwski=0.0
+|norweski (nynorsk)=0.0
+|somalijski=0.0
+|białoruski=19.7
+|tadżycki=0.0
+|plautdietsch=0.0
+|angielski=18.8
+|ormiański=0.1
+|farerski=0.0
+|aczoli=0.0
+|xhosa=0.0
+|aztecki=0.0
+|birmański=0.0
+|kildin=0.0
+|japoński=0.4
+|adjukru=0.0
+|albański=0.1
+|udmurcki=0.0
+|gocki=0.0
+|staroruski=0.0
+|pirahã=0.0
+|fenicki=0.0
+|tuvalu=0.0
+|portugalski=2.0
+|jèrriais=6.9
+|jaćwieski=0.0
+|szkocki gaelicki=0.2
+|kurdyjski=0.0
+|lombardzki=0.0
+|komi-permiacki=0.0
+|ubychski=0.0
+|karelski=0.0
+|jakucki=0.0
+|staro-wysoko-niemiecki=0.0
+|staroperski=0.0
+|włoski=2.0
+|bugijski=0.0
+|tuwiński=0.0
+|karaczajsko-bałkarski=0.0
+|sardyński=0.0
+|wepski=0.0
+|luganda=0.0
+|malajski=0.0
+|użycie międzynarodowe=0.2
+|kumycki=0.0
+|paszto=0.0
+|arumuński=0.0
+|uzbecki=0.0
+|kantoński=0.0
+|koptyjski=0.0
+|bislama=0.0
+|chorwacki=1.6
+|volapük=0.0
+|suahili=0.0
+|liguryjski=0.0
+|dari=0.0
+|tamazight=0.0
+|dżuhuri=0.0
+|tupinambá=0.0
+|laotański=0.0
+|łatgalski=0.0
+|maya=0.0
+|herero=0.0
+|tumbuka=0.0
+|baszkirski=6.3
+|fidżyjski=0.0
+|bengalski=0.0
+|sycylijski=0.0
+|czeczeński=0.5
+|dolnołużycki=0.1
+|znak chiński=0.0
+|ladino=0.0
+|osetyjski=0.0
+|mazanderański=0.0
+|czuwaski=0.0
+|esperanto (morfem)=0.2
+|=12.9|data=24.10.2014
+|#default=bd.
+}}
