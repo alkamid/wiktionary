@@ -7,10 +7,10 @@ class kategoriaSlowa():
     def __init__(self, name, counter, pages, tabelka, outputFile):
         self.name = name
         self.counter = counter
-        self.pages = u'Wikipedysta:AlkamidBot/sjp/' + pages
-        self.buffer = u''
+        self.pages = 'Wikipedysta:AlkamidBot/sjp/' + pages
+        self.buffer = ''
         self.tabelka = tabelka
-        self.outputFile = u'output/' + outputFile
+        self.outputFile = 'output/' + outputFile
         self.limit = 0
     def addLimit(self, limit):
         self.limit = limit

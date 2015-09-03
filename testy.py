@@ -1,49 +1,60 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# szuka danego przez szukany_tekst wyrażenia w hasłach
+from statystyka import *
+import klasa
 
-import codecs
-from pywikibot import Category
-import pywikibot
-from pywikibot import pagegenerators
-import re
-from pywikibot import xmlreader
-import datetime
-import time
-from klasa import *
+def test(haslo):
 
-def meanings():
+    lista_stron2 = haslo
+    for a in lista_stron2:
+        print(a)
+        #if (i<1000):
+        try: haslo = klasa.Haslo(a)
+        except sectionsNotFound:
+            pass
+        except WrongHeader:
+            pass
+        else:
+            if haslo.type != 5:
+                for b in haslo.listLangs:
+                    #print haslo.title
+                    if b.type != 2 and b.type != 3:
+                        if b.langLong == 'termin obcy w języku polskim':
+                            b.langLong = 'język polski'
+                        b.pola()
+                        if not b.inflectedOnly:
+                            print((countLength(b.content)))
 
-	global data
-	data = '20110512'
-	#lista_stron1 = xmlreader.XmlDump('plwiktionary-%s-pages-articles.xml' % data)
-	print 'hohoho'
-	file = open('output/ttt.txt', 'w')
-	file.write('aaa'.encode( "utf-8" ))
-	file.close
-	
-	site_en = pywikibot.Site('en', 'wiktionary')
-	commons = pywikibot.Site('commons', 'commons')
-	
-	try: pywikibot.ImagePage(site_en, u'File:Hacienda Chac, Yucatán (02).JPG').fileIsShared()
-	except pywikibot.NoPage:
-		pass
-	except pywikibot.IsRedirectPage:
-		pass
-	else:
-		try: tmpget = pywikibot.ImagePage(commons, u'File:Hacienda Chac, Yucatán (02).JPG').get()
-		except pywikibot.NoPage or pywikibot.IsRedirectPage:
-			pass
-		except pywikibot.IsRedirectPage:
-			pass
-		else:
-			if not '{{ARlicense' in tmpget:
-				print 'hop'
-	
-	
-if __name__ == '__main__':
-    try:
-        meanings()
-    finally:
-        pywikibot.stopme()
+
+def testNew(haslo):
+
+    temps = deletedTemplates()
+
+    lista_stron2 = haslo
+    for a in lista_stron2:
+        #if (i<1000):
+        try: haslo = klasa.Haslo(a)
+        except sectionsNotFound:
+            pass
+        except WrongHeader:
+            pass
+        else:
+            if haslo.type != 5:
+                for b in haslo.listLangs:
+                    #print haslo.title
+                    if b.type != 2 and b.type != 3:
+                        if b.langLong == 'termin obcy w języku polskim':
+                            b.langLong = 'język polski'
+                        b.pola()
+                        if not b.inflectedOnly:
+                            #print b.content
+                            print((countLength(b.content, temps)))
+
+
+#word = [u'gaciara', u'gacić', u'gąbka', u'galant', u'gargantuizm']
+word = ['poniedziałek', 'gacić', 'gargantuizm']
+word = ['galaktyka']
+
+testNew(word)
+#test(word)
