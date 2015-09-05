@@ -757,32 +757,30 @@ def checkForNewDumps(lastUpdate):
             return tempDate
     return 1
 
-def getListFromXML(data, findLatest=False):
+def getListFromXML(date, findLatest=False):
     #converts a wikimedia dump to a python generator of xml entries
     #if findLatest True, it will search for the newest dump in dumps folder
 
-    filename = config.path['dumps'] + '%s/plwiktionary-%s-pages-articles.xml.bz2' % (data,data)
+    filename = config.path['dumps'] + '{0}/plwiktionary-{0}-pages-articles.xml.bz2'.format(date)
     
     if findLatest:
         now = datetime.datetime.now()
-        today_year = now.year
         checked = now
         found = 0
 
         while checked > (now - datetime.timedelta(days=90)):
-            if found == 1:
-                break
 
             tempDate = checked.strftime('%Y%m%d')
-            tempFilename = config.path['dumps'] + tempDate
+            tempFilename = config.path['dumps'] + '{0}/plwiktionary-{0}-pages-articles.xml.bz2'.format(tempDate)
 
-            checked = checked - datetime.timedelta(days=1) #checking day by day
-
-            if os.path.isdir(tempFilename):
+            if os.path.isfile(tempFilename):
                 found = 1
+                break
+
+            checked -= datetime.timedelta(days=1) #checking day by day
                 
         if found:
-            filename = tempFilename + '/plwiktionary-%s-pages-articles.xml.bz2' % (tempDate)
+            filename = tempFilename
     
     if os.path.isfile(filename):
         generator = xmlreader.XmlDump.parse(xmlreader.XmlDump(filename))
@@ -791,7 +789,6 @@ def getListFromXML(data, findLatest=False):
         print(filename)
         raise DumpNotFound
 
-    #return list(lista_stron)
 
 def log(text, filename='log_all', test_mode=0):
     if test_mode == 1:
