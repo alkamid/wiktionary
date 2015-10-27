@@ -23,21 +23,24 @@ def brakCzesciMowy(data):
 
     LangsMediaWiki = getAllLanguages()
 
-    for a in lista_stron:
-        try: word = Haslo(a)
-        except notFromMainNamespace:
-            pass
-        except sectionsNotFound:
-            pass
-        except WrongHeader:
-            pass
-        else:
-            if word.type == 3:
-                for lang in word.listLangs:
-                    if lang.type != 2 and lang.type != 7:
-                        lang.pola()
-                        if lang.type == 5:
-                            notFoundList['%s' % lang.lang].append(lang.title)
+    with open('output/missing_pos.txt', 'w') as f:
+        for a in lista_stron:
+            try: word = Haslo(a)
+            except notFromMainNamespace:
+                pass
+            except sectionsNotFound:
+                pass
+            except WrongHeader:
+                pass
+            else:
+                if word.type == 3:
+                    for lang in word.listLangs:
+                        if lang.type != 2 and lang.type != 7:
+                            lang.pola()
+                            if lang.type == 5:
+                                notFoundList['%s' % lang.lang].append(lang.title)
+                                print(lang.title)
+                                f.write(lang.title + '\n')
 
     for a in LangsMediaWiki:
         if notFoundList['%s' % a.shortName]:

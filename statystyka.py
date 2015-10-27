@@ -12,7 +12,7 @@ from pywikibot import xmlreader
 import math
 import collections
 from klasa import *
-import mwparserfromhell
+import mwparserfromhell as mwp
 
 def countRanks(langStats):
 
@@ -198,7 +198,7 @@ def countLength(content, templates):
     (declination, conjugation etc.) they contain many explicitly named parameters, so only parameter values count
     towards the total length'''
     if 'odmiana-' in content:
-        parsed = mwparserfromhell.parse(content)
+        parsed = mwp.parse(content)
         tempsFound = parsed.filter_templates()
         for t in tempsFound:
             if 'odmiana-' in t.name:
