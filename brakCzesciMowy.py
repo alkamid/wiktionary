@@ -49,9 +49,8 @@ def brakCzesciMowy(data):
                 text += '\n*[[%s]]' % (b)
             text += '\n'
 
-    file = open('output/missing_pos.txt', 'w')
-    file.write(text)
-    file.close
+    with open('output/missing_pos.txt', 'w') as f:
+        f.write(text)
 
     outputPage.text = text
     outputPage.save(comment="Aktualizacja listy", botflag=False)
