@@ -23,7 +23,7 @@ def brakCzesciMowy(data):
 
     LangsMediaWiki = getAllLanguages()
 
-    with open('output/missing_pos.txt', 'w') as f:
+    with open('output/missing_pos.txt', encoding='utf-8', mode='w') as f:
         for a in lista_stron:
             try: word = Haslo(a)
             except notFromMainNamespace:
@@ -39,7 +39,7 @@ def brakCzesciMowy(data):
                             lang.pola()
                             if lang.type == 5:
                                 notFoundList['%s' % lang.lang].append(lang.title)
-                                print(lang.title)
+                                #print(lang.title)
                                 f.write(lang.title + '\n')
 
     for a in LangsMediaWiki:
@@ -49,8 +49,8 @@ def brakCzesciMowy(data):
                 text += '\n*[[%s]]' % (b)
             text += '\n'
 
-    with open('output/missing_pos.txt', 'w') as f:
-        f.write(text)
+    #with open('output/missing_pos.txt', encoding='utf-8', mode='w') as f:
+    #    f.write(text)
 
     outputPage.text = text
     outputPage.save(comment="Aktualizacja listy", botflag=False)
