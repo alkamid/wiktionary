@@ -48,20 +48,12 @@ def main():
 
     statSite = pywikibot.Page(site, 'Wikipedysta:AlkamidBot/statystyka/wizyty')
 
-    for i in range(24):
+    for hour in range(24):
 
-        if i < 10:
-            hour = '0%d' % i
-        else:
-            hour = '%d' % i
+        for seconds in range(25):
 
-        for j in range(25):
-            if j<10:
-                j = '0%d' % j
-            else:
-                j = '%d' % j
             folder = config.path['pagecounts']
-            filename = '%s/%s-%s/pagecounts-%s-%s00%s.gz' % (date_string[:4], date_string[:4], date_string[4:6], date_string, hour, j)
+            filename = '{0}/{1}-{2}/pagecounts-{3}-{4:02d}00{5:02d}.gz'.format(date_string[:4], date_string[:4], date_string[4:6], date_string, hour, seconds)
 
             try: inp = gzip.open(folder + filename)
             except IOError:
@@ -84,7 +76,7 @@ def main():
                         a[1] = a[1].decode('string-escape').decode('iso-8859-2')
                     except ValueError:
                         #this is to ignore ValueError: Trailing \ in string
-                        continue
+                        pass
 
 
                     #if the page is not in the dictionary, add it with the initial count; if it is in dictionary, sum the visits
@@ -120,10 +112,9 @@ def main():
     text += '\n|}'
     text = text.replace('_', ' ')
 
-    file = open("%soutput/visits.txt" % config.path['scripts'], 'w')
-    file.write(textFile)
-    file.close
-
+    with open('{0}output/visits.txt'.format(config.path['scripts']), encoding='utf-8', mode='w') as f:
+        f.write(textFile)
+    
     statSite.text = text
     statSite.save(comment = 'aktualizacja', botflag=False)
 
