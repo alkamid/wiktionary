@@ -53,7 +53,7 @@ def main():
 
             folder = config.path['pagecounts']
             filename = '{0}/{1}-{2}/pagecounts-{3}-{4:02d}00{5:02d}.gz'.format(date_string[:4], date_string[:4], date_string[4:6], date_string, hour, seconds)
-            try: inp = gzip.open(folder + filename, mode='rt')
+            try: inp = gzip.open(folder + filename, encoding='utf-8', mode='rt')
             except IOError:
                 continue
 
