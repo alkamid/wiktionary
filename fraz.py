@@ -64,9 +64,8 @@ def fraz(data):
                 text += '\n*[[%s]] <nowiki>| *[[%s]]</nowiki> →' % (b, b)
             text += '\n'
 
-    file = open('output/fraz.txt', 'w')
-    file.write(text)
-    file.close
+    with open('output/fraz.txt', encoding='utf-8', mode='w') as f:
+        f.write(text)
 
     outputPage.text = text
     outputPage.save(comment="Aktualizacja listy", botflag=False)
