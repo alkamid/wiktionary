@@ -9,7 +9,6 @@ import glob #need this to remove files
 import subprocess
 import pywikibot
 import urllib.request, urllib.parse, urllib.error
-import urllib.request, urllib.error, urllib.parse
 import datetime
 import gzip
 import config
@@ -54,8 +53,7 @@ def main():
 
             folder = config.path['pagecounts']
             filename = '{0}/{1}-{2}/pagecounts-{3}-{4:02d}00{5:02d}.gz'.format(date_string[:4], date_string[:4], date_string[4:6], date_string, hour, seconds)
-
-            try: inp = gzip.open(folder + filename)
+            try: inp = gzip.open(folder + filename, mode='rt')
             except IOError:
                 continue
 
@@ -63,37 +61,21 @@ def main():
 
         try:
             for line in inp:
+                
                 #only process lines starting with "pl.d" which means pl.wiktionary
                 if line[:4] == 'pl.d':
-
+                    
                     #the lines should look like this: pl.d pagename visits size, where size is the size of the content returned
                     a = line.split()
 
-                    #I don't know why, but the lines may differ in encoding, it is therefore necessary to check both encodings
+                    #convert %-escaped characters to utf-8
                     a[1] = urllib.parse.unquote(a[1])
-                    try: a[1] = a[1].decode('string-escape').decode('utf-8')
-                    except UnicodeDecodeError:
-                        a[1] = a[1].decode('string-escape').decode('iso-8859-2')
-                    except ValueError:
-                        #this is to ignore ValueError: Trailing \ in string
-                        pass
-
-
+                    
                     #if the page is not in the dictionary, add it with the initial count; if it is in dictionary, sum the visits
-                    try: rankingDict[a[1]]
-                    except KeyError:
-                        try: rankingDict[a[1]] = int(a[2])
-                        except ValueError:
-                            # if a[2] is not an integer, then there probably is a space in the pagename, which there shouldn't be, so just ignore these pages (they won't have significant count anyway)
-                            print('The number of counts is not an integer! The entire line reads: "%s"' % line)
-                    else:
-                        try: rankingDict[a[1]] += int(a[2])
-                        except ValueError:
-                            # if a[2] is not an integer, then there probably is a space in the pagename, which there shouldn't be, so just ignore these pages (they won't have significant count anyway
-                            print('The number of counts is not an integer! The entire line reads: "%s"' % line)
+                    rankingDict[a[1]] = rankingDict.get(a[1], 0) + int(a[2])
         except IOError:
             pass
-        print(hour) #- just for debugging, shows which hour we are in
+        #print(hour) #- just for debugging, shows which hour we are in
         inp.close
 
     ranking = sorted(list(rankingDict.items()), key=itemgetter(1), reverse=True)
