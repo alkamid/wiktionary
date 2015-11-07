@@ -41,21 +41,18 @@ def missingLangs(data):
 
     missingText = ''
 
-    for a in lista_stron:
-        try: word = Haslo(a)
-        except notFromMainNamespace:
-            pass
-        except sectionsNotFound:
-            pass
-        except WrongHeader:
-            pass
-        else:
-            if word.type == 3:
-                for lang in word.listLangs:
-                    if lang.type != 2:
-                        if lang.lang in diff:
-                            missingText = missingText + '%s - %s\n' % (lang.lang, word.title)
-
-    file = open('%soutput/missingLangs.txt' % (config.path['scripts']), 'w')
-    file.write(missingText)
-    file.close()
+    with open('%soutput/missingLangs.txt' % (config.path['scripts']), encoding='utf-8', mode='w') as f:
+        for a in lista_stron:
+            try: word = Haslo(a)
+            except notFromMainNamespace:
+                pass
+            except sectionsNotFound:
+                pass
+            except WrongHeader:
+                pass
+            else:
+                if word.type == 3:
+                    for lang in word.listLangs:
+                        if lang.type != 2:
+                            if lang.lang in diff:
+                                f.write('%s - %s\n' % (lang.lang, word.title))

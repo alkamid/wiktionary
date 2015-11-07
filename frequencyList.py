@@ -122,14 +122,11 @@ def frequencyList(data):
         outputPage.save(comment='aktualizacja')
 
     htmllist += '</body></html>'
-    file = open('%spublic_html/frequencyListPL.html' % (config.path['home']), 'w')
-    file.write(htmllist)
-    file.close
+    with open('%spublic_html/frequencyListPL.html' % (config.path['home']), encoding='utf-8', mode='w') as f:
+        f.write(htmllist)
 
-    file = open('%soutput/frequencyListPL.txt' % (config.path['scripts']), 'w')
-    file.write(nonExistingText)
-    file.close
-
+    with open('%soutput/frequencyListPL.txt' % (config.path['scripts']), encoding='utf-8', mode='w') as f:
+        f.write(nonExistingText)
 
 #if __name__ == "__main__":
 #    frequencyList('20141024')

@@ -77,6 +77,7 @@ def rzeczownikRodzaj(data):
             if len(text) < lenHalf:
                 text += '== %s ==' % (a.longName)
                 text += '\nRodzaju nie posiada \'\'\'%.1f%%\'\'\' rzeczowników' % (float(len(notFoundList[a.shortName]))/float(allNounsCount[a.shortName])*100.0)
+
                 for b in notFoundList['%s' % a.shortName]:
                     text += '\n*[[%s]]' % (b)
                 text += '\n'
@@ -87,13 +88,12 @@ def rzeczownikRodzaj(data):
                     text2 += '\n*[[%s]]' % (b)
                 text2 += '\n'
 
-    file = open('output/bez_rodzaju_1.txt', 'w')
-    file.write(text)
-    file.close
+                
+    with open('output/bez_rodzaju_1.txt', encoding='utf-8', mode='w') as f:
+        f.write(text)
 
-    file = open('output/bez_rodzaju_2.txt', 'w')
-    file.write(text2)
-    file.close
+    with open('output/bez_rodzaju_2.txt', encoding='utf-8', mode='w') as f:
+        f.write(text2)
 
     outputPage1.text = text
     outputPage2.text = text2
