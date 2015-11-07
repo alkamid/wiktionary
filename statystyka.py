@@ -3,7 +3,6 @@
 
 # statystyka długości haseł - pobiera ja z xml
 
-import codecs
 from pywikibot import Category
 import pywikibot
 from pywikibot import pagegenerators
@@ -297,10 +296,9 @@ def licz_jezyki(dump_date):
         if statList[c].countWords:
             text += '%s\t%.1f\t%.0f\t%.0f\t%.0f\t%.1f\t%.0f\t%.1f\t%.0f\t%.2f\t%.0f\t%.1f\t%d\t%d\t%d\t%d\t%d\t%d\t%d' % (statList[c].shortName, statList[c].avgLen, statList[c].countWords, statList[c].countLen/1000.0, statList[c].countAudio, statList[c].percAudio, statList[c].countGraph, statList[c].percGraph, statList[c].countMeans, statList[c].avgMean, statList[c].countRef, statList[c].percRef, statList[c].rank['countWords'], statList[c].rank['countMeans'], statList[c].rank['countLen'], statList[c].rank['avgLen'], statList[c].rank['percAudio'], statList[c].rank['percGraph'], statList[c].rank['percRef'])
 
-    output_file = open(filename, 'w')
-    output_file.write(text)
-    output_file.close()
-
+    with open(filename, encoding='utf-8', mode='w') as f:
+        f.write(text)
+    
     return statList
 
 
@@ -537,20 +535,15 @@ def stat_wikitable(old, new):
     filename_multi_old = "output/multi_old_%s.txt" % (data)
     filename_znacz_old = "output/znacz_old_%s.txt" % (data)
 
-    file = open(filename_dlugosc, 'w')
-    file.write(text_dlugosc)
-    file.close
-    file = open(filename_srednia, 'w')
-    file.write(text_srednia)
-    file.close
-    file = open(filename_multimedia, 'w')
-    file.write(text_multimedia)
-    file.close
-    file = open(filename_znaczenia, 'w')
-    file.write(text_znaczenia)
-    file.close
-
-
+    with open(filename_dlugosc, encoding='utf-8', mode='w') as f:
+        f.write(text_dlugosc)
+    with open(filename_srednia, encoding='utf-8', mode='w') as f:
+        f.write(text_srednia)
+    with open(filename_multimedia, encoding='utf-8', mode='w') as f:
+        f.write(text_multimedia)
+    with open(filename_znaczenia, encoding='utf-8', mode='w') as f:
+        f.write(text_znaczenia)
+    
     page_dlugosc.text = text_dlugosc
     page_srednia.text = text_srednia
     page_multimedia.text = text_multimedia
@@ -576,11 +569,10 @@ def stat_wikitable(old, new):
         page_AudioCount_templ.save(comment="Aktualizacja statystyk, dane z %s" % data_slownie)
         page_AudioPerc_templ.save(comment="Aktualizacja statystyk, dane z %s" % data_slownie)
     else:
-        file = codecs.open('outstat.txt', 'w')
         myout = text_dlugosc + '\n\n\n' + text_srednia + '\n\n\n' + text_multimedia + '\n\n\n' + text_znaczenia + '\n\n\n' + text_dane + '\n\n\n' + text_dlugosc_template + '\n\n\n' + text_srednia_template + '\n\n\n' + text_GraphCount_template + '\n\n\n' + text_GraphPerc_template + '\n\n\n' + text_AudioCount_template + '\n\n\n' + text_AudioPerc_template
-        file.write(myout)
-        file.close()
-
+        with open('outstat.txt', encoding='utf-8', mode='w') as f:
+            f.write(myout)
+        
 
 def dlaczego(new):
     site = pywikibot.getSite()
