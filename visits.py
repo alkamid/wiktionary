@@ -70,7 +70,7 @@ def main():
 
                     #convert %-escaped characters to utf-8
                     a[1] = urllib.parse.unquote(a[1])
-                    
+                                        
                     #if the page is not in the dictionary, add it with the initial count; if it is in dictionary, sum the visits
                     rankingDict[a[1]] = rankingDict.get(a[1], 0) + int(a[2])
         except IOError:
@@ -78,6 +78,7 @@ def main():
         #print(hour) #- just for debugging, shows which hour we are in
         inp.close
 
+    rankingDict.pop('1', None) # sometimes pagecounts file lists '1' with an unreasonable number of views - I'm deleting it manually here
     ranking = sorted(list(rankingDict.items()), key=itemgetter(1), reverse=True)
 
     text = 'Statystyka wizyt na stronach z %s. Nie obejmuje przestrzeni nazw: Plik, Szablon, Specjalna, Kategoria, Dyskusja Wikipedysty.' % data_slownie
@@ -97,8 +98,8 @@ def main():
     with open('{0}output/visits.txt'.format(config.path['scripts']), encoding='utf-8', mode='w') as f:
         f.write(textFile)
     
-    statSite.text = text
-    statSite.save(comment = 'aktualizacja', botflag=False)
+    #statSite.text = text
+    #statSite.save(comment = 'aktualizacja', botflag=False)
 
     #cleanup  - only if you download files along the way
     '''os.chdir('/mnt/user-store/alkamid/stats/')
