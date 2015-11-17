@@ -98,8 +98,8 @@ def main():
     with open('{0}output/visits.txt'.format(config.path['scripts']), encoding='utf-8', mode='w') as f:
         f.write(textFile)
     
-    #statSite.text = text
-    #statSite.save(comment = 'aktualizacja', botflag=False)
+    statSite.text = text
+    statSite.save(comment = 'aktualizacja', botflag=False)
 
     #cleanup  - only if you download files along the way
     '''os.chdir('/mnt/user-store/alkamid/stats/')
