@@ -56,6 +56,8 @@ def main():
             try: inp = gzip.open(folder + filename, encoding='utf-8', mode='rt')
             except IOError:
                 continue
+            else:
+                break
 
             #here was the code used for downloading pagecounts, moved to the end of this file
 
@@ -75,10 +77,10 @@ def main():
                     rankingDict[a[1]] = rankingDict.get(a[1], 0) + int(a[2])
         except IOError:
             pass
-        #print(hour) #- just for debugging, shows which hour we are in
+        #print(folder + filename) #- just for debugging, shows which hour we are in
         inp.close
 
-    rankingDict.pop('1', None) # sometimes pagecounts file lists '1' with an unreasonable number of views - I'm deleting it manually here
+    #rankingDict.pop('1', None) # sometimes pagecounts file lists '1' with an unreasonable number of views - I'm deleting it manually here
     ranking = sorted(list(rankingDict.items()), key=itemgetter(1), reverse=True)
 
     text = 'Statystyka wizyt na stronach z %s. Nie obejmuje przestrzeni nazw: Plik, Szablon, Specjalna, Kategoria, Dyskusja Wikipedysty.' % data_slownie
@@ -87,7 +89,7 @@ def main():
 
     i = 0
     for a in ranking:
-        if (i<limitEntriesTo) and 'Plik:' not in a[0] and 'Szablon:' not in a[0] and 'Specjalna:' not in a[0] and 'Kategoria:' not in a[0] and 'Special:' not in a[0] and 'Dyskusja Wikipedysty:' not in a[0] and 'admin/' not in a[0]:
+        if (i<limitEntriesTo) and 'Plik:' not in a[0] and 'Szablon:' not in a[0] and 'Specjalna:' not in a[0] and 'Kategoria:' not in a[0] and 'Special:' not in a[0] and 'Dyskusja Wikipedysty:' not in a[0] and 'admin/' not in a[0] and not a[0].isdigit():
             textFile = textFile + '\n%s|%d' % (a[0], a[1])
             text = text + '\n|-\n|[[%s]]\n|%d' % (a[0], a[1])
             i += 1
