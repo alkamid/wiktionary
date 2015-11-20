@@ -80,7 +80,6 @@ def main():
         #print(folder + filename) #- just for debugging, shows which hour we are in
         inp.close
 
-    #rankingDict.pop('1', None) # sometimes pagecounts file lists '1' with an unreasonable number of views - I'm deleting it manually here
     ranking = sorted(list(rankingDict.items()), key=itemgetter(1), reverse=True)
 
     text = 'Statystyka wizyt na stronach z %s. Nie obejmuje przestrzeni nazw: Plik, Szablon, Specjalna, Kategoria, Dyskusja Wikipedysty.' % data_slownie
