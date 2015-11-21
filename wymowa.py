@@ -218,7 +218,7 @@ def main():
     #print r
     output_r.put(r, comment = 'Aktualizacja listy słów bez litery r')
 
-    with open('%s/public_html/pron_with_r.html' % (os.environ['HOME']), 'w') as f:
+    with open('%s/public_html/pron_with_r.html' % (os.environ['HOME']), encoding='utf-8', mode='w') as f:
         f.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"\n"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\n<html xmlns="http://www.w3.org/1999/xhtml\nxml:lang="pl">\n<head>\n<meta http-equiv="content-type" content="text/html; charset=UTF-8" />\n</head><body>')
         f.write('<br />' + data1 + '\n')
         
