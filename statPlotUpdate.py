@@ -1,4 +1,3 @@
-#import urllib.request as urllib
 import urllib.request, urllib.error, urllib.parse
 from lxml import etree, html
 from datetime import date, timedelta
@@ -26,7 +25,7 @@ def update():
 
     with open("stat-data.csv", "a+") as myfile:
         myfile.seek(0)
-        last_line = myfile.readlines()[-1].split()
+        last_line = myfile.readlines()[-1].split(',')
         if last_line[0] != dateEarlier.strftime('%m-%Y'):
             myfile.write("%s,%s,%s\n" % (dateEarlier.strftime("%m-%Y"), page, entry))
 
