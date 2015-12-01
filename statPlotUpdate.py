@@ -5,6 +5,7 @@ from datetime import date, timedelta
 from subprocess import call
 import upload
 import pywikibot
+from statPlot import monthly_stat_plot
 
 def update():
 
@@ -23,13 +24,13 @@ def update():
     dateToday = date.today()
     dateEarlier = dateToday - timedelta(days=5)
 
-    with open("stat-data.dat", "a+") as myfile:
+    with open("stat-data.csv", "a+") as myfile:
         myfile.seek(0)
         last_line = myfile.readlines()[-1].split()
         if last_line[0] != dateEarlier.strftime('%m-%Y'):
-            myfile.write("%s\t%s\t%s\n" % (dateEarlier.strftime("%m-%Y"), page, entry))
+            myfile.write("%s,%s,%s\n" % (dateEarlier.strftime("%m-%Y"), page, entry))
 
-    call(["gnuplot", "wikislownik.plt"])
+    monthly_stat_plot()
 
     targetFilename = 'Wzrost_Wikislownika.svg'
     fname = 'Wzrost_Wikislownika.svg'
