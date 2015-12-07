@@ -53,6 +53,8 @@ def fraz(data):
                     try: lang.subSections['znaczenia'].text
                     except AttributeError:
                         pass
+                    except KeyError:
+                        print('{0} / {1}: znaczenia not found'.format(word.title, listLangs.lang))
                     else:
                         if lang.type != 2 and 'związek frazeologiczny' in lang.subSections['znaczenia'].text and '[[%s]]' % word.title not in phraseList['%s' % lang.lang]:
                             notFoundList['%s' % lang.lang].append(word.title)
