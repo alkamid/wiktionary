@@ -2,12 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import pywikibot
-from pywikibot import pagegenerators
 import re
-from pywikibot import xmlreader
 import collections
 from klasa import *
-
 
 def czescimowy(data):
 
@@ -57,7 +54,7 @@ def czescimowy(data):
 
     pretext = 'W poniższych hasłach trzeba poprawić nazwę części mowy. Jeśli znajduje się tutaj poprawny opis części mowy, można go dopisać na [[Wikipedysta:AlkamidBot/części_mowy/dozwolone|listę dozwolonych]]. Jeśli jakiś błąd powtarza się zbyt często, można dopisać go na [[Wikipedysta:AlkamidBot/części_mowy/zamiana|listę automatycznej zamiany]] lub zgłosić to [[Dyskusja wikipedysty:Alkamid|Alkamidowi]]. Ostatnia aktualizacja wg zrzutu bazy danych z %s.\n' % (data_slownie)
 
-    for a in lista:
+    for a in lista1:
         ifex = 0
         try: h = Haslo(a)
         except sectionsNotFound:
@@ -75,11 +72,18 @@ def czescimowy(data):
                             #generowanie tabelki na wiki
                             s_spacje = re.search(re_spacje, d[0])
                             temp = d[0]
+                            
                             if s_spacje:
                                 temp = '\'\'%s\'\'' % s_spacje.group(1).strip()
+                            
+                            # sometimes <ref> appears in the middle of POS description, and after removing references
+                            # we are left with '''' — these need to be removed
+                            temp = temp.replace('\'\'\'\'', '')
+
                             if temp in allowedParts:
                                 if len(allowedParts[temp]) == 0 or c.lang in allowedParts[temp]:
                                     found = 1
+
                             s_przyslowie = re.search(re_przyslowie, temp)
                             s_forma = re.search(re_forma, temp)
                             s_morfem = re.search(re_morfem, temp)
@@ -126,7 +130,7 @@ def czescimowy(data):
                 tabelka += '%s, ' % b
 
     tabelka += '\n|}'
-
+    
     outputPage.text = pretext + '\n' + tabelka
     outputPage.save(comment="Aktualizacja listy", botflag=False)
 
@@ -134,3 +138,4 @@ def czescimowy(data):
         f.write(tabelka)
     with open("output/czescimowy_input.txt", encoding='utf-8', mode='w') as f:
         f.write(final_input)
+    
