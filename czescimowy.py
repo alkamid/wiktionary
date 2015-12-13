@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 import pywikibot
@@ -8,7 +7,7 @@ from klasa import *
 
 def czescimowy(data):
 
-    data_slownie = data[6] + data[7] + '.' + data[4] + data[5] + '.' + data[0] + data[1] + data[2] + data[3]
+    data_slownie = data[6:8] + '.' + data[4:6] + '.' + data[0:4]
     site = pywikibot.getSite()
     allowedPage = pywikibot.Page(site, 'Wikipedysta:AlkamidBot/części_mowy/dozwolone')
     outputPage = pywikibot.Page(site, 'Wikipedysta:AlkamidBot/części_mowy/wszystkie')
@@ -45,7 +44,7 @@ def czescimowy(data):
     # four apostrophes (e.g. in "vergehen"). The regex below is to remove
     # them, but only if they are not preceded/followed by other apostrophes
     # (that would break reflective words, e.g. "apunhalar")
-    re_apostrophes = re.compile(r'([^\'])\'\'\s*\'\'([^\'])')
+    re_apostrophes = re.compile(r'([^\'])\'\'(\s*)\'\'([^\'])')
 
     re_spacje = re.compile(r'\'\'(.*?)\'\'$')
     re_zwrotnyFr = re.compile(r'\'\'\'\'\'(s\'|se ).*?\'\'\', czasownik zwrotny\'\'$')
@@ -76,7 +75,7 @@ def czescimowy(data):
                         for d in c.znaczeniaDetail:
                             found = 0
                             d[0] = re.sub(re_ref, '', d[0])
-                            d[0] = re.sub(re_apostrophes, r'\1\2', d[0]) 
+                            d[0] = re.sub(re_apostrophes, r'\1\2\3', d[0]) 
                             #generowanie tabelki na wiki
                             s_spacje = re.search(re_spacje, d[0])
                             temp = d[0]
@@ -134,10 +133,10 @@ def czescimowy(data):
                 tabelka += '%s, ' % b
 
     tabelka += '\n|}'
-    '''
+    
     outputPage.text = pretext + '\n' + tabelka
     outputPage.save(comment="Aktualizacja listy", botflag=False)
-    '''
+    
     with open("output/czescimowy_tabelka.txt", encoding='utf-8', mode='w') as f:
         f.write(tabelka)
     with open("output/czescimowy_input.txt", encoding='utf-8', mode='w') as f:
