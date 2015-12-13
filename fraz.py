@@ -11,7 +11,8 @@ from klasa import *
 
 def fraz(data):
 
-    data_slownie = data[6] + data[7] + '.' + data[4] + data[5] + '.' + data[0] + data[1] + data[2] + data[3]
+    data_slownie = data[6:8] + '.' + data[4:6] + '.' + data[0:4]
+
     lista_stron = getListFromXML(data)
     site = pywikibot.Site('pl', 'wiktionary')
     outputPage = pywikibot.Page(site, 'Wikipedysta:AlkamidBot/listy/związki_frazeologiczne')
@@ -37,15 +38,18 @@ def fraz(data):
             phraseList['%s' % a.shortName] = ''
         except pywikibot.IsRedirectPage:
             print('redirect')
+        else:
+            phraseList['%s' % a.shortName] = ifExists
+
 
     for a in lista_stron:
         try: word = Haslo(a)
         except notFromMainNamespace:
-            pass
+            continue
         except sectionsNotFound:
-            pass
+            continue
         except WrongHeader:
-            pass
+            continue
         else:
             if word.type == 3:
                 for lang in word.listLangs:
@@ -53,7 +57,9 @@ def fraz(data):
                         lang.pola()
                     try: lang.subSections['znaczenia'].text
                     except AttributeError:
-                        continue
+                        pass
+                    except KeyError:
+                        print('{0} / {1}: znaczenia not found'.format(word.title, lang.lang))
                     else:
                         if lang.type != 2 and 'związek frazeologiczny' in lang.subSections['znaczenia'].text and '[[{0}]]'.format(word.title) not in phraseList[lang.lang]:
                             notFoundList['%s' % lang.lang].append(word.title)
