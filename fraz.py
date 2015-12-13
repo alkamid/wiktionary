@@ -38,8 +38,6 @@ def fraz(data):
             phraseList['%s' % a.shortName] = ''
         except pywikibot.IsRedirectPage:
             print('redirect')
-        else:
-            phraseList['%s' % a.shortName] = ifExists
 
 
     for a in lista_stron:
