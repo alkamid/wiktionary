@@ -10,8 +10,8 @@ from klasa import *
 
 def fraz(data):
 
-    data_slownie = data[6:8] '.' + data[4:6] '.' + data[0:4]
-    print(data_slownie)
+    data_slownie = data[6:8] + '.' + data[4:6] + '.' + data[0:4]
+
     lista_stron = getListFromXML(data)
     wikt = pywikibot.Site('pl', 'wiktionary')
     outputPage = pywikibot.Page(wikt, 'Wikipedysta:AlkamidBot/listy/związki_frazeologiczne')
@@ -36,6 +36,7 @@ def fraz(data):
         else:
             phraseList['%s' % a.shortName] = ifExists
 
+
     for a in lista_stron:
         try: word = Haslo(a)
         except notFromMainNamespace:
@@ -46,7 +47,7 @@ def fraz(data):
             continue
         else:
             if word.type == 3:
-                print(word.title)
+                
                 for lang in word.listLangs:
                     if lang.type != 2:
                         lang.pola()
@@ -69,7 +70,7 @@ def fraz(data):
     with open('output/fraz.txt', encoding='utf-8', mode='w') as f:
         f.write(text)
 
-    '''
+    
     outputPage.text = text
     outputPage.save(comment="Aktualizacja listy", botflag=False)
-    '''
+    
