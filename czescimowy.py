@@ -39,7 +39,7 @@ def czescimowy(data):
     re_przyslowie = re.compile(r'\'\'{{przysłowie .*?}}\'\'$')
     re_forma = re.compile(r'(\'\'|){{forma (czasownika|rzeczownika|przymiotnika|zaimka|liczebnika|rodzajnika|przysłówka)\|[a-z]*?}}(\'\'|)$')
     re_morfem = re.compile(r'\'\'{{morfem\|[a-z]*?(}}|\|(przyrostek|przedrostek|przyrostkowy|przedrostkowy)}})\'\'$')
-    re_ref = re.compile(r'\s*<ref.*?(</ref>|/>)\s*')
+    re_ref = re.compile(r'*<ref.*?(</ref>|/>)*')
     
     # depending on the position of <ref> in POS, it might leave behind
     # four apostrophes (e.g. in "vergehen"). The regex below is to remove
