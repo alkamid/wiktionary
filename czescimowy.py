@@ -40,9 +40,16 @@ def czescimowy(data):
     re_forma = re.compile(r'(\'\'|){{forma (czasownika|rzeczownika|przymiotnika|zaimka|liczebnika|rodzajnika|przysłówka)\|[a-z]*?}}(\'\'|)$')
     re_morfem = re.compile(r'\'\'{{morfem\|[a-z]*?(}}|\|(przyrostek|przedrostek|przyrostkowy|przedrostkowy)}})\'\'$')
     re_ref = re.compile(r'\s*<ref.*?(</ref>|/>)\s*')
+    
+    # depending on the position of <ref> in POS, it might leave behind
+    # four apostrophes (e.g. in "vergehen"). The regex below is to remove
+    # them, but only if they are not preceded/followed by other apostrophes
+    # (that would break reflective words, e.g. "apunhalar")
+    re_apostrophes = re.compile(r'([^\'])\'\'\s*\'\'([^\'])')
+
     re_spacje = re.compile(r'\'\'(.*?)\'\'$')
     re_zwrotnyFr = re.compile(r'\'\'\'\'\'(s\'|se ).*?\'\'\', czasownik zwrotny\'\'$')
-    re_zwrotny = re.compile(r'\'\'czasownik zwrotny \'\'\'(.*?)\'\'\'$')
+    re_zwrotny = re.compile(r'\'\'czasownik zwrotny \'\'\'(.*?)(\'\'\'|\')$')
     re_nieprzechodni_dk_ndk = re.compile(r'\'\'czasownik( (nie|)przechodni|)( (nie|)dokonany|)( lub (nie|)dokonany|)\'\' \({{(n|)dk}} (\[\[(.*?)\]\]|\'\'brak\'\')\)$') #potem można usunąć | z "przechodni" i "dokonany" - wymóg, by wszystkie czasowniki posiadały informację o przechodniości i aspekcie
     re_zwrotny_dk_ndk = re.compile(r'\'\'czasownik zwrotny( (nie|)dokonany|)( lub (nie|)dokonany|) \'\'\'(.*?)(się|sobie)\'\'\'\'\' \({{(n|)dk}} (\[\[(.*?)(się|sobie)\]\]|\'\'brak\'\')\)$')
     re_zwrotny_sie_in_title = re.compile(r'\'\'czasownik zwrotny( (nie|)dokonany|)( lub (nie|)dokonany|)\'\' \({{(n|)dk}} (\[\[(.*?)(się|sobie)\]\]|\'\'brak\'\')\)$')
@@ -69,6 +76,7 @@ def czescimowy(data):
                         for d in c.znaczeniaDetail:
                             found = 0
                             d[0] = re.sub(re_ref, '', d[0])
+                            d[0] = re.sub(re_apostrophes, r'\1\2', d[0]) 
                             #generowanie tabelki na wiki
                             s_spacje = re.search(re_spacje, d[0])
                             temp = d[0]
@@ -76,10 +84,6 @@ def czescimowy(data):
                             if s_spacje:
                                 temp = '\'\'%s\'\'' % s_spacje.group(1).strip()
                             
-                            # sometimes <ref> appears in the middle of POS description, and after removing references
-                            # we are left with '''' — these need to be removed
-                            temp = temp.replace('\'\'\'\'', '')
-
                             if temp in allowedParts:
                                 if len(allowedParts[temp]) == 0 or c.lang in allowedParts[temp]:
                                     found = 1
@@ -97,6 +101,7 @@ def czescimowy(data):
                                 s_zwrotny_sie_in_title = 0
 
                             if not found and not s_przyslowie and not s_forma and not s_morfem and not s_zwrotny and not s_zwrotnyFr and not s_zwrotny_dk_ndk and not s_nieprzechodni_dk_ndk and not s_zwrotny_sie_in_title:
+                                print('dododania')
                                 try: lista_na_wiki[temp]
                                 except KeyError:
                                     lista_na_wiki[temp] = collections.defaultdict()
@@ -130,10 +135,10 @@ def czescimowy(data):
                 tabelka += '%s, ' % b
 
     tabelka += '\n|}'
-    
+    '''
     outputPage.text = pretext + '\n' + tabelka
     outputPage.save(comment="Aktualizacja listy", botflag=False)
-
+    '''
     with open("output/czescimowy_tabelka.txt", encoding='utf-8', mode='w') as f:
         f.write(tabelka)
     with open("output/czescimowy_input.txt", encoding='utf-8', mode='w') as f:
