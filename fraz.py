@@ -47,6 +47,7 @@ def fraz(data):
             pass
         else:
             if word.type == 3:
+                print(word.title)
                 for lang in word.listLangs:
                     if lang.type != 2:
                         lang.pola()
