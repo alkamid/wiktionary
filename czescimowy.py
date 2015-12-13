@@ -39,7 +39,7 @@ def czescimowy(data):
     re_przyslowie = re.compile(r'\'\'{{przysłowie .*?}}\'\'$')
     re_forma = re.compile(r'(\'\'|){{forma (czasownika|rzeczownika|przymiotnika|zaimka|liczebnika|rodzajnika|przysłówka)\|[a-z]*?}}(\'\'|)$')
     re_morfem = re.compile(r'\'\'{{morfem\|[a-z]*?(}}|\|(przyrostek|przedrostek|przyrostkowy|przedrostkowy)}})\'\'$')
-    re_ref = re.compile(r'*<ref.*?(</ref>|/>)*')
+    re_ref = re.compile(r'<ref.*?(</ref>|/>)*')
     
     # depending on the position of <ref> in POS, it might leave behind
     # four apostrophes (e.g. in "vergehen"). The regex below is to remove
@@ -101,7 +101,6 @@ def czescimowy(data):
                                 s_zwrotny_sie_in_title = 0
 
                             if not found and not s_przyslowie and not s_forma and not s_morfem and not s_zwrotny and not s_zwrotnyFr and not s_zwrotny_dk_ndk and not s_nieprzechodni_dk_ndk and not s_zwrotny_sie_in_title:
-                                print('dododania')
                                 try: lista_na_wiki[temp]
                                 except KeyError:
                                     lista_na_wiki[temp] = collections.defaultdict()
