@@ -54,7 +54,7 @@ def czescimowy(data):
 
     pretext = 'W poniższych hasłach trzeba poprawić nazwę części mowy. Jeśli znajduje się tutaj poprawny opis części mowy, można go dopisać na [[Wikipedysta:AlkamidBot/części_mowy/dozwolone|listę dozwolonych]]. Jeśli jakiś błąd powtarza się zbyt często, można dopisać go na [[Wikipedysta:AlkamidBot/części_mowy/zamiana|listę automatycznej zamiany]] lub zgłosić to [[Dyskusja wikipedysty:Alkamid|Alkamidowi]]. Ostatnia aktualizacja wg zrzutu bazy danych z %s.\n' % (data_slownie)
 
-    for a in lista1:
+    for a in lista:
         ifex = 0
         try: h = Haslo(a)
         except sectionsNotFound:
