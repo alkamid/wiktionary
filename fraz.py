@@ -13,8 +13,8 @@ def fraz(data):
 
     data_slownie = data[6] + data[7] + '.' + data[4] + data[5] + '.' + data[0] + data[1] + data[2] + data[3]
     lista_stron = getListFromXML(data)
-    wikt = pywikibot.Site('pl', 'wiktionary')
-    outputPage = pywikibot.Page(wikt, 'Wikipedysta:AlkamidBot/listy/związki_frazeologiczne')
+    site = pywikibot.Site('pl', 'wiktionary')
+    outputPage = pywikibot.Page(site, 'Wikipedysta:AlkamidBot/listy/związki_frazeologiczne')
 
     tempLangs = []
 
@@ -25,17 +25,18 @@ def fraz(data):
 
     LangsMediaWiki = getAllLanguages()
 
+    # prepare a dictionary of phrase indexes. If an index page doesn't exist
+    # assign a blank page to it
+
     for a in LangsMediaWiki:
         #print a.shortName
-        indexPageName = 'Indeks:%s_-_Związki_frazeologiczne' % a.upperName
-        try:
-            ifExists = pywikibot.Page(wikt, indexPageName).get()
+        indexPageName = 'Indeks:{0}_-_Związki_frazeologiczne'.format(a.upperName)
+        
+        try: phraseList[a.shortName] = pywikibot.Page(site, indexPageName).get()
         except pywikibot.NoPage:
             phraseList['%s' % a.shortName] = ''
         except pywikibot.IsRedirectPage:
             print('redirect')
-        else:
-            phraseList['%s' % a.shortName] = ifExists
 
     for a in lista_stron:
         try: word = Haslo(a)
@@ -52,9 +53,9 @@ def fraz(data):
                         lang.pola()
                     try: lang.subSections['znaczenia'].text
                     except AttributeError:
-                        pass
+                        continue
                     else:
-                        if lang.type != 2 and 'związek frazeologiczny' in lang.subSections['znaczenia'].text and '[[%s]]' % word.title not in phraseList['%s' % lang.lang]:
+                        if lang.type != 2 and 'związek frazeologiczny' in lang.subSections['znaczenia'].text and '[[{0}]]'.format(word.title) not in phraseList[lang.lang]:
                             notFoundList['%s' % lang.lang].append(word.title)
 
     for a in LangsMediaWiki:
