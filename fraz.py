@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 import pywikibot
@@ -11,7 +10,8 @@ from klasa import *
 
 def fraz(data):
 
-    data_slownie = data[6] + data[7] + '.' + data[4] + data[5] + '.' + data[0] + data[1] + data[2] + data[3]
+    data_slownie = data[6:8] + '.' + data[4:6] + '.' + data[0:4]
+
     lista_stron = getListFromXML(data)
     wikt = pywikibot.Site('pl', 'wiktionary')
     outputPage = pywikibot.Page(wikt, 'Wikipedysta:AlkamidBot/listy/związki_frazeologiczne')
@@ -26,7 +26,6 @@ def fraz(data):
     LangsMediaWiki = getAllLanguages()
 
     for a in LangsMediaWiki:
-        #print a.shortName
         indexPageName = 'Indeks:%s_-_Związki_frazeologiczne' % a.upperName
         try:
             ifExists = pywikibot.Page(wikt, indexPageName).get()
@@ -37,22 +36,26 @@ def fraz(data):
         else:
             phraseList['%s' % a.shortName] = ifExists
 
+
     for a in lista_stron:
         try: word = Haslo(a)
         except notFromMainNamespace:
-            pass
+            continue
         except sectionsNotFound:
-            pass
+            continue
         except WrongHeader:
-            pass
+            continue
         else:
             if word.type == 3:
+                
                 for lang in word.listLangs:
                     if lang.type != 2:
                         lang.pola()
                     try: lang.subSections['znaczenia'].text
                     except AttributeError:
                         pass
+                    except KeyError:
+                        print('{0} / {1}: znaczenia not found'.format(word.title, lang.lang))
                     else:
                         if lang.type != 2 and 'związek frazeologiczny' in lang.subSections['znaczenia'].text and '[[%s]]' % word.title not in phraseList['%s' % lang.lang]:
                             notFoundList['%s' % lang.lang].append(word.title)
@@ -67,5 +70,7 @@ def fraz(data):
     with open('output/fraz.txt', encoding='utf-8', mode='w') as f:
         f.write(text)
 
+    
     outputPage.text = text
     outputPage.save(comment="Aktualizacja listy", botflag=False)
+    
