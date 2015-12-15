@@ -95,7 +95,7 @@ class HasloSJP():
         parser = etree.HTMLParser()
 
         while True:
-            try: sjpsite = urllib.request.urlopen('http://www.sjp.pl/%s' % urllib.parse.quote(a)))
+            try: sjpsite = urllib.request.urlopen('http://www.sjp.pl/%s' % urllib.parse.quote(a))
             except urllib.error.HTTPError:
                 print('httperror')
                 return 0
