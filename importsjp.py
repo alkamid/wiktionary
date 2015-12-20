@@ -67,13 +67,13 @@ def checkFlexSJP(forma):
 
 
 class HasloSJP():
-    def __init__(self, a, grabExisting = False):
+    def __init__(self, a, grabExisting = False, noWiki = False):
         self.words = []
         self.numWords = 0
         self.type = 1
         self.problems = {'kilka_znaczen' : 0, 'kilka_form_odmiany' : 0, 'synonimy' : 0, 'obcy' : 0, 'ndm' : 0, 'rodzaj' : 0, 'brak_znaczenia' : 0, 'przymiotnik_od' : 0}
 
-        if not grabExisting:
+        if not noWiki and not grabExisting:
             try: ifExists = Haslo(a)
             except sectionsNotFound:
                 pass
@@ -87,7 +87,7 @@ class HasloSJP():
             if self.retrieve(a) == 0:
                 self.type = 0
             else:
-                self.meanings()
+                self.meanings(noWiki)
 
 
 
@@ -139,7 +139,7 @@ class HasloSJP():
                 temp.addDictionary(xp_dictionary[j].text)
                 temp.addFlex(xp_flex[j].text)
 
-                numTr = len(tables[j])/2
+                numTr = len(tables[j])//2
 
                 for i in range(numTr-4):
                     ii = i+3
@@ -152,35 +152,42 @@ class HasloSJP():
                         temp.addFlags([tables[j][2*ii-1], tables[j][2*ii].split(', ')])
 
                 self.words.append(temp)
+            else:		
+                temp = Word(xp_title, notRoot = True)		
+                self.words.append(temp)
 
-    def meanings(self):
+    def meanings(self, noWiki=False):
         re_mean = re.compile('(?<![2-9])[0-9]\.(.*?)(?=<br />[0-9]\.|$)', re.DOTALL)
         re_osoba = re.compile('[0-9]{4}')
         #poniï¿½ej lista znaczeï¿½ odrzucanych od razu - moï¿½na siï¿½ zastanowiï¿½ nad imionami
         for a in self.words:
-            s_osoba = re.search(re_osoba, a.tempMean)
-            if a.tempMean == '' or a.tempMean == '(brak znaczenia)':
-                a.tempMean = ''
-                self.problems['brak_znaczenia'] = 1
-            if s_osoba or 'nazwisko' in a.tempMean or 'wie¶ w' in a.tempMean or 'imiê mêskie' in a.tempMean or 'imiê ¿eñskie' in a.tempMean:
-                a.addMean(None)
-                a.noMean = 1
-            else:
-                re_czytaj = re.compile(r'\[czytaj\:(.*?)\]\s*')
-                s_czytaj = re.search(re_czytaj, a.tempMean)
-                if s_czytaj:
-                    a.obcy = 1
-                    a.wymowa = s_czytaj.group(1).strip()
-                    a.tempMean = re.sub(re_czytaj, '', a.tempMean)
-                s_mean = re.findall(re_mean, a.tempMean)
-                if s_mean:
-                    for b in range(len(s_mean)):
-                        s_mean[b] = s_mean[b].strip()
-                        s_mean[b] = s_mean[b].rstrip(';')
-                        tempMean = Meaning(s_mean[b])
+            if not a.notRoot:
+                s_osoba = re.search(re_osoba, a.tempMean)
+                if a.tempMean == '' or a.tempMean == '(brak znaczenia)':
+                    a.tempMean = ''
+                    self.problems['brak_znaczenia'] = 1
+                if s_osoba or 'nazwisko' in a.tempMean or 'wie¶ w' in a.tempMean or 'imiê mêskie' in a.tempMean or 'imiê ¿eñskie' in a.tempMean:
+                    a.addMean(None)
+                    a.noMean = 1
+                elif not noWiki:
+                    re_czytaj = re.compile(r'\[czytaj\:(.*?)\]\s*')
+                    s_czytaj = re.search(re_czytaj, a.tempMean)
+                    if s_czytaj:
+                        a.obcy = 1
+                        a.wymowa = s_czytaj.group(1).strip()
+                        a.tempMean = re.sub(re_czytaj, '', a.tempMean)
+                    s_mean = re.findall(re_mean, a.tempMean)
+                    if s_mean:
+                        for b in range(len(s_mean)):
+                            s_mean[b] = s_mean[b].strip()
+                            s_mean[b] = s_mean[b].rstrip(';')
+                            tempMean = Meaning(s_mean[b], noWiki)
+                            a.addMean(tempMean)
+                    else:
+                        tempMean = Meaning(a.tempMean, noWiki)
                         a.addMean(tempMean)
-                else:
-                    tempMean = Meaning(a.tempMean)
+                else:		
+                    tempMean = Meaning(a.tempMean, noWiki)		
                     a.addMean(tempMean)
 
     def checkProblems(self):
@@ -206,8 +213,9 @@ class HasloSJP():
 
 
 class Word():
-    def __init__(self, title):
+    def __init__(self, title, notRoot = False):
         self.title = title
+        self.notRoot = notRoot	
         self.flags = []
         self.meanings = []
         self.czescMowy = 0 # mo¿liwo¶ci: 1 rzeczownik, 2 ndm (nie wiadomo), 3 przymiotnik, 4 czasownik
@@ -614,21 +622,25 @@ def kodujOdmiane(word,rdzen=0):
     return ''.join(wynik)
 
 class Meaning():
-    def __init__(self, temp_definition):
+    def __init__(self, temp_definition, noWiki=False):
         re_definition = re.compile('(.*?)(;(?! [a-z]\))|$)')
-        if 'a)' in temp_definition or 'b)' in temp_definition or 'c)' in temp_definition:
-            self.synonyms = None
-            s_definition = temp_definition
+        if noWiki:
+            self.definition = temp_definition
         else:
-            self.synonyms = self.synonymsSearch(temp_definition)
-            s_definition = re.search(re_definition, temp_definition)
-            if s_definition:
-                s_definition = s_definition.group(1)
-            else:
+            if 'a)' in temp_definition or 'b)' in temp_definition or 'c)' in temp_definition:
+                self.synonyms = None
                 s_definition = temp_definition
+            else:
+                self.synonyms = self.synonymsSearch(temp_definition)
+                s_definition = re.search(re_definition, temp_definition)
+                if s_definition:
+                    s_definition = s_definition.group(1)
+                else:
+                    s_definition = temp_definition
 
-        self.definition = meanProcess(s_definition)
-        self.definition = wikilink(self.definition)
+        if not noWiki:
+            self.definition = meanProcess(s_definition)
+            self.definition = wikilink(self.definition)
 
 
     def synonymsSearch(self, definition):
