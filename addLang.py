@@ -16,12 +16,12 @@ def main():
 
     '''Start input - remember to change the variables below!'''
 
-    shortName = 'niwchijski' #short language name, i.e. without "język"
+    shortName = 'nanajski' #short language name, i.e. without "język"
     shortOnly = 0 #some languages are referred to by their name only, e.g. "esperanto" (not "esperanto language") - in that case, set shortOnly to 1
-    kod = 'mis' #wikimedia or ISO code
-    jakie = 'niwchijskie' #adjective: polski -> polskie, esperanto -> esperanckie, volapuk -> volapuk
-    zjezyka = 'niwchijskiego' #"z' #"z języka polskiego", "z esperanto", "z języka akan"
-    etymSkr = 'niwch' #abbreviation to use in {{etym}} template, chosen arbitrarily
+    kod = 'gld' #wikimedia or ISO code
+    jakie = 'nanajskie' #adjective: polski -> polskie, esperanto -> esperanckie, volapuk -> volapuk
+    zjezyka = 'nanajskiego' #"z' #"z języka polskiego", "z esperanto", "z języka akan"
+    etymSkr = 'nanaj' #abbreviation to use in {{etym}} template, chosen arbitrarily
 
     '''End input'''
 
@@ -159,29 +159,30 @@ def main():
         pywikibot.output('Nazwa języka (%s) istnieje już w szablonie {{etym/język}}' % shortName)
         
 
-
     #9. MediaWiki:Gadget-langdata.js
     page10 = pywikibot.Page(site, 'MediaWiki:Gadget-langdata.js')
-    if '"%s"' % (shortName) not in page10.get():
+    if '"%s"' % (shortName) not in page10.text:
         zaczepienie = '\n\t},\n\tshortLangs:'
         re_before = re.compile(r'(.*?)%s' % re.escape(zaczepienie), re.DOTALL)
         re_after = re.compile(r'.*?(%s.*)' % re.escape(zaczepienie), re.DOTALL)
-        s_before = re.search(re_before, page10.get())
-        s_after = re.search(re_after, page10.get())
+        s_before = re.search(re_before, page10.text)
+        s_after = re.search(re_after, page10.text)
         if s_before and s_after:
             textPage10 = s_before.group(1)
             textPage10 += ',\n\t\t"%s"\t :"%s"' % (shortName, kod)
             textPage10 += s_after.group(1)
             page10.text = textPage10
+            site.logout()
+            site.login(sysop=True) # need to be sysop to edit this page
             page10.save(summary='Dodanie języka {0}'.format(zjezyka), as_group='sysop')
             #print textPage10
         else:
             pywikibot.output('Nie dodano parametru do strony MediaWiki:Gadget-langdata.js!')
     else:
         pywikibot.output('Nazwa języka (%s) istnieje już na stronie MediaWiki:Gadget-langdata.js' % shortName)
+    
 
     #8. Moduł:statystyka/dane
-
     page8 = pywikibot.Page(site, 'Moduł:statystyka/dane')
     if '%s' % shortName not in page8.get():
         textPage8 = page8.get()[:-40] + page8.get()[-40:].replace("\tdate =", "\t{ '%s' },\n\tdate =" % shortName)
