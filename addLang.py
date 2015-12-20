@@ -16,12 +16,12 @@ def main():
 
     '''Start input - remember to change the variables below!'''
 
-    shortName = 'lakota' #short language name, i.e. without "język"
+    shortName = 'niwchijski' #short language name, i.e. without "język"
     shortOnly = 0 #some languages are referred to by their name only, e.g. "esperanto" (not "esperanto language") - in that case, set shortOnly to 1
-    kod = 'lkt' #wikimedia or ISO code
-    jakie = 'lakota' #adjective: polski -> polskie, esperanto -> esperanckie, volapuk -> volapuk
-    zjezyka = 'lakota' #"z' #"z języka polskiego", "z esperanto", "z języka akan"
-    etymSkr = 'lak' #abbreviation to use in {{etym}} template, chosen arbitrarily
+    kod = 'mis' #wikimedia or ISO code
+    jakie = 'niwchijskie' #adjective: polski -> polskie, esperanto -> esperanckie, volapuk -> volapuk
+    zjezyka = 'niwchijskiego' #"z' #"z języka polskiego", "z esperanto", "z języka akan"
+    etymSkr = 'niwch' #abbreviation to use in {{etym}} template, chosen arbitrarily
 
     '''End input'''
 
@@ -85,11 +85,12 @@ def main():
             pywikibot.output('Nie dodano parametru do szablonu {{indeks}}!')
     else:
         pywikibot.output('Nazwa języka (%s) istnieje już  w szablonie {{indeks}}' % shortName)
-
+    
     #6. {{dopracować}}
     page6 = pywikibot.Page(site, 'Szablon:dopracować')
     if ' %s=' % shortName not in page6.get():
-        zaczepienie = ' |#default=Należy w nim poprawić: \'\'{{{1}}}\'\'[[Kategoria:Hasła do dopracowania|{{BASEPAGENAME}}]]'
+        zaczepienie = ' |#default=<br>Należy w nim poprawić: <i>{{{1}}}</i>[[Kategoria:Hasła do dopracowania|{{BASEPAGENAME}}]]'
+        #zaczepienie = ' |#default=Należy w nim poprawić: \'\'{{{1}}}\'\'[[Kategoria:Hasła do dopracowania|{{BASEPAGENAME}}]]'
         re_before = re.compile(r'(.*?)%s' % re.escape(zaczepienie), re.DOTALL)
         re_after = re.compile(r'.*?(%s.*)' % re.escape(zaczepienie), re.DOTALL)
         s_before = re.search(re_before, page6.get())
@@ -104,7 +105,7 @@ def main():
             pywikibot.output('Nie dodano parametru do szablonu {{dopracować}}!')
     else:
         pywikibot.output('Nazwa języka (%s) istnieje już w szablonie {{dopracować}}' % shortName)
-
+    
     #7. skróty do sekcji
     page7 = pywikibot.Page(site, 'Wikisłownik:Kody języków')
     if ' %s\n' % shortName not in page7.get():
@@ -126,7 +127,7 @@ def main():
 
     #7a. etymologia - kategoria
     page71 = pywikibot.Page(site, 'Kategoria:%s w etymologii' % longNameCapital)
-    try: page1.get()
+    try: page71.get()
     except pywikibot.NoPage:
         textPage71 = '__HIDDENCAT__\n[[Kategoria:%s| ]]\n[[Kategoria:Relacje etymologiczne|%s]]' % (longNameCapital, shortName)
         page71.put(textPage71, comment="Dodanie języka %s" % zjezyka)
