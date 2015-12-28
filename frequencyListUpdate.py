@@ -6,7 +6,7 @@ import pywikibot as pwb
 import config
 from klasa import *
 
-def main():
+def frequencyListUpdate():
 
     site = pwb.Site()
     table = {}
@@ -65,6 +65,6 @@ def main():
 
 if __name__ == '__main__':
     try:
-        main()
+        frequencyListUpdate()
     finally:
         pwb.stopme()
