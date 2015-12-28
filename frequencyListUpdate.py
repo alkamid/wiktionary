@@ -1,28 +1,17 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# szuka danego przez szukany_tekst wyrażenia w hasłach
-
 import codecs
-from pywikibot import Category
-import pywikibot
-from pywikibot import pagegenerators
-import re
+import pywikibot as pwb
 import config
-from pywikibot import xmlreader
-from os import environ
 from klasa import *
 
 def main():
 
-    site = pywikibot.Site()
-    files = {}
+    site = pwb.Site()
     table = {}
-    file = codecs.open('%soutput/frequencyListPL.txt' % (config.path['scripts']), 'r', 'utf-8')
 
-    #table = u'<div class="plainlinks">\n{| border="0"\n! POLSKIE\n! NIEPOLSKIE\n|-\n| valign="top" |'
     table = '\n{| class="wikitable sortable"\n! słowo !! linków '
-    #table['rest'] = u'\n{| class="wikitable sortable"\n! słowo !! linków '
 
     i=1
     dluga = 0 # mozna wygenerowac dluga liste, ktora bedzie zapisywala sie na stronie /Najbardziej potrzebne - dluga lista
@@ -31,48 +20,51 @@ def main():
     else:
         limit = 500
 
-    for line in file:
-        if i>limit:
-            break
-        tmp = line.split('=')
+    with open('{0}output/frequencyListPL.txt'.format(config.path['scripts']), encoding='utf-8', mode='r') as f:
 
-        found = 0
-        page = pywikibot.Page(site, tmp[0].strip())
-        try: page.get()
-        except pywikibot.NoPage:
-            pass
-        except pywikibot.IsRedirectPage:
-            pass
-        except pywikibot.InvalidTitle:
-            continue
-        except TypeError:
-            pass
-        else:
-            if page.namespace():
+        for line in f:
+            if i>limit:
+                break
+            tmp = line.split('=')
+
+            found = 0
+            page = pwb.Page(site, tmp[0].strip())
+            try: page.get()
+            except pwb.NoPage:
+                pass
+            except pwb.IsRedirectPage:
+                pass
+            except pwb.InvalidTitle:
                 continue
-            found = 1
-
-        if not found:
-            if dluga:
-                table += '\n|-\n| [[%s]] || %d' % (tmp[0], int(tmp[1]))
+            except TypeError:
+                pass
             else:
-                table += '\n|-\n| [[%s]] || [{{fullurl:Specjalna:Linkujące|limit=500&from=0&target=%s}} %d]' % (tmp[0], tmp[0].replace(' ', '_'), int(tmp[1]))
-            i += 1
+                if page.namespace():
+                    continue
+                found = 1
+
+            if not found:
+                if dluga:
+                    table += '\n|-\n| [[{0}]] || {1}'.format(tmp[0], int(tmp[1]))
+                else:
+                    table += '\n|-\n| [[{0}]] || [{{fullurl:Specjalna:Linkujące|limit=500&from=0&target={1}}} {2}]'.format(tmp[0], tmp[0].replace(' ', '_'), int(tmp[1]))
+                i += 1
 
     table += '\n|-\n|}'
 
-    file = open('%soutput/frequencyProcessedTable.txt' % config.path['scripts'], 'w')
-    file.write(table)
-    file.close()
-    if dluga:
-        outputPage = pywikibot.Page(site, 'Wikipedysta:AlkamidBot/listy/Najbardziej_potrzebne_-_długa_lista')
-    else:
-        outputPage = pywikibot.Page(site, 'Wikipedysta:AlkamidBot/listy/Najbardziej_potrzebne')
+    with open('{0}output/frequencyProcessedTable.txt'.format(config.path['scripts']), 'w') as g:
+        g.write(table)
 
-    outputPage.put(table, comment='aktualizacja')
+    if dluga:
+        outputPage = pwb.Page(site, 'Wikipedysta:AlkamidBot/listy/Najbardziej_potrzebne_-_długa_lista')
+    else:
+        outputPage = pwb.Page(site, 'Wikipedysta:AlkamidBot/listy/Najbardziej_potrzebne')
+
+    outputPage.text = table
+    outputPage.save(table, summary='aktualizacja')
 
 if __name__ == '__main__':
     try:
         main()
     finally:
-        pywikibot.stopme()
+        pwb.stopme()
