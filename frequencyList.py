@@ -2,11 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import codecs
-from pywikibot import Category
-import pywikibot
-from pywikibot import pagegenerators
+import pywikibot as pwb
 import re
-from pywikibot import xmlreader
 from klasa import *
 import config
 
@@ -14,18 +11,18 @@ import config
 # the list of words that are ignored in all frequency lists
 def getDeletedList():
     deleted = set()
-    site = pywikibot.Site()
-    pageDeleted = pywikibot.Page(site, 'Wikisłownik:Ranking brakujących tłumaczeń/zawsze usuwane')
+    site = pwb.Site()
+    pageDeleted = pwb.Page(site, 'Wikisłownik:Ranking brakujących tłumaczeń/zawsze usuwane')
     for line in pageDeleted.get().split('\n'):
         if line[0] == ':':
             lineList = line.split('[[')
             deleted.add(lineList[1].strip(']'))
     return deleted
 
-def frequencyList(data):
+def frequencyList(date):
 
-    site = pywikibot.Site()
-    lista_stron2 = getListFromXML(data)
+    site = pwb.Site()
+    lista_stron2 = getListFromXML(date)
     ranking = {}
     re_example_translation = re.compile('→(.*?)(?=\<ref|\n|$)')
     re_colloc_translation = re.compile('→(.*?)(?=\<ref|\n|•|;|$)')
@@ -116,7 +113,7 @@ def frequencyList(data):
 
     for num, elem in enumerate(alltext):
         elem = elem.strip()
-        outputPage = pywikibot.Page(site, 'Indeks:Polski - Najpopularniejsze słowa %d-%d' % (num*2000+1, (num+1)*2000))
+        outputPage = pwb.Page(site, 'Indeks:Polski - Najpopularniejsze słowa %d-%d' % (num*2000+1, (num+1)*2000))
         elem = 'Lista frekwencyjna języka polskiego na podstawie odnośników na stronach Wikisłownika.\n\n{{język linków|polski}}\n' + elem + '\n[[Kategoria:Polski (słowniki tematyczne)]]\n[[Kategoria:Listy frekwencyjne|polski]]'
         outputPage.text = elem
         outputPage.save(comment='aktualizacja')
