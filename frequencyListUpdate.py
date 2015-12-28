@@ -47,7 +47,7 @@ def frequencyListUpdate():
                 if dluga:
                     table += '\n|-\n| [[{0}]] || {1}'.format(tmp[0], int(tmp[1]))
                 else:
-                    table += '\n|-\n| [[{0}]] || [{{fullurl:Specjalna:Linkujące|limit=500&from=0&target={1}}} {2}]'.format(tmp[0], tmp[0].replace(' ', '_'), int(tmp[1]))
+                    table += '\n|-\n| [[{0}]] || [{{{{fullurl:Specjalna:Linkujące|limit=500&from=0&target={1}}}}} {2}]'.format(tmp[0], tmp[0].replace(' ', '_'), int(tmp[1]))
                 i += 1
 
     table += '\n|-\n|}'
