@@ -52,7 +52,7 @@ def frequencyListUpdate():
 
     table += '\n|-\n|}'
 
-    with open('{0}output/frequencyProcessedTable.txt'.format(config.path['scripts']), 'w') as g:
+    with open('{0}output/frequencyProcessedTable.txt'.format(config.path['scripts']), encoding='utf-8', mode='w') as g:
         g.write(table)
 
     if dluga:
