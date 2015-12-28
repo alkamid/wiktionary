@@ -61,7 +61,7 @@ def frequencyListUpdate():
         outputPage = pwb.Page(site, 'Wikipedysta:AlkamidBot/listy/Najbardziej_potrzebne')
 
     outputPage.text = table
-    outputPage.save(table, summary='aktualizacja')
+    outputPage.save(summary='aktualizacja')
 
 if __name__ == '__main__':
     try:
