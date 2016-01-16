@@ -4,7 +4,6 @@
 import codecs
 import pywikibot
 import urllib.request, urllib.parse, urllib.error
-import urllib.request, urllib.error, urllib.parse
 import http.client
 import re
 import collections
