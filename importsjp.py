@@ -60,7 +60,7 @@ def checkFlexSJP(forma):
         elif forma[-6:] in enie[2]:
             return forma[:-6] + 'enie'
     elif len(podstawowa) == 1:
-        return podstawowa[0]
+        return str(podstawowa[0])
     else:
         return None
 
