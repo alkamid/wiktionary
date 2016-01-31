@@ -908,6 +908,8 @@ def wikilink(phrase):
                         analysed = shortLink(morfAnalyse(s_word)[0], morfAnalyse(s_word)[1])
 
                 phraseOutput += ' {0}{1}{2}'.format(s_punctuation_around.group(1), analysed, s_punctuation_around.group(3))
+            else:
+                phraseOutput += word
 
             i+=1
             phraseOutput = phraseOutput.strip()
