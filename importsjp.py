@@ -857,12 +857,8 @@ def wikilink(phrase):
     re_punctuation_around = re.compile(r'([()\[\],;:.!?\-%/`\']*)?(\w+)([()\[\],;:.!?\-%/`\']*)') #TODO: add ua2014
 
     dontAnalyse = ['np.', 'm.in.', 'etc.', 'itd.', 'itp.', 'z', 'w', 'dziêki', 'co', 'po', 'pod', 'o']
-    dontAnalyseNawias1 = []
-    dontAnalyseNawias2 = []
-    dontAnalyseNawiasy = []
-    dontAnalysePrzecinek = []
-    enieAnie = ['eñ', 'enia', 'enie', 'eniu', 'eniem', 'eniom', 'eniach', 'eniami', 'añ', 'ania', 'anie', 'aniu', 'aniem', 'aniom', 'aniach', 'aniami']
-    dontAnalyse.append('od') # mo¿e byæ te¿ od 'oda'
+    enieAnie = ('enia', 'enie', 'eniu', 'eniem', 'eniom', 'eniach', 'eniami', 'añ', 'ania', 'anie', 'aniu', 'aniem', 'aniom', 'aniach', 'aniami')
+    dontAnalyse.append('od') # alt: "oda"
     dontAnalyse.append('byæ') # alt: "bycie"
     dontAnalyse.append('lub') # alt: "lubiæ"
     dontAnalyse.append('gdzie¶') # rozbija na "gdzie" i "by¶½"
@@ -871,13 +867,9 @@ def wikilink(phrase):
     dontAnalyse.append('kawa') # alt: "Kawa" (?)
     dontAnalyse.append('sposób') # alt: "sposobiæ½"
     dontAnalyse.append('i¶æ') # alt: "i¶ciæ
-    for a in dontAnalyse:
-        dontAnalyseNawias1.append('(%s' % a)
-        dontAnalyseNawias2.append('%s)' % a)
-        dontAnalyseNawiasy.append('(%s)' % a)
-        dontAnalysePrzecinek.append('%s,' % a)
+
     phraseOutput = ''
-    print(phraseTab)
+
     re_przymiotnikOd = re.compile(r'^przymiotnik od\:\s*(.*?)\s*$')
     s_przymiotnikOd = re.search(re_przymiotnikOd, phrase)
     if s_przymiotnikOd:
@@ -891,26 +883,30 @@ def wikilink(phrase):
             if s_punctuation_around:
                 analysed = ''
                 s_word = s_punctuation_around.group(2)
-                print(s_word)
+
                 if s_word in dontAnalyse:
                     analysed = '[[{0}]]'.format(s_punctuation_around.group(2))
-                elif s_word.endswith(('enia', 'enie', 'eniu', 'eniem', 'eniom', 'eniach', 'eniami', 'ania', 'anie', 'aniu', 'aniem', 'aniom', 'aniach', 'aniami')):
+
+                elif s_word.endswith(enieAnie):
                     checked = checkFlexSJP(s_word)
                     if checked:
                         analysed = shortLink(checked, s_word)
                     else:
                         analysed = shortLink(morfAnalyse(s_word)[0], morfAnalyse(s_word)[1])
+
                 elif i<n-1 and 'siê' in phraseTab[i+1]:
                     s_punctuation_around_sie = re.search(re_punctuation_around, phraseTab[i+1])
                     if s_punctuation_around_sie:
                         if s_punctuation_around_sie.group(2) == 'siê' and morfAnalyse(s_word)[2] and ('inf:' in morfAnalyse(s_word)[2] or 'pact:' in morfAnalyse(s_word)[2]):
                             analysed = shortLink(morfAnalyse(s_word)[0] + ' siê', word + ' siê') + s_punctuation_around_sie.group(3)
                             i += 1
+
                 elif len(s_word):
                     if '{{' in s_punctuation_around.group(1) and '}}' in s_punctuation_around.group(3):
                         analysed = s_word
                     else:
                         analysed = shortLink(morfAnalyse(s_word)[0], morfAnalyse(s_word)[1])
+
                 phraseOutput += ' {0}{1}{2}'.format(s_punctuation_around.group(1), analysed, s_punctuation_around.group(3))
 
             i+=1
