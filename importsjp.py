@@ -854,7 +854,7 @@ def wikilink(phrase):
     phraseTab = re.split(r'\s*', phrase)
 
     # https://regex101.com/r/yB6tQ8/1
-    re_punctuation_around = re.compile(r'([()\[\],;:.!?\-%/`\']*)?(\w+)([()\[\],;:.!?\-%/`\']*)') #TODO: add ua2014
+    re_punctuation_around = re.compile(r'([()\[\],;:.!?\-%/`\'"]*)?(\w+)([()\[\],;:.!?\-%/`\'"]*)') #TODO: add ua2014
 
     dontAnalyse = ['np.', 'm.in.', 'etc.', 'itd.', 'itp.', 'z', 'w', 'dziêki', 'co', 'po', 'pod', 'o']
     enieAnie = ('enia', 'enie', 'eniu', 'eniem', 'eniom', 'eniach', 'eniami', 'añ', 'ania', 'anie', 'aniu', 'aniem', 'aniom', 'aniach', 'aniami')
