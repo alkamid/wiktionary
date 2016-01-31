@@ -853,6 +853,9 @@ def wikilink(phrase):
     phrase = phrase.strip()
     phraseTab = re.split(r'\s*', phrase)
 
+    # https://regex101.com/r/yB6tQ8/1
+    re_punctuation_around = re.compile(r'([()\[\],;:.!?\-%/`\']*)?(\w+)([()\[\],;:.!?\-%/`\']*)') #TODO: add ua2014
+
     dontAnalyse = ['np.', 'm.in.', 'etc.', 'itd.', 'itp.', 'z', 'w', 'dziêki', 'co', 'po', 'pod', 'o']
     dontAnalyseNawias1 = []
     dontAnalyseNawias2 = []
@@ -884,45 +887,31 @@ def wikilink(phrase):
         i = 0
         while (i<n):
             word = phraseTab[i]
-            if word in dontAnalyse:
-                phraseOutput += ' [[%s]]' % word
-            elif word in dontAnalyseNawiasy:
-                phraseOutput += ' ([[%s]])' % word[1:-1]
-            elif word in dontAnalyseNawias1:
-                phraseOutput += ' ([[%s]]' % word[1:]
-            elif word in dontAnalyseNawias2:
-                phraseOutput += ' [[%s]])' % word[:-1]
-            elif word in dontAnalysePrzecinek:
-                phraseOutput += ' [[%s]],' % word[:-1]
-            elif word.endswith(('enia', 'enie', 'eniu', 'eniem', 'eniom', 'eniach', 'eniami', 'ania', 'anie', 'aniu', 'aniem', 'aniom', 'aniach', 'aniami')):
-                checked = checkFlexSJP(word)
-                if checked:
-                    phraseOutput += ' %s' % shortLink(checked, word)
-                else:
-                    phraseOutput += ' ' + shortLink(morfAnalyse(word)[0], morfAnalyse(word)[1])
-            elif i<n-1 and phraseTab[i+1].rstrip(',.;:)') == 'siê' and morfAnalyse(word)[2] and ('inf:' in morfAnalyse(word)[2] or 'pact:' in morfAnalyse(word)[2]):
-                if phraseTab[i+1][-2:] in ('),', ').', '):', ');'):
-                    phraseOutput += ' %s' % (shortLink(morfAnalyse(word)[0] + ' siê', word + ' siê')) + phraseTab[i+1][-2:]
-                elif phraseTab[i+1][-1] in ',.:);':
-                    phraseOutput += ' %s' % (shortLink(morfAnalyse(word)[0] + ' siê', word + ' siê')) + phraseTab[i+1][-1]
-                else:
-                    phraseOutput += ' %s' % (shortLink(morfAnalyse(word)[0] + ' siê', word + ' siê'))
-                i+=1
-            else:
-                if '{{' in word and '}}' in word:
-                    phraseOutput += ' %s' % word
-                elif len(word) and ((word[0] == '(' and word[-1] == ')') or (word[0] == '(' and word[-1] == ',')):
-                    phraseOutput += ' (%s)' % shortLink(morfAnalyse(word[1:-1])[0], morfAnalyse(word[1:-1])[1])
-                elif len(word) and word[0] == '(':
-                    phraseOutput += ' (%s' % shortLink(morfAnalyse(word[1:])[0], morfAnalyse(word[1:])[1])
-                elif len(word) and (word[-2:] == '),' or word[-2:] == ').' or word[-2:] == '):' or word[-2:] == ');'):
-                    phraseOutput += ' ' + shortLink(morfAnalyse(word[:-2])[0], morfAnalyse(word[:-2])[1]) + word[-2:]
-                elif len(word) and (word[-1] == ',' or word[-1] == '.' or word[-1] == ':' or word[-1] == ')' or word[-1] == ';'):
-                    phraseOutput += ' ' + shortLink(morfAnalyse(word[:-1])[0], morfAnalyse(word[:-1])[1]) + word[-1]
-                elif len(word) and ((word[0] == '\"' and word[-1] == '\"')):
-                    phraseOutput += ' \"{0}\"'.format(shortLink(morfAnalyse(word[1:-1])[0], morfAnalyse(word[1:-1])[1]))
-                else:
-                    phraseOutput += ' ' + shortLink(morfAnalyse(word)[0], morfAnalyse(word)[1])
+            s_punctuation_around = re.search(re_punctuation_around, word)
+            if s_punctuation_around:
+                analysed = ''
+                s_word = s_punctuation_around.group(2)
+                print(s_word)
+                if s_word in dontAnalyse:
+                    analysed = '[[{0}]]'.format(s_punctuation_around.group(2))
+                elif s_word.endswith(('enia', 'enie', 'eniu', 'eniem', 'eniom', 'eniach', 'eniami', 'ania', 'anie', 'aniu', 'aniem', 'aniom', 'aniach', 'aniami')):
+                    checked = checkFlexSJP(s_word)
+                    if checked:
+                        analysed = shortLink(checked, s_word)
+                    else:
+                        analysed = shortLink(morfAnalyse(s_word)[0], morfAnalyse(s_word)[1])
+                elif i<n-1 and 'siê' in phraseTab[i+1]:
+                    s_punctuation_around_sie = re.search(re_punctuation_around, phraseTab[i+1])
+                    if s_punctuation_around_sie:
+                        if s_punctuation_around_sie.group(2) == 'siê' and morfAnalyse(s_word)[2] and ('inf:' in morfAnalyse(s_word)[2] or 'pact:' in morfAnalyse(s_word)[2]):
+                            analysed = shortLink(morfAnalyse(s_word)[0] + ' siê', word + ' siê') + s_punctuation_around_sie.group(3)
+                            i += 1
+                elif len(s_word):
+                    if '{{' in s_punctuation_around.group(1) and '}}' in s_punctuation_around.group(3):
+                        analysed = s_word
+                    else:
+                        analysed = shortLink(morfAnalyse(s_word)[0], morfAnalyse(s_word)[1])
+                phraseOutput += ' {0}{1}{2}'.format(s_punctuation_around.group(1), analysed, s_punctuation_around.group(3))
 
             i+=1
             phraseOutput = phraseOutput.strip()
