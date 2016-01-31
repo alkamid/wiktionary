@@ -874,7 +874,7 @@ def wikilink(phrase):
         dontAnalyseNawiasy.append('(%s)' % a)
         dontAnalysePrzecinek.append('%s,' % a)
     phraseOutput = ''
-
+    print(phraseTab)
     re_przymiotnikOd = re.compile(r'^przymiotnik od\:\s*(.*?)\s*$')
     s_przymiotnikOd = re.search(re_przymiotnikOd, phrase)
     if s_przymiotnikOd:
@@ -900,11 +900,11 @@ def wikilink(phrase):
                     phraseOutput += ' %s' % shortLink(checked, word)
                 else:
                     phraseOutput += ' ' + shortLink(morfAnalyse(word)[0], morfAnalyse(word)[1])
-            elif i<n-1 and (phraseTab[i+1] == 'siê' or phraseTab[i+1] == 'siê,' or phraseTab[i+1] == 'siê.' or phraseTab[i+1] == 'siê;' or phraseTab[i+1] == 'siê)' or phraseTab[i+1] == 'siê),' or phraseTab[i+1] == 'siê);' or phraseTab[i+1] == 'siê).') and morfAnalyse(word)[2] and ('inf:' in morfAnalyse(word)[2] or 'pact:' in morfAnalyse(word)[2]):
-                if phraseTab[i+1][-1] == ',' or phraseTab[i+1][-1] == '.' or phraseTab[i+1][-1] == ':' or phraseTab[i+1][-1] == ')' or phraseTab[i+1][-1] == ';':
-                    phraseOutput += ' %s' % (shortLink(morfAnalyse(word)[0] + ' siê', word + ' siê')) + phraseTab[i+1][-1]
-                elif phraseTab[i+1][-2:] == '),' or phraseTab[i+1][-2:] == ').' or phraseTab[i+1][-2:] == '):' or phraseTab[i+1][-2:] == ');':
+            elif i<n-1 and phraseTab[i+1].rstrip(',.;:)') == 'siê' and morfAnalyse(word)[2] and ('inf:' in morfAnalyse(word)[2] or 'pact:' in morfAnalyse(word)[2]):
+                if phraseTab[i+1][-2:] in ('),', ').', '):', ');'):
                     phraseOutput += ' %s' % (shortLink(morfAnalyse(word)[0] + ' siê', word + ' siê')) + phraseTab[i+1][-2:]
+                elif phraseTab[i+1][-1] in ',.:);':
+                    phraseOutput += ' %s' % (shortLink(morfAnalyse(word)[0] + ' siê', word + ' siê')) + phraseTab[i+1][-1]
                 else:
                     phraseOutput += ' %s' % (shortLink(morfAnalyse(word)[0] + ' siê', word + ' siê'))
                 i+=1
@@ -919,6 +919,8 @@ def wikilink(phrase):
                     phraseOutput += ' ' + shortLink(morfAnalyse(word[:-2])[0], morfAnalyse(word[:-2])[1]) + word[-2:]
                 elif len(word) and (word[-1] == ',' or word[-1] == '.' or word[-1] == ':' or word[-1] == ')' or word[-1] == ';'):
                     phraseOutput += ' ' + shortLink(morfAnalyse(word[:-1])[0], morfAnalyse(word[:-1])[1]) + word[-1]
+                elif len(word) and ((word[0] == '\"' and word[-1] == '\"')):
+                    phraseOutput += ' \"{0}\"'.format(shortLink(morfAnalyse(word[1:-1])[0], morfAnalyse(word[1:-1])[1]))
                 else:
                     phraseOutput += ' ' + shortLink(morfAnalyse(word)[0], morfAnalyse(word)[1])
 
