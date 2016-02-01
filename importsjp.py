@@ -780,66 +780,52 @@ def morfAnalyse(word):
     if word == '':
         return [None, '', None]
     analiza = analyse(word, dag=1)
-    numWords = analiza[-1][1]
-    count = [] # tablica z zerami do wy³apywania ró¿nic w formach podstawowych
-    count_first = [] # tablica z zerami do ustawiania pierwszego elementu dla danego s³owa
-    found = 0
-    base = None
-    form = ''
-    text = ''
-    for counter in range(numWords):
-        count.append(0)
-        count_first.append(0)
-        seek_last = 0
-
-        for a in analiza: #Morfeusz rozbija s³owa z "¶" na koñcu na co¶ + by¶ (wtedy w analizie pojawia siê oznakowanie "aglt"
-            if a[2][2] and 'aglt' in a[2][2]:
-                count[counter] += 1
-        for for_helper, element in enumerate(analiza):
-            #print element
-            if element[0] == counter:
-                if seek_last == 0:
-                    seek_last = 1
-                if count_first[counter] == 0: # catch the first element
-                    pierwszy = element
-                    count_first[counter] = 1
-                if element[2][1] != pierwszy[2][1]: # if base form is different from the base form of the first elem, ++counter
-                    count[counter] += 1
-                    break
-            else:
-                if seek_last == 1:
-                    seek_last = 2
-
-            if seek_last == 2:
-                for_helper -= 1
-                break
-
-        # to jest trochê ryzykowne: je¶li Morfeusz widzi niejednoznaczno¶æ, wtedy skrypt sprawdza czy w sjp.pl to s³owo jest jednoznaczne. Przyk³ad: "temu" w sjp.pl ma wskazuje tylko na formê podstawow± "ten"
-        if count[counter] or analiza[for_helper][2][1] == None:
-            check = checkFlexSJP(word)
-            if check:
-                base = check
-                form = word
-                #text = text + shortLink(check, word)
-            else:
-                base = None
-                form = analiza[for_helper][2][0]
-                #text = text + analiza[for_helper][2][0]
-            type = None
-        elif analiza[for_helper][2][0] in ', ( ) ; - . : [ ]':
+    
+    if len(analiza) == 1:
+        return [analiza[0][2][1], word, analiza[0][2][2]]
+    else:
+        base_form = analiza[0][2][1]
+        ambig = 0
+        for elem in analiza:
+            if elem[2][1] != base_form:
+                ambig += 1
+        if ambig == 0:
+            return [analiza[0][2][1], word, None]
+        elif ambig == 1 and analiza[-1][2][2].startswith('aglt:'):
+            return [analiza[0][2][1], word, None]
+        else:
+            return [None, word, None]
+    '''
+    # to jest trochê ryzykowne: je¶li Morfeusz widzi niejednoznaczno¶æ, wtedy skrypt sprawdza czy w sjp.pl to s³owo jest jednoznaczne. Przyk³ad: "temu" w sjp.pl ma wskazuje tylko na formê podstawow± "ten"
+    if ambig:
+        #if count[counter] or analiza[for_helper][2][1] == None:
+        check = checkFlexSJP(word)
+        if check:
+            base = check
+            form = word
+            #text = text + shortLink(check, word)
+        else:
             base = None
             form = analiza[for_helper][2][0]
             #text = text + analiza[for_helper][2][0]
-            type = None
-        else:
-            base = analiza[for_helper][2][1]
-            form = analiza[for_helper][2][0]
-            #text = text + shortLink(analiza[for_helper][2][1], analiza[for_helper][2][0])
-            type = analiza[for_helper][2][2]
+        type = None
+    elif analiza[for_helper][2][0] in ', ( ) ; - . : [ ]':
+        base = None
+        form = analiza[for_helper][2][0]
+        #text = text + analiza[for_helper][2][0]
+        type = None
+    else:
+        base = analiza[for_helper][2][1]
+        form = analiza[for_helper][2][0]
+        #text = text + shortLink(analiza[for_helper][2][1], analiza[for_helper][2][0])
+        type = analiza[for_helper][2][2]
 
-    return [base, form, type]
+    return [base, form, type]'''
 
-def shortLink(base, flex):
+def shortLink(base, flex=None):
+    if flex == None:
+        flex = base[1]
+        base = base[0]
     if base == None:
         return flex
     else:
@@ -892,7 +878,7 @@ def wikilink(phrase):
                     if checked:
                         analysed = shortLink(checked, s_word)
                     else:
-                        analysed = shortLink(morfAnalyse(s_word)[0], morfAnalyse(s_word)[1])
+                        analysed = shortLink(morfAnalyse(s_word)[0:2])
 
                 elif i<n-1 and 'siê' in phraseTab[i+1]:
                     s_punctuation_around_sie = re.search(re_punctuation_around, phraseTab[i+1])
@@ -901,13 +887,15 @@ def wikilink(phrase):
                             analysed = shortLink(morfAnalyse(s_word)[0] + ' siê', word + ' siê') + s_punctuation_around_sie.group(3)
                             i += 1
                         else:
-                            analysed = shortLink(morfAnalyse(s_word)[0], morfAnalyse(s_word)[1])
+                            analysed = shortLink(morfAnalyse(s_word)[0:2])
 
                 elif len(s_word):
+                    print(s_punctuation_around.group(2))
                     if '{{' in s_punctuation_around.group(1) and '}}' in s_punctuation_around.group(3):
                         analysed = s_word
                     else:
-                        analysed = shortLink(morfAnalyse(s_word)[0], morfAnalyse(s_word)[1])
+                        print((morfAnalyse(s_word),s_word))
+                        analysed = shortLink(morfAnalyse(s_word)[0:2])
 
                 phraseOutput += ' {0}{1}{2}'.format(s_punctuation_around.group(1), analysed, s_punctuation_around.group(3))
             else:
