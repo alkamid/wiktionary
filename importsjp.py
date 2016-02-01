@@ -909,7 +909,7 @@ def wikilink(phrase):
 
                 phraseOutput += ' {0}{1}{2}'.format(s_punctuation_around.group(1), analysed, s_punctuation_around.group(3))
             else:
-                phraseOutput += word
+                phraseOutput += ' ' + word
 
             i+=1
             phraseOutput = phraseOutput.strip()
