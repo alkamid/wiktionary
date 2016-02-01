@@ -900,6 +900,8 @@ def wikilink(phrase):
                         if s_punctuation_around_sie.group(2) == 'siê' and morfAnalyse(s_word)[2] and ('inf:' in morfAnalyse(s_word)[2] or 'pact:' in morfAnalyse(s_word)[2]):
                             analysed = shortLink(morfAnalyse(s_word)[0] + ' siê', word + ' siê') + s_punctuation_around_sie.group(3)
                             i += 1
+                        else:
+                            analysed = shortLink(morfAnalyse(s_word)[0], morfAnalyse(s_word)[1])
 
                 elif len(s_word):
                     if '{{' in s_punctuation_around.group(1) and '}}' in s_punctuation_around.group(3):
