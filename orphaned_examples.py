@@ -9,6 +9,7 @@ to fetch examples from the most comprehensive Polish language corpus.
 from nkjp_lookup import nkjp_lookup
 from lxml import etree
 import re
+import json
 import string # for removing punctuation
 from importsjp import morfAnalyse, wikilink
 import xml.dom.minidom # for testing
@@ -32,26 +33,81 @@ def extract_one_sentence(nkjp_match, nkjp_query):
             itself (in [[baseform|match]] form) and the right side
     """
 
-    re_end_sentence_left = re.compile(r'.!?([^.?!]*?)$')
-    re_end_sentence_right = re.compile(r'^([^.?!]*)(.)')
+    abbreviations = ['np\.', 'tzw\.', 'm\.in\.', 'prof\.'] 
+
+    # regex here: https://regex101.com/r/yB8vG7/6
+
+    re_end_sentence_left = re.compile(r'(?:^|[.?!]\s*)((?:' + r'|'.join(abbreviations) + r'|[^.?!]|[.?!](?!\s*[A-Z]))+)$')
+    re_end_sentence_right = re.compile(r'^((?:' + r'|'.join(abbreviations) + r'|[^.?!]|[.?!](?!\s*[A-Z])|)+(?:[.?!]|$))')
+    #print(r'^((?:' + r'|'.join(abbreviations) + r'|[^.?!]|[.?!](?!\s*[A-Z])|)+(?:[.?!]|$))')
+
     left = nkjp_match.find('left').text
     centre = nkjp_match.find('match').text
     right = nkjp_match.find('right').text
 
     left_end_sentence = re.search(re_end_sentence_left, left)
     right_end_sentence = re.search(re_end_sentence_right, right)
-    wikitext = ''
-    if left_end_sentence:
-        wikitext = left_end_sentence.group(1).lstrip()
 
-    wikitext += '[[{0}|{1}]]'.format(nkjp_query, centre)
+    if left_end_sentence:
+        left_return = left_end_sentence.group(1).lstrip()
+        #print((left_return, left_end_sentence.group(1)))
+        while len(left_return) < 100:
+            left = left.replace(left_end_sentence.group(1), '')
+            left_end_sentence = re.search(re_end_sentence_left, left)
+            if left_end_sentence:
+                left_return = left_end_sentence.group(1) + left_return
+            else:
+                break
+    else:
+        left_return = ''
+
+    centre_return = '[[{0}|{1}]]'.format(nkjp_query, centre)
     
     if right_end_sentence:
-        wikitext += right_end_sentence.group(1) + right_end_sentence.group(2)
-    
-    return (left_end_sentence.group(1).lstrip(), '[[{0}|{1}]]'.format(nkjp_query, centre), right_end_sentence.group(1) + right_end_sentence.group(2))
+        right_return = right_end_sentence.group(1)
+    else:
+        right_return = ''
+    #print((left_return, centre, right_return))
+    return (left_return, centre, right_return)
 
-def wikitext_one_sentence(left_match_right):
+def check_sentence_quality(left_match_right):
+    """
+    Take a tuble with the left and right side of the matched word
+    and check a few arbitrary conditions to determine whether it's
+    a good example or not
+
+    Args:
+        left_match_right (tuple): a tuple of three strings: the left side
+            of the NKJP match, the match itself (in [[baseform|match]] form)
+            and the right side
+
+    Returns:
+        int: 0 for bad quality, 1 for good quality
+    """
+
+    joined_sentence = ''.join(left_match_right)
+
+    # the proportion of upper case letters to all letters is too high
+    allowed_uppercase_proportion = 0.1
+
+    if sum(1 for c in joined_sentence if c.isupper())/len(joined_sentence) > allowed_uppercase_proportion:
+        return 0
+
+    # the sentence is too long
+    allowed_length = 500
+
+    if len(joined_sentence) > allowed_length:
+        return 0
+
+    # there are too many newlines (most likely a list)
+    allowed_newlines = 3
+    
+    if joined_sentence.count('\n') > allowed_newlines:
+        return 0
+
+
+
+def wikitext_one_sentence(left_match_right, match_base_form):
     """
     Take a tuple with the left and right side of the matched word
     and format it for printing. This is a way to circumvent doing
@@ -69,13 +125,25 @@ def wikitext_one_sentence(left_match_right):
     re_whitespace_left = re.compile(r'(\s*?)$')
     re_whitespace_right = re.compile(r'^(\s*)')
 
+    # https://regex101.com/r/yB6tQ8/2
+    re_punctuation_around = re.compile(r'([\W]*?)([\w]+(?:-\w+)*)([\W]*)')
+
     whitespaces_left = re.search(re_whitespace_left, left_match_right[0])
     whitespaces_right = re.search(re_whitespace_right, left_match_right[2])
+    punctuation_match = re.search(re_punctuation_around, left_match_right[1])
 
     pretty_sentence = wikilink(left_match_right[0])
     if whitespaces_left:
         pretty_sentence += whitespaces_left.group(1)
-    pretty_sentence += left_match_right[1]
+
+    if punctuation_match:
+        pretty_sentence += punctuation_match.group(1) + '[[' + match_base_form
+        if match_base_form != punctuation_match.group(2):
+            pretty_sentence += '|' + punctuation_match.group(2)
+        pretty_sentence += ']]' + punctuation_match.group(3)
+
+    else:
+        pretty_sentence += left_match_right[1]
     if whitespaces_right:
         pretty_sentence += whitespaces_right.group(1)
     pretty_sentence += wikilink(left_match_right[2])
@@ -92,19 +160,32 @@ def get_reference(api_output):
             i.e. the content within one <line> tag
 
     Returns:
-        str: pretty formated citation
+        str: pretty formated citation. If the source is on the blacklist,
+            returns ''
     """
 
     ref = 'Nazwisko Autora'
+
+    match = api_output.find('match').text.lower()
     
+    excluded_titles = ['Wikipedia:']
+
     # article title exists for newspaper records
     article_title = api_output.find('title_a')
-    if article_title is not None and len(article_title.text) > 0:
-        ref += ', \'\'{0}\'\''.format(article_title.text)
+    if article_title is not None:
+        if any(article_title.text.startswith(c) for c in excluded_titles):
+            return ''
+        elif len(article_title.text) > 0:
+            ref += ', \'\'{0}\'\''.format(article_title.text)
+
+
 
     # this is a book title or a newspaper name
     pub_title = api_output.find('title_mono')
     if pub_title is not None:
+        if article_title.text.lower().startswith(match) and 'Wikipedia' in pub_title.text:
+            return '' # Wikipedia pages about matched words are probably
+            # the best examples
         ref += ', '
         if article_title is None:
             ref += '\'\''
@@ -136,6 +217,7 @@ def get_definitions(word):
     """
 
     re_numbers = re.compile(r'\: \(([0-9]\.[0-9])\)\s*(.*)')
+    re_refs = re.compile(r'(<ref.*?(?:/>|</ref>))')
 
     try: wikipage = Haslo(word)
     except sectionsNotFound:
@@ -146,17 +228,31 @@ def get_definitions(word):
                 if langsection.lang == 'polski':
                     langsection.pola()
                     for pos in langsection.znaczeniaDetail:
-                        defs = re.findall(re_numbers, pos[1])
+                        defs_found = re.findall(re_numbers, pos[1])
+                        # get rid of <refs> in definitions
+                        defs = [(d[0], re.sub(re_refs, '', d[1])) for d in defs_found]
                         return defs
 
     return 0
 
-def orphaned_examples():
-    with open('output/porzucone.txt') as f, open('output/empty_sections.txt', 'r') as g:
+
+
+def orphaned_examples(test_word=None):
+    output = []
+    i = 0
+    with open('output/porzucone.txt') as f,\
+    open('output/empty_sections.txt', 'r') as g,\
+    open('output/json_examples.json', 'w') as o:
         no_examples = g.read()
+        if test_word:
+            f = ['*[[{0}]]\n'.format(test_word)]
+            print(f)
         for orphaned in f:
-            if orphaned[3] == '-' or orphaned[-3] == '-':
-                continue # let's skip prefixes and sufixes for now
+            print(orphaned)
+            if orphaned[3] == '-' or orphaned[-3] == '-' \
+               or orphaned[3].isupper():
+                continue # let's skip prefixes and sufixes for now, also whatever starts with a capital leter
+
 
             # words come in '*[[word]]' format hence the stripping below
             root = etree.parse(nkjp_lookup('{0}**'.format(orphaned[3:-3]))).getroot()
@@ -167,15 +263,41 @@ def orphaned_examples():
                 found = 0
                 for line in root.find('concordance').findall('line'):
                     sentence = extract_one_sentence(line, orphaned[3:-3])
+                    if check_sentence_quality(sentence) == 0:
+                        continue
                     for word in set(sentence[0].split() + sentence[2].split()):
                         lookup_word = morfAnalyse(word.strip('!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~'))[0]
                         if lookup_word and '\n{0}\n'.format(lookup_word) in no_examples:
-                            print('orphan:', orphaned[3:-3])
-                            print('missing example:', lookup_word)
-                            print(sentence)
-                            print(wikitext_one_sentence(sentence))
-                            print(get_reference(line))
+                            print(lookup_word)
+                            defs = get_definitions(lookup_word)
+                            if defs == 0:
+                                print(lookup_word)
+                                found = 1
+                                break
+                            ref = get_reference(line)
+                            if ref == '':
+                                break
+                            output.append({})
+                            output[i]['title'] = lookup_word
+                            output[i]['left'] = line.find('left').text
+                            output[i]['right'] = line.find('right').text
+                            output[i]['example'] = wikitext_one_sentence(sentence, orphaned[3:-3])
+                            print(wikitext_one_sentence(sentence, orphaned[3:-3]))
+                            output[i]['source'] = get_reference(line)
+                            output[i]['verificator'] = 'None'
+                            output[i]['correct_num'] = 'None'
+                            output[i]['good_example'] = False
+                            output[i]['bad_example'] = False
+                            output[i]['definitions'] = []
+                            output[i]['orphan'] = orphaned[3:-3]
+                            for d in defs:
+                                output[i]['definitions'].append({'num': d[0], 'text': d[1]})
+                            o.write(json.dumps(output[i], ensure_ascii=False, indent=4) + ',')
+                            i+=1
                             found = 1
                             break
-                    #if found:
-                    #    break
+                    if found:
+                        break
+
+if __name__ == '__main__':
+    orphaned_examples()
