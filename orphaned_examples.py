@@ -45,30 +45,46 @@ def extract_one_sentence(nkjp_match, nkjp_query):
     centre = nkjp_match.find('match').text
     right = nkjp_match.find('right').text
 
-    left_end_sentence = re.search(re_end_sentence_left, left)
+    #left_end_sentence = re.search(re_end_sentence_left, left)
     right_end_sentence = re.search(re_end_sentence_right, right)
 
-    if left_end_sentence:
-        left_return = left_end_sentence.group(1).lstrip()
-        #print((left_return, left_end_sentence.group(1)))
-        while len(left_return) < 100:
+
+    left_return = ''
+
+    # Usually the context is to the left of the matched word, so it
+    # might be useful to set the lower limit for the length of the left context
+    left_context_min_length = 100
+
+    while len(left_return) < left_context_min_length:
+        left_end_sentence = re.search(re_end_sentence_left, left)
+        if left_end_sentence:
+            left_return = left_end_sentence.group(1) + left_return
             left = left.replace(left_end_sentence.group(1), '')
-            left_end_sentence = re.search(re_end_sentence_left, left)
-            if left_end_sentence:
-                left_return = left_end_sentence.group(1) + left_return
+        else:
+            break
+
+
+    # cut some extra stuff on the left so users can add it
+    left_extra = ''
+    if len(left_return) >= left_context_min_length:
+        while len(left_extra) < left_context_min_length:
+            left_extra_end_sentence = re.search(re_end_sentence_left, left)
+            if left_extra_end_sentence:
+                left_extra = left_extra_end_sentence.group(1) + left_extra
+                left = left.replace(left_extra_end_sentence.group(1), '')
             else:
                 break
-    else:
-        left_return = ''
-
+            
+    
     centre_return = '[[{0}|{1}]]'.format(nkjp_query, centre)
     
     if right_end_sentence:
         right_return = right_end_sentence.group(1)
     else:
         right_return = ''
+    
     #print((left_return, centre, right_return))
-    return (left_return, centre, right_return)
+    return (left_return, centre, right_return, left_extra)
 
 def check_sentence_quality(left_match_right):
     """
@@ -85,7 +101,7 @@ def check_sentence_quality(left_match_right):
         int: 0 for bad quality, 1 for good quality
     """
 
-    joined_sentence = ''.join(left_match_right)
+    joined_sentence = ''.join(left_match_right[:3])
 
     # the proportion of upper case letters to all letters is too high
     allowed_uppercase_proportion = 0.1
@@ -231,6 +247,8 @@ def get_definitions(word):
                         defs_found = re.findall(re_numbers, pos[1])
                         # get rid of <refs> in definitions
                         defs = [(d[0], re.sub(re_refs, '', d[1])) for d in defs_found]
+                        # dewikify (remove [[ ]])
+                        #defs = [(d[0], d[1].replace('[[', '').replace(']]', '')) for d in defs]
                         return defs
 
     return 0
@@ -283,6 +301,7 @@ def orphaned_examples(test_word=None):
                             output[i]['right'] = line.find('right').text
                             output[i]['example'] = wikitext_one_sentence(sentence, orphaned[3:-3])
                             print(wikitext_one_sentence(sentence, orphaned[3:-3]))
+                            output[i]['left_extra'] = wikilink(sentence[3])
                             output[i]['source'] = get_reference(line)
                             output[i]['verificator'] = 'None'
                             output[i]['correct_num'] = 'None'
