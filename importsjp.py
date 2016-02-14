@@ -779,20 +779,20 @@ def wikipage(hasloSJP, obrazki):
 def morfAnalyse(word):
     if word == '':
         return [None, '', None]
-    analiza = analyse(word, dag=1)
+    analysed = analyse(word, dag=1)
     
-    if len(analiza) == 1:
-        return [analiza[0][2][1], word, analiza[0][2][2]]
+    if len(analysed) == 1:
+        return [analysed[0][2][1], word, analysed[0][2][2]]
     else:
-        base_form = analiza[0][2][1]
+        base_form = analysed[0][2][1]
         ambig = 0
-        for elem in analiza:
+        for elem in analysed:
             if elem[2][1] != base_form:
                 ambig += 1
         if ambig == 0:
-            return [analiza[0][2][1], word, None]
-        elif ambig == 1 and analiza[-1][2][2].startswith('aglt:'):
-            return [analiza[0][2][1], word, None]
+            return [analysed[0][2][1], word, None]
+        elif ambig == 1 and analysed[-1][2][2] and analysed[-1][2][2].startswith('aglt:'):
+            return [analysed[0][2][1], word, None]
         else:
             return [None, word, None]
     '''
@@ -890,11 +890,9 @@ def wikilink(phrase):
                             analysed = shortLink(morfAnalyse(s_word)[0:2])
 
                 elif len(s_word):
-                    print(s_punctuation_around.group(2))
                     if '{{' in s_punctuation_around.group(1) and '}}' in s_punctuation_around.group(3):
                         analysed = s_word
                     else:
-                        print((morfAnalyse(s_word),s_word))
                         analysed = shortLink(morfAnalyse(s_word)[0:2])
 
                 phraseOutput += ' {0}{1}{2}'.format(s_punctuation_around.group(1), analysed, s_punctuation_around.group(3))
