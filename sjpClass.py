@@ -17,6 +17,9 @@ class kategoriaSlowa():
 
 def checkHistory(pagename):
     #returns 1, if AlkamidBot or Olafbot were the last authors, 0 if someone is verifying the page (=it was last edited by someone else)
+
+    bots = ('AlkamidBot', 'Olafbot', 'PBbot')
+
     site = pywikibot.getSite()
     page = pywikibot.Page(site, pagename)
     try: page.get()
@@ -24,7 +27,7 @@ def checkHistory(pagename):
         return 1
     else:
         history = page.getVersionHistory()
-        if history[0][2] == 'AlkamidBot' or history[0][2] == 'Olafbot':
+        if history[0][2] in bots:
             return 1
         else:
             return 0

@@ -4,7 +4,6 @@
 import codecs
 import pywikibot
 import urllib.request, urllib.parse, urllib.error
-import urllib.request, urllib.error, urllib.parse
 import http.client
 import re
 import collections
@@ -763,7 +762,7 @@ def wikipage(hasloSJP, obrazki):
     if ref_sjp or synTemp[1]:
         zrodla += '\n<references>'
         if ref_sjp:
-            zrodla += '\n<ref name=sjp.pl>{{sjp.pl|%s}}</ref>' % (firstWord.title)
+            zrodla += '\n<ref name=sjp.pl>{{importSJP.pl|%s}}</ref>' % (firstWord.title)
         if synTemp[1]:
             zrodla += '\n<ref name=synonimy>{{synonimy.ux.pl}}</ref>'
         zrodla += '\n</references>'
