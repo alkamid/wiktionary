@@ -69,7 +69,12 @@ def checkImages(page, obrazki):
 def updateTable(katPages, pageCount, tableText):
     page = pywikibot.Page(site, '%s%d' % (katPages, pageCount))
     history = page.getVersionHistory()
-    if history[0][2] == 'Olafbot' and history[0][3] == 'Zawartość została przeniesiona do artykułów.':
+
+    author = history[0][2]
+    comment = history[0][3]
+
+    if (author == 'Olafbot' and comment == 'Zawartość została przeniesiona do artykułów.') or\
+       (author == 'AlkamidBot' and comment == 'usunięcie istniejącego hasła' and len(page.text) < 60):
         tableText = tableText.replace('\n| [[%s%d|%d]]' % (katPages, pageCount, pageCount), '')
     return tableText
 
