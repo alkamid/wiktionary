@@ -11,6 +11,7 @@ var css = [
     '.def-selector {width: 50px; border: solid 2px #eeeedd; align: center; margin: 0 auto}',
     '.raw-text {width:50%; float:left;}',
     '.left-context {font-size: x-small;}',
+    '.wikified-text {overflow: auto;}',
     '.raw-textarea {resize: vertical;}',
     '.source {font-size: small}',
     '.selector-div-unknown-choice {border: solid 2px red;}',
@@ -221,7 +222,7 @@ var verifyButtonAction = function(content, good_or_bad) {
 		    .append($('<textarea>')
 			    .addClass('raw-textarea')
 			    .text(word.example)
-			    .attr('rows', 4)
+			    .attr('rows', 6)
 			    .attr('data-index', index)
 			   );
 
