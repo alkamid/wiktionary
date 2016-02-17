@@ -142,7 +142,7 @@ def wikitext_one_sentence(left_match_right, match_base_form):
     re_whitespace_right = re.compile(r'^(\s*)')
 
     # https://regex101.com/r/yB6tQ8/2
-    re_punctuation_around = re.compile(r'([\W]*?)([\w]+(?:-\w+)*)([\W]*)')
+    re_punctuation_around = re.compile(r'([\W]*?)([\w]+(?:(?:-|\s)\w+)*)([\W]*)')
 
     whitespaces_left = re.search(re_whitespace_left, left_match_right[0])
     whitespaces_right = re.search(re_whitespace_right, left_match_right[2])
@@ -258,13 +258,18 @@ def get_definitions(word):
 def orphaned_examples(test_word=None):
     output = []
     i = 0
+
+    # this is a dirty trick, because morfAnalyse() and wikilink() don't
+    # really work as they should. The following regex extracts the first part
+    # of [[these|links]]
+    re_base_form = re.compile(r'\[\[(.*?)(?:\||\]\])')
+
     with open('output/porzucone.txt') as f,\
     open('output/empty_sections.txt', 'r') as g,\
     open('output/json_examples.json', 'w') as o:
         no_examples = g.read()
         if test_word:
             f = ['*[[{0}]]\n'.format(test_word)]
-            print(f)
         for orphaned in f:
             print(orphaned)
             if orphaned[3] == '-' or orphaned[-3] == '-' \
@@ -273,7 +278,7 @@ def orphaned_examples(test_word=None):
 
 
             # words come in '*[[word]]' format hence the stripping below
-            root = etree.parse(nkjp_lookup('{0}**'.format(orphaned[3:-3]))).getroot()
+            root = etree.parse(nkjp_lookup('{0}**'.format(orphaned[3:-3]).replace(' ', '** '))).getroot()
             #root = etree.parse(nkjp_lookup('a capite**'.format(orphaned[3:-3]))).getroot()
             #xmlout = nkjp_lookup('{0}**'.format(orphaned[3:-3])).read()
             #print(xml.dom.minidom.parseString(xmlout).toprettyxml())
@@ -284,9 +289,9 @@ def orphaned_examples(test_word=None):
                     if check_sentence_quality(sentence) == 0:
                         continue
                     for word in set(sentence[0].split() + sentence[2].split()):
-                        lookup_word = morfAnalyse(word.strip('!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~'))[0]
-                        if lookup_word and '\n{0}\n'.format(lookup_word) in no_examples:
-                            print(lookup_word)
+                        s_lookup_word = re.search(re_base_form, wikilink(word.strip('!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~')))
+                        if s_lookup_word and '\n{0}\n'.format(s_lookup_word.group(1)) in no_examples:
+                            lookup_word = s_lookup_word.group(1)
                             defs = get_definitions(lookup_word)
                             if defs == 0:
                                 print(lookup_word)
@@ -319,4 +324,4 @@ def orphaned_examples(test_word=None):
                         break
 
 if __name__ == '__main__':
-    orphaned_examples()
+    orphaned_examples('akcjonariat pracowniczy')
