@@ -141,7 +141,7 @@ def wikitext_one_sentence(left_match_right, match_base_form):
     re_whitespace_left = re.compile(r'(\s*?)$')
     re_whitespace_right = re.compile(r'^(\s*)')
 
-    # https://regex101.com/r/yB6tQ8/2
+    # https://regex101.com/r/yB6tQ8/3
     re_punctuation_around = re.compile(r'([\W]*?)([\w]+(?:(?:-|\s)\w+)*)([\W]*)')
 
     whitespaces_left = re.search(re_whitespace_left, left_match_right[0])
