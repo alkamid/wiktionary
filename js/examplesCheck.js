@@ -2,17 +2,18 @@
 
 var css = [
     '#wikiEditor-ui-examples {display: block; height=10px; background-color: #eeeedd;}',
-    '.toggle-button { background-color: white; margin: 5px 0; border: 2px solid #D0D0D0; height: 24px; width: 100px; cursor:pointer; position: relative; display: inline-block; user-select: none; -webkit-user-select: none; -ms-user-select: none; -moz-user-select: none; text-align: center; }',
+    '.toggle-button { background-color: white; margin: 5px 0; border: 2px solid #D0D0D0; height: 24px; width: 50px; cursor:pointer; position: relative; display: inline-block; user-select: none; -webkit-user-select: none; -ms-user-select: none; -moz-user-select: none; text-align: center; font-size: large;}',
     '.toggle-button-selected-good { background-color: #83B152; border: 2px solid #7DA652; }',
     '.toggle-button-selected-bad { background-color: #e34a33; border: 2px solid #ca331c; }',
     '.example-div {display: none;}',
     '.example-box {display: inline-block; width:100%;}',
+    '.example-buttons {width:60px; float:left; align: center;}',
+    '.def-selector {width: 50px; border: solid 2px #eeeedd; align: center; margin: 0 auto}',
     '.raw-text {width:50%; float:left;}',
     '.left-context {font-size: x-small;}',
-    '.wikified-text {width:50%; float:left;}',
     '.raw-textarea {resize: vertical;}',
     '.source {font-size: small}',
-    '.selector-div-unknown-choice {color: red; font-weight: bold;}',
+    '.selector-div-unknown-choice {border: solid 2px red;}',
     '.current {display: block;}'
 ];
 
@@ -76,6 +77,8 @@ var verifyButtonAction = function(content, good_or_bad) {
     	    }
        	    content[index].bad_example = !content[index].bad_example;
 	}
+
+	content[index].example = $('.raw-textarea*[data-index=' + index + ']').val();
 	document.editform.wpTextbox1.value = JSON.stringify(content, null, 4);
 	
     };
@@ -133,6 +136,51 @@ var verifyButtonAction = function(content, good_or_bad) {
 		    .addClass('example-box')
 		    .appendTo($singleExampleDiv);
 
+		// buttons and selector container
+		$buttonsdiv = $('<div>')
+		    .addClass('example-buttons')
+		    .appendTo($textdiv)
+
+		// meaning selector: if words have multiple meanings, one of them must be selected
+		$selectdiv = $('<div>')
+		    .addClass('def-selector')
+		    .appendTo($buttonsdiv);
+
+		$select = $('<select>')
+		    .addClass('num_selector')
+		    .appendTo($selectdiv);
+
+
+		// good/bad example buttons
+		$okbutton = $('<div>')
+		    .addClass('toggle-button')
+		    .addClass('good-button')
+		    .attr('data-index', index)
+		    .text('✓')
+		    .appendTo($buttonsdiv);
+		
+		$buttonsdiv.append($('<br/>'));
+
+		$badbutton = $('<div>')
+		    .addClass('toggle-button')
+		    .addClass('bad-button')
+		    .attr('data-index', index)
+		    .text('✗')
+		    .appendTo($buttonsdiv);
+		
+		// if the page has already been edited, select respective buttons
+		if (word.good_example === true) {
+		    $okbutton.addClass('toggle-button-selected-good');
+		}
+		if (word.bad_example === true) {
+		    $badbutton.addClass('toggle-button-selected-bad');
+		}
+		
+		
+		$okbutton.click(verifyButtonAction(content, 'good'));
+		$badbutton.click(verifyButtonAction(content, 'bad'));
+
+
 		// container for raw text ([[such]] [[as]] [[this]])
 		$rawTextdiv = $('<div>')
 		    .addClass('raw-text')
@@ -156,7 +204,7 @@ var verifyButtonAction = function(content, good_or_bad) {
 		$reloadButton.click(function(){
 		    event.preventDefault();
 		    $('#wikified-text' + index).empty();
-		    wikifyExample($('#wikified-text' + index), $('#textarea' + index).val());
+		    wikifyExample($('#wikified-text' + index), $('.raw-textarea*[data-index=' + index + ']').val(), word.title);
 		        
 		});
 
@@ -166,7 +214,7 @@ var verifyButtonAction = function(content, good_or_bad) {
 		    .attr('id', 'wikified-text' + index)
 		    .appendTo($textdiv);
 
-		wikifyExample($wikifiedTextdiv, word.example);
+		wikifyExample($wikifiedTextdiv, word.example, word.title);
 
 		// editable wikitext
 		$rawTextdiv
@@ -174,7 +222,7 @@ var verifyButtonAction = function(content, good_or_bad) {
 			    .addClass('raw-textarea')
 			    .text(word.example)
 			    .attr('rows', 4)
-			    .attr('id', 'textarea' + index)
+			    .attr('data-index', index)
 			   );
 
 		// source of the example
@@ -183,16 +231,6 @@ var verifyButtonAction = function(content, good_or_bad) {
 			    .addClass('source')
 			    .text('źródło: ' + word.source)
 			   );
-
-		// meaning selector: if words have multiple meanings, one of them must be selected
-		$selectdiv = $('<div>')
-		    .addClass('def-selector')
-		    .text('wybierz znaczenie: ')
-		    .appendTo($singleExampleDiv);
-
-		$select = $('<select>')
-		    .addClass('num_selector')
-		    .appendTo($selectdiv);
 
 		// if there's only one meaning, show the selector but don't require the user to select a value
 		if (word.definitions.length > 1) {
@@ -203,41 +241,18 @@ var verifyButtonAction = function(content, good_or_bad) {
 		    $select.append($('<option>', {value: def_value.num, text: def_value.num}));
 		    $defdiv.append(wikifyExample($defdiv, '(' + def_value.num + ') ' + def_value.text));
 		});
-
-
-		// good/bad example buttons
-		$okbutton = $('<div>')
-		    .addClass('toggle-button')
-		    .addClass('good-button')
-		    .attr('data-index', index)
-		    .text('dobry przykład')
-		    .appendTo($singleExampleDiv);
-
-		$badbutton = $('<div>')
-		    .addClass('toggle-button')
-		    .addClass('bad-button')
-		    .attr('data-index', index)
-		    .text('zły przykład')
-		    .appendTo($singleExampleDiv);
-		
-		// if the page has already been edited, select respective buttons
-		if (word.good_example === true) {
-		    $okbutton.addClass('toggle-button-selected-good');
-		}
-		if (word.bad_example === true) {
-		    $badbutton.addClass('toggle-button-selected-bad');
-		}
-		
-		
-		$okbutton.click(verifyButtonAction(content, 'good'));
-		$badbutton.click(verifyButtonAction(content, 'bad'));
 		
 	    });
 	    
 
-	    var prevNextButtonAction = function(prev_or_next) {
+	    var prevNextButtonAction = function(content, prev_or_next) {
 		return function(event) {
 		    event.preventDefault();
+		    
+		    var $text = $('.current.example-div').find('.raw-textarea');
+		    var index = $text.attr('data-index');
+		    content[index].example = $text.val();
+		    document.editform.wpTextbox1.value = JSON.stringify(content, null, 4);
 		    if (!$('.current').hasClass(prev_or_next === 'prev' ? 'first' : 'last')) {
 			
 			if (prev_or_next === 'prev') {
@@ -262,14 +277,14 @@ var verifyButtonAction = function(content, good_or_bad) {
 		.attr('id', 'prev')
 		.attr('disabled', 'disabled')
 		.text('Poprzedni')
-		.click(prevNextButtonAction('prev'))
+		.click(prevNextButtonAction(content, 'prev'))
 		.appendTo($editbox);
 
 	    
 	    $nextButton = $('<button>')
 		.attr('id', 'next')
 		.text('Następny')
-		.click(prevNextButtonAction('next'))
+		.click(prevNextButtonAction(content, 'next'))
 		.appendTo($editbox);
 
 
@@ -286,12 +301,15 @@ var verifyButtonAction = function(content, good_or_bad) {
     } );
 } );
 
-function wikifyExample($div, exampleText) {
+function wikifyExample($div, exampleText, word) {
+    
+    word = typeof word !== 'undefined' ? word : 'kdslamsd';
     $.getJSON(
 	mw.util.wikiScript( 'api' ),
 	
 	{'format': 'json',
 	 'action': 'parse',
+	 'title': word,
 	 'text': String(exampleText),
 	 'prop': 'text',
 	 'disablelimitreport': ''
