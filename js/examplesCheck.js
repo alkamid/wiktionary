@@ -240,7 +240,9 @@ var verifyButtonAction = function(content, good_or_bad) {
 
 		$.each(word.definitions, function(def_index, def_value){
 		    $select.append($('<option>', {value: def_value.num, text: def_value.num}));
-		    $defdiv.append(wikifyExample($defdiv, '(' + def_value.num + ') ' + def_value.text));
+		    $defdiv.append($('<div>'));
+		    //console.log(def_index);
+		    wikifyExample($defdiv.find('div').eq(def_index), '(' + def_value.num + ') ' + def_value.text);
 		});
 		
 	    });
