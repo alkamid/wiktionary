@@ -243,16 +243,56 @@ def get_definitions(word):
             for langsection in wikipage.listLangs:
                 if langsection.lang == 'polski':
                     langsection.pola()
+                    defs = []
                     for pos in langsection.znaczeniaDetail:
+                        if word + ' się' in pos[0]:
+                            prefix = '(' + word + ' się) '
+                        else:
+                            prefix = ''
+
                         defs_found = re.findall(re_numbers, pos[1])
+                        print(defs_found)
                         # get rid of <refs> in definitions
-                        defs = [(d[0], re.sub(re_refs, '', d[1])) for d in defs_found]
+                        defs += [(d[0], prefix + re.sub(re_refs, '', d[1])) for d in defs_found]
+                        
                         # dewikify (remove [[ ]])
                         #defs = [(d[0], d[1].replace('[[', '').replace(']]', '')) for d in defs]
-                        return defs
+                    
+                    return defs
 
     return 0
 
+
+def get_definitions_new(word):
+    """
+    Load a page from pl.wikt and find all definitions in the Polish section.
+    This can be used to show the user a list of definitions beside an example,
+    so they can match the two.
+
+    Args:
+        word (str): page title on pl.wikt
+    Returns:
+        list: all definitions found in page, e.g. [('1.1', 'mean1'),
+            ('1.2', 'mean2'), ('2.1', 'mean3')]
+    """
+
+    # https://regex101.com/r/sX1yF7/1
+    re_numbers = re.compile(r'\: \(([0-9]\.[0-9]{1,2})\)\s*.*')
+    re_refs = re.compile(r'(<ref.*?(?:/>|</ref>))')
+
+    try: wikipage = Haslo(word)
+    except sectionsNotFound:
+        pass
+    else:
+        if wikipage.type == 3:
+            for langsection in wikipage.listLangs:
+                if langsection.lang == 'polski':
+                    langsection.pola()
+                    nums = re.findall(re_numbers, langsection.subSections['znaczenia'].text)
+
+                    return [re.sub(re_refs, '', langsection.subSections['znaczenia'].text), nums]
+
+    return 0
 
 
 def orphaned_examples(test_word=None):
@@ -288,11 +328,16 @@ def orphaned_examples(test_word=None):
                     sentence = extract_one_sentence(line, orphaned[3:-3])
                     if check_sentence_quality(sentence) == 0:
                         continue
-                    for word in set(sentence[0].split() + sentence[2].split()):
-                        s_lookup_word = re.search(re_base_form, wikilink(word.strip('!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~')))
-                        if s_lookup_word and '\n{0}\n'.format(s_lookup_word.group(1)) in no_examples:
-                            lookup_word = s_lookup_word.group(1)
-                            defs = get_definitions(lookup_word)
+                    allwords = re.findall(re_base_form, wikilink(sentence[0] + sentence[2]))
+                    for lookup_word in allwords:
+                        if ' się' in lookup_word:
+                            lookup_word = lookup_word[:-4]
+                        if '\n{0}\n'.format(lookup_word) in no_examples:
+                            print('???')
+                            #lookup_word = s_lookup_word.group(1)
+                            print(lookup_word)
+                            defs = get_definitions_new(lookup_word)
+                            print(defs)
                             if defs == 0:
                                 print(lookup_word)
                                 found = 1
@@ -312,10 +357,11 @@ def orphaned_examples(test_word=None):
                             output[i]['correct_num'] = 'None'
                             output[i]['good_example'] = False
                             output[i]['bad_example'] = False
-                            output[i]['definitions'] = []
+                            output[i]['definitions'] = defs[0]
                             output[i]['orphan'] = orphaned[3:-3]
-                            for d in defs:
-                                output[i]['definitions'].append({'num': d[0], 'text': d[1]})
+                            output[i]['def_nums'] = defs[1]
+                            #for d in defs:
+                            #    output[i]['definitions'].append({'num': d[0], 'text': d[1]})
                             o.write(json.dumps(output[i], ensure_ascii=False, indent=4) + ',')
                             i+=1
                             found = 1
@@ -324,4 +370,4 @@ def orphaned_examples(test_word=None):
                         break
 
 if __name__ == '__main__':
-    orphaned_examples('akcjonariat pracowniczy')
+    orphaned_examples('brandzel')
