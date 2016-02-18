@@ -234,7 +234,7 @@ var verifyButtonAction = function(content, good_or_bad) {
 			   );
 
 		// if there's only one meaning, show the selector but don't require the user to select a value
-		if (word.definitions.length > 1) {
+		if (word.def_nums.length > 1) {
 		    $select.append($('<option>', {value: ''}));
 		}
 
