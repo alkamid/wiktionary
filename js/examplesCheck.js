@@ -238,11 +238,10 @@ var verifyButtonAction = function(content, good_or_bad) {
 		    $select.append($('<option>', {value: ''}));
 		}
 
-		$.each(word.definitions, function(def_index, def_value){
-		    $select.append($('<option>', {value: def_value.num, text: def_value.num}));
-		    $defdiv.append($('<div>'));
-		    //console.log(def_index);
-		    wikifyExample($defdiv.find('div').eq(def_index), '(' + def_value.num + ') ' + def_value.text);
+		wikifyExample($defdiv, word.definitions);
+
+		$.each(word.def_nums, function(def_index, def_value){
+		    $select.append($('<option>', {value: def_value, text: def_value}));
 		});
 		
 	    });
@@ -289,6 +288,10 @@ var verifyButtonAction = function(content, good_or_bad) {
 		.text('Następny')
 		.click(prevNextButtonAction(content, 'next'))
 		.appendTo($editbox);
+
+	    if ($('.current').hasClass('last')) {
+		$nextButton.attr('disabled', 'disabled');
+	    };
 
 
         }
