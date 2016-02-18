@@ -854,6 +854,9 @@ def wikilink(phrase):
     dontAnalyse.append('sposób') # alt: "sposobiæ½"
     dontAnalyse.append('i¶æ') # alt: "i¶ciæ
 
+    #http://www.ipipan.waw.pl/~wolinski/publ/znakowanie.pdf
+    verb_tags = ('inf', 'fin', 'pact', 'ppas', 'pcon', 'pant', 'imps', 'impt')
+
     phraseOutput = ''
 
     re_przymiotnikOd = re.compile(r'^przymiotnik od\:\s*(.*?)\s*$')
@@ -880,9 +883,13 @@ def wikilink(phrase):
                         analysed = shortLink(morfAnalyse(s_word)[0:2])
 
                 elif i<n-1 and 'siê' in phraseTab[i+1]:
+                    print('ajeeeemhere')
                     s_punctuation_around_sie = re.search(re_punctuation_around, phraseTab[i+1])
                     if s_punctuation_around_sie:
-                        if s_punctuation_around_sie.group(2) == 'siê' and morfAnalyse(s_word)[2] and ('inf:' in morfAnalyse(s_word)[2] or 'pact:' in morfAnalyse(s_word)[2]):
+                        print('andhere')
+                        print(s_punctuation_around_sie.group(2))
+                        print(morfAnalyse(s_word)[2])
+                        if s_punctuation_around_sie.group(2) == 'siê' and morfAnalyse(s_word)[2] and any(tag + ':' in morfAnalyse(s_word)[2] for tag in verb_tags):
                             analysed = shortLink(morfAnalyse(s_word)[0] + ' siê', word + ' siê') + s_punctuation_around_sie.group(3)
                             i += 1
                         else:
