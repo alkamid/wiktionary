@@ -242,7 +242,7 @@ var verifyButtonAction = function(content, good_or_bad) {
 		    }
 		
 		// if there's only one meaning, show the selector but don't require the user to select a value
-		if ($('.num_selector option').length > 1) {
+		if ($select.find('option').length > 1) {
 		    $select.prepend($('<option>', {value: ''}));
 		}
 
