@@ -782,7 +782,7 @@ def morfAnalyse(word):
     analysed = analyse(word, dag=1)
     
     if len(analysed) == 1:
-        return [analysed[0][2][1], word, analysed[0][2][2]]
+        analysed_return = [analysed[0][2][1], word, analysed[0][2][2]]
     else:
         base_form = analysed[0][2][1]
         ambig = 0
@@ -790,37 +790,20 @@ def morfAnalyse(word):
             if elem[2][1] != base_form:
                 ambig += 1
         if ambig == 0:
-            return [analysed[0][2][1], word, None]
+            analysed_return = [analysed[0][2][1], word, None]
         elif ambig == 1 and analysed[-1][2][2] and analysed[-1][2][2].startswith('aglt:'):
-            return [analysed[0][2][1], word, None]
+            analysed_return = [analysed[0][2][1], word, None]
         else:
             return [None, word, None]
-    '''
-    # to jest trochê ryzykowne: je¶li Morfeusz widzi niejednoznaczno¶æ, wtedy skrypt sprawdza czy w sjp.pl to s³owo jest jednoznaczne. Przyk³ad: "temu" w sjp.pl ma wskazuje tylko na formê podstawow± "ten"
-    if ambig:
-        #if count[counter] or analiza[for_helper][2][1] == None:
-        check = checkFlexSJP(word)
-        if check:
-            base = check
-            form = word
-            #text = text + shortLink(check, word)
-        else:
-            base = None
-            form = analiza[for_helper][2][0]
-            #text = text + analiza[for_helper][2][0]
-        type = None
-    elif analiza[for_helper][2][0] in ', ( ) ; - . : [ ]':
-        base = None
-        form = analiza[for_helper][2][0]
-        #text = text + analiza[for_helper][2][0]
-        type = None
-    else:
-        base = analiza[for_helper][2][1]
-        form = analiza[for_helper][2][0]
-        #text = text + shortLink(analiza[for_helper][2][1], analiza[for_helper][2][0])
-        type = analiza[for_helper][2][2]
 
-    return [base, form, type]'''
+    #When I updated to libmorfeusz2 on 18/02/2016, I realised sometimes ':a' or ':s'
+    #was added to the end of the base form. Until I figure out what it is, I'll have the
+    #workaround below
+
+    if analysed_return[0][-2] == ':':
+        analysed_return[0] = analysed_return[0][:-2]
+    return analysed_return
+
 
 def shortLink(base, flex=None):
     if flex == None:
@@ -883,12 +866,8 @@ def wikilink(phrase):
                         analysed = shortLink(morfAnalyse(s_word)[0:2])
 
                 elif i<n-1 and 'siê' in phraseTab[i+1]:
-                    print('ajeeeemhere')
                     s_punctuation_around_sie = re.search(re_punctuation_around, phraseTab[i+1])
                     if s_punctuation_around_sie:
-                        print('andhere')
-                        print(s_punctuation_around_sie.group(2))
-                        print(morfAnalyse(s_word)[2])
                         if s_punctuation_around_sie.group(2) == 'siê' and morfAnalyse(s_word)[2] and any(tag + ':' in morfAnalyse(s_word)[2] for tag in verb_tags):
                             analysed = shortLink(morfAnalyse(s_word)[0] + ' siê', word + ' siê') + s_punctuation_around_sie.group(3)
                             i += 1
