@@ -233,16 +233,25 @@ var verifyButtonAction = function(content, good_or_bad) {
 			    .text('źródło: ' + word.source)
 			   );
 
+		// count meanings and add options to select dropdown menu
+		var reNums = /\: \(([0-9]\.[0-9]{1,2})\)\s*/g;
+		match = reNums.exec(word.definitions);
+		while (match != null) {
+		    $select.append($('<option>', {value: match[1], text: match[1]}));
+		    match = reNums.exec(word.definitions);
+		    }
+		
 		// if there's only one meaning, show the selector but don't require the user to select a value
-		if (word.def_nums.length > 1) {
-		    $select.append($('<option>', {value: ''}));
+		if ($('.num_selector option').length > 1) {
+		    $select.prepend($('<option>', {value: ''}));
 		}
 
 		wikifyExample($defdiv, word.definitions);
 
-		$.each(word.def_nums, function(def_index, def_value){
-		    $select.append($('<option>', {value: def_value, text: def_value}));
-		});
+		// leaving for now, need to test speed
+		//$.each(word.def_nums, function(def_index, def_value){
+		//    $select.append($('<option>', {value: def_value, text: def_value}));
+		//});
 		
 	    });
 	    
