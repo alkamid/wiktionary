@@ -320,8 +320,9 @@ def orphaned_examples(test_word=None):
         no_examples = g.read()
         if test_word:
             f = ['*[[{0}]]\n'.format(test_word)]
-        for orphaned in f:
-            print(orphaned)
+        for input_word in f:
+            input_word = input_word.strip('*[]\n')
+            print(input_word)
 
             if len(output) == buffer_size:
                 with open('output/json_examples_{0}.json'.format(pages_count), 'w') as o:
@@ -332,20 +333,20 @@ def orphaned_examples(test_word=None):
 
 
             
-            if orphaned[3] == '-' or orphaned[-3] == '-' \
-               or orphaned[3].isupper():
+            if input_word[0] == '-' or input_word[-1] == '-' \
+               or input_word[0].isupper():
                 continue # let's skip prefixes and sufixes for now, also whatever starts with a capital leter
 
 
             # words come in '*[[word]]' format hence the stripping below
-            root = etree.parse(nkjp_lookup('{0}**'.format(orphaned[3:-3]).replace(' ', '** '))).getroot()
+            root = etree.parse(nkjp_lookup('{0}**'.format(input_word).replace(' ', '** '))).getroot()
             #root = etree.parse(nkjp_lookup('a capite**'.format(orphaned[3:-3]))).getroot()
             #xmlout = nkjp_lookup('{0}**'.format(orphaned[3:-3])).read()
             #print(xml.dom.minidom.parseString(xmlout).toprettyxml())
             if root.find('concordance') is not None:
                 found = 0
                 for line in root.find('concordance').findall('line'):
-                    sentence = extract_one_sentence(line, orphaned[3:-3])
+                    sentence = extract_one_sentence(line, input_word)
                     if check_sentence_quality(sentence) == 0:
                         continue
                     allwords = re.findall(re_base_form, wikilink(sentence[0] + sentence[2]))
@@ -366,28 +367,14 @@ def orphaned_examples(test_word=None):
                             new_example['title'] = lookup_word
                             new_example['left'] = line.find('left').text
                             new_example['right'] = line.find('right').text
-                            new_example['example'] = wikitext_one_sentence(sentence, orphaned[3:-3])
+                            new_example['example'] = wikitext_one_sentence(sentence, input_word)
                             new_example['left_extra'] = wikilink(sentence[3])
                             new_example['source'] = get_reference(line)
                             new_example['definitions'] = defs
-                            new_example['orphan'] = orphaned[3:-3]
+                            new_example['orphan'] = input_word
                             output.append(new_example)
 
-                            '''output.append({})
-                            output[i]['title'] = lookup_word
-                            output[i]['left'] = line.find('left').text
-                            output[i]['right'] = line.find('right').text
-                            output[i]['example'] = wikitext_one_sentence(sentence, orphaned[3:-3])
-                            output[i]['left_extra'] = wikilink(sentence[3])
-                            output[i]['source'] = get_reference(line)
-                            output[i]['verificator'] = 'None'
-                            output[i]['correct_num'] = 'None'
-                            output[i]['good_example'] = False
-                            output[i]['bad_example'] = False
-                            output[i]['definitions'] = defs
-                            output[i]['orphan'] = orphaned[3:-3]
-                            '''
-                            print(wikitext_one_sentence(sentence, orphaned[3:-3]))
+                            print(wikitext_one_sentence(sentence, input_word))
 
                             i+=1
                             found = 1
