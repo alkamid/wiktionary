@@ -33,7 +33,7 @@ def extract_one_sentence(nkjp_match, nkjp_query):
             itself (in [[baseform|match]] form) and the right side
     """
 
-    abbreviations = ['np\.', 'tzw\.', 'm\.in\.', 'prof\.'] 
+    abbreviations = ['np\.', 'tzw\.', 'm\.in\.', 'prof\.', 'św\.', 'dr\.'] 
 
     # regex here: https://regex101.com/r/yB8vG7/6
 
@@ -45,7 +45,6 @@ def extract_one_sentence(nkjp_match, nkjp_query):
     centre = nkjp_match.find('match').text
     right = nkjp_match.find('right').text
 
-    #left_end_sentence = re.search(re_end_sentence_left, left)
     right_end_sentence = re.search(re_end_sentence_right, right)
 
 
@@ -272,8 +271,8 @@ def get_definitions_new(word):
     Args:
         word (str): page title on pl.wikt
     Returns:
-        list: all definitions found in page, e.g. [('1.1', 'mean1'),
-            ('1.2', 'mean2'), ('2.1', 'mean3')]
+        str: all definitions found in page along with their part of speech
+            descriptions
     """
 
     # https://regex101.com/r/sX1yF7/1
@@ -290,12 +289,14 @@ def get_definitions_new(word):
                     langsection.pola()
                     nums = re.findall(re_numbers, langsection.subSections['znaczenia'].text)
 
-                    return [re.sub(re_refs, '', langsection.subSections['znaczenia'].text), nums]
+                    return re.sub(re_refs, '', langsection.subSections['znaczenia'].text)
 
     return 0
 
 
 def orphaned_examples(test_word=None):
+    one_page_buffer = []
+    buffer_size = 20
     output = []
     i = 0
 
@@ -312,6 +313,7 @@ def orphaned_examples(test_word=None):
             f = ['*[[{0}]]\n'.format(test_word)]
         for orphaned in f:
             print(orphaned)
+
             if orphaned[3] == '-' or orphaned[-3] == '-' \
                or orphaned[3].isupper():
                 continue # let's skip prefixes and sufixes for now, also whatever starts with a capital leter
@@ -333,11 +335,8 @@ def orphaned_examples(test_word=None):
                         if ' się' in lookup_word:
                             lookup_word = lookup_word[:-4]
                         if '\n{0}\n'.format(lookup_word) in no_examples:
-                            print('???')
-                            #lookup_word = s_lookup_word.group(1)
                             print(lookup_word)
                             defs = get_definitions_new(lookup_word)
-                            print(defs)
                             if defs == 0:
                                 print(lookup_word)
                                 found = 1
@@ -350,19 +349,18 @@ def orphaned_examples(test_word=None):
                             output[i]['left'] = line.find('left').text
                             output[i]['right'] = line.find('right').text
                             output[i]['example'] = wikitext_one_sentence(sentence, orphaned[3:-3])
-                            print(wikitext_one_sentence(sentence, orphaned[3:-3]))
                             output[i]['left_extra'] = wikilink(sentence[3])
                             output[i]['source'] = get_reference(line)
                             output[i]['verificator'] = 'None'
                             output[i]['correct_num'] = 'None'
                             output[i]['good_example'] = False
                             output[i]['bad_example'] = False
-                            output[i]['definitions'] = defs[0]
+                            output[i]['definitions'] = defs
                             output[i]['orphan'] = orphaned[3:-3]
-                            output[i]['def_nums'] = defs[1]
-                            #for d in defs:
-                            #    output[i]['definitions'].append({'num': d[0], 'text': d[1]})
                             o.write(json.dumps(output[i], ensure_ascii=False, indent=4) + ',')
+                            
+                            print(wikitext_one_sentence(sentence, orphaned[3:-3]))
+
                             i+=1
                             found = 1
                             break
@@ -370,4 +368,4 @@ def orphaned_examples(test_word=None):
                         break
 
 if __name__ == '__main__':
-    orphaned_examples('brandzel')
+    orphaned_examples()
