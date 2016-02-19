@@ -295,8 +295,8 @@ def get_definitions_new(word):
 
 
 def orphaned_examples(test_word=None):
-    one_page_buffer = []
     buffer_size = 20
+    pages_count = 0
     output = []
     i = 0
 
@@ -306,14 +306,23 @@ def orphaned_examples(test_word=None):
     re_base_form = re.compile(r'\[\[(.*?)(?:\||\]\])')
 
     with open('output/porzucone.txt') as f,\
-    open('output/empty_sections.txt', 'r') as g,\
-    open('output/json_examples.json', 'w') as o:
+    open('output/empty_sections.txt', 'r') as g:
+
         no_examples = g.read()
         if test_word:
             f = ['*[[{0}]]\n'.format(test_word)]
         for orphaned in f:
             print(orphaned)
 
+            if len(output) == buffer_size:
+                with open('output/json_examples_{0}.json'.format(pages_count), 'w') as o:
+                    o.write(json.dumps(output, ensure_ascii=False, indent=4) + ',')
+                    pages_count += 1
+                    output = []
+                    i = 0
+
+
+            
             if orphaned[3] == '-' or orphaned[-3] == '-' \
                or orphaned[3].isupper():
                 continue # let's skip prefixes and sufixes for now, also whatever starts with a capital leter
@@ -357,7 +366,6 @@ def orphaned_examples(test_word=None):
                             output[i]['bad_example'] = False
                             output[i]['definitions'] = defs
                             output[i]['orphan'] = orphaned[3:-3]
-                            o.write(json.dumps(output[i], ensure_ascii=False, indent=4) + ',')
                             
                             print(wikitext_one_sentence(sentence, orphaned[3:-3]))
 
@@ -369,3 +377,5 @@ def orphaned_examples(test_word=None):
 
 if __name__ == '__main__':
     orphaned_examples()
+
+
