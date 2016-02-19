@@ -304,10 +304,8 @@ class ExampleDict(dict):
 
 
 def orphaned_examples(test_word=None):
-    buffer_size = 20
-    pages_count = 0
-    output = []
-    i = 0
+
+    buffer_size = 20 #how many words will be printed on one page
 
     # this is a dirty trick, because morfAnalyse() and wikilink() don't
     # really work as they should. The following regex extracts the first part
@@ -317,52 +315,66 @@ def orphaned_examples(test_word=None):
     with open('output/porzucone.txt') as f,\
     open('output/empty_sections.txt', 'r') as g:
 
+        # list of pages with no examples (obtained by empty_section.py)
         no_examples = g.read()
+        
+        # for testing purposes
         if test_word:
-            f = ['*[[{0}]]\n'.format(test_word)]
+            f = [test_word]
+
+        pages_count = 0 #loop helper
+        output = [] #list-container for examples
+
         for input_word in f:
+
+            # dealing with various list formats, e.g. *[[word]]
             input_word = input_word.strip('*[]\n')
             print(input_word)
 
+            # write to file/page every N words
             if len(output) == buffer_size:
                 with open('output/json_examples_{0}.json'.format(pages_count), 'w') as o:
                     o.write(json.dumps(output, ensure_ascii=False, indent=4) + ',')
                     pages_count += 1
                     output = []
-                    i = 0
 
 
-            
-            if input_word[0] == '-' or input_word[-1] == '-' \
-               or input_word[0].isupper():
+            if input_word[0] == '-' or input_word[-1] == '-' or input_word[0].isupper():
                 continue # let's skip prefixes and sufixes for now, also whatever starts with a capital leter
 
-
-            # words come in '*[[word]]' format hence the stripping below
             root = etree.parse(nkjp_lookup('{0}**'.format(input_word).replace(' ', '** '))).getroot()
-            #root = etree.parse(nkjp_lookup('a capite**'.format(orphaned[3:-3]))).getroot()
-            #xmlout = nkjp_lookup('{0}**'.format(orphaned[3:-3])).read()
-            #print(xml.dom.minidom.parseString(xmlout).toprettyxml())
+
             if root.find('concordance') is not None:
                 found = 0
+
                 for line in root.find('concordance').findall('line'):
+
                     sentence = extract_one_sentence(line, input_word)
+
                     if check_sentence_quality(sentence) == 0:
                         continue
+                    
+                    # see "dirty trick" note above
                     allwords = re.findall(re_base_form, wikilink(sentence[0] + sentence[2]))
                     for lookup_word in allwords:
+                        
+                        #for now, reflective verbs are not included in "missing example" list
+                        #hence this trick
                         if ' się' in lookup_word:
                             lookup_word = lookup_word[:-4]
+
                         if '\n{0}\n'.format(lookup_word) in no_examples:
                             print(lookup_word)
                             defs = get_definitions_new(lookup_word)
+                            
                             if defs == 0:
                                 print(lookup_word)
-                                found = 1
                                 break
+
                             ref = get_reference(line)
                             if ref == '':
                                 break
+
                             new_example = ExampleDict()
                             new_example['title'] = lookup_word
                             new_example['left'] = line.find('left').text
@@ -376,7 +388,6 @@ def orphaned_examples(test_word=None):
 
                             print(wikitext_one_sentence(sentence, input_word))
 
-                            i+=1
                             found = 1
                             break
                     if found:
