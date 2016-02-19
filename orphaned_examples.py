@@ -294,6 +294,15 @@ def get_definitions_new(word):
     return 0
 
 
+class ExampleDict(dict):
+   def __init__(self,*arg,**kw):
+      super(ExampleDict, self).__init__(*arg, **kw)
+      self['verificator'] = 'None'
+      self['correct_num'] = 'None'
+      self['good_example'] = False
+      self['bad_example'] = False
+
+
 def orphaned_examples(test_word=None):
     buffer_size = 20
     pages_count = 0
@@ -353,7 +362,18 @@ def orphaned_examples(test_word=None):
                             ref = get_reference(line)
                             if ref == '':
                                 break
-                            output.append({})
+                            new_example = ExampleDict()
+                            new_example['title'] = lookup_word
+                            new_example['left'] = line.find('left').text
+                            new_example['right'] = line.find('right').text
+                            new_example['example'] = wikitext_one_sentence(sentence, orphaned[3:-3])
+                            new_example['left_extra'] = wikilink(sentence[3])
+                            new_example['source'] = get_reference(line)
+                            new_example['definitions'] = defs
+                            new_example['orphan'] = orphaned[3:-3]
+                            output.append(new_example)
+
+                            '''output.append({})
                             output[i]['title'] = lookup_word
                             output[i]['left'] = line.find('left').text
                             output[i]['right'] = line.find('right').text
@@ -366,7 +386,7 @@ def orphaned_examples(test_word=None):
                             output[i]['bad_example'] = False
                             output[i]['definitions'] = defs
                             output[i]['orphan'] = orphaned[3:-3]
-                            
+                            '''
                             print(wikitext_one_sentence(sentence, orphaned[3:-3]))
 
                             i+=1
