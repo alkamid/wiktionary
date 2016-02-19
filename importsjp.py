@@ -779,8 +779,10 @@ def wikipage(hasloSJP, obrazki):
 def morfAnalyse(word):
     if word == '':
         return [None, '', None]
-    analysed = analyse(word, dag=1)
-    
+    try: analysed = analyse(word, dag=1)
+    except KeyError:
+        return [None, word, None]
+
     if len(analysed) == 1:
         analysed_return = [analysed[0][2][1], word, analysed[0][2][2]]
     else:
@@ -800,8 +802,11 @@ def morfAnalyse(word):
     #was added to the end of the base form. Until I figure out what it is, I'll have the
     #workaround below
 
-    if analysed_return[0][-2] == ':':
-        analysed_return[0] = analysed_return[0][:-2]
+    if len(analysed_return[0]) > 3:
+        if analysed_return[0][-2] == ':':
+            analysed_return[0] = analysed_return[0][:-2]
+        elif analysed_return[0][-3] == ':':
+            analysed_return[0] = analysed_return[0][:-3]
     return analysed_return
 
 
