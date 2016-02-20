@@ -59,7 +59,6 @@ var verifyButtonAction = function(content, good_or_bad) {
     	 	content[index].correct_num = $('.num_selector').eq(index).find(":selected").text();
     	    }
     	    else {
-    	 	content[index].verificator = config.wgUserName;
     	 	content[index].correct_num = $('.num_selector').eq(index).find(":selected").text();
     	    }
     	    content[index].good_example = !content[index].good_example;
@@ -73,12 +72,10 @@ var verifyButtonAction = function(content, good_or_bad) {
     	 	content[index].good_example = false;
     	 	content[index].correct_num = 'None';
     	    }
-    	    else {
-    	 	content[index].verificator = config.wgUserName;
-    	    }
        	    content[index].bad_example = !content[index].bad_example;
 	}
 
+    	content[index].verificator = config.wgUserName;
 	content[index].example = $('.raw-textarea*[data-index=' + index + ']').val();
 	document.editform.wpTextbox1.value = JSON.stringify(content, null, 4);
 	
@@ -150,6 +147,25 @@ var verifyButtonAction = function(content, good_or_bad) {
 		$select = $('<select>')
 		    .addClass('num_selector')
 		    .appendTo($selectdiv);
+
+		
+		// count meanings and add options to select dropdown menu
+		var reNums = /\: \(([0-9]\.[0-9]{1,2})\)\s*/g;
+		match = reNums.exec(word.definitions);
+		while (match != null) {
+		    $option = $('<option>', {value: match[1], text: match[1]})
+			.appendTo($select);
+		    if (word.correct_num != '' && match[1] == word.correct_num) {
+			$option.attr('selected', 'selected');
+		    }
+
+		    match = reNums.exec(word.definitions);
+		    }
+		
+		// if there's only one meaning, show the selector but don't require the user to select a value
+		if ($select.find('option').length > 1) {
+		    $select.prepend($('<option>', {value: ''}));
+		}
 
 
 		// good/bad example buttons
@@ -233,18 +249,6 @@ var verifyButtonAction = function(content, good_or_bad) {
 			    .text('źródło: ' + word.source)
 			   );
 
-		// count meanings and add options to select dropdown menu
-		var reNums = /\: \(([0-9]\.[0-9]{1,2})\)\s*/g;
-		match = reNums.exec(word.definitions);
-		while (match != null) {
-		    $select.append($('<option>', {value: match[1], text: match[1]}));
-		    match = reNums.exec(word.definitions);
-		    }
-		
-		// if there's only one meaning, show the selector but don't require the user to select a value
-		if ($select.find('option').length > 1) {
-		    $select.prepend($('<option>', {value: ''}));
-		}
 
 		wikifyExample($defdiv, word.definitions);
 
