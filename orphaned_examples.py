@@ -14,6 +14,7 @@ import string # for removing punctuation
 from importsjp import morfAnalyse, wikilink
 import xml.dom.minidom # for testing
 from klasa import *
+import pywikibot as pwb
 
 def extract_one_sentence(nkjp_match, nkjp_query):
     """
@@ -302,6 +303,28 @@ class ExampleDict(dict):
       self['good_example'] = False
       self['bad_example'] = False
 
+def check_verifications():
+    site = pwb.Site('test', 'wikipedia')
+    page = pwb.Page(site, 'Przykłady')
+
+    new_revid = page.latest_revision_id
+
+    for a in page.revisions():
+        if a.user == 'Alkamid':
+            old_revid = a.revid
+            break
+
+    if new_revid != old_revid:
+        old = json.loads(page.getOldVersion(old_revid))
+        new = json.loads(page.text)
+    else:
+        return -1
+
+    print(old[0])
+    print(new[0])
+
+    #print(old)
+    
 
 def orphaned_examples(test_word=None):
 
