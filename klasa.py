@@ -50,8 +50,7 @@ class Haslo():
             self.content = ''
             self.listLangs = []
 
-        #title should be unicode only? will change in python 3 version
-        elif type(title) is str or type(title) is str:
+        elif type(title) is str:
             self.site = pywikibot.Site('pl', 'wiktionary')
             self.type = 1
             self.title = title
@@ -136,24 +135,26 @@ class Haslo():
         self.listLangs.append(section)
 
 def sortSections(sectionList):
-    # sorting sections. The proper order is: 1. "użycie międzynarodowe" 2. "polski" 3. "termin obcy w języku polskim" 4. "znak chiński". The rest is sorted alphabetically with pl_PL locale
+    """ sorting sections. The proper order is:
+    1. "użycie międzynarodowe"
+    2. "polski"
+    3. "termin obcy w języku polskim"
+    4. "znak chiński"
+    The rest is sorted alphabetically with pl_PL locale
+    
+    @param sectionList: a list of language sections to be sorted
+    @type sectionList: list of LanguageSection() objects
+    
+    """
+    
     sectionList = sorted(sectionList, key=lambda x: locale.strxfrm(x.lang))
-    for sec in sectionList:
-        if sec.lang == 'znak chiński':
-            ind = sectionList.index(sec)
-            sectionList.insert(0, sectionList.pop(ind))
-    for sec in sectionList:
-        if sec.lang == 'termin obcy w języku polskim':
-            ind = sectionList.index(sec)
-            sectionList.insert(0, sectionList.pop(ind))
-    for sec in sectionList:
-        if sec.lang == 'polski':
-            ind = sectionList.index(sec)
-            sectionList.insert(0, sectionList.pop(ind))
-    for sec in sectionList:
-        if sec.lang == 'użycie międzynarodowe':
-            ind = sectionList.index(sec)
-            sectionList.insert(0, sectionList.pop(ind))
+    
+    for lang in ['znak chiński', 'termin obcy w języku polskim', 'polski', 'użycie międzynarodowe']:
+        for sec in sectionList:
+            if sec.lang == lang:
+                ind = sectionList.index(sec)
+                sectionList.insert(0, sectionList.pop(ind))
+
     return sectionList
 
 class notFromMainNamespace(Exception):
@@ -179,6 +180,13 @@ class WrongHeader(Exception):
         self.value = 'something is wrong with the header'
     def __str__(self):
         return repr(self.value)
+
+class NotExampleField(Exception):
+    def __init__(self):
+        self.value = 'this method only works for {{przykłady}} subsection'
+    def __str__(self):
+        return repr(self.value)
+
 
 def generateRegexp(order):
     for i, sect in enumerate(order):
@@ -230,11 +238,28 @@ class LanguageSection():
     sectionOrder = collections.OrderedDict() # we want to keep subsections ordered
 
     # first, standard subsections template. The rest is adding/subtracting specific subsections for a few languages
-    sectionOrder['default'] = [subSection('', True, name='dodatki'), subSection('wymowa'), subSection('znaczenia'), subSection('odmiana'), subSection('przykłady'), subSection('składnia'), subSection('kolokacje'), subSection('synonimy'), subSection('antonimy'), subSection('hiperonimy', True), subSection('hiponimy', True), subSection('holonimy', True), subSection('meronimy', True), subSection('pokrewne'), subSection('frazeologia'), subSection('etymologia'), subSection('uwagi'), subSection('źródła')]
+    sectionOrder['default'] = [subSection('', True, name='dodatki'),
+                               subSection('wymowa'), subSection('znaczenia'),
+                               subSection('odmiana'), subSection('przykłady'),
+                               subSection('składnia'), subSection('kolokacje'),
+                               subSection('synonimy'), subSection('antonimy'),
+                               subSection('hiperonimy', optional=True),
+                               subSection('hiponimy', optional=True),
+                               subSection('holonimy', optional=True),
+                               subSection('meronimy', optional=True),
+                               subSection('pokrewne'), subSection('frazeologia'),
+                               subSection('etymologia'), subSection('uwagi'),
+                               subSection('źródła')]
 
-    sectionOrder['znak chiński'] = [subSection('klucz'), subSection('kreski'), subSection('warianty'), subSection('kolejność'), subSection('znaczenia'), subSection('etymologia'), subSection('kody'), subSection('słowniki'), subSection('uwagi')]
+    sectionOrder['znak chiński'] = [subSection('klucz'), subSection('kreski'),
+                                    subSection('warianty'), subSection('kolejność'),
+                                    subSection('znaczenia'), subSection('etymologia'),
+                                    subSection('kody'), subSection('słowniki'), subSection('uwagi')]
 
-    sectionOrder['staroegipski'] = [subSection('', True, name='dodatki'), subSection('zapis hieroglificzny'), subSection('transliteracja'), subSection('transkrypcja'), subSection('znaczenia'), subSection('determinatywy')] + deepcopy(sectionOrder['default'])
+    sectionOrder['staroegipski'] = [subSection('', True, name='dodatki'),
+                                    subSection('zapis hieroglificzny'),
+                                    subSection('transliteracja'), subSection('transkrypcja'),
+                                    subSection('znaczenia'), subSection('determinatywy')] + deepcopy(sectionOrder['default'])
     del sectionOrder['staroegipski'][6:9]
 
     sectionOrder['polski'] = deepcopy(sectionOrder['default'])
@@ -340,23 +365,23 @@ class LanguageSection():
                     self.subSections[sect.name] = Pole('')
                 else:
                     self.type = 7
+                    return 7
 
 
-            if self.type == 1:
-                s_znaczeniaDetail = re.findall(LanguageSection.regex['pola-znaczeniaDetail'], self.subSections['znaczenia'].text)
-                if s_znaczeniaDetail:
-                    self.znaczeniaDetail = [list(tup) for tup in s_znaczeniaDetail]
+            s_znaczeniaDetail = re.findall(LanguageSection.regex['pola-znaczeniaDetail'], self.subSections['znaczenia'].text)
+            if s_znaczeniaDetail:
+                self.znaczeniaDetail = [list(tup) for tup in s_znaczeniaDetail]
 
-                    self.checkForInflectedForms(self.znaczeniaDetail)
-                    # checking if the last number [(1.1), (2.1) etc.] matches the length of self.znaczeniaDetail - if it doesn't, it means that the numbering is invalid
-                    s_numer = re.search(LanguageSection.regex['pola-nr'], self.znaczeniaDetail[-1][1])
-                    if int(s_numer.group(1)[0]) != len(self.znaczeniaDetail):
-                        self.type = 14
+                self.checkForInflectedForms(self.znaczeniaDetail)
+                # checking if the last number [(1.1), (2.1) etc.] matches the length of self.znaczeniaDetail - if it doesn't, it means that the numbering is invalid
+                s_numer = re.search(LanguageSection.regex['pola-nr'], self.znaczeniaDetail[-1][1])
+                if int(s_numer.group(1)[0]) != len(self.znaczeniaDetail):
+                    self.type = 14
+            else:
+                if self.lang == 'znak chiński':
+                    self.znaczeniaDetail = []
                 else:
-                    if self.lang == 'znak chiński':
-                        self.znaczeniaDetail = []
-                    else:
-                        self.type = 5
+                    self.type = 5
 
     def checkForInflectedForms(self, meanings):
         allFlexForms = True
@@ -405,9 +430,31 @@ class Pole():
             kody = re.findall(Pole.regex['init-kodySlowniki-details'], self.text)
             for b in kody:
                 self.dict[b[0]] = b[1]
+
+    def add_example(self, num, example_text):
+        #TODO: make it universal so it works for any subsection
+        if self.type != 'auto':
+            raise NotExampleField
+        
+        #https://regex101.com/r/xP6eR5/4
+        #find all existing examples
+        re_example = re.compile(r'(\: \(([0-9]\.[0-9]{1,2})\)\s{0,1}.*?)(?=\n\: \([0-9]\.[0-9]{1,2}\)|$)', re.DOTALL)
+        s_examples = re.findall(re_example, self.text)
+
+        #add the given example
+        s_examples.append((': ({0}) {1}'.format(num, example_text), str(num)))
+        
+        #sort examples
+        sorted_examples = sorted(s_examples, key=lambda tup: tup[1])
+
+        #join them as a string, excluding empty examples ": (1.1) "
+        self.text = '\n' + '\n'.join([a[0] for a in sorted_examples if len(a[0]) > 8])
+
+
     def merge(self, mode=2): #mode = 1 - test for a proper field, return 0 if invalid; mode=2 - merge a list/dict into a string
         text=''
         if self.type == 'warianty':
+            #TODO: this code can be shortened with two for loops
             text = ' |'
             if 'ct' in self.dict:
                 for a in self.dict['ct']:
