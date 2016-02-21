@@ -15,6 +15,7 @@ from importsjp import morfAnalyse, wikilink
 import xml.dom.minidom # for testing
 from klasa import *
 import pywikibot as pwb
+from datetime import datetime, timedelta
 
 def extract_one_sentence(nkjp_match, nkjp_query):
     """
@@ -290,7 +291,7 @@ def get_definitions_new(word):
                     langsection.pola()
                     nums = re.findall(re_numbers, langsection.subSections['znaczenia'].text)
 
-                    return re.sub(re_refs, '', langsection.subSections['znaczenia'].text)
+                    return (re.sub(re_refs, '', langsection.subSections['znaczenia'].text), pwb.Page(pwb.Site(), word).editTime())
 
     return 0
 
@@ -303,16 +304,67 @@ class ExampleDict(dict):
       self['good_example'] = False
       self['bad_example'] = False
 
+
+    
+def log_verification(verified_entry, error=''):
+    with open('log/date.log', 'a') as f:
+        log_line = ''
+        for field in ['title', 'verificator', 'example']:
+            log_line += '##' + verified_entry[field]
+        log_line += '##' + '1' if verified_entry['good_example'] else '0'
+        
+        if error != '':
+            log_line += '##' + error
+
+        f.write('\n' + log_line)
+        print(log_line)
+
+def add_example_to_page(verified_entry):
+        
+    fetch_time = datetime.strptime(verified_entry['fetch_time'], '%Y-%m-%dT%H:%M:%SZ') 
+    
+    try: page = Haslo(verified_entry['title'])
+    except sectionsNotFound:
+        pass
+    except WrongHeader:
+        pass
+    else:
+        if page.type == 3:
+            for lang_section in page.listLangs:
+                if lang_section.lang == 'polski':
+
+                    if pwb.Page(pwb.Site(), verified_entry['title']).editTime()+timedelta(days=1) > fetch_time:
+                        log_verification(verified_entry, 'edit_conflict')
+                        return -1
+
+                    lang_section.pola()
+                    lang_section.subSections['przykłady'].add_example(verified_entry['correct_num'], verified_entry['example'])
+                    lang_section.saveChanges()
+                    page.push(offline=True, myComment='[[Wikiprojekt:Dodawanie przykładów]]. Źródło przykładu: nkjp.pl. Weryfikator: [[User:{0}]]'.format(verified_entry['verificator']))
+                    log_verification(verified_entry)
+                    return 0
+    
+    log_verification(verified_entry, 'not_written_to_page')
+
+
+
 def check_verifications():
+
+    anon_edit = False
+
     site = pwb.Site('test', 'wikipedia')
     page = pwb.Page(site, 'Przykłady')
 
     new_revid = page.latest_revision_id
 
     for a in page.revisions():
+        if not anon_edit and a.anon == True:
+            anon_edit = True
+
         if a.user == 'Alkamid':
             old_revid = a.revid
             break
+
 
     if new_revid != old_revid:
         old = json.loads(page.getOldVersion(old_revid))
@@ -320,11 +372,25 @@ def check_verifications():
     else:
         return -1
 
-    print(old[0])
-    print(new[0])
+    if anon_edit:
+        for ix, verified_word in enumerate(new):
+            if verified_word['verificator'] == None:
+                for rev in page.revisions():
+                    temp = json.loads(page.getOldVersion(rev.revid))
+                    if temp[ix]['verificator'] != None:
+                        verified_word['verificator'] = previous_user
+                        break
+                    previous_id = rev.revid
+                    previous_user = rev.user
+                    if rev.revid == old_revid:
+                        break
 
-    #print(old)
-    
+    for verified_word in new:
+        if verified_word['good_example'] == True:
+            add_example_to_page(verified_word)
+        elif verified_word['bad_example'] == True:
+            log_verification(verified_word)
+
 
 def orphaned_examples(test_word=None):
 
@@ -405,7 +471,8 @@ def orphaned_examples(test_word=None):
                             new_example['example'] = wikitext_one_sentence(sentence, input_word)
                             new_example['left_extra'] = wikilink(sentence[3])
                             new_example['source'] = get_reference(line)
-                            new_example['definitions'] = defs
+                            new_example['definitions'] = defs[0]
+                            new_example['fetch_time'] = str(defs[1])
                             new_example['orphan'] = input_word
                             output.append(new_example)
 
