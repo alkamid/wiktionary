@@ -98,6 +98,7 @@ var verifyButtonAction = function(content, good_or_bad) {
 	    // and a button to hide/show it (and a cookie to control hide/show)
 	    $helpbutton = $('<button>')
 		.text('pokaż/schowaj pomoc')
+		.addClass('help-screenshot-button')
 		.click(function() {
 		    event.preventDefault();
 		    $('#explain').toggle();
