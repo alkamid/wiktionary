@@ -258,10 +258,7 @@ def get_definitions(word):
 class ExampleDict(dict):
    def __init__(self,*arg,**kw):
       super(ExampleDict, self).__init__(*arg, **kw)
-      self['verificator'] = 'None'
-      self['correct_num'] = 'None'
-      self['good_example'] = False
-      self['bad_example'] = False
+      self['examples'] = []
 
 
 def log_verification(verified_entry, error=''):
@@ -384,19 +381,23 @@ def orphaned_examples(test_word=None):
     open('output/empty_sections.txt', 'r') as g:
 
         # list of pages with no examples (obtained by empty_section.py)
-        no_examples = g.read()
+        orphans = f.read()
         
         # for testing purposes
         if test_word:
-            f = [test_word]
+            g = [test_word]
 
         pages_count = 0 #loop helper
         output = [] #list-container for examples
 
-        for input_word in f:
+        for input_word in g:
+
 
             # dealing with various list formats, e.g. *[[word]]
             input_word = input_word.strip('*[]\n')
+            if len(input_word) < 4 or input_word.upper == input_word:
+                continue
+
             print(input_word)
 
             # write to file/page every N words
@@ -414,53 +415,66 @@ def orphaned_examples(test_word=None):
 
             if root.find('concordance') is not None:
                 found = 0
+                found_orphan = 0
+
+                defs = get_definitions(input_word)
+                if defs == 0:
+                    continue
+
+                new_word = ExampleDict()
+                new_word['title'] = input_word
+                new_word['fetch_time'] = str(defs[1])
+                new_word['definitions'] = defs[0]
 
                 for line in root.find('concordance').findall('line'):
 
+                    print(line.find('match').text)
                     sentence = extract_one_sentence(line, input_word)
 
                     if check_sentence_quality(sentence) == 0:
                         continue
-                    
-                    # see "dirty trick" note above
-                    allwords = re.findall(re_base_form, wikilink(sentence[0] + sentence[2]))
-                    for lookup_word in allwords:
-                        
-                        #for now, reflective verbs are not included in "missing example" list
-                        #hence this trick
-                        if ' się' in lookup_word:
-                            lookup_word = lookup_word[:-4]
 
-                        if '\n{0}\n'.format(lookup_word) in no_examples:
-                            print(lookup_word)
-                            defs = get_definitions(lookup_word)
-                            
-                            if defs == 0:
-                                print(lookup_word)
-                                break
-
-                            ref = get_reference(line)
-                            if ref == '':
-                                break
-
-                            new_example = ExampleDict()
-                            new_example['title'] = lookup_word
-                            new_example['left'] = line.find('left').text
-                            new_example['right'] = line.find('right').text
-                            new_example['example'] = wikitext_one_sentence(sentence, input_word)
-                            new_example['left_extra'] = wikilink(sentence[3])
-                            new_example['source'] = get_reference(line)
-                            new_example['definitions'] = defs[0]
-                            new_example['fetch_time'] = str(defs[1])
-                            new_example['orphan'] = input_word
-                            output.append(new_example)
-
-                            print(wikitext_one_sentence(sentence, input_word))
-
-                            found = 1
-                            break
-                    if found:
+                    ref = get_reference(line)
+                    if ref == '':
                         break
+
+                    if len(new_word['examples']) < 2:
+                        print(len(new_word['examples']))
+                        temp_example = {'verificator': 'None', 'correct_num': 'None', 'good_example': False, 'bad_example': False}
+                        temp_example['left'] = line.find('left').text
+                        temp_example['right'] = line.find('right').text
+                        temp_example['example'] = wikitext_one_sentence(sentence, input_word)
+                        temp_example['left_extra'] = wikilink(sentence[3])
+                        temp_example['source'] = ref
+                        temp_example['orphan'] = None
+                        new_word['examples'].append(temp_example)
+
+                    else:
+                        # see "dirty trick" note above
+                        allwords = re.findall(re_base_form, wikilink(sentence[0] + sentence[2]))
+                        for lookup_word in allwords:
+                            #for now, reflective verbs are not included in "missing example" list
+                            #hence this trick
+                            if ' się' in lookup_word:
+                                lookup_word = lookup_word[:-4]
+
+                            if '\n*[[{0}]]\n'.format(lookup_word) in orphans:
+                                new_example = new_word['examples'][1]
+                                new_example['orphan'] = lookup_word
+                                new_example['left'] = line.find('left').text
+                                new_example['right'] = line.find('right').text
+                                new_example['example'] = wikitext_one_sentence(sentence, input_word)
+                                new_example['left_extra'] = wikilink(sentence[3])
+                                new_example['source'] = ref
+                                new_example['definitions'] = defs[0]
+                                found_orphan = 1
+                                break
+                        if found_orphan:
+                            break
+
+                if new_word and len(new_word['examples']) > 0:
+                    output.append(new_word)
+
 
 if __name__ == '__main__':
     orphaned_examples()
