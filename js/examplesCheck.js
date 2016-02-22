@@ -6,7 +6,7 @@ var css = [
     '.toggle-button-selected-good { background-color: #83B152; border: 2px solid #7DA652; }',
     '.toggle-button-selected-bad { background-color: #e34a33; border: 2px solid #ca331c; }',
     '.example-div {display: none;}',
-    '.example-box {display: inline-block; width:100%;}',
+    '.example-box {display: inline-block; width:100%; border: solid 2px;}',
     '.example-buttons {width:60px; float:left; align: center;}',
     '.def-selector {width: 50px; border: solid 2px #eeeedd; align: center; margin: 0 auto}',
     '.raw-text {width:50%; float:left;}',
@@ -32,9 +32,11 @@ mw.loader.using( 'mediawiki.util', function () {
 
 var verifyButtonAction = function(content, good_or_bad) {
     return function(event) {
-	var $thisbutton = $('.current.example-div').find('.toggle-button.' + good_or_bad + '-button');
-	var $thatbutton = $('.current.example-div').find(':not(.toggle-button.' + good_or_bad + '-button)'); 
-	var $selectordiv = $('.current.example-div').find('.def-selector');
+	exampleIndex = $(this).closest('.example-box').attr('data-example-index');
+
+	var $thisbutton = $(this);
+	var $thatbutton = $('.current.example-div').find('*[data-example-index=' + exampleIndex + ']').find(':not(.toggle-button.' + good_or_bad + '-button)'); 
+	var $selectordiv = $('.current.example-div').find('*[data-example-index=' + exampleIndex + ']').find('.def-selector');
 
 	selectorValue = $selectordiv.find('.num_selector').val();
 	if (good_or_bad == 'good' && selectorValue === '') {
@@ -50,33 +52,33 @@ var verifyButtonAction = function(content, good_or_bad) {
 	index = $thisbutton.attr('data-index');
 	
 	if (good_or_bad === 'good') {
-	    if (content[index].good_example === true) {
-    	 	content[index].verificator = 'None';
-    	 	content[index].correct_num = 'None';
+	    if (content[index].examples[exampleIndex].good_example === true) {
+    	 	content[index].examples[exampleIndex].verificator = 'None';
+    	 	content[index].examples[exampleIndex].correct_num = 'None';
     	    }
-    	    else if (content[index].bad_example === true) {
-    	 	content[index].bad_example = false;
-    	 	content[index].correct_num = $('.num_selector').eq(index).find(":selected").text();
+    	    else if (content[index].examples[exampleIndex].bad_example === true) {
+    	 	content[index].examples[exampleIndex].bad_example = false;
+    	 	content[index].examples[exampleIndex].correct_num = $('.num_selector').eq(index).find(":selected").text();
     	    }
     	    else {
-    	 	content[index].correct_num = $('.num_selector').eq(index).find(":selected").text();
+    	 	content[index].examples[exampleIndex].correct_num = $('.num_selector').eq(index).find(":selected").text();
     	    }
-    	    content[index].good_example = !content[index].good_example;
+    	    content[index].examples[exampleIndex].good_example = !content[index].examples[exampleIndex].good_example;
     	}
 	else if (good_or_bad === 'bad') {
-	    if (content[index].bad_example === true) {
-    	 	content[index].verificator = 'None';
-    	 	content[index].correct_num = 'None';
+	    if (content[index].examples[exampleIndex].bad_example === true) {
+    	 	content[index].examples[exampleIndex].verificator = 'None';
+    	 	content[index].examples[exampleIndex].correct_num = 'None';
     	    }
-    	    else if (content[index].good_example === true) {
-    	 	content[index].good_example = false;
-    	 	content[index].correct_num = 'None';
+    	    else if (content[index].examples[exampleIndex].good_example === true) {
+    	 	content[index].examples[exampleIndex].good_example = false;
+    	 	content[index].examples[exampleIndex].correct_num = 'None';
     	    }
-       	    content[index].bad_example = !content[index].bad_example;
+       	    content[index].examples[exampleIndex].bad_example = !content[index].examples[exampleIndex].bad_example;
 	}
 
-    	content[index].verificator = config.wgUserName;
-	content[index].example = $('.raw-textarea*[data-index=' + index + ']').val();
+    	content[index].examples[exampleIndex].verificator = config.wgUserName;
+	content[index].examples[exampleIndex].example = $('.raw-textarea*[data-index=' + index + ']').val();
 	document.editform.wpTextbox1.value = JSON.stringify(content, null, 4);
 	
     };
@@ -158,126 +160,134 @@ var verifyButtonAction = function(content, good_or_bad) {
 		    .addClass('defs-div')
 		    .appendTo($singleExampleDiv);
 		
-		// containter for example text
-		$textdiv = $('<div>')
-		    .addClass('example-box')
-		    .appendTo($singleExampleDiv);
-
-		// buttons and selector container
-		$buttonsdiv = $('<div>')
-		    .addClass('example-buttons')
-		    .appendTo($textdiv)
-
-		// meaning selector: if words have multiple meanings, one of them must be selected
-		$selectdiv = $('<div>')
-		    .addClass('def-selector')
-		    .appendTo($buttonsdiv);
-
-		$select = $('<select>')
-		    .addClass('num_selector')
-		    .appendTo($selectdiv);
-
 		
-		// count meanings and add options to select dropdown menu
-		var reNums = /\: \(([0-9]\.[0-9]{1,2})\)\s*/g;
-		match = reNums.exec(word.definitions);
-		while (match != null) {
-		    $option = $('<option>', {value: match[1], text: match[1]})
-			.appendTo($select);
-		    if (word.correct_num != '' && match[1] == word.correct_num) {
-			$option.attr('selected', 'selected');
-		    }
+		$.each(word.examples, function(ix, example){
+		    
+		    // containter for example text
+		    $textdiv = $('<div>')
+			.addClass('example-box')
+			.attr('data-example-index', ix)
+			.appendTo($singleExampleDiv);
 
+		    // buttons and selector container
+		    $buttonsdiv = $('<div>')
+			.addClass('example-buttons')
+			.appendTo($textdiv)
+
+		    // meaning selector: if words have multiple meanings, one of them must be selected
+		    $selectdiv = $('<div>')
+			.addClass('def-selector')
+			.appendTo($buttonsdiv);
+
+		    $select = $('<select>')
+			.addClass('num_selector')
+			.appendTo($selectdiv);
+
+
+		    // count meanings and add options to select dropdown menu
+		    var reNums = /\: \(([0-9]\.[0-9]{1,2})\)\s*/g;
 		    match = reNums.exec(word.definitions);
+		    while (match != null) {
+			$option = $('<option>', {value: match[1], text: match[1]})
+			    .appendTo($select);
+			if (example.correct_num != '' && match[1] == example.correct_num) {
+			    $option.attr('selected', 'selected');
+			}
+
+			match = reNums.exec(word.definitions);
+			}
+
+		    // if there's only one meaning, show the selector but don't require the user to select a value
+		    if ($select.find('option').length > 1) {
+			$select.prepend($('<option>', {value: ''}));
+		    }
+
+
+		    // good/bad example buttons
+		    $okbutton = $('<div>')
+			.addClass('toggle-button')
+			.addClass('good-button')
+			.attr('data-index', index)
+			.text('✓')
+			.appendTo($buttonsdiv);
+
+		    $buttonsdiv.append($('<br/>'));
+
+		    $badbutton = $('<div>')
+			.addClass('toggle-button')
+			.addClass('bad-button')
+			.attr('data-index', index)
+			.text('✗')
+			.appendTo($buttonsdiv);
+
+		    // if the page has already been edited, select respective buttons
+		    if (word.good_example === true) {
+			$okbutton.addClass('toggle-button-selected-good');
+		    }
+		    if (word.bad_example === true) {
+			$badbutton.addClass('toggle-button-selected-bad');
 		    }
 		
-		// if there's only one meaning, show the selector but don't require the user to select a value
-		if ($select.find('option').length > 1) {
-		    $select.prepend($('<option>', {value: ''}));
-		}
+		    // container for raw text ([[such]] [[as]] [[this]])
+		    $rawTextdiv = $('<div>')
+			.addClass('raw-text')
+			.appendTo($textdiv);
+
+		    // left context - in case the usage is not clear from what's been copied into the textbox
+		    $leftcontext = $('<p>')
+			.addClass('left-context')
+			.text(example.left_extra)
+			.appendTo($rawTextdiv);
+
+		    // refresh button - I put it in another diff for it to stay in one place
+		    $refreshDiv= $('<div>')
+			.addClass('wikified-text')
+			.appendTo($textdiv);
+
+		    $reloadButton = $('<button>')
+			.text('odśwież')
+			.appendTo($refreshDiv);
+
+		    $reloadButton.click(function(){
+			event.preventDefault();
+			$('#wikified-text' + index).empty();
+			wikifyExample($('#wikified-text' + index), $('.raw-textarea*[data-index=' + index + ']').val(), word.title);
+
+		    });
+
+		    // wikified text - can be refreshed
+		    $wikifiedTextdiv = $('<div>')
+			.addClass('wikified-text')
+			.attr('id', 'wikified-text' + index)
+			.appendTo($textdiv);
+
+		    wikifyExample($wikifiedTextdiv, example.example, word.title);
+
+		    // editable wikitext
+		    $rawTextdiv
+			.append($('<textarea>')
+				.addClass('raw-textarea')
+				.text(example.example)
+				.attr('rows', 6)
+				.attr('data-index', index)
+			       );
+
+		    // source of the example
+		    $textdiv
+			.append($('<p>')
+				.addClass('source')
+				.text('źródło: ' + example.source)
+			       );
 
 
-		// good/bad example buttons
-		$okbutton = $('<div>')
-		    .addClass('toggle-button')
-		    .addClass('good-button')
-		    .attr('data-index', index)
-		    .text('✓')
-		    .appendTo($buttonsdiv);
-		
-		$buttonsdiv.append($('<br/>'));
+		    $okbutton.click(verifyButtonAction(content, 'good'));
+		    $badbutton.click(verifyButtonAction(content, 'bad'));
 
-		$badbutton = $('<div>')
-		    .addClass('toggle-button')
-		    .addClass('bad-button')
-		    .attr('data-index', index)
-		    .text('✗')
-		    .appendTo($buttonsdiv);
-		
-		// if the page has already been edited, select respective buttons
-		if (word.good_example === true) {
-		    $okbutton.addClass('toggle-button-selected-good');
-		}
-		if (word.bad_example === true) {
-		    $badbutton.addClass('toggle-button-selected-bad');
-		}
-		
-		
-		$okbutton.click(verifyButtonAction(content, 'good'));
-		$badbutton.click(verifyButtonAction(content, 'bad'));
-
-
-		// container for raw text ([[such]] [[as]] [[this]])
-		$rawTextdiv = $('<div>')
-		    .addClass('raw-text')
-		    .appendTo($textdiv);
-
-		// left context - in case the usage is not clear from what's been copied into the textbox
-		$leftcontext = $('<p>')
-		    .addClass('left-context')
-		    .text(word.left_extra)
-		    .appendTo($rawTextdiv);
-
-		// refresh button - I put it in another diff for it to stay in one place
-		$refreshDiv= $('<div>')
-		    .addClass('wikified-text')
-		    .appendTo($textdiv);
-		
-		$reloadButton = $('<button>')
-		    .text('odśwież')
-		    .appendTo($refreshDiv);
-
-		$reloadButton.click(function(){
-		    event.preventDefault();
-		    $('#wikified-text' + index).empty();
-		    wikifyExample($('#wikified-text' + index), $('.raw-textarea*[data-index=' + index + ']').val(), word.title);
-		        
 		});
+				
 
-		// wikified text - can be refreshed
-		$wikifiedTextdiv = $('<div>')
-		    .addClass('wikified-text')
-		    .attr('id', 'wikified-text' + index)
-		    .appendTo($textdiv);
 
-		wikifyExample($wikifiedTextdiv, word.example, word.title);
-
-		// editable wikitext
-		$rawTextdiv
-		    .append($('<textarea>')
-			    .addClass('raw-textarea')
-			    .text(word.example)
-			    .attr('rows', 6)
-			    .attr('data-index', index)
-			   );
-
-		// source of the example
-		$singleExampleDiv
-		    .append($('<p>')
-			    .addClass('source')
-			    .text('źródło: ' + word.source)
-			   );
-
+		
 
 		wikifyExample($defdiv, word.definitions);
 
