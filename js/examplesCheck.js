@@ -6,12 +6,12 @@ var css = [
     '.toggle-button-selected-good { background-color: #83B152; border: 2px solid #7DA652; }',
     '.toggle-button-selected-bad { background-color: #e34a33; border: 2px solid #ca331c; }',
     '.example-div {display: none;}',
-    '.example-box {display: inline-block; width:100%; border: solid 2px;}',
+    '.example-box {display: inline-block; width:100%;}',
     '.example-buttons {width:60px; float:left; align: center;}',
     '.def-selector {width: 50px; border: solid 2px #eeeedd; align: center; margin: 0 auto}',
     '.raw-text {width:50%; float:left;}',
     '.left-context {font-size: x-small;}',
-    '.wikified-text {overflow: auto;}',
+    '.wikified-text-box {overflow: auto;}',
     '.raw-textarea {resize: vertical;}',
     '.source {font-size: small}',
     '.selector-div-unknown-choice {border: solid 2px red;}',
@@ -96,6 +96,9 @@ var verifyButtonAction = function(content, good_or_bad) {
 
 	    // add explanatory screenshot at the top
 	    $('.wikiEditor-ui-top').prepend('<img id="explain" style="max-width:100%" src="https://upload.wikimedia.org/wikipedia/test/9/92/Przyk%C5%82ad.png" />');
+	    
+	    // until I find a way to redirect special characters etc. to my custom fields
+	    $('#wikiEditor-ui-toolbar').hide();
 
 	    // and a button to hide/show it (and a cookie to control hide/show)
 	    $helpbutton = $('<button>')
@@ -243,27 +246,30 @@ var verifyButtonAction = function(content, good_or_bad) {
 			.text(example.left_extra)
 			.appendTo($rawTextdiv);
 
-		    // refresh button - I put it in another diff for it to stay in one place
-		    $refreshDiv= $('<div>')
-			.addClass('wikified-text')
+		    $wikifiedDiv= $('<div>')
+			.addClass('wikified-text-box')
 			.appendTo($textdiv);
 
+		    // refresh button - I put it in another diff for it to stay in one place
 		    $reloadButton = $('<button>')
+			.addClass('refresh-button')
 			.text('odśwież')
-			.appendTo($refreshDiv);
+			.appendTo($wikifiedDiv);
 
 		    $reloadButton.click(function(){
 			event.preventDefault();
-			$('#wikified-text' + index).empty();
-			wikifyExample($('#wikified-text' + index), $('.raw-textarea*[data-index=' + index + ']').val(), word.title);
+			$div_to_refresh = $(this).closest('.example-box').find('.wikified-text');
+			text_to_refresh_from = $(this).closest('.example-box').find('.raw-textarea').val();
+			$div_to_refresh.empty();
+			wikifyExample($div_to_refresh, text_to_refresh_from, word.title);
 
 		    });
 
 		    // wikified text - can be refreshed
 		    $wikifiedTextdiv = $('<div>')
 			.addClass('wikified-text')
-			.attr('id', 'wikified-text' + index)
-			.appendTo($textdiv);
+			.attr('data-example-index', ix)
+			.appendTo($wikifiedDiv);
 
 		    wikifyExample($wikifiedTextdiv, example.example, word.title);
 
@@ -277,7 +283,7 @@ var verifyButtonAction = function(content, good_or_bad) {
 			       );
 
 		    // source of the example
-		    $textdiv
+		    $wikifiedDiv
 			.append($('<p>')
 				.addClass('source')
 				.text('źródło: ' + example.source)
@@ -287,10 +293,12 @@ var verifyButtonAction = function(content, good_or_bad) {
 		    $okbutton.click(verifyButtonAction(content, 'good'));
 		    $badbutton.click(verifyButtonAction(content, 'bad'));
 
+
+		if (ix == 0) {
+		    $singleExampleDiv.append($('<hr/>'));
+		}
+
 		});
-				
-
-
 		
 
 		wikifyExample($defdiv, word.definitions);
@@ -299,7 +307,7 @@ var verifyButtonAction = function(content, good_or_bad) {
 		//$.each(word.def_nums, function(def_index, def_value){
 		//    $select.append($('<option>', {value: def_value, text: def_value}));
 		//});
-		
+	
 	    });
 	    
 
