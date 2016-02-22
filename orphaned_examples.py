@@ -229,52 +229,11 @@ def get_definitions(word):
     Args:
         word (str): page title on pl.wikt
     Returns:
-        list: all definitions found in page, e.g. [('1.1', 'mean1'),
-            ('1.2', 'mean2'), ('2.1', 'mean3')]
-    """
-
-    re_numbers = re.compile(r'\: \(([0-9]\.[0-9])\)\s*(.*)')
-    re_refs = re.compile(r'(<ref.*?(?:/>|</ref>))')
-
-    try: wikipage = Haslo(word)
-    except sectionsNotFound:
-        pass
-    else:
-        if wikipage.type == 3:
-            for langsection in wikipage.listLangs:
-                if langsection.lang == 'polski':
-                    langsection.pola()
-                    defs = []
-                    for pos in langsection.znaczeniaDetail:
-                        if word + ' się' in pos[0]:
-                            prefix = '(' + word + ' się) '
-                        else:
-                            prefix = ''
-
-                        defs_found = re.findall(re_numbers, pos[1])
-                        print(defs_found)
-                        # get rid of <refs> in definitions
-                        defs += [(d[0], prefix + re.sub(re_refs, '', d[1])) for d in defs_found]
-                        
-                        # dewikify (remove [[ ]])
-                        #defs = [(d[0], d[1].replace('[[', '').replace(']]', '')) for d in defs]
-                    
-                    return defs
-
-    return 0
-
-
-def get_definitions_new(word):
-    """
-    Load a page from pl.wikt and find all definitions in the Polish section.
-    This can be used to show the user a list of definitions beside an example,
-    so they can match the two.
-
-    Args:
-        word (str): page title on pl.wikt
-    Returns:
-        str: all definitions found in page along with their part of speech
+        tuple:
+            str: all definitions found in page along with their part of speech
             descriptions
+            pywikibot.Timestamp: time at which definitions were retrieved (useful
+                for checking for edit conflicts
     """
 
     # https://regex101.com/r/sX1yF7/1
@@ -362,6 +321,8 @@ def add_example_to_page(verified_entry):
     
     log_verification(verified_entry, 'not_written_to_page')
 
+def dewikify(input_text):
+    re_base_form = re.compile(r'\[\[(.*?)(?:\||\]\])')
 
 
 def check_verifications():
@@ -472,7 +433,7 @@ def orphaned_examples(test_word=None):
 
                         if '\n{0}\n'.format(lookup_word) in no_examples:
                             print(lookup_word)
-                            defs = get_definitions_new(lookup_word)
+                            defs = get_definitions(lookup_word)
                             
                             if defs == 0:
                                 print(lookup_word)
