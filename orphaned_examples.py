@@ -305,8 +305,12 @@ class ExampleDict(dict):
       self['bad_example'] = False
 
 
-    
 def log_verification(verified_entry, error=''):
+
+    #format: title##verificator##example##correct_def##bool(good_example)##error
+
+    #https://regex101.com/r/nN1bN2/2
+    re_correct_def = re.compile(r'(?:\: \(' + re.escape(verified_entry['correct_num']) + r'\)\s{0,1}(.*?))(?=\n\: \([0-9]\.[0-9]{1,2}\)|\n\'\'|\n\{\{|$)', re.DOTALL)
     
     todays_date = (datetime.today()).strftime('%Y%m%d')
 
@@ -314,8 +318,17 @@ def log_verification(verified_entry, error=''):
         log_line = ''
         for field in ['title', 'verificator', 'example']:
             log_line += '##' + verified_entry[field]
+
+        s_correct_def = re.search(re_correct_def, verified_entry['definitions'])
+        if s_correct_def:
+            log_line += '##' + s_correct_def.group(1)
+        elif verified_entry['bad_example'] == True:
+            log_line += '##none'
+        else:
+            error += ';cant_find_correct_def'
+
         log_line += '##' + ('1' if verified_entry['good_example'] else '0')
-        
+    
         if error != '':
             log_line += '##' + error
 
@@ -336,7 +349,7 @@ def add_example_to_page(verified_entry):
             for lang_section in page.listLangs:
                 if lang_section.lang == 'polski':
 
-                    if pwb.Page(pwb.Site(), verified_entry['title']).editTime()+timedelta(days=1) > fetch_time:
+                    if pwb.Page(pwb.Site(), verified_entry['title']).editTime() > fetch_time:
                         log_verification(verified_entry, 'edit_conflict')
                         return -1
 
@@ -375,6 +388,8 @@ def check_verifications():
     else:
         return -1
 
+    #we can't really get anonymous editors' IP from JS, so this is
+    #a way of retrieving them from page history
     if anon_edit:
         for ix, verified_word in enumerate(new):
             if verified_word['verificator'] == None:
