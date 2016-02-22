@@ -15,7 +15,7 @@ from importsjp import morfAnalyse, wikilink
 import xml.dom.minidom # for testing
 from klasa import *
 import pywikibot as pwb
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 
 def extract_one_sentence(nkjp_match, nkjp_query):
     """
@@ -307,11 +307,14 @@ class ExampleDict(dict):
 
     
 def log_verification(verified_entry, error=''):
-    with open('log/date.log', 'a') as f:
+    
+    todays_date = (datetime.today()).strftime('%Y%m%d')
+
+    with open('log/{0}.log'.format(todays_date), 'a') as f:
         log_line = ''
         for field in ['title', 'verificator', 'example']:
             log_line += '##' + verified_entry[field]
-        log_line += '##' + '1' if verified_entry['good_example'] else '0'
+        log_line += '##' + ('1' if verified_entry['good_example'] else '0')
         
         if error != '':
             log_line += '##' + error
