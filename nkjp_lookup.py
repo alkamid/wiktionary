@@ -25,7 +25,7 @@ def nkjp_lookup(ngram):
     #Od którego wyniku zaczynamy?
     offset=0
     #Po czym sortujemy? srodek|lewa|prawa|title_mono|pubDate|channel title_mono to  tytuł publikacji/książki/gazety
-    sort="srodek"
+    sort="lewa"
     #od 1 do 5000 na raz. Wartości > 5000 są przycinane.
     limit=100
     #Po czym grupujemy? (--- to brak grupowania)  title_mono|pubDate|channel|---|text_id
