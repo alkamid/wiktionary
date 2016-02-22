@@ -160,6 +160,14 @@ var verifyButtonAction = function(content, good_or_bad) {
 		    .addClass('defs-div')
 		    .appendTo($singleExampleDiv);
 		
+		// count meanings (used for dropdown menu later)
+		var nums = [];
+		var reNums = /\: \(([0-9]\.[0-9]{1,2})\)\s*/g;
+		match = reNums.exec(word.definitions);
+		while (match != null) {
+		    nums.push(match[1]);
+		    match = reNums.exec(word.definitions);
+		}
 		
 		$.each(word.examples, function(ix, example){
 		    
@@ -184,18 +192,14 @@ var verifyButtonAction = function(content, good_or_bad) {
 			.appendTo($selectdiv);
 
 
-		    // count meanings and add options to select dropdown menu
-		    var reNums = /\: \(([0-9]\.[0-9]{1,2})\)\s*/g;
-		    match = reNums.exec(word.definitions);
-		    while (match != null) {
-			$option = $('<option>', {value: match[1], text: match[1]})
+		    // add options to select dropdown menu
+		    $.each(nums, function(ix, val) {
+			$option = $('<option>', {value: val, text: val})
 			    .appendTo($select);
-			if (example.correct_num != '' && match[1] == example.correct_num) {
+			if (example.correct_num != '' && val == example.correct_num) {
 			    $option.attr('selected', 'selected');
 			}
-
-			match = reNums.exec(word.definitions);
-			}
+		    });
 
 		    // if there's only one meaning, show the selector but don't require the user to select a value
 		    if ($select.find('option').length > 1) {
