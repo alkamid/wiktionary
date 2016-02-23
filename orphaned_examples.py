@@ -261,29 +261,32 @@ class ExampleDict(dict):
       self['examples'] = []
 
 
-def log_verification(verified_entry, error=''):
+def log_verification(verified_entry, example_index, error=''):
 
     #format: title##verificator##example##correct_def##bool(good_example)##error
 
     #https://regex101.com/r/nN1bN2/2
-    re_correct_def = re.compile(r'(?:\: \(' + re.escape(verified_entry['correct_num']) + r'\)\s{0,1}(.*?))(?=\n\: \([0-9]\.[0-9]{1,2}\)|\n\'\'|\n\{\{|$)', re.DOTALL)
+
+    this_example = verified_entry['examples'][example_index]
+    re_correct_def = re.compile(r'(?:\: \(' + re.escape(this_example['correct_num']) + r'\)\s{0,1}(.*?))(?=\n\: \([0-9]\.[0-9]{1,2}\)|\n\'\'|\n\{\{|$)', re.DOTALL)
     
     todays_date = (datetime.today()).strftime('%Y%m%d')
 
     with open('log/{0}.log'.format(todays_date), 'a') as f:
         log_line = ''
-        for field in ['title', 'verificator', 'example']:
-            log_line += '##' + verified_entry[field]
+        log_line += verified_entry['title']
+        for field in ['verificator', 'example']:
+            log_line += '##' + this_example[field]
 
         s_correct_def = re.search(re_correct_def, verified_entry['definitions'])
         if s_correct_def:
             log_line += '##' + s_correct_def.group(1)
-        elif verified_entry['bad_example'] == True:
+        elif this_example['bad_example'] == True:
             log_line += '##none'
         else:
             error += ';cant_find_correct_def'
 
-        log_line += '##' + ('1' if verified_entry['good_example'] else '0')
+        log_line += '##' + ('1' if this_example['good_example'] else '0')
     
         if error != '':
             log_line += '##' + error
@@ -305,15 +308,43 @@ def add_example_to_page(verified_entry):
             for lang_section in page.listLangs:
                 if lang_section.lang == 'polski':
 
-                    if pwb.Page(pwb.Site(), verified_entry['title']).editTime() > fetch_time:
-                        log_verification(verified_entry, 'edit_conflict')
-                        return -1
+                    changes = False
+                    verificators = set()
+                    edit_conflict = pwb.Page(pwb.Site(), verified_entry['title']).editTime() > fetch_time
 
-                    lang_section.pola()
-                    lang_section.subSections['przykłady'].add_example(verified_entry['correct_num'], verified_entry['example'])
-                    lang_section.saveChanges()
-                    page.push(offline=True, myComment='[[Wikiprojekt:Dodawanie przykładów]]. Źródło przykładu: nkjp.pl. Weryfikator: [[User:{0}]]'.format(verified_entry['verificator']))
-                    log_verification(verified_entry)
+                    good_example_indices = [ex['good_example'] for ex in verified_entry['examples']]
+                    if sum(good_example_indices) > 0:
+                        lang_section.pola()
+
+                    for ix, verified_example in enumerate(verified_entry['examples']):
+                        if verified_example['bad_example'] == True:
+                            log_verification(verified_entry, ix)
+                        elif verified_example['good_example'] == True:
+                            if edit_conflict:
+                                log_verification(verified_entry, ix, 'edit_conflict')
+                                return -1
+
+                            lang_section.subSections['przykłady'].add_example(verified_example['correct_num'], verified_example['example'])
+                            lang_section.saveChanges()
+                            verificators.add(verified_example['verificator'])
+                            changes = True
+
+                    if changes:
+                        if len(verificators) > 1:
+                            comment = ''
+                            for i, ver in enumerate(verificators):
+                                if i > 0:
+                                    comment += ', '
+                                comment += '[[User:{0}|{0}]]'.format(ver)
+                            comment = 'Weryfikatorzy: ' + comment
+                        else:
+                            (only_ver, ) = verificators
+                            comment = 'Weryfikator: [[User:{0}|{0}]]'.format(only_ver)
+                        
+                        page.push(offline=True, myComment='[[Wikiprojekt:Dodawanie przykładów]]. Źródło przykładu: nkjp.pl. {0}'.format(comment))
+                        for i, ex in enumerate(good_example_indices):
+                            if ex:
+                                log_verification(verified_entry, i)
                     return 0
     
     log_verification(verified_entry, 'not_written_to_page')
@@ -350,22 +381,23 @@ def check_verifications():
     #a way of retrieving them from page history
     if anon_edit:
         for ix, verified_word in enumerate(new):
-            if verified_word['verificator'] == None:
-                for rev in page.revisions():
-                    temp = json.loads(page.getOldVersion(rev.revid))
-                    if temp[ix]['verificator'] != None:
-                        verified_word['verificator'] = previous_user
-                        break
-                    previous_id = rev.revid
-                    previous_user = rev.user
-                    if rev.revid == old_revid:
-                        break
+            for ex_ix, verified_example in enumerate(verified_word['examples']): 
+                if verified_example['verificator'] == None:
+                    for rev in page.revisions():
+                        temp = json.loads(page.getOldVersion(rev.revid))
+                        if temp[ix]['examples'][ex_ix]['verificator'] != None:
+                            verified_word['examples'][ex_ix]['verificator'] = previous_user
+                            break
+                        previous_id = rev.revid
+                        previous_user = rev.user
+                        if rev.revid == old_revid:
+                            break
 
     for verified_word in new:
-        if verified_word['good_example'] == True:
-            add_example_to_page(verified_word)
-        elif verified_word['bad_example'] == True:
-            log_verification(verified_word)
+        for verified_example in verified_word['examples']:
+            if verified_example['good_example'] == True or verified_example['bad_example'] == True:
+                add_example_to_page(verified_word)
+                break
 
 
 def orphaned_examples(test_word=None):
@@ -403,7 +435,7 @@ def orphaned_examples(test_word=None):
             # write to file/page every N words
             if len(output) == buffer_size:
                 with open('output/json_examples_{0}.json'.format(pages_count), 'w') as o:
-                    o.write(json.dumps(output, ensure_ascii=False, indent=4) + ',')
+                    o.write(json.dumps(output, ensure_ascii=False, indent=4))
                     pages_count += 1
                     output = []
 
@@ -439,7 +471,6 @@ def orphaned_examples(test_word=None):
                         break
 
                     if len(new_word['examples']) < 2:
-                        print(len(new_word['examples']))
                         temp_example = {'verificator': 'None', 'correct_num': 'None', 'good_example': False, 'bad_example': False}
                         temp_example['left'] = line.find('left').text
                         temp_example['right'] = line.find('right').text
