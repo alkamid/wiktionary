@@ -324,7 +324,7 @@ def add_example_to_page(verified_entry):
                                 log_verification(verified_entry, ix, 'edit_conflict')
                                 return -1
 
-                            lang_section.subSections['przykłady'].add_example(verified_example['correct_num'], verified_example['example'])
+                            lang_section.subSections['przykłady'].add_example(verified_example['correct_num'], verified_example['example'] + '<ref>{0}</ref>'.format(verified_example['source']))
                             lang_section.saveChanges()
                             verificators.add(verified_example['verificator'])
                             changes = True
