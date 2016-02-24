@@ -189,7 +189,6 @@ def get_reference(api_output, hashtable):
         except KeyError:
             return ''
     
-    ref = ''
     match = api_output.find('match').text.lower()
     
     excluded_titles = ['Wikipedia:']
@@ -533,7 +532,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False):
                                 new_example['example'] = wikitext_one_sentence(sentence, input_word)
                                 new_example['left_extra'] = wikilink(sentence[3])
                                 new_example['source'] = ref
-                                new_example['definitions'] = defs[0]
+                                #new_example['definitions'] = defs[0]
                                 found_orphan = 1
                                 break
                         if found_orphan:
