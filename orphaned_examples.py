@@ -167,7 +167,7 @@ def wikitext_one_sentence(left_match_right, match_base_form):
 
     return pretty_sentence
 
-def get_reference(api_output):
+def get_reference(api_output, hashtable):
     """
     Take one result from NKJP api (within <line> tags), extract info
     about autorship and format it for printing
@@ -181,7 +181,13 @@ def get_reference(api_output):
             returns ''
     """
 
-    ref = 'Nazwisko Autora'
+    if len(hashtable) == 0:
+        ref = 'Nazwisko Autora'
+    else:
+        author_hash = bytes(api_output.find('hash').text, 'utf-8')
+        try: ref = hashtable(author_hash).decode('utf-8')[4:-5].replace('</au><au>', ', ')
+        except KeyError:
+            return ''
 
     match = api_output.find('match').text.lower()
     
@@ -193,7 +199,9 @@ def get_reference(api_output):
         if any(article_title.text.startswith(c) for c in excluded_titles):
             return ''
         elif len(article_title.text) > 0:
-            ref += ', \'\'{0}\'\''.format(article_title.text)
+            if len(ref):
+                ref += ', '
+            ref += '\'\'{0}\'\''.format(article_title.text)
 
 
 
@@ -399,10 +407,28 @@ def check_verifications():
                 add_example_to_page(verified_word)
                 break
 
+import gzip                                                           
+                                                                      
+def read_author_hashtable():                                          
+    mydict = {}                                                       
+    with gzip.open('input/authors_under3.tab.gz', 'r') as f:                
+        i = 0                                                         
+        for line in f:                                                
+            mydict[line[:32]] = line[33:-1]                           
+            i+=1                                                      
+            if i > 10:                                                
+                break                                                 
+    return mydict                                                     
 
-def orphaned_examples(test_word=None):
+
+def orphaned_examples(test_word=None, online=False):
 
     buffer_size = 20 #how many words will be printed on one page
+    
+    if online:
+        authors_hashtable = read_author_hashtable()
+    else:
+        authors_hashtable = {}
 
     # this is a dirty trick, because morfAnalyse() and wikilink() don't
     # really work as they should. The following regex extracts the first part
@@ -466,7 +492,7 @@ def orphaned_examples(test_word=None):
                     if check_sentence_quality(sentence) == 0:
                         continue
 
-                    ref = get_reference(line)
+                    ref = get_reference(line, authors_hashtable)
                     if ref == '':
                         break
 
