@@ -421,7 +421,7 @@ def read_author_hashtable():
     return mydict                                                     
 
 
-def orphaned_examples(test_word=None, hashtable=None):
+def orphaned_examples(test_word=None, hashtable=None, online=False):
 
     buffer_size = 20 #how many words will be printed on one page
     
@@ -429,6 +429,8 @@ def orphaned_examples(test_word=None, hashtable=None):
         authors_hashtable = read_author_hashtable()
     else:
         authors_hashtable = hashtable
+
+    site = pwb.Site()
 
     # this is a dirty trick, because morfAnalyse() and wikilink() don't
     # really work as they should. The following regex extracts the first part
@@ -460,8 +462,13 @@ def orphaned_examples(test_word=None, hashtable=None):
 
             # write to file/page every N words
             if len(output) == buffer_size:
+                formatted_output = json.dumps(output, ensure_ascii=False, indent=4)
+                output_page = pwb.Page('Wikisłownik:Dodawanie przykładów/dane/{0:03d}'.format(pages_count))
+                output_page.text = formatted_output
+                output_page.save(comment='Pobranie nowych przykładów z NKJP.pl')
+
                 with open('output/json_examples_{0}.json'.format(pages_count), 'w') as o:
-                    o.write(json.dumps(output, ensure_ascii=False, indent=4))
+                    o.write(formatted_output)
                     pages_count += 1
                     output = []
 
@@ -497,8 +504,8 @@ def orphaned_examples(test_word=None, hashtable=None):
 
                     if len(new_word['examples']) < 2:
                         temp_example = {'verificator': 'None', 'correct_num': 'None', 'good_example': False, 'bad_example': False}
-                        temp_example['left'] = line.find('left').text
-                        temp_example['right'] = line.find('right').text
+                        #temp_example['left'] = line.find('left').text
+                        #temp_example['right'] = line.find('right').text
                         temp_example['example'] = wikitext_one_sentence(sentence, input_word)
                         temp_example['left_extra'] = wikilink(sentence[3])
                         temp_example['source'] = ref
@@ -517,8 +524,8 @@ def orphaned_examples(test_word=None, hashtable=None):
                             if '\n*[[{0}]]\n'.format(lookup_word) in orphans:
                                 new_example = new_word['examples'][0]
                                 new_example['orphan'] = lookup_word
-                                new_example['left'] = line.find('left').text
-                                new_example['right'] = line.find('right').text
+                                #new_example['left'] = line.find('left').text
+                                #new_example['right'] = line.find('right').text
                                 new_example['example'] = wikitext_one_sentence(sentence, input_word)
                                 new_example['left_extra'] = wikilink(sentence[3])
                                 new_example['source'] = ref
