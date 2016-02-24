@@ -185,7 +185,7 @@ def get_reference(api_output, hashtable):
         ref = 'Nazwisko Autora'
     else:
         author_hash = bytes(api_output.find('hash').text, 'utf-8')
-        try: ref = hashtable(author_hash).decode('utf-8')[4:-5].replace('</au><au>', ', ')
+        try: ref = hashtable[author_hash].decode('utf-8')[4:-5].replace('</au><au>', ', ')
         except KeyError:
             return ''
 
@@ -415,13 +415,13 @@ def read_author_hashtable():
         i = 0                                                         
         for line in f:                                                
             mydict[line[:32]] = line[33:-1]                           
-            i+=1                                                      
-            if i > 10:                                                
-                break                                                 
+            #i+=1                                                      
+            #if i > 10:                                                
+            #    break                                                 
     return mydict                                                     
 
 
-def orphaned_examples(test_word=None, online=False):
+def orphaned_examples(test_word=None, online=False, hashtable=None):
 
     buffer_size = 20 #how many words will be printed on one page
     
