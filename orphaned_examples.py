@@ -421,14 +421,14 @@ def read_author_hashtable():
     return mydict                                                     
 
 
-def orphaned_examples(test_word=None, online=False, hashtable=None):
+def orphaned_examples(test_word=None, hashtable=None):
 
     buffer_size = 20 #how many words will be printed on one page
     
-    if online:
+    if not hashtable:
         authors_hashtable = read_author_hashtable()
     else:
-        authors_hashtable = {}
+        authors_hashtable = hashtable
 
     # this is a dirty trick, because morfAnalyse() and wikilink() don't
     # really work as they should. The following regex extracts the first part
