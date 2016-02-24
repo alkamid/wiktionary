@@ -486,7 +486,6 @@ def orphaned_examples(test_word=None, online=False):
 
                 for line in root.find('concordance').findall('line'):
 
-                    print(line.find('match').text)
                     sentence = extract_one_sentence(line, input_word)
 
                     if check_sentence_quality(sentence) == 0:
@@ -516,7 +515,7 @@ def orphaned_examples(test_word=None, online=False):
                                 lookup_word = lookup_word[:-4]
 
                             if '\n*[[{0}]]\n'.format(lookup_word) in orphans:
-                                new_example = new_word['examples'][1]
+                                new_example = new_word['examples'][0]
                                 new_example['orphan'] = lookup_word
                                 new_example['left'] = line.find('left').text
                                 new_example['right'] = line.find('right').text
