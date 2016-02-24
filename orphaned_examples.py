@@ -180,7 +180,7 @@ def get_reference(api_output, hashtable):
         str: pretty formated citation. If the source is on the blacklist,
             returns ''
     """
-
+    
     if len(hashtable) == 0:
         ref = 'Nazwisko Autora'
     else:
@@ -188,7 +188,8 @@ def get_reference(api_output, hashtable):
         try: ref = hashtable[author_hash].decode('utf-8')[4:-5].replace('</au><au>', ', ')
         except KeyError:
             return ''
-
+    
+    ref = ''
     match = api_output.find('match').text.lower()
     
     excluded_titles = ['Wikipedia:']
@@ -212,10 +213,10 @@ def get_reference(api_output, hashtable):
             return '' # Wikipedia pages about matched words are probably
             # the best examples
         ref += ', '
-        if article_title is None:
+        if article_title.text == '':
             ref += '\'\''
         ref += pub_title.text.strip()
-        if article_title is None:
+        if article_title.text == '':
             ref += '\'\''
     
     pub_date = api_output.find('pubDate')
