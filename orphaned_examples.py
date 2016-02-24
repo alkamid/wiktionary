@@ -462,10 +462,11 @@ def orphaned_examples(test_word=None, hashtable=None, online=False):
 
             # write to file/page every N words
             if len(output) == buffer_size:
-                formatted_output = json.dumps(output, ensure_ascii=False, indent=4)
-                output_page = pwb.Page('Wikisłownik:Dodawanie przykładów/dane/{0:03d}'.format(pages_count))
-                output_page.text = formatted_output
-                output_page.save(comment='Pobranie nowych przykładów z NKJP.pl')
+                if online:
+                    formatted_output = json.dumps(output, ensure_ascii=False, indent=4)
+                    output_page = pwb.Page('Wikisłownik:Dodawanie przykładów/dane/{0:03d}'.format(pages_count))
+                    output_page.text = formatted_output
+                    output_page.save(comment='Pobranie nowych przykładów z NKJP.pl')
 
                 with open('output/json_examples_{0}.json'.format(pages_count), 'w') as o:
                     o.write(formatted_output)
