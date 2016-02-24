@@ -451,7 +451,9 @@ def orphaned_examples(test_word=None, hashtable=None, online=False):
         output = [] #list-container for examples
 
         for input_word in g:
-
+            
+            if pages_count == 100:
+                return 0
 
             # dealing with various list formats, e.g. *[[word]]
             input_word = input_word.strip('*[]\n')
@@ -464,7 +466,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False):
             if len(output) == buffer_size:
                 if online:
                     formatted_output = json.dumps(output, ensure_ascii=False, indent=4)
-                    output_page = pwb.Page('Wikisłownik:Dodawanie przykładów/dane/{0:03d}'.format(pages_count))
+                    output_page = pwb.Page(site, 'Wikisłownik:Dodawanie przykładów/dane/{0:03d}'.format(pages_count))
                     output_page.text = formatted_output
                     output_page.save(comment='Pobranie nowych przykładów z NKJP.pl')
 
