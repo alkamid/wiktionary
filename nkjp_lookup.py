@@ -45,7 +45,7 @@ def nkjp_lookup(ngram):
     #Tytuł książki, gazety, forum internetowego, itp.
     m_title_mono=""
     #Ale z wyłączeniem:
-    m_title_mono_NOT=""
+    m_title_mono_NOT="Wikipedia.pl"
     #Tytuł tekstu, wątku, itp.
     m_text_title=""
     #Słowa kluczowe w pasującym akapicie
