@@ -494,12 +494,15 @@ def read_edit_history():
     return {'added': added, 'bad_examples': bad_examples}
 
 
+import random
 def orphaned_examples(test_word=None, hashtable=None, online=False, complete_overwrite=False):
 
     buffer_size = 20 #how many words will be printed on one page
     active_words = fetch_active_words() # prepare only as many pages as we need at the moment
     edit_history = read_edit_history()
     excluded_words = active_words['active'] + edit_history['added']
+    if not complete_overwrite:
+        excluded_words += active_words['inactive']
     
     if not hashtable:
         authors_hashtable = read_author_hashtable()
@@ -513,7 +516,8 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
     # of [[these|links]]
     re_base_form = re.compile(r'\[\[(.*?)(?:\||\]\])')
 
-
+    with open('output/empty_sections.txt', 'r') as g:
+        empty_sections = random.shuffle(g.readlines())
 
     words_count = 0
     with open('output/porzucone.txt') as f,\
@@ -529,7 +533,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
         pages_count = 0 #loop helper
         output = [] #list-container for examples
 
-        for input_word in g:
+        for input_word in empty_sections:
             
             if complete_overwrite == False and words_count > 2*len(active_words['active']):
                 with open('output/example_queue.json', 'w') as o:
