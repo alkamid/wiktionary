@@ -3,7 +3,7 @@
 from klasa import *
 import re
 
-def empty_section(section):
+def empty_section(section='przykłady'):
 
     re_numbers = re.compile(r'\: \(([0-9]\.[0-9])\)\s*(.*)')
 
@@ -13,9 +13,9 @@ def empty_section(section):
 
     excluded_pos = ['rzeczownik', '{{forma']
 
-
     wordlist = getListFromXML('xx', findLatest=True)
 
+    i = 0
     with open('output/empty_sectionsxx.txt', 'w') as f:
         for word in wordlist:
             try: h = Haslo(word)
@@ -28,11 +28,17 @@ def empty_section(section):
                     for lang_section in h.listLangs:
                         if lang_section.lang == 'polski':
                             lang_section.pola()
-                            if any(lang_section.subSections['przykłady'].text == empty for empty in empty_content) \
+                            if any(lang_section.subSections['przykłady'].text == empty for empty in empty_content): \
                                and not any(pos in lang_section.subSections['znaczenia'].text for pos in excluded_pos):
-                               
+                               i += 1
+                               break
                                 defs_found = re.findall(re_numbers, lang_section.subSections['znaczenia'].text)
                                 for defn in defs_found:
                                     if 'dokonany od' not in defn[1] or '{{zob' not in defn[1]:
                                         f.write(h.title + '\n')
                                         break
+
+    print(i)
+
+if __name__ == '__main__':
+    empty_section()
