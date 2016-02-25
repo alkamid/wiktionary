@@ -94,8 +94,8 @@ var verifyButtonAction = function(content, good_or_bad) {
 
 	if (config.wgPageName.indexOf(allowed_prefix) === 0) {
 	
-	if (config.wgAction === 'view') {
-	    //$('#mw-content-text').empty();
+	if (config.wgAction === 'view' && $('.firstHeading').text() === config.wgPageName) {
+	    $('#mw-content-text').empty();
 	    wikifyExample($('#mw-content-text'), '{{Dodawanie_przykładów_intro}}');
 	}
 
