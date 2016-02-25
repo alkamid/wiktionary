@@ -271,7 +271,7 @@ class ExampleDict(dict):
 
 def log_verification(verified_entry, example_index, error=''):
 
-    #format: title##verificator##example##correct_def##bool(good_example)##error
+    #format: title##bool(good_example)##verificator##example##correct_def##error
 
     #https://regex101.com/r/nN1bN2/2
 
@@ -280,9 +280,12 @@ def log_verification(verified_entry, example_index, error=''):
     
     todays_date = (datetime.today()).strftime('%Y%m%d')
 
-    with open('log/{0}.log'.format(todays_date), 'a') as f:
+    with open('log/{0}_examples.log'.format(todays_date), 'a') as f:
         log_line = ''
         log_line += verified_entry['title']
+
+        log_line += '##' + ('1' if this_example['good_example'] else '0')
+
         for field in ['verificator', 'example']:
             log_line += '##' + this_example[field]
 
@@ -294,10 +297,10 @@ def log_verification(verified_entry, example_index, error=''):
         else:
             error += ';cant_find_correct_def'
 
-        log_line += '##' + ('1' if this_example['good_example'] else '0')
-    
         if error != '':
             log_line += '##' + error
+        else:
+            log_line += '##' + none
 
         f.write('\n' + log_line)
         print(log_line)
@@ -358,15 +361,38 @@ def add_example_to_page(verified_entry):
     log_verification(verified_entry, 'not_written_to_page')
 
 def dewikify(input_text):
-    re_base_form = re.compile(r'\[\[(.*?)(?:\||\]\])')
+    #https://regex101.com/r/yB0pZ6/1
+    re_base_form = re.compile(r'(\[\[(?:[^\]\|]*?\||)(.*?)\]\])')
+    dewikified = re.sub(re_base_form, r'\2', input_text)
+    return dewikified
 
+def sweep_all_pages():
+    
+    buffer_size = 20
+    site = pwb.Site()
+    prefix = 'Wikisłownik:Dodawanie_przykładów/dane/'
+    
+    with open('output/example_queue.json', 'r') as inp:
+        example_queue = json.loads(inp.read())
+    
+    for i in range(100):
+        page = pwb.Page(site, prefix + '{0:03d}'.format(i))
+        page_remaining_examples = check_verifications(page)
+        if page_remaining_examples != -1:
+            while(len(page_remaining_examples) < buffer_size):
+                page_remaining_examples.append(example_queue.pop())
+                if len(example_queue) == 0:
+                    return -1
 
-def check_verifications():
+            with open('output/example_queue_test.json', 'w') as out:
+                json_output = json.dumps(example_queue, ensure_ascii=False, indent=4)
+                out.write(json_output)
+                page.text = json_output
+                page.save(comment='Pobranie nowych przykładów z NKJP.pl')
+
+def check_verifications(page):
 
     anon_edit = False
-
-    site = pwb.Site('test', 'wikipedia')
-    page = pwb.Page(site, 'Przykłady')
 
     new_revid = page.latest_revision_id
 
@@ -401,11 +427,18 @@ def check_verifications():
                         if rev.revid == old_revid:
                             break
 
+    revised_wordlist = []
     for verified_word in new:
+        found = 0
         for verified_example in verified_word['examples']:
             if verified_example['good_example'] == True or verified_example['bad_example'] == True:
                 add_example_to_page(verified_word)
+                found = 1
                 break
+        if not found:
+            revised_wordlist.append(verified_word)
+
+    return revised_wordlist
 
 import gzip                                                           
                                                                       
@@ -420,10 +453,53 @@ def read_author_hashtable():
             #    break                                                 
     return mydict                                                     
 
+def fetch_active_words():
+    page_prefix = 'Wikisłownik:Dodawanie_przykładów/dane/'
+    
+    active_words = []
+    inactive_words = []
+    for i in range(100):
+        page = pwb.Page(pwb.Site(), page_prefix + '{0:03d}'.format(i))
+        text = json.loads(page.text)
+        for j in text:
+            found = 0
+            for k in j['examples']:
+                if k['good_example'] or k['bad_example']:
+                    active_words.append(j['title'])
+                    found = 1
+                    break
+            if not found:
+                inactive_words.append(j['title'])
+                
+    print(active_words)
+    return {'active': active_words, 'inactive': inactive_words}
 
-def orphaned_examples(test_word=None, hashtable=None, online=False):
+
+import os
+def read_edit_history():
+
+    added = []
+    bad_examples = []
+    for file in os.listdir("log"):
+        if file.endswith("examples.log"):
+            with open('log/' + file, 'r') as inp:
+                for line in inp:
+                    lsp = line.split('##')
+                    if len(lsp) > 3:
+                        if lsp[0] == '1':
+                            added.append(lsp[1])
+                        elif lsp[1] == '0':
+                            bad_examples.append(dewikify(lsp[2]))
+
+    return {'added': added, 'bad_examples': bad_examples}
+
+
+def orphaned_examples(test_word=None, hashtable=None, online=False, complete_overwrite=False):
 
     buffer_size = 20 #how many words will be printed on one page
+    active_words = fetch_active_words() # prepare only as many pages as we need at the moment
+    edit_history = read_edit_history()
+    excluded_words = active_words['active'] + edit_history['added']
     
     if not hashtable:
         authors_hashtable = read_author_hashtable()
@@ -452,6 +528,12 @@ def orphaned_examples(test_word=None, hashtable=None, online=False):
 
         for input_word in g:
             
+            if complete_overwrite == False and words_count > 2*len(active_words['active']):
+                with open('output/example_queue.json', 'w') as o:
+                    formatted_output = json.dumps(output, ensure_ascii=False, indent=4)
+                    o.write(formatted_output)
+                return 2
+            
             if pages_count == 100:
                 return 0
 
@@ -460,20 +542,24 @@ def orphaned_examples(test_word=None, hashtable=None, online=False):
             if len(input_word) < 4 or input_word.upper == input_word:
                 continue
 
+            if input_word in excluded_words:
+                continue
+
             print(input_word)
 
+            if complete_overwrite:
             # write to file/page every N words
-            if len(output) == buffer_size:
-                if online:
-                    formatted_output = json.dumps(output, ensure_ascii=False, indent=4)
-                    output_page = pwb.Page(site, 'Wikisłownik:Dodawanie przykładów/dane/{0:03d}'.format(pages_count))
-                    output_page.text = formatted_output
-                    output_page.save(comment='Pobranie nowych przykładów z NKJP.pl')
+                if len(output) == buffer_size:
+                    if online:
+                        formatted_output = json.dumps(output, ensure_ascii=False, indent=4)
+                        output_page = pwb.Page(site, 'Wikisłownik:Dodawanie przykładów/dane/{0:03d}'.format(pages_count))
+                        output_page.text = formatted_output
+                        output_page.save(comment='Pobranie nowych przykładów z NKJP.pl')
 
-                with open('output/json_examples_{0}.json'.format(pages_count), 'w') as o:
-                    o.write(formatted_output)
-                    pages_count += 1
-                    output = []
+                    with open('output/json_examples_{0}.json'.format(pages_count), 'w') as o:
+                        o.write(formatted_output)
+                        pages_count += 1
+                        output = []
 
 
             if input_word[0] == '-' or input_word[-1] == '-' or input_word[0].isupper():
