@@ -501,6 +501,11 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
     active_words = fetch_active_words() # prepare only as many pages as we need at the moment
     edit_history = read_edit_history()
     excluded_words = active_words['active'] + edit_history['added']
+
+    with open('output/empty_sections.txt', 'r') as g:
+        empty_sections = g.readlines()
+        random.shuffle(empty_sections)
+
     if not complete_overwrite:
         excluded_words += active_words['inactive']
     
@@ -516,8 +521,6 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
     # of [[these|links]]
     re_base_form = re.compile(r'\[\[(.*?)(?:\||\]\])')
 
-    with open('output/empty_sections.txt', 'r') as g:
-        empty_sections = random.shuffle(g.readlines())
 
     words_count = 0
     with open('output/porzucone.txt') as f,\
