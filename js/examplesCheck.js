@@ -25,6 +25,7 @@ mw.loader.using( 'mediawiki.util', function () {
     var config = mw.config.get( [
 	'wgPageName',
 	'wgAction',
+	'wgUserName'
     ] );
 
 var verifyButtonAction = function(content, good_or_bad) {
@@ -36,7 +37,7 @@ var verifyButtonAction = function(content, good_or_bad) {
 	var $selectordiv = $('.current.example-div').find('*[data-example-index=' + exampleIndex + ']').find('.def-selector');
 
 	selectorValue = $selectordiv.find('.num_selector').val();
-	if (good_or_bad == 'good' && selectorValue === '') {
+	if (good_or_bad === 'good' && selectorValue === '') {
     	    $selectordiv.addClass('selector-div-unknown-choice');
 	    return -1;
 	}
@@ -94,7 +95,7 @@ var verifyButtonAction = function(content, good_or_bad) {
 	if (config.wgPageName.indexOf(allowed_prefix) === 0) {
 	
 	if (config.wgAction === 'view') {
-	    $('#mw-content-text').empty();
+	    //$('#mw-content-text').empty();
 	    wikifyExample($('#mw-content-text'), '{{Dodawanie_przykładów_intro}}');
 	}
 
@@ -178,7 +179,7 @@ var verifyButtonAction = function(content, good_or_bad) {
 		var nums = [];
 		var reNums = /\: \(([0-9]\.[0-9]{1,2})\)\s*/g;
 		match = reNums.exec(word.definitions);
-		while (match != null) {
+		while (match !== null) {
 		    nums.push(match[1]);
 		    match = reNums.exec(word.definitions);
 		}
@@ -194,7 +195,7 @@ var verifyButtonAction = function(content, good_or_bad) {
 		    // buttons and selector container
 		    $buttonsdiv = $('<div>')
 			.addClass('example-buttons')
-			.appendTo($textdiv)
+			.appendTo($textdiv);
 
 		    // meaning selector: if words have multiple meanings, one of them must be selected
 		    $selectdiv = $('<div>')
@@ -210,7 +211,7 @@ var verifyButtonAction = function(content, good_or_bad) {
 		    $.each(nums, function(ix, val) {
 			$option = $('<option>', {value: val, text: val})
 			    .appendTo($select);
-			if (example.correct_num != '' && val == example.correct_num) {
+			if (example.correct_num !== '' && val === example.correct_num) {
 			    $option.attr('selected', 'selected');
 			}
 		    });
@@ -304,7 +305,7 @@ var verifyButtonAction = function(content, good_or_bad) {
 		    $badbutton.click(verifyButtonAction(content, 'bad'));
 
 
-		if (ix == 0) {
+		if (ix === 0) {
 		    $singleExampleDiv.append($('<hr/>'));
 		}
 
@@ -324,9 +325,13 @@ var verifyButtonAction = function(content, good_or_bad) {
 	    var prevNextButtonAction = function(content, prev_or_next) {
 		return function(event) {
 		    
+		    event.preventDefault();
+
 		    var $text = $('.current.example-div').find('.raw-textarea');
 		    var index = $text.attr('data-index');
-		    content[index].example = $text.val();
+		    $.each($('.current.example-div').find('.raw-textarea'), function(ix, textarea) {
+			content[index].examples[ix].example = textarea.value;
+		    });
 		    document.editform.wpTextbox1.value = JSON.stringify(content, null, 4);
 		    if (!$('.current').hasClass(prev_or_next === 'prev' ? 'first' : 'last')) {
 			
@@ -344,7 +349,6 @@ var verifyButtonAction = function(content, good_or_bad) {
 			}
 			$('#' + (prev_or_next === 'prev' ? 'next' : 'prev')).attr('disabled', null);
 		    };
-		return false;
 		};
 	    };
 
