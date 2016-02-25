@@ -400,7 +400,7 @@ def check_verifications(page):
         if not anon_edit and a.anon == True:
             anon_edit = True
 
-        if a.user == 'Alkamid':
+        if a.user == 'AlkamidBot':
             old_revid = a.revid
             break
 
