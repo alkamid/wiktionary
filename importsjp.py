@@ -777,6 +777,12 @@ def wikipage(hasloSJP, obrazki):
 
 
 def morfAnalyse(word):
+
+    #When I updated to libmorfeusz2 on 18/02/2016, I realised sometimes ':a' or ':s'
+    #was added to the end of the base form. Until I figure out what it is, I'll have
+    #to use regex
+
+    re_before_colon = re.compile(r'([^:]*)')
     if word == '':
         return [None, '', None]
     try: analysed = analyse(word, dag=1)
@@ -784,29 +790,20 @@ def morfAnalyse(word):
         return [None, word, None]
 
     if len(analysed) == 1:
-        analysed_return = [analysed[0][2][1], word, analysed[0][2][2]]
+        analysed_return = [re.match(re_before_colon, analysed[0][2][1]).group(1), word, analysed[0][2][2]]
     else:
-        base_form = analysed[0][2][1]
+        base_form = re.match(re_before_colon, analysed[0][2][1]).group(1)
         ambig = 0
         for elem in analysed:
-            if elem[2][1] != base_form:
+            if re.match(re_before_colon, elem[2][1]).group(1) != base_form:
                 ambig += 1
         if ambig == 0:
-            analysed_return = [analysed[0][2][1], word, None]
+            analysed_return = [base_form, word, None]
         elif ambig == 1 and analysed[-1][2][2] and analysed[-1][2][2].startswith('aglt:'):
-            analysed_return = [analysed[0][2][1], word, None]
+            analysed_return = [base_form, word, None]
         else:
             return [None, word, None]
 
-    #When I updated to libmorfeusz2 on 18/02/2016, I realised sometimes ':a' or ':s'
-    #was added to the end of the base form. Until I figure out what it is, I'll have the
-    #workaround below
-
-    if len(analysed_return[0]) > 3:
-        if analysed_return[0][-2] == ':':
-            analysed_return[0] = analysed_return[0][:-2]
-        elif analysed_return[0][-3] == ':':
-            analysed_return[0] = analysed_return[0][:-3]
     return analysed_return
 
 
