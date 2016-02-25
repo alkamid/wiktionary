@@ -513,6 +513,9 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
     # of [[these|links]]
     re_base_form = re.compile(r'\[\[(.*?)(?:\||\]\])')
 
+
+
+    words_count = 0
     with open('output/porzucone.txt') as f,\
     open('output/empty_sections.txt', 'r') as g:
 
@@ -626,6 +629,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
 
                 if new_word and len(new_word['examples']) > 0:
                     output.append(new_word)
+                    words_count += 1
 
 
 if __name__ == '__main__':
