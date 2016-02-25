@@ -300,7 +300,7 @@ def log_verification(verified_entry, example_index, error=''):
         if error != '':
             log_line += '##' + error
         else:
-            log_line += '##' + none
+            log_line += '##none'
 
         f.write('\n' + log_line)
         print(log_line)
@@ -375,7 +375,7 @@ def sweep_all_pages():
     with open('output/example_queue.json', 'r') as inp:
         example_queue = json.loads(inp.read())
     
-    for i in range(100):
+    for i in range(10):
         page = pwb.Page(site, prefix + '{0:03d}'.format(i))
         page_remaining_examples = check_verifications(page)
         if page_remaining_examples != -1:
@@ -388,7 +388,7 @@ def sweep_all_pages():
                 json_output = json.dumps(example_queue, ensure_ascii=False, indent=4)
                 out.write(json_output)
                 page.text = json_output
-                page.save(comment='Pobranie nowych przykładów z NKJP.pl')
+                page.save(comment='Pobranie nowych przykładów z NKJP.pl', offline=True)
 
 def check_verifications(page):
 
@@ -564,7 +564,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
                         formatted_output = json.dumps(output, ensure_ascii=False, indent=4)
                         output_page = pwb.Page(site, 'Wikisłownik:Dodawanie przykładów/dane/{0:03d}'.format(pages_count))
                         output_page.text = formatted_output
-                        output_page.save(comment='Pobranie nowych przykładów z NKJP.pl')
+                        output_page.save(comment='Pobranie nowych przykładów z NKJP.pl', offline=True)
 
                     with open('output/json_examples_{0}.json'.format(pages_count), 'w') as o:
                         o.write(formatted_output)
