@@ -240,10 +240,10 @@ var verifyButtonAction = function(content, good_or_bad) {
 			.appendTo($buttonsdiv);
 
 		    // if the page has already been edited, select respective buttons
-		    if (word.good_example === true) {
+		    if (example.good_example === true) {
 			$okbutton.addClass('toggle-button-selected-good');
 		    }
-		    if (word.bad_example === true) {
+		    if (example.bad_example === true) {
 			$badbutton.addClass('toggle-button-selected-bad');
 		    }
 		
