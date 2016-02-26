@@ -335,7 +335,7 @@ def add_example_to_page(verified_entry):
                                 log_verification(verified_entry, ix, 'edit_conflict')
                                 return -1
 
-                            lang_section.subSections['przykłady'].add_example(verified_example['correct_num'], verified_example['example'] + '<ref>{0}</ref>'.format(verified_example['source']))
+                            lang_section.subSections['przykłady'].add_example(verified_example['correct_num'], '\'\'' + verified_example['example'] + '\'\'' + '<ref>{0}</ref>'.format(verified_example['source']))
                             lang_section.saveChanges()
                             verificators.add(verified_example['verificator'])
                             changes = True
@@ -352,7 +352,7 @@ def add_example_to_page(verified_entry):
                             (only_ver, ) = verificators
                             comment = 'Weryfikator: [[User:{0}|{0}]]'.format(only_ver)
                         
-                        page.push(offline=False, myComment='[[Wikiprojekt:Dodawanie przykładów]]. Źródło przykładu: nkjp.pl. {0}'.format(comment))
+                        page.push(offline=False, myComment='[[Wikisłownik:Dodawanie przykładów|WS:Dodawanie przykładów]]. Źródło przykładu: [http://nkjp.pl/ NKJP]. {0}'.format(comment))
                         for i, ex in enumerate(good_example_indices):
                             if ex:
                                 log_verification(verified_entry, i)
@@ -376,7 +376,7 @@ def sweep_all_pages():
         example_queue = json.loads(inp.read())
 
     #print(len(example_queue))
-    for i in range(1):
+    for i in range(1,2):
         page = pwb.Page(site, prefix + '{0:03d}'.format(i))
         page_remaining_examples = check_verifications(page)
         if page_remaining_examples != -1:
@@ -397,9 +397,9 @@ def check_if_wikified(input_text):
     wikified = sum(['[[' in word for word in split_on_space])
     
     if wikified/len(split_on_space) > 0.98:
-        return 1
+        return True
     else:
-        return 0
+        return False
 
 def check_verifications(page):
 
@@ -442,7 +442,7 @@ def check_verifications(page):
     for verified_word in new:
         found = 0
         for verified_example in verified_word['examples']:
-            if (verified_example['good_example'] == True and check_if_wikified(verified_example['example'])) or verified_example['bad_example'] == True:
+            if (verified_example['good_example'] == True and check_if_wikified(verified_example['example']) == True) or verified_example['bad_example'] == True:
                 add_example_to_page(verified_word)
                 found = 1
                 break
