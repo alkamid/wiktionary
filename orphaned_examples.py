@@ -401,7 +401,7 @@ def sweep_all_pages():
     with open('output/example_queue.json', 'r') as inp:
         example_queue = json.loads(inp.read())
 
-    for i in range(99,100):
+    for i in range(100):
         page = pwb.Page(site, prefix + '{0:03d}'.format(i))
         page_remaining_examples = check_verifications(page)
         
@@ -516,11 +516,17 @@ def fetch_active_words():
     
     active_words = []
     inactive_words = []
+    words_in_active_pages = []
     for i in range(100):
         page = pwb.Page(pwb.Site(), page_prefix + '{0:03d}'.format(i))
         text = json.loads(page.text)
+
+        active_page = page.userName() != 'AlkamidBot'
+
         for j in text:
             found = 0
+            if active_page:
+                words_in_active_pages.append(j['title'])
             for k in j['examples']:
                 if k['good_example'] or k['bad_example']:
                     active_words.append(j['title'])
@@ -530,7 +536,7 @@ def fetch_active_words():
                 inactive_words.append(j['title'])
                 
     print(active_words)
-    return {'active': active_words, 'inactive': inactive_words}
+    return {'active': active_words, 'inactive': inactive_words, 'under_review': words_in_active_pages}
 
 
 import os
@@ -563,7 +569,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
         active_words = {'active': [], 'inactive': []}
         edit_history = {'added': []}
 
-    excluded_words = active_words['active'] + edit_history['added']
+    excluded_words =  active_words['active'] + edit_history['added']
 
     with open('output/empty_sections.txt', 'r') as g:
         empty_sections = g.readlines()
@@ -571,6 +577,8 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
 
     if not complete_overwrite:
         excluded_words += active_words['inactive']
+    else:
+        excluded_words += active_words['under_review']
     
     if not hashtable:
         authors_hashtable = read_author_hashtable()
@@ -625,9 +633,18 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
                 if len(output) == buffer_size:
                     if online:
                         formatted_output = json.dumps(ordermydict(output), ensure_ascii=False, indent=4)
-                        output_page = pwb.Page(site, 'Wikisłownik:Dodawanie przykładów/dane/{0:03d}'.format(pages_count))
-                        output_page.text = formatted_output
-                        output_page.save(comment='Pobranie nowych przykładów z NKJP.pl')
+                        
+                        while(True):
+                            output_page = pwb.Page(site, 'Wikisłownik:Dodawanie przykładów/dane/{0:03d}'.format(pages_count))
+                            if output_page.userName() == 'AlkamidBot':
+                                output_page.text = formatted_output
+                                output_page.save(comment='Pobranie nowych przykładów z NKJP.pl')
+                                break
+                            else:
+                                pages_count += 1
+                                if pages_count == 100:
+                                    return 0
+                            
 
                     with open('output/json_examples_{0}.json'.format(pages_count), 'w') as o:
                         o.write(formatted_output)
