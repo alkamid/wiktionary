@@ -352,7 +352,7 @@ def add_example_to_page(verified_entry):
                             (only_ver, ) = verificators
                             comment = 'Weryfikator: [[User:{0}|{0}]]'.format(only_ver)
                         
-                        page.push(offline=True, myComment='[[Wikiprojekt:Dodawanie przykładów]]. Źródło przykładu: nkjp.pl. {0}'.format(comment))
+                        page.push(offline=False, myComment='[[Wikiprojekt:Dodawanie przykładów]]. Źródło przykładu: nkjp.pl. {0}'.format(comment))
                         for i, ex in enumerate(good_example_indices):
                             if ex:
                                 log_verification(verified_entry, i)
@@ -576,7 +576,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
                         output_page = pwb.Page(site, 'Wikisłownik:Dodawanie przykładów/dane/{0:03d}'.format(pages_count))
                         output_page.text = formatted_output
                         print(output_page.text)
-                        #output_page.save(comment='Pobranie nowych przykładów z NKJP.pl')
+                        output_page.save(comment='Pobranie nowych przykładów z NKJP.pl')
 
                     with open('output/json_examples_{0}.json'.format(pages_count), 'w') as o:
                         o.write(formatted_output)
