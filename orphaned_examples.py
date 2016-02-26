@@ -225,6 +225,7 @@ def get_reference(api_output, hashtable):
             ref += '{0}/{1}/'.format(pub_date.text[6:], pub_date.text[4:6])
         if len(pub_date.text) in (4, 8):
             ref += pub_date.text[:4]
+        ref += '.'
 
     return ref
 
@@ -305,6 +306,19 @@ def log_verification(verified_entry, example_index, error=''):
         f.write('\n' + log_line)
         print(log_line)
 
+def add_ref_to_example(example, ref):
+    
+    re_ref_punctuation = re.compile(r'(.*?)([^\w\)\"\?\”\]]+?)$', re.DOTALL)
+    s_ref_punctuation = re.search(re_ref_punctuation, example)
+
+    referenced_example = '\'\'' + s_ref_punctuation.group(1) + '\'\''\
+                         + '<ref>' + ref + '</ref>'
+
+    if s_ref_punctuation.group(2):
+        referenced_example += s_ref_punctuation.group(2)
+
+    return referenced_example
+
 def add_example_to_page(verified_entry):
         
     fetch_time = datetime.strptime(verified_entry['fetch_time'], '%Y-%m-%dT%H:%M:%SZ') 
@@ -341,7 +355,8 @@ def add_example_to_page(verified_entry):
                             if verified_example['correct_num'] == '':
                                 print('{0} - error - no number'.format(verified_entry['title']))
                                 continue
-                            lang_section.subSections['przykłady'].add_example(verified_example['correct_num'], '\'\'' + verified_example['example'] + '\'\'' + '<ref>{0}</ref>'.format(verified_example['source']))
+                            lang_section.subSections['przykłady'].add_example(verified_example['correct_num'],\
+                                                                              add_ref_to_example(verified_example['example'], verified_example['source']))
                             if 'references' not in lang_section.subSections['źródła'].text:
                                 lang_section.subSections['źródła'].text += '\n<references />'
                             lang_section.saveChanges()
