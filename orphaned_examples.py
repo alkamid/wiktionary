@@ -323,6 +323,9 @@ def add_example_to_page(verified_entry):
                     verificators = set()
                     edit_conflict = pwb.Page(pwb.Site(), verified_entry['title']).editTime() > fetch_time
 
+                    not_wikified_and_bad_only = [((ex['good_example'] and not check_if_wikified(ex['example'])) or ex['bad_example']) for ex in verified_entry['examples']]
+                    if all(not_wikified_and_bad_only):
+                        return 0
                     good_example_indices = [ex['good_example'] for ex in verified_entry['examples']]
                     if sum(good_example_indices) > 0:
                         lang_section.pola()
@@ -333,7 +336,7 @@ def add_example_to_page(verified_entry):
                         elif verified_example['good_example'] == True:
                             if edit_conflict:
                                 log_verification(verified_entry, ix, 'edit_conflict')
-                                return -1
+                                return 0
 
                             if verified_example['correct_num'] == '':
                                 print('{0} - error - no number'.format(verified_entry['title']))
@@ -361,6 +364,8 @@ def add_example_to_page(verified_entry):
                         for i, ex in enumerate(good_example_indices):
                             if ex:
                                 log_verification(verified_entry, i)
+                        return 1
+
                     return 0
     
     log_verification(verified_entry, 'not_written_to_page')
@@ -380,10 +385,9 @@ def sweep_all_pages():
     with open('output/example_queue.json', 'r') as inp:
         example_queue = json.loads(inp.read())
 
-    for i in range(54,55):
+    for i in range(99,100):
         page = pwb.Page(site, prefix + '{0:03d}'.format(i))
         page_remaining_examples = check_verifications(page)
-        
         
         if page_remaining_examples != -1:
             while(len(page_remaining_examples) < buffer_size):
@@ -468,9 +472,8 @@ def check_verifications(page):
         found = 0
         for verified_example in verified_word['examples']:
             if (verified_example['good_example'] == True and check_if_wikified(verified_example['example']) == True) or verified_example['bad_example'] == True:
-                add_example_to_page(verified_word)
-                found = 1
-                changes_in_list = 1
+                found = add_example_to_page(verified_word)
+                changes_in_list = found
                 break
         if not found:
             revised_wordlist.append(verified_word)
