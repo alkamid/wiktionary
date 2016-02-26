@@ -374,8 +374,9 @@ def sweep_all_pages():
     
     with open('output/example_queue.json', 'r') as inp:
         example_queue = json.loads(inp.read())
-    
-    for i in range(10):
+
+    #print(len(example_queue))
+    for i in range(1):
         page = pwb.Page(site, prefix + '{0:03d}'.format(i))
         page_remaining_examples = check_verifications(page)
         if page_remaining_examples != -1:
@@ -384,11 +385,21 @@ def sweep_all_pages():
                 if len(example_queue) == 0:
                     return -1
 
-            with open('output/example_queue_test.json', 'w') as out:
-                json_output = json.dumps(example_queue, ensure_ascii=False, indent=4)
-                out.write(json_output)
+            with open('output/example_queue.json', 'w') as out:
+                json_remaining = json.dumps(example_queue, ensure_ascii=False, indent=4)
+                json_output = json.dumps(page_remaining_examples, ensure_ascii=False, indent=4)
+                out.write(json_remaining)
                 page.text = json_output
-                page.save(comment='Pobranie nowych przykładów z NKJP.pl', offline=True)
+                page.save(comment='Pobranie nowych przykładów z NKJP.pl')
+
+def check_if_wikified(input_text):
+    split_on_space = input_text.split()
+    wikified = sum(['[[' in word for word in split_on_space])
+    
+    if wikified/len(split_on_space) > 0.98:
+        return 1
+    else:
+        return 0
 
 def check_verifications(page):
 
@@ -431,7 +442,7 @@ def check_verifications(page):
     for verified_word in new:
         found = 0
         for verified_example in verified_word['examples']:
-            if verified_example['good_example'] == True or verified_example['bad_example'] == True:
+            if (verified_example['good_example'] == True and check_if_wikified(verified_example['example'])) or verified_example['bad_example'] == True:
                 add_example_to_page(verified_word)
                 found = 1
                 break
@@ -564,7 +575,8 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
                         formatted_output = json.dumps(output, ensure_ascii=False, indent=4)
                         output_page = pwb.Page(site, 'Wikisłownik:Dodawanie przykładów/dane/{0:03d}'.format(pages_count))
                         output_page.text = formatted_output
-                        output_page.save(comment='Pobranie nowych przykładów z NKJP.pl', offline=True)
+                        print(output_page.text)
+                        #output_page.save(comment='Pobranie nowych przykładów z NKJP.pl')
 
                     with open('output/json_examples_{0}.json'.format(pages_count), 'w') as o:
                         o.write(formatted_output)
