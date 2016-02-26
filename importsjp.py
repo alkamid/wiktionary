@@ -790,7 +790,10 @@ def morfAnalyse(word):
         return [None, word, None]
 
     if len(analysed) == 1:
-        analysed_return = [re.match(re_before_colon, analysed[0][2][1]).group(1), word, analysed[0][2][2]]
+        if analysed[0][2][2] == 'ign':
+            analysed_return = [None, word, None]
+        else:
+            analysed_return = [re.match(re_before_colon, analysed[0][2][1]).group(1), word, analysed[0][2][2]]
     else:
         base_form = re.match(re_before_colon, analysed[0][2][1]).group(1)
         ambig = 0
