@@ -12,6 +12,7 @@ import re
 import json
 import string # for removing punctuation
 from importsjp import morfAnalyse, wikilink
+import morfeusz
 import xml.dom.minidom # for testing
 from klasa import *
 import pywikibot as pwb
@@ -555,8 +556,13 @@ import random
 def orphaned_examples(test_word=None, hashtable=None, online=False, complete_overwrite=False):
 
     buffer_size = 20 #how many words will be printed on one page
-    active_words = fetch_active_words() # prepare only as many pages as we need at the moment
-    edit_history = read_edit_history()
+    if online:
+        active_words = fetch_active_words() # prepare only as many pages as we need at the moment
+        edit_history = read_edit_history()
+    else:
+        active_words = {'active': [], 'inactive': []}
+        edit_history = {'added': []}
+
     excluded_words = active_words['active'] + edit_history['added']
 
     with open('output/empty_sections.txt', 'r') as g:
@@ -588,7 +594,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
         
         # for testing purposes
         if test_word:
-            g = [test_word]
+            empty_sections = [test_word]
 
         pages_count = 0 #loop helper
         output = [] #list-container for examples
@@ -650,6 +656,12 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
                 for line in root.find('concordance').findall('line'):
 
                     sentence = extract_one_sentence(line, input_word)
+
+                    # NKJP treats gerunds as verb forms. We don't
+                    if '\'\'czasownik' in new_word['definitions'] and\
+                       all('ger:' in analysed[2] for analysed in morfeusz.analyse(sentence[1])[0]):
+                        continue
+
 
                     if check_sentence_quality(sentence) == 0:
                         continue
