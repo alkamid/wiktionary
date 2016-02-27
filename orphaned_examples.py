@@ -576,7 +576,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
     if online:
         active_words = fetch_active_words() # prepare only as many pages as we need at the moment
     else:
-        active_words = {'active': [], 'inactive': []}
+        active_words = {'active': [], 'inactive': [], 'under_review': []}
 
     edit_history = read_edit_history()
     excluded_words =  active_words['active'] + edit_history['added']
