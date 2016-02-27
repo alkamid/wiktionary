@@ -568,9 +568,9 @@ def read_edit_history():
 
 
 import random
-def orphaned_examples(test_word=None, hashtable=None, online=False, complete_overwrite=False):
+def orphaned_examples(test_word=None, hashtable=None, online=False, complete_overwrite=False, onepage_testmode=False):
 
-    buffer_size = 2 #how many words will be printed on one page
+    buffer_size = 20 #how many words will be printed on one page
     if online:
         active_words = fetch_active_words() # prepare only as many pages as we need at the moment
     else:
@@ -612,7 +612,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
         if test_word:
             empty_sections = [test_word]
 
-        pages_count = 0 #loop helper
+        pages_count = 666 if onepage_testmode else 0 #loop helper
         output = [] #list-container for examples
 
         for input_word in empty_sections:
@@ -623,7 +623,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
                     o.write(formatted_output)
                 return 2
             
-            if pages_count == 100:
+            if (pages_count == 100) or (pages_count == 667 and onepage_testmode):
                 return 0
 
             # dealing with various list formats, e.g. *[[word]]
@@ -644,7 +644,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
                     if online:                        
                         while(True):
                             output_page = pwb.Page(site, 'Wikisłownik:Dodawanie przykładów/dane/{0:03d}'.format(pages_count))
-                            if output_page.userName() == 'AlkamidBot':
+                            if pages_count == 666 or output_page.userName() == 'AlkamidBot':
                                 output_page.text = formatted_output
                                 output_page.save(comment='Pobranie nowych przykładów z NKJP.pl')
                                 break
