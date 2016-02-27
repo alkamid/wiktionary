@@ -436,12 +436,16 @@ def ordermydict(words_list):
 
 def check_if_wikified(input_text):
 
-    #https://regex101.com/r/bU8oY3/7
-    re_count_all = re.compile(r'(\[\[.*?\]\]|(?<!])\b[^\W\d]+?\b)', re.UNICODE)
-    re_count_wikified = re.compile(r'(\[\[.*?\]\])')
+    #https://regex101.com/r/bU8oY3/8
+    #wikilinks including numbers are ignored (they don't have to be wikified)
+    re_count_all = re.compile(r'(\[\[[^0-9]+?\]\]|(?<!]|\|)\b[^\W\d]+?\b)', re.UNICODE)
+    re_count_wikified = re.compile(r'(\[\[[^0-9]+?\]\])')
+
     count_all = re.findall(re_count_all, input_text)
+    #ignore unwikified words starting with a capital letter (names don't have to be wikified)
+    count_all = [a for a in count_all if not (a[0] != '[' and a[0].upper() == a[0])]
+
     count_wikified = re.findall(re_count_wikified, input_text)
-    
     return len(count_wikified)/len(count_all) > 0.98
     
 def check_verifications(page):
