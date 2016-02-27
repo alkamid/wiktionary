@@ -113,8 +113,11 @@ def check_sentence_quality(left_match_right):
 
     # the sentence is too long
     allowed_length = 300
+    minimum_length = 70
 
     if len(joined_sentence) > allowed_length:
+        return 0
+    if len(joined_sentence) < minimum_length:
         return 0
 
     # there are too many newlines (most likely a list)
