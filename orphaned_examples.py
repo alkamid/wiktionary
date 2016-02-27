@@ -575,13 +575,11 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
     buffer_size = 20 #how many words will be printed on one page
     if online:
         active_words = fetch_active_words() # prepare only as many pages as we need at the moment
-        edit_history = read_edit_history()
     else:
         active_words = {'active': [], 'inactive': []}
-        edit_history = {'added': []}
 
     excluded_words =  active_words['active'] + edit_history['added']
-    adopted_orphans = edit_history['orphans']
+    edit_history = read_edit_history()
 
     with open('output/empty_sections.txt', 'r') as g:
         empty_sections = g.readlines()
@@ -718,7 +716,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
                             if ' się' in lookup_word:
                                 lookup_word = lookup_word[:-4]
 
-                            if '\n*[[{0}]]\n'.format(lookup_word) in orphans and lookup_word not in orphans_adopted:
+                            if '\n*[[{0}]]\n'.format(lookup_word) in orphans and lookup_word not in edit_history['orphans']:
                                 new_example = new_word['examples'][0]
                                 new_example['orphan'] = lookup_word
                                 #new_example['left'] = line.find('left').text
