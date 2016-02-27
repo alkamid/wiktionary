@@ -112,7 +112,7 @@ def check_sentence_quality(left_match_right):
         return 0
 
     # the sentence is too long
-    allowed_length = 500
+    allowed_length = 300
 
     if len(joined_sentence) > allowed_length:
         return 0
@@ -338,7 +338,7 @@ def add_example_to_page(verified_entry):
                     verificators = set()
                     edit_conflict = pwb.Page(pwb.Site(), verified_entry['title']).editTime() > fetch_time
 
-                    not_wikified_and_bad_only = [((ex['good_example'] and not check_if_wikified(ex['example'])) or ex['bad_example']) for ex in verified_entry['examples']]
+                    not_wikified_and_bad_only = [((ex['good_example'] and wikified_proportion(ex['example']) < 0.98) or ex['bad_example']) for ex in verified_entry['examples']]
                     if all(not_wikified_and_bad_only):
                         return 0
                     good_example_indices = [ex['good_example'] for ex in verified_entry['examples']]
@@ -434,7 +434,7 @@ def ordermydict(words_list):
         newlist.append(newword)
     return newlist
 
-def check_if_wikified(input_text):
+def wikified_proportion(input_text):
 
     #https://regex101.com/r/bU8oY3/8
     #wikilinks including numbers are ignored (they don't have to be wikified)
@@ -446,7 +446,7 @@ def check_if_wikified(input_text):
     count_all = [a for a in count_all if not (a[0] != '[' and a[0].upper() == a[0])]
 
     count_wikified = re.findall(re_count_wikified, input_text)
-    return len(count_wikified)/len(count_all) > 0.98
+    return len(count_wikified)/len(count_all)
     
 def check_verifications(page):
     anon_edit = False
@@ -491,7 +491,7 @@ def check_verifications(page):
     for verified_word in new:
         found = 0
         for verified_example in verified_word['examples']:
-            if (verified_example['good_example'] == True and check_if_wikified(verified_example['example']) == True) or verified_example['bad_example'] == True:
+            if (verified_example['good_example'] == True and wikified_proportion(verified_example['example']) > 0.98) or verified_example['bad_example'] == True:
                 found = add_example_to_page(verified_word)
                 changes_in_list = found
                 break
@@ -565,6 +565,17 @@ def read_edit_history():
                             bad_examples.append(dewikify(lsp[2]))
 
     return {'added': added, 'bad_examples': bad_examples, 'orphans': orphans}
+
+
+def check_if_includes_orphan(sentence, orphan_list, excluded_orphans):
+    re_base_form = re.compile(r'\[\[(.*?)(?:\||\]\])')
+    allwords = re.findall(re_base_form, wikilink(sentence[0] + sentence[2]))
+    for word in allwords:
+        if ' się' in word:
+            word = word[:-4]
+        if '\n*[[{0}]]\n'.format(word) in orphan_list and word not in excluded_orphans:
+            return word
+    return None
 
 
 import random
@@ -702,31 +713,43 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
                         temp_example['example'] = wikitext_one_sentence(sentence, input_word)
                         temp_example['left_extra'] = wikilink(sentence[3])
                         temp_example['source'] = ref
-                        temp_example['orphan'] = None
+
+                        orphan_switch = check_if_includes_orphan(sentence, orphans, edit_history['orphans'])
+                        temp_example['orphan'] = orphan_switch
                         new_word['examples'].append(temp_example)
 
                     else:
-                        # see "dirty trick" note above
-                        allwords = re.findall(re_base_form, wikilink(sentence[0] + sentence[2]))
-                        for lookup_word in allwords:
-                            #for now, reflective verbs are not included in "missing example" list
-                            #hence this trick
-                            if ' się' in lookup_word:
-                                lookup_word = lookup_word[:-4]
+                        
+                        found_new = 0
+                        wikified_example = wikitext_one_sentence(sentence, input_word)
 
-                            if '\n*[[{0}]]\n'.format(lookup_word) in orphans and lookup_word not in edit_history['orphans']:
-                                new_example = new_word['examples'][0]
-                                new_example['orphan'] = lookup_word
-                                #new_example['left'] = line.find('left').text
-                                #new_example['right'] = line.find('right').text
-                                new_example['example'] = wikitext_one_sentence(sentence, input_word)
-                                new_example['left_extra'] = wikilink(sentence[3])
-                                new_example['source'] = ref
-                                #new_example['definitions'] = defs[0]
-                                found_orphan = 1
-                                break
-                        if found_orphan:
-                            break
+                        for ex_ix, ex in enumerate(new_word['examples']):
+                            neworphan = check_if_includes_orphan(sentence, orphans, edit_history['orphans'])
+                            if neworphan:
+                                if ex['orphan']:
+                                    if wikified_proportion(ex['example']) < wikified_proportion(wikified_example):
+                                        new_example = new_word['examples'][ex_ix]
+                                        found_new = 1
+                                        orphan_switch = neworphan
+                                        break
+                                elif not orphan_switch:
+                                    new_example = new_word['examples'][ex_ix]
+                                    found_new = 1
+                                    break
+                            else:
+                                if not ex['orphan']:
+                                    if wikified_proportion(ex['example']) < wikified_proportion(wikified_example):
+                                        new_example = new_word['examples'][ex_ix]
+                                        found_new = 1
+                                        break
+                            
+                        if found_new:
+                            new_example['orphan'] = neworphan
+                            #new_example['left'] = line.find('left').text
+                            #new_example['right'] = line.find('right').text
+                            new_example['example'] = wikitext_one_sentence(sentence, input_word)
+                            new_example['left_extra'] = wikilink(sentence[3])
+                            new_example['source'] = ref
 
                 if new_word and len(new_word['examples']) > 0:
                     output.append(new_word)
