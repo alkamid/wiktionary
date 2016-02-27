@@ -273,7 +273,7 @@ class ExampleDict(dict):
 
 def log_verification(verified_entry, example_index, error=''):
 
-    #format: title##bool(good_example)##verificator##example##correct_def##error
+    #format: title##bool(good_example)##verificator##example##correct_def##orphan##error
 
     #https://regex101.com/r/nN1bN2/2
 
@@ -298,6 +298,11 @@ def log_verification(verified_entry, example_index, error=''):
             log_line += '##none'
         else:
             error += ';cant_find_correct_def'
+
+        if this_example['orphan']:
+            log_line += '##{0}'.format(this_example['orphan'])
+        else:
+            log_line += '##none'
 
         if error != '':
             log_line += '##' + error
@@ -548,18 +553,23 @@ def read_edit_history():
 
     added = []
     bad_examples = []
+    orphans = []
     for file in os.listdir("log"):
         if file.endswith("examples.log"):
             with open('log/' + file, 'r') as inp:
                 for line in inp:
                     lsp = line.split('##')
+                    #print(len(lsp))
                     if len(lsp) > 3:
-                        if lsp[0] == '1':
-                            added.append(lsp[1])
+                        if lsp[1] == '1':
+                            added.append(lsp[0])
+                            if len(lsp) > 6:
+                                if lsp[5] != 'none':
+                                    orphans.append(lsp[5])
                         elif lsp[1] == '0':
                             bad_examples.append(dewikify(lsp[2]))
 
-    return {'added': added, 'bad_examples': bad_examples}
+    return {'added': added, 'bad_examples': bad_examples, 'orphans': orphans}
 
 
 import random
@@ -574,6 +584,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
         edit_history = {'added': []}
 
     excluded_words =  active_words['active'] + edit_history['added']
+    adopted_orphans = edit_history['orphans']
 
     with open('output/empty_sections.txt', 'r') as g:
         empty_sections = g.readlines()
@@ -710,7 +721,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
                             if ' się' in lookup_word:
                                 lookup_word = lookup_word[:-4]
 
-                            if '\n*[[{0}]]\n'.format(lookup_word) in orphans:
+                            if '\n*[[{0}]]\n'.format(lookup_word) in orphans and lookup_word not in orphans_adopted:
                                 new_example = new_word['examples'][0]
                                 new_example['orphan'] = lookup_word
                                 #new_example['left'] = line.find('left').text
