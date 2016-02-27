@@ -182,11 +182,13 @@ def get_reference(api_output, hashtable):
             returns ''
     """
     
+
+    ref = OrderedDict()
     if len(hashtable) == 0:
-        ref = 'Nazwisko Autora'
+        ref['authors'] = 'Nazwisko Autora'
     else:
         author_hash = bytes(api_output.find('hash').text, 'utf-8')
-        try: ref = hashtable[author_hash].decode('utf-8')[4:-5].replace('</au><au>', ', ')
+        try: ref['authors'] = hashtable[author_hash].decode('utf-8')[4:-5].replace('</au><au>', ', ')
         except KeyError:
             return ''
     
@@ -202,7 +204,7 @@ def get_reference(api_output, hashtable):
         elif len(article_title.text) > 0:
             if len(ref):
                 ref += ', '
-            ref += '\'\'{0}\'\''.format(article_title.text)
+            ref['article_title'] = article_title.text
 
 
 
@@ -212,21 +214,16 @@ def get_reference(api_output, hashtable):
         if article_title.text.lower().startswith(match) and 'Wikipedia' in pub_title.text:
             return '' # Wikipedia pages about matched words are probably
             # the best examples
-        ref += ', '
-        if article_title.text == '':
-            ref += '\'\''
-        ref += pub_title.text.strip()
-        if article_title.text == '':
-            ref += '\'\''
-    
+        ref['pub_title'] = pub_title.text.strip()
+            
     pub_date = api_output.find('pubDate')
     if pub_date is not None:
-        ref += ', '
+        refdate = ''
         if len(pub_date.text) == 8:
-            ref += '{0}/{1}/'.format(pub_date.text[6:], pub_date.text[4:6])
+            refdate += '{0}/{1}/'.format(pub_date.text[6:], pub_date.text[4:6])
         if len(pub_date.text) in (4, 8):
-            ref += pub_date.text[:4]
-        ref += '.'
+            refdate += pub_date.text[:4]
+        ref['date'] = refdate
 
     return ref
 
@@ -646,9 +643,9 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
             if complete_overwrite:
             # write to file/page every N words
                 if len(output) == buffer_size:
-                    if online:
-                        formatted_output = json.dumps(ordermydict(output), ensure_ascii=False, indent=4)
-                        
+                    formatted_output = json.dumps(ordermydict(output), ensure_ascii=False, indent=4)
+
+                    if online:                        
                         while(True):
                             output_page = pwb.Page(site, 'Wikisłownik:Dodawanie przykładów/dane/{0:03d}'.format(pages_count))
                             if output_page.userName() == 'AlkamidBot':
