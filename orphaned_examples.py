@@ -578,8 +578,8 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
     else:
         active_words = {'active': [], 'inactive': []}
 
-    excluded_words =  active_words['active'] + edit_history['added']
     edit_history = read_edit_history()
+    excluded_words =  active_words['active'] + edit_history['added']
 
     with open('output/empty_sections.txt', 'r') as g:
         empty_sections = g.readlines()
