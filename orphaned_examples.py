@@ -202,8 +202,6 @@ def get_reference(api_output, hashtable):
         if any(article_title.text.startswith(c) for c in excluded_titles):
             return ''
         elif len(article_title.text) > 0:
-            if len(ref):
-                ref += ', '
             ref['article_title'] = article_title.text
 
 
@@ -572,7 +570,7 @@ def read_edit_history():
 import random
 def orphaned_examples(test_word=None, hashtable=None, online=False, complete_overwrite=False):
 
-    buffer_size = 20 #how many words will be printed on one page
+    buffer_size = 2 #how many words will be printed on one page
     if online:
         active_words = fetch_active_words() # prepare only as many pages as we need at the moment
     else:
