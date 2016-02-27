@@ -794,6 +794,9 @@ def morfAnalyse(word):
             analysed_return = [None, word, None]
         else:
             analysed_return = [re.match(re_before_colon, analysed[0][2][1]).group(1), word, analysed[0][2][2]]
+    elif 'ppron3' in analysed[0][2][2]:
+        #morfeusz links all 3rd person pronouns to 'on', so we'll skip them
+        return [None, word, 'ppron3']
     else:
         base_form = re.match(re_before_colon, analysed[0][2][1]).group(1)
         ambig = 0
@@ -842,6 +845,9 @@ def wikilink(phrase):
     dontAnalyse.append('sposób') # alt: "sposobiæ½"
     dontAnalyse.append('i¶æ') # alt: "i¶ciæ
 
+    #so far I only found baseform ambiguity in pronouns where there was none in reality
+    hardcoded_baseforms = [('jej', 'ona'), ('niej', 'ona'), ('j±', 'ona'), ('ni±', 'ona')]
+
     #http://www.ipipan.waw.pl/~wolinski/publ/znakowanie.pdf
     verb_tags = ('inf', 'fin', 'pact', 'ppas', 'pcon', 'pant', 'imps', 'impt')
 
@@ -862,7 +868,10 @@ def wikilink(phrase):
                 s_word = s_punctuation_around.group(2)
                 if s_word in dontAnalyse:
                     analysed = '[[{0}]]'.format(s_punctuation_around.group(2))
-
+                elif s_word in [a[0] for a in hardcoded_baseforms]:
+                    for a in hardcoded_baseforms:
+                        if s_word == a[0]:
+                            analysed = '[[{0}|{1}]]'.format(a[1], a[0])
                 elif s_word.endswith(enieAnie):
                     checked = checkFlexSJP(s_word)
                     if checked:
