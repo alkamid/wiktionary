@@ -52,7 +52,8 @@ def extract_one_sentence(nkjp_match, nkjp_query):
 
 
     left_return = ''
-
+    #na razie zakomentowuję, ze względu na dyskusje o zbyt długich przykładach
+    '''
     # Usually the context is to the left of the matched word, so it
     # might be useful to set the lower limit for the length of the left context
     left_context_min_length = 100
@@ -64,19 +65,21 @@ def extract_one_sentence(nkjp_match, nkjp_query):
             left = left.replace(left_end_sentence.group(1), '')
         else:
             break
+    '''
+    left_context_min_length = 100
+
+    left_end_sentence = re.search(re_end_sentence_left, left)
+    if left_end_sentence:
+        left_return = left_end_sentence.group(1)
+        left = left.replace(left_end_sentence.group(1), '')
 
 
     # cut some extra stuff on the left so users can add it
     left_extra = ''
-    if len(left_return) >= left_context_min_length:
-        while len(left_extra) < left_context_min_length:
-            left_extra_end_sentence = re.search(re_end_sentence_left, left)
-            if left_extra_end_sentence:
-                left_extra = left_extra_end_sentence.group(1) + left_extra
-                left = left.replace(left_extra_end_sentence.group(1), '')
-            else:
-                break
-            
+    if len(left) >= 20:
+        left_extra_end_sentence = re.search(re_end_sentence_left, left)
+        if left_extra_end_sentence:
+            left_extra = left_extra_end_sentence.group(1)
     
     centre_return = '[[{0}|{1}]]'.format(nkjp_query, centre)
     
@@ -85,7 +88,7 @@ def extract_one_sentence(nkjp_match, nkjp_query):
     else:
         right_return = ''
     
-    #print((left_return, centre, right_return))
+    #print((left_return, centre, right_return, left_extra))
     return (left_return, centre, right_return, left_extra)
 
 def check_sentence_quality(left_match_right):
@@ -112,8 +115,8 @@ def check_sentence_quality(left_match_right):
         return 0
 
     # the sentence is too long
-    allowed_length = 300
-    minimum_length = 70
+    allowed_length = 200
+    minimum_length = 60
 
     if len(joined_sentence) > allowed_length:
         return 0
@@ -226,6 +229,10 @@ def get_reference(api_output, hashtable):
             refdate += pub_date.text[:4]
         ref['date'] = refdate
 
+    #extras
+    for field in ['hash', 'match_start', 'match_end', 'channel', 'domain']:
+        ref[field] = api_output.find(field).text
+
     return ref
 
 def get_definitions(word):
@@ -264,14 +271,15 @@ def get_definitions(word):
 
 
 class ExampleDict(dict):
-   def __init__(self,*arg,**kw):
-      super(ExampleDict, self).__init__(*arg, **kw)
-      self['examples'] = []
+    def __init__(self,*arg,**kw):
+        super(ExampleDict, self).__init__(*arg, **kw)
+        self['examples'] = []
+
 
 
 def log_verification(verified_entry, example_index, error=''):
 
-    #format: title##bool(good_example)##verificator##example##correct_def##orphan##error
+    #format: title##bool(good_example)##verificator##example##correct_def##orphan##authors##a_title##pub_title##pub_date##channel##domain##error
 
     #https://regex101.com/r/nN1bN2/2
 
@@ -302,6 +310,13 @@ def log_verification(verified_entry, example_index, error=''):
         else:
             log_line += '##none'
 
+        if type(this_example['source']) != str:
+            for field in ['authors', 'article_title', 'pub_title', 'date', 'channel', 'domain']:
+                if field in this_example['source'] and this_example['source'][field]:
+                    log_line += '##{0}'.format(this_example['source'][field])
+                else:
+                    log_line += '##none'
+
         if error != '':
             log_line += '##' + error
         else:
@@ -312,15 +327,24 @@ def log_verification(verified_entry, example_index, error=''):
 
 def add_ref_to_example(example, ref):
     
-    #https://regex101.com/r/dW1xU3/1
+    #https://regex101.com/r/dW1xU3/2
     #https://pl.wiktionary.org/w/index.php?oldid=4957309#odno.C5.9Bniki_a_interpunkcja
     #https://pl.wiktionary.org/w/index.php?diff=4957513
 
-    re_ref_punctuation = re.compile(r'(.*?)((?<!itp|itd|etc)\.$|$)', re.DOTALL)
+    #three dots below because 'error: look-behind requires fixed-width pattern'
+    re_ref_punctuation = re.compile(r'(.*?)((?<!itp|itd|etc|\.\.)\.$|$)', re.DOTALL)
     s_ref_punctuation = re.search(re_ref_punctuation, example)
 
+    if type(ref) == str:
+        r = ref
+    else:
+        r = '{{NKJP'
+        for field in ref:
+            r += '|{0}={1}'.format(field, ref[field])
+        r += '}}'
+
     referenced_example = '\'\'' + s_ref_punctuation.group(1) + '\'\''\
-                         + '<ref>' + ref + '</ref>'
+                         + '<ref>' + r + '</ref>'
 
     if s_ref_punctuation.group(2) != '':
         referenced_example += s_ref_punctuation.group(2)
@@ -345,6 +369,11 @@ def add_example_to_page(verified_entry):
                     verificators = set()
                     edit_conflict = pwb.Page(pwb.Site(), verified_entry['title']).editTime() > fetch_time
 
+                    bad_only = [ex['bad_example'] for ex in verified_entry['examples']]
+                    if all(bad_only):
+                        for ix, ex in enumerate(verified_entry['examples']):
+                            log_verification(verified_entry, ix)
+                        return 1
                     not_wikified_and_bad_only = [((ex['good_example'] and wikified_proportion(ex['example']) < 0.98) or ex['bad_example']) for ex in verified_entry['examples']]
                     if all(not_wikified_and_bad_only):
                         return 0
@@ -681,8 +710,12 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
             if input_word[0] == '-' or input_word[-1] == '-' or input_word[0].isupper():
                 continue # let's skip prefixes and sufixes for now, also whatever starts with a capital leter
 
-            root = etree.parse(nkjp_lookup('{0}**'.format(input_word).replace(' ', '** '))).getroot()
+            query = '{0}**'.format(input_word).replace(' ', '** ')
+            result = nkjp_lookup(query)
+            root = etree.parse(result).getroot()
 
+            #print(xml.dom.minidom.parseString(etree.tostring(root)).toprettyxml())
+            #return -1
             if root.find('concordance') is not None:
                 found = 0
                 found_orphan = 0
