@@ -332,7 +332,7 @@ def add_ref_to_example(example, ref):
     #https://pl.wiktionary.org/w/index.php?diff=4957513
 
     #three dots below because 'error: look-behind requires fixed-width pattern'
-    re_ref_punctuation = re.compile(r'(.*?)((?<!itp|itd|etc|\.\.)\.$|$)', re.DOTALL)
+    re_ref_punctuation = re.compile(r'(.*?)((?<!itp|itd|etc|.\.\.)\.$|$)', re.DOTALL)
     s_ref_punctuation = re.search(re_ref_punctuation, example)
 
     if type(ref) == str:
@@ -384,7 +384,7 @@ def add_example_to_page(verified_entry, revid):
                     for ix, verified_example in enumerate(verified_entry['examples']):
                         if verified_example['bad_example'] == True:
                             log_verification(verified_entry, ix)
-                        elif verified_example['good_example'] == True:
+                        elif verified_example['good_example'] == True and wikified_proportion(verified_example['example']) < 0.98:
                             if edit_conflict:
                                 log_verification(verified_entry, ix, 'edit_conflict')
                                 return 0
@@ -410,8 +410,8 @@ def add_example_to_page(verified_entry, revid):
                         else:
                             (only_ver, ) = verificators
                             comment = only_ver
-                        
-                        page.push(offline=False, myComment='[[Wikisłownik:Dodawanie przykładów|WS:Dodawanie przykładów]]. Źródło przykładu: http://nkjp.pl/. [[Special:Permalink/{0}|Weryfikacja: {{1}}]]'.format(revid, comment))
+
+                        page.push(offline=False, myComment='[[Wikisłownik:Dodawanie przykładów|WS:Dodawanie przykładów]]. Źródło przykładu: http://nkjp.pl/. [[Special:Permalink/{0}|Weryfikacja: {1}]]'.format(revid, comment))
                         for i, ex in enumerate(good_example_indices):
                             if ex:
                                 log_verification(verified_entry, i)
