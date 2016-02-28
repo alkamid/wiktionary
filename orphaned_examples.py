@@ -351,7 +351,7 @@ def add_ref_to_example(example, ref):
 
     return referenced_example
 
-def add_example_to_page(verified_entry):
+def add_example_to_page(verified_entry, revid):
         
     fetch_time = datetime.strptime(verified_entry['fetch_time'], '%Y-%m-%dT%H:%M:%SZ') 
     
@@ -406,13 +406,12 @@ def add_example_to_page(verified_entry):
                             for i, ver in enumerate(verificators):
                                 if i > 0:
                                     comment += ', '
-                                comment += '[[User:{0}|{0}]]'.format(ver)
-                            comment = 'Weryfikatorzy: ' + comment
+                                comment += ver
                         else:
                             (only_ver, ) = verificators
-                            comment = 'Weryfikator: [[User:{0}|{0}]]'.format(only_ver)
+                            comment = only_ver
                         
-                        page.push(offline=False, myComment='[[Wikisłownik:Dodawanie przykładów|WS:Dodawanie przykładów]]. Źródło przykładu: http://nkjp.pl/. {0}'.format(comment))
+                        page.push(offline=False, myComment='[[Wikisłownik:Dodawanie przykładów|WS:Dodawanie przykładów]]. Źródło przykładu: http://nkjp.pl/. [[Special:Permalink/{0}|Weryfikacja: {{1}}]]'.format(revid, comment))
                         for i, ex in enumerate(good_example_indices):
                             if ex:
                                 log_verification(verified_entry, i)
@@ -528,7 +527,7 @@ def check_verifications(page):
         found = 0
         for verified_example in verified_word['examples']:
             if (verified_example['good_example'] == True and wikified_proportion(verified_example['example']) > 0.98) or verified_example['bad_example'] == True:
-                found = add_example_to_page(verified_word)
+                found = add_example_to_page(verified_word, new_revid)
                 changes_in_list = found
                 break
         if not found:
