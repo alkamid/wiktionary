@@ -384,7 +384,7 @@ def add_example_to_page(verified_entry, revid):
                     for ix, verified_example in enumerate(verified_entry['examples']):
                         if verified_example['bad_example'] == True:
                             log_verification(verified_entry, ix)
-                        elif verified_example['good_example'] == True and wikified_proportion(verified_example['example']) < 0.98:
+                        elif verified_example['good_example'] == True and wikified_proportion(verified_example['example']) > 0.98:
                             if edit_conflict:
                                 log_verification(verified_entry, ix, 'edit_conflict')
                                 return 0
@@ -523,6 +523,7 @@ def check_verifications(page):
 
     revised_wordlist = []
     changes_in_list = 0
+    
     for verified_word in new:
         found = 0
         for verified_example in verified_word['examples']:
@@ -796,6 +797,8 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
 
 
 if __name__ == '__main__':
-    orphaned_examples()
-
+    ht = read_author_hashtable()
+    if orphaned_examples(test_word=None, hashtable=ht, online=True, complete_overwrite=False, onepage_testmode=False) == 2:
+        del ht
+        sweep_all_pages()
 
