@@ -742,7 +742,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
 
                     # NKJP treats gerunds as verb forms. We don't
                     if '\'\'czasownik' in new_word['definitions'] and\
-                       all('ger:' in analysed[2] for analysed in morfeusz.analyse(sentence[1])[0]):
+                       all(('ger:' in analysed[2] or 'subst:' in analysed[2]) for analysed in morfeusz.analyse(sentence[1])[0]):
                         continue
 
 
