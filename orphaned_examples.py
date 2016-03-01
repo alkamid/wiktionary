@@ -83,13 +83,20 @@ def extract_one_sentence(nkjp_match, nkjp_query):
     
     centre_return = '[[{0}|{1}]]'.format(nkjp_query, centre)
     
+    right_extra = ''
+
     if right_end_sentence:
         right_return = right_end_sentence.group(1)
+        right = right.replace(right_return, '')
+        if len(right) >=20 and len(left_return+centre+right_return) <= 90:
+            s_right_extra = re.search(re_end_sentence_right, right)
+            if s_right_extra:
+                right_extra = s_right_extra.group(1)
     else:
         right_return = ''
     
-    #print((left_return, centre, right_return, left_extra))
-    return (left_return, centre, right_return, left_extra)
+    #print((left_return, centre, right_return, left_extra, right_extra))
+    return (left_return, centre, right_return, left_extra, right_extra)
 
 def check_sentence_quality(left_match_right):
     """
@@ -752,6 +759,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
                         #temp_example['right'] = line.find('right').text
                         temp_example['example'] = wikitext_one_sentence(sentence, input_word)
                         temp_example['left_extra'] = wikilink(sentence[3])
+                        temp_example['right_extra'] = wikilink(sentence[4])
                         temp_example['source'] = ref
 
                         orphan_switch = check_if_includes_orphan(sentence, orphans, edit_history['orphans'])
@@ -789,6 +797,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
                             #new_example['right'] = line.find('right').text
                             new_example['example'] = wikitext_one_sentence(sentence, input_word)
                             new_example['left_extra'] = wikilink(sentence[3])
+                            new_example['right_extra'] = wikilink(sentence[4])
                             new_example['source'] = ref
 
                 if new_word and len(new_word['examples']) > 0:
