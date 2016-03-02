@@ -71,25 +71,31 @@ def extract_one_sentence(nkjp_match, nkjp_query):
     left_end_sentence = re.search(re_end_sentence_left, left)
     if left_end_sentence:
         left_return = left_end_sentence.group(1)
-        left = left.replace(left_end_sentence.group(1), '')
-
+        if left.endswith(left_end_sentence.group(1)):
+            left = left[:-len(left_end_sentence.group(1))]
 
     # cut some extra stuff on the left so users can add it
     left_extra = ''
     if len(left) >= 20:
         left_extra_end_sentence = re.search(re_end_sentence_left, left)
         if left_extra_end_sentence:
-            left_extra = left_extra_end_sentence.group(1)
+            left_extra = left_extra_end_sentence.group(1)[-150:]
     
     centre_return = '[[{0}|{1}]]'.format(nkjp_query, centre)
     
+    right_extra = ''
+
     if right_end_sentence:
         right_return = right_end_sentence.group(1)
+        right = right.replace(right_return, '', 1)
+        if len(right) >=20 and len(left_return+centre+right_return) <= 90:
+            s_right_extra = re.search(re_end_sentence_right, right)
+            if s_right_extra:
+                right_extra = s_right_extra.group(1)[:150]
     else:
         right_return = ''
     
-    #print((left_return, centre, right_return, left_extra))
-    return (left_return, centre, right_return, left_extra)
+    return (left_return, centre, right_return, left_extra, right_extra)
 
 def check_sentence_quality(left_match_right):
     """
@@ -384,7 +390,7 @@ def add_example_to_page(verified_entry, revid):
                     for ix, verified_example in enumerate(verified_entry['examples']):
                         if verified_example['bad_example'] == True:
                             log_verification(verified_entry, ix)
-                        elif verified_example['good_example'] == True and wikified_proportion(verified_example['example']) < 0.98:
+                        elif verified_example['good_example'] == True and wikified_proportion(verified_example['example']) > 0.98:
                             if edit_conflict:
                                 log_verification(verified_entry, ix, 'edit_conflict')
                                 return 0
@@ -422,6 +428,16 @@ def add_example_to_page(verified_entry, revid):
     log_verification(verified_entry, 'not_written_to_page')
 
 def dewikify(input_text):
+    """
+    Dewikify a wikified string.
+
+    Args:
+        input_text (str): wikified text ([[word]]s [[be|are]] [[write|written]]
+            [[like]] [[this]])
+    Returns:
+        str: unwikified text (words are written like this)
+    """
+    
     #https://regex101.com/r/yB0pZ6/1
     re_base_form = re.compile(r'(\[\[(?:[^\]\|]*?\||)(.*?)\]\])')
     dewikified = re.sub(re_base_form, r'\2', input_text)
@@ -470,7 +486,18 @@ def ordermydict(words_list):
     return newlist
 
 def wikified_proportion(input_text):
+    """
+    Calculate the proportion of wikified words in a string. Numbers and
+    words starting with a capital letters are ignored — they don't need
+    too be wikified on pl.wikt
 
+    Args:
+        input_text (str): wikified text ([[word]]s [[be|are]] [[write|written]]
+            [[like]] [[this]])
+    Returns:
+        float: the proportion of wikified text
+    """
+    
     #https://regex101.com/r/bU8oY3/8
     #wikilinks including numbers are ignored (they don't have to be wikified)
     re_count_all = re.compile(r'(\[\[[^0-9]+?\]\]|(?<!]|\|)\b[^\W\d]+?\b)', re.UNICODE)
@@ -479,8 +506,8 @@ def wikified_proportion(input_text):
     count_all = re.findall(re_count_all, input_text)
     #ignore unwikified words starting with a capital letter (names don't have to be wikified)
     count_all = [a for a in count_all if not (a[0] != '[' and a[0].upper() == a[0])]
-
     count_wikified = re.findall(re_count_wikified, input_text)
+    
     return len(count_wikified)/len(count_all)
     
 def check_verifications(page):
@@ -523,6 +550,7 @@ def check_verifications(page):
 
     revised_wordlist = []
     changes_in_list = 0
+    
     for verified_word in new:
         found = 0
         for verified_example in verified_word['examples']:
@@ -734,7 +762,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
 
                     # NKJP treats gerunds as verb forms. We don't
                     if '\'\'czasownik' in new_word['definitions'] and\
-                       all('ger:' in analysed[2] for analysed in morfeusz.analyse(sentence[1])[0]):
+                       all(('ger:' in analysed[2] or 'subst:' in analysed[2]) for analysed in morfeusz.analyse(sentence[1])[0]):
                         continue
 
 
@@ -751,6 +779,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
                         #temp_example['right'] = line.find('right').text
                         temp_example['example'] = wikitext_one_sentence(sentence, input_word)
                         temp_example['left_extra'] = wikilink(sentence[3])
+                        temp_example['right_extra'] = wikilink(sentence[4])
                         temp_example['source'] = ref
 
                         orphan_switch = check_if_includes_orphan(sentence, orphans, edit_history['orphans'])
@@ -788,6 +817,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
                             #new_example['right'] = line.find('right').text
                             new_example['example'] = wikitext_one_sentence(sentence, input_word)
                             new_example['left_extra'] = wikilink(sentence[3])
+                            new_example['right_extra'] = wikilink(sentence[4])
                             new_example['source'] = ref
 
                 if new_word and len(new_word['examples']) > 0:
@@ -796,6 +826,8 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
 
 
 if __name__ == '__main__':
-    orphaned_examples()
-
+    ht = read_author_hashtable()
+    if orphaned_examples(test_word=None, hashtable=ht, online=True, complete_overwrite=False, onepage_testmode=False) == 2:
+        del ht
+        sweep_all_pages()
 
