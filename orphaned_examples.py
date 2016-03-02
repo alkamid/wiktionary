@@ -71,15 +71,15 @@ def extract_one_sentence(nkjp_match, nkjp_query):
     left_end_sentence = re.search(re_end_sentence_left, left)
     if left_end_sentence:
         left_return = left_end_sentence.group(1)
-        left = left.replace(left_end_sentence.group(1), '')
-
+        if left.endswith(left_end_sentence.group(1)):
+            left = left[:-len(left_end_sentence.group(1))]
 
     # cut some extra stuff on the left so users can add it
     left_extra = ''
     if len(left) >= 20:
         left_extra_end_sentence = re.search(re_end_sentence_left, left)
         if left_extra_end_sentence:
-            left_extra = left_extra_end_sentence.group(1)
+            left_extra = left_extra_end_sentence.group(1)[-150:]
     
     centre_return = '[[{0}|{1}]]'.format(nkjp_query, centre)
     
@@ -87,15 +87,14 @@ def extract_one_sentence(nkjp_match, nkjp_query):
 
     if right_end_sentence:
         right_return = right_end_sentence.group(1)
-        right = right.replace(right_return, '')
+        right = right.replace(right_return, '', 1)
         if len(right) >=20 and len(left_return+centre+right_return) <= 90:
             s_right_extra = re.search(re_end_sentence_right, right)
             if s_right_extra:
-                right_extra = s_right_extra.group(1)
+                right_extra = s_right_extra.group(1)[:150]
     else:
         right_return = ''
     
-    #print((left_return, centre, right_return, left_extra, right_extra))
     return (left_return, centre, right_return, left_extra, right_extra)
 
 def check_sentence_quality(left_match_right):
