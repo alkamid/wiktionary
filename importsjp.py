@@ -845,8 +845,18 @@ def wikilink(phrase):
     dontAnalyse.append('sposób') # alt: "sposobiæ½"
     dontAnalyse.append('i¶æ') # alt: "i¶ciæ
 
+    temp_capital = []
+    for elem in dontAnalyse:
+        temp_capital.append(elem.title())
+    dontAnalyse += temp_capital
+
     #so far I only found baseform ambiguity in pronouns where there was none in reality
     hardcoded_baseforms = [('jej', 'ona'), ('niej', 'ona'), ('j±', 'ona'), ('ni±', 'ona')]
+    temp_capital = []
+    for elem in hardcoded_baseforms:
+        temp_capital.append((elem[0].title(), elem[1].title()))
+    hardcoded_baseforms += temp_capital
+
 
     #http://www.ipipan.waw.pl/~wolinski/publ/znakowanie.pdf
     verb_tags = ('inf', 'fin', 'pact', 'ppas', 'pcon', 'pant', 'imps', 'impt')
