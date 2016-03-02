@@ -429,6 +429,16 @@ def add_example_to_page(verified_entry, revid):
     log_verification(verified_entry, 'not_written_to_page')
 
 def dewikify(input_text):
+    """
+    Dewikify a wikified string.
+
+    Args:
+        input_text (str): wikified text ([[word]]s [[be|are]] [[write|written]]
+            [[like]] [[this]])
+    Returns:
+        str: unwikified text (words are written like this)
+    """
+    
     #https://regex101.com/r/yB0pZ6/1
     re_base_form = re.compile(r'(\[\[(?:[^\]\|]*?\||)(.*?)\]\])')
     dewikified = re.sub(re_base_form, r'\2', input_text)
@@ -477,7 +487,18 @@ def ordermydict(words_list):
     return newlist
 
 def wikified_proportion(input_text):
+    """
+    Calculate the proportion of wikified words in a string. Numbers and
+    words starting with a capital letters are ignored — they don't need
+    too be wikified on pl.wikt
 
+    Args:
+        input_text (str): wikified text ([[word]]s [[be|are]] [[write|written]]
+            [[like]] [[this]])
+    Returns:
+        float: the proportion of wikified text
+    """
+    
     #https://regex101.com/r/bU8oY3/8
     #wikilinks including numbers are ignored (they don't have to be wikified)
     re_count_all = re.compile(r'(\[\[[^0-9]+?\]\]|(?<!]|\|)\b[^\W\d]+?\b)', re.UNICODE)
@@ -486,8 +507,8 @@ def wikified_proportion(input_text):
     count_all = re.findall(re_count_all, input_text)
     #ignore unwikified words starting with a capital letter (names don't have to be wikified)
     count_all = [a for a in count_all if not (a[0] != '[' and a[0].upper() == a[0])]
-
     count_wikified = re.findall(re_count_wikified, input_text)
+    
     return len(count_wikified)/len(count_all)
     
 def check_verifications(page):
