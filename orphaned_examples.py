@@ -383,7 +383,7 @@ def add_example_to_page(verified_entry, revid):
                     not_wikified_and_bad_only = [((ex['good_example'] and wikified_proportion(ex['example']) < 0.98) or ex['bad_example']) for ex in verified_entry['examples']]
                     if all(not_wikified_and_bad_only):
                         return 0
-                    good_example_indices = [ex['good_example'] for ex in verified_entry['examples']]
+                    good_example_indices = [(ex['good_example'] and wikified_proportion(ex['example']) > 0.98) for ex in verified_entry['examples']]
                     if sum(good_example_indices) > 0:
                         lang_section.pola()
 
@@ -605,29 +605,81 @@ def fetch_active_words():
     print(active_words)
     return {'active': active_words, 'inactive': inactive_words, 'under_review': words_in_active_pages}
 
+def write_stats_data():
+    edit_history = read_edit_history()
+    
+    data_text = 'data = {}\n'
+    data_text += 'data[\'pages\'] = { '
+    for i in range(100):
+        data_text += '\'{0:03d}\', '.format(i)
+
+    data_text = data_text[:-2] + ' }\n'
+    data_text += 'data[\'added_examples\'] = {0}\n'.format(edit_history['added_number'])
+    data_text += 'data[\'unorphaned\'] = {0}\n'.format(len(set(edit_history['orphans'])))
+    data_text += 'data[\'verificators\'] = { '
+    for v in edit_history['verificators']:
+        data_text += '["{0}"] = {1}, '.format(v[0], v[1])
+
+    data_text = data_text[:-2] + ' }\n'
+    data_text += 'return data'
+    
+    site = pwb.Site()
+    output_page = pwb.Page(site, 'Moduł:examplesCheck/data')
+    output_page.text = data_text
+    output_page.save(comment='Aktualizacja statystyk')
 
 import os
+from operator import itemgetter
 def read_edit_history():
 
     added = []
     bad_examples = []
     orphans = []
+    verificators = {}
+
     for file in os.listdir("log"):
         if file.endswith("examples.log"):
             with open('log/' + file, 'r') as inp:
                 for line in inp:
                     lsp = line.split('##')
-                    #print(len(lsp))
                     if len(lsp) > 3:
-                        if lsp[1] == '1':
-                            added.append(lsp[0])
+                        if lsp[1] == '1' and lsp[-1] == 'none\n':
+                            verificators[lsp[2]] = verificators.get(lsp[2], 0) + 1
+                            added.append(tuple(lsp))
                             if len(lsp) > 6:
                                 if lsp[5] != 'none':
                                     orphans.append(lsp[5])
                         elif lsp[1] == '0':
                             bad_examples.append(dewikify(lsp[2]))
 
-    return {'added': added, 'bad_examples': bad_examples, 'orphans': orphans}
+    added_words = [a[0] for a in set(added)]
+    
+    return {'added': added_words, 'added_number': len(set(added)),\
+        'bad_examples': bad_examples, 'orphans': orphans,\
+            'verificators': sorted(verificators.items(), key=itemgetter(1), reverse=True)}
+    
+from pywikibot import pagegenerators
+def verify_added_examples():
+
+
+    re_exam = re.compile(r'{{przykłady}}(.*?){{składnia}}', re.DOTALL)
+    re_num = re.compile(r'(\([0-9]\.[0-9]\))')
+
+  
+    pages = pagegenerators.UserContributionsGenerator('AlkamidBot', 0, total=299)
+    with open('log/alkadsbot.txt', 'w') as f:
+        cnt = 0
+        for page in pages:
+            revs = page.revisions()
+            
+            for rev in revs:
+                if rev.user == 'AlkamidBot':
+                    przy = re.search(re_exam, page.getOldVersion(rev.revid))
+                    if przy:
+                        nr = re.findall(re_num, przy.group(1))
+                        cnt += len(nr)
+                        f.write(page.title() + '\t{0}'.format(len(nr)) + '\n')
+                    break
 
 
 def check_if_includes_orphan(sentence, orphan_list, excluded_orphans):
