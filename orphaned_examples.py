@@ -487,6 +487,46 @@ def ordermydict(words_list):
     return newlist
 
 def wikified_proportion(input_text):
+    #TODO: co z wyrazmi od wielkiej litery na początku zdania?
+    re_nonwords = re.compile(r'([\W0-9]*)', re.UNICODE)
+    allwords = input_text.split()
+    counted = []
+    i = 0
+    while (i < len(allwords)):
+        a = allwords[i]
+        s_nonword = re.search(re_nonwords, a)
+        if (s_nonword and s_nonword.group(1) == a) or any(char.isdigit() for char in a):
+            #ignore punctuation and numbers
+            i += 1
+        elif '[[' in a and ']]' in a:
+            counted.append(a)
+            i += 1
+        elif '[[' in a:
+            cache = []
+            cache.append(a)
+            for j, b in enumerate(allwords[(i+1):]):
+                if ']]' in b:
+                    print(type(cache))
+                    counted.append(' '.join(cache) + ' ' + b)
+                    i += j + 2
+                    break
+                elif '[[' in b:
+                    counted += cache
+                    i += j
+                    break
+                else:
+                    cache.append(b)
+        elif a[0].upper() == a[0]:
+            i += 1
+        else:
+            counted.append(a)
+            i += 1
+    
+    wikified = [a for a in counted if ('[[' in a and ']]' in a)]
+
+    return len(wikified)/len(counted)
+
+def old_wikified_proportion(input_text):
     """
     Calculate the proportion of wikified words in a string. Numbers and
     words starting with a capital letters are ignored — they don't need
