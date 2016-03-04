@@ -468,7 +468,8 @@ def sweep_all_pages():
                 out.write(json_remaining)
                 page.text = json_output
                 page.save(comment='Pobranie nowych przykładów z NKJP.pl')
-        
+    
+    write_stats_data()
     return 0
 
 from collections import OrderedDict
@@ -618,7 +619,7 @@ def write_stats_data():
     data_text += 'data[\'unorphaned\'] = {0}\n'.format(len(set(edit_history['orphans'])))
     data_text += 'data[\'verificators\'] = { '
     for v in edit_history['verificators']:
-        data_text += '["{0}"] = {1}, '.format(v[0], v[1])
+        data_text += '{"' + v[0] + '", ' + str(v[1]) +'}, '
 
     data_text = data_text[:-2] + ' }\n'
     data_text += 'return data'
