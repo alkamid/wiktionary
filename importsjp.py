@@ -9,10 +9,12 @@ import re
 import collections
 import locale
 import sjpMaintain
+import pdb
 from morfeusz import *
 from klasa import *
 from lxml import etree, html
 from sjpClass import kategoriaSlowa, checkHistory
+
 
 
 def checkFlexSJP(forma):
@@ -825,6 +827,86 @@ def shortLink(base, flex=None):
             return '[[%s]]%s' % (base, suffix)
         else:
             return '[[%s|%s]]' % (base, flex)
+
+def phrases_wikilink(input_text):
+    text = []
+    #https://regex101.com/r/dU5rE9/1
+    re_wikilink_decompose = re.compile(r'\[\[([^\]\|]*)(?:\||)(.*?)\]\]')
+
+    with open('input/phrases_under_4words.txt') as f:
+        phraselist = f.read().splitlines()
+
+    split_text = input_text.split()
+    lengths = [len(line.split()) for line in phraselist]
+    max_length = max(lengths)
+    print(max_length)
+
+    i = 0
+    while (i < len(split_text)):
+        word = split_text[i]
+        if not ('[[' in word and ']]' in word):
+            text.append(word)
+            i += 1
+            continue
+        else:
+            
+            loop = True
+            j = i
+            outside_loop_control = 0
+            cache = []
+            while (loop):
+                if j == len(split_text):
+                    pass
+                else:
+                    s_decompose = re.search(re_wikilink_decompose, split_text[j])
+                    if not s_decompose:
+                        text.append(' '.join(cache))
+                        i += 1
+                        loop = False
+                        continue
+                        
+                    decomposed = (s_decompose.group(1), s_decompose.group(2))
+                    if j == i:
+                        possible_phrases = [decomposed]
+                    else:
+                        possible_phrases = new_possible_phrases
+
+                    new_possible_phrases = []
+                    #pdb.set_trace()
+
+                    found = 0
+                    for phr in possible_phrases:
+                        if any(phrase.startswith((phr[0] + ' ' if j != i else '') + decomposed[0]) for phrase in phraselist):
+                            if decomposed[1] == '':
+                                second = decomposed[0]
+                            else:
+                                second = decomposed[1]
+                                
+                            found = 1
+
+                            new_possible_phrases.append(((phr[0] + ' ' if j != i else '') + decomposed[0], (phr[1] + ' ' if j!= i else '') + second))
+
+                        if decomposed[1] != '' and any(phrase.startswith((phr[0] + ' ' if j != i else '') + decomposed[1]) for phrase in phraselist):
+                            new_possible_phrases.append(((phr[0] + ' ' if j != i else '') + decomposed[1], (phr[1] + ' ' if j!= i else '') + decomposed[1]))
+                            found = 1
+                    if found:
+                        cache.append(split_text[j])
+                        j += 1
+                        continue
+
+                if len(new_possible_phrases) == 0 and len(possible_phrases) == 1 and possible_phrases[0][0] in phraselist:
+                    text.append('[[{0}|{1}]]'.format(possible_phrases[0][0], possible_phrases[0][1]))
+                    loop = False
+                    i = j 
+                elif len(new_possible_phrases) == 1 and new_possible_phrases[0][0] in phraselist:
+                    text.append('[[{0}|{1}]]'.format(new_possible_phrases[0][0], new_possible_phrases[0][1]))
+                    loop = False
+                    i = j + 1
+                else:
+                    text += cache
+                    loop = False
+                    i += len(cache)
+    return ' '.join(text)
 
 def wikilink(phrase):
     phrase = phrase.strip()
