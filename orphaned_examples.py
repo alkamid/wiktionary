@@ -357,6 +357,24 @@ def add_ref_to_example(example, ref):
 
     return referenced_example
 
+def check_edit_conflicts(verified_entry, page_section):
+    fetch_time = datetime.strptime(verified_entry['fetch_time'], '%Y-%m-%dT%H:%M:%SZ')
+    re_refs = re.compile(r'(<ref.*?(?:/>|</ref>))')
+    
+    try: fullpage = pwb.Page(pwb.Site('pl', 'wiktionary'), verified_entry['title'])
+    except (pwb.NoPage, IsRedirectPage) as e:
+        return 1
+    else:
+        if fullpage.editTime() > fetch_time:
+            new_meanings = re.sub(re_refs, '', page_section.subSections['znaczenia'].text)
+            old_meanings = verified_entry['definitions']
+            if new_meanings == old_meanings:
+                return 0
+            else:
+                return 1
+        else:
+            return 0
+
 def add_example_to_page(verified_entry, revid):
         
     fetch_time = datetime.strptime(verified_entry['fetch_time'], '%Y-%m-%dT%H:%M:%SZ') 
@@ -373,7 +391,6 @@ def add_example_to_page(verified_entry, revid):
 
                     changes = False
                     verificators = set()
-                    edit_conflict = pwb.Page(pwb.Site(), verified_entry['title']).editTime() > fetch_time
 
                     bad_only = [ex['bad_example'] for ex in verified_entry['examples']]
                     if all(bad_only):
@@ -386,6 +403,8 @@ def add_example_to_page(verified_entry, revid):
                     good_example_indices = [(ex['good_example'] and wikified_proportion(ex['example']) > 0.98) for ex in verified_entry['examples']]
                     if sum(good_example_indices) > 0:
                         lang_section.pola()
+                        #edit_conflict = pwb.Page(pwb.Site(), verified_entry['title']).editTime() > fetch_time
+                        edit_conflict = check_edit_conflicts(verified_entry, lang_section)
 
                     for ix, verified_example in enumerate(verified_entry['examples']):
                         if verified_example['bad_example'] == True:
@@ -452,7 +471,7 @@ def sweep_all_pages():
     with open('output/example_queue.json', 'r') as inp:
         example_queue = json.loads(inp.read())
 
-    for i in range(100):
+    for i in range(1):
         page = pwb.Page(site, prefix + '{0:03d}'.format(i))
         page_remaining_examples = check_verifications(page)
         
@@ -521,7 +540,6 @@ def wikified_proportion(input_text):
             cache.append(a)
             for j, b in enumerate(allwords[(i+1):]):
                 if ']]' in b:
-                    print(type(cache))
                     counted.append(' '.join(cache) + ' ' + b)
                     i += j + 2
                     break
