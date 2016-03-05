@@ -10,7 +10,7 @@ from nkjp_lookup import nkjp_lookup
 from lxml import etree
 import re
 import json
-from importsjp import morfAnalyse, wikilink
+from importsjp import morfAnalyse, wikilink, phrases_wikilink
 import morfeusz
 import xml.dom.minidom # for testing
 from klasa import *
@@ -177,8 +177,9 @@ def wikitext_one_sentence(left_match_right, match_base_form):
     if whitespaces_right:
         pretty_sentence += whitespaces_right.group(1)
     pretty_sentence += wikilink(left_match_right[2])
+    prettier_sentence = phrases_wikilink(pretty_sentence)
 
-    return pretty_sentence
+    return prettier_sentence
 
 def get_reference(api_output, hashtable):
     """
@@ -881,8 +882,8 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
                         #temp_example['left'] = line.find('left').text
                         #temp_example['right'] = line.find('right').text
                         temp_example['example'] = wikitext_one_sentence(sentence, input_word)
-                        temp_example['left_extra'] = wikilink(sentence[3])
-                        temp_example['right_extra'] = wikilink(sentence[4])
+                        temp_example['left_extra'] = phrases_wikilink(wikilink(sentence[3]))
+                        temp_example['right_extra'] = phrases_wikilink(wikilink(sentence[4]))
                         temp_example['source'] = ref
 
                         orphan_switch = check_if_includes_orphan(sentence, orphans, edit_history['orphans'])
@@ -919,8 +920,8 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
                             #new_example['left'] = line.find('left').text
                             #new_example['right'] = line.find('right').text
                             new_example['example'] = wikitext_one_sentence(sentence, input_word)
-                            new_example['left_extra'] = wikilink(sentence[3])
-                            new_example['right_extra'] = wikilink(sentence[4])
+                            new_example['left_extra'] = phrases_wikilink(wikilink(sentence[3]))
+                            new_example['right_extra'] = phrases_wikilink(wikilink(sentence[4]))
                             new_example['source'] = ref
 
                 if new_word and len(new_word['examples']) > 0:
