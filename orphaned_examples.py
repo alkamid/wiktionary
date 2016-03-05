@@ -10,13 +10,13 @@ from nkjp_lookup import nkjp_lookup
 from lxml import etree
 import re
 import json
-import string # for removing punctuation
 from importsjp import morfAnalyse, wikilink
 import morfeusz
 import xml.dom.minidom # for testing
 from klasa import *
 import pywikibot as pwb
 from datetime import datetime, timedelta, time
+import pdb
 
 def extract_one_sentence(nkjp_match, nkjp_query):
     """
@@ -487,7 +487,19 @@ def ordermydict(words_list):
     return newlist
 
 def wikified_proportion(input_text):
-    #TODO: co z wyrazmi od wielkiej litery na początku zdania?
+    """
+    Calculate the proportion of wikified words in a string. Numbers and
+    words starting with a capital letters are ignored — they don't need
+    too be wikified on pl.wikt (unless it's a normal word at the beginning
+    of a sentence — but there is no reliable way for me now of checking this
+
+    Args:
+        input_text (str): wikified text ([[word]]s [[be|are]] [[write|written]]
+            [[like]] [[this]])
+    Returns:
+        float: the proportion of wikified text
+    """
+
     re_nonwords = re.compile(r'([\W0-9]*)', re.UNICODE)
     allwords = input_text.split()
     counted = []
@@ -499,9 +511,12 @@ def wikified_proportion(input_text):
             #ignore punctuation and numbers
             i += 1
         elif '[[' in a and ']]' in a:
+            #these are [[proper]] [[wikified]] [[words]]
             counted.append(a)
             i += 1
         elif '[[' in a:
+            #wikified phrases [[can have spaces]] in them - all this loop
+            #does is to search for them and merge at the end 
             cache = []
             cache.append(a)
             for j, b in enumerate(allwords[(i+1):]):
@@ -512,44 +527,19 @@ def wikified_proportion(input_text):
                     break
                 elif '[[' in b:
                     counted += cache
-                    i += j
+                    i += j + 1
                     break
                 else:
                     cache.append(b)
         elif a[0].upper() == a[0]:
+            #ignore titlecase words
             i += 1
         else:
             counted.append(a)
             i += 1
     
     wikified = [a for a in counted if ('[[' in a and ']]' in a)]
-
     return len(wikified)/len(counted)
-
-def old_wikified_proportion(input_text):
-    """
-    Calculate the proportion of wikified words in a string. Numbers and
-    words starting with a capital letters are ignored — they don't need
-    too be wikified on pl.wikt
-
-    Args:
-        input_text (str): wikified text ([[word]]s [[be|are]] [[write|written]]
-            [[like]] [[this]])
-    Returns:
-        float: the proportion of wikified text
-    """
-    
-    #https://regex101.com/r/bU8oY3/8
-    #wikilinks including numbers are ignored (they don't have to be wikified)
-    re_count_all = re.compile(r'(\[\[[^0-9]+?\]\]|(?<!]|\|)\b[^\W\d]+?\b)', re.UNICODE)
-    re_count_wikified = re.compile(r'(\[\[[^0-9]+?\]\])')
-
-    count_all = re.findall(re_count_all, input_text)
-    #ignore unwikified words starting with a capital letter (names don't have to be wikified)
-    count_all = [a for a in count_all if not (a[0] != '[' and a[0].upper() == a[0])]
-    count_wikified = re.findall(re_count_wikified, input_text)
-    
-    return len(count_wikified)/len(count_all)
     
 def check_verifications(page):
     anon_edit = False
