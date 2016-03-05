@@ -831,7 +831,7 @@ def shortLink(base, flex=None):
 def phrases_wikilink(input_text):
     text = []
     #https://regex101.com/r/dU5rE9/1
-    re_wikilink_decompose = re.compile(r'\[\[([^\]\|]*)(?:\||)(.*?)\]\]')
+    re_wikilink_decompose = re.compile(r'\[\[([^\]\|]*)(?:\||)(.*?)\]\](\w*)', re.UNICODE)
 
     with open('input/phrases_under_4words.txt') as f:
         phraselist = f.read().splitlines()
@@ -839,7 +839,6 @@ def phrases_wikilink(input_text):
     split_text = input_text.split()
     lengths = [len(line.split()) for line in phraselist]
     max_length = max(lengths)
-    print(max_length)
 
     i = 0
     while (i < len(split_text)):
@@ -865,8 +864,11 @@ def phrases_wikilink(input_text):
                         i += 1
                         loop = False
                         continue
-                        
-                    decomposed = (s_decompose.group(1), s_decompose.group(2))
+                    
+                    if s_decompose.group(3) != '' and s_decompose.group(2) == '':
+                        decomposed = (s_decompose.group(1), s_decompose.group(1) + s_decompose.group(3))
+                    else:
+                        decomposed = (s_decompose.group(1), s_decompose.group(2))
                     if j == i:
                         possible_phrases = [decomposed]
                     else:
@@ -897,11 +899,11 @@ def phrases_wikilink(input_text):
                         continue
 
                 if len(new_possible_phrases) == 0 and len(possible_phrases) == 1 and possible_phrases[0][0] in phraselist:
-                    text.append('[[{0}|{1}]]'.format(possible_phrases[0][0], possible_phrases[0][1]))
+                    text.append(shortLink(possible_phrases[0][0], possible_phrases[0][1]))
                     loop = False
                     i = j 
                 elif len(new_possible_phrases) == 1 and new_possible_phrases[0][0] in phraselist:
-                    text.append('[[{0}|{1}]]'.format(new_possible_phrases[0][0], new_possible_phrases[0][1]))
+                    text.append(shortLink(new_possible_phrases[0][0], new_possible_phrases[0][1]))
                     loop = False
                     i = j + 1
                 else:
