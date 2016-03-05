@@ -471,7 +471,7 @@ def sweep_all_pages():
     with open('output/example_queue.json', 'r') as inp:
         example_queue = json.loads(inp.read())
 
-    for i in range(1):
+    for i in range(100):
         page = pwb.Page(site, prefix + '{0:03d}'.format(i))
         page_remaining_examples = check_verifications(page)
         
@@ -693,7 +693,6 @@ def read_edit_history():
                     lsp = line.split('##')
                     if len(lsp) > 3:
                         if lsp[1] == '1' and lsp[-1] == 'none\n':
-                            verificators[lsp[2]] = verificators.get(lsp[2], 0) + 1
                             added.append(tuple(lsp))
                             if len(lsp) > 6:
                                 if lsp[5] != 'none':
@@ -701,7 +700,10 @@ def read_edit_history():
                         elif lsp[1] == '0':
                             bad_examples.append(dewikify(lsp[2]))
 
-    added_words = [a[0] for a in set(added)]
+    added_words = []
+    for a in set(added):
+        added_words.append(a[0])
+        verificators[a[2]] = verificators.get(a[2], 0) + 1
     
     return {'added': added_words, 'added_number': len(set(added)),\
         'bad_examples': bad_examples, 'orphans': orphans,\
