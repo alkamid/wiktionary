@@ -387,6 +387,7 @@ def add_example_to_page(verified_entry, revid):
 
                     changes = False
                     verificators = set()
+                    already_added = 0
 
                     bad_only = [ex['bad_example'] for ex in verified_entry['examples']]
                     if all(bad_only):
@@ -415,6 +416,7 @@ def add_example_to_page(verified_entry, revid):
                             example_with_ref = add_ref_to_example(verified_example['example'], verified_example['source'])
                             if lang_section.subSections['przykłady'].add_example(verified_example['correct_num'],\
                                                                                  example_with_ref) == -1:
+                                already_added = 1
                                 continue
                             if 'references' not in lang_section.subSections['źródła'].text:
                                 lang_section.subSections['źródła'].text += '\n<references />'
@@ -438,7 +440,8 @@ def add_example_to_page(verified_entry, revid):
                             if ex:
                                 log_verification(verified_entry, i)
                         return 1
-
+                    elif already_added == 1:
+                        return 1
                     return 0
     
     log_verification(verified_entry, 'not_written_to_page')
@@ -602,7 +605,7 @@ def check_verifications(page):
         for verified_example in verified_word['examples']:
             if (verified_example['good_example'] == True and wikified_proportion(verified_example['example']) > 0.98) or verified_example['bad_example'] == True:
                 found = add_example_to_page(verified_word, new_revid)
-                changes_in_list = found
+                changes_in_list += found
                 break
         if not found:
             revised_wordlist.append(verified_word)
