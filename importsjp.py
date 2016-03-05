@@ -854,6 +854,7 @@ def phrases_wikilink(input_text):
             j = i
             outside_loop_control = 0
             cache = []
+            #pdb.set_trace()
             while (loop):
                 if j == len(split_text):
                     pass
@@ -889,8 +890,9 @@ def phrases_wikilink(input_text):
                         if decomposed[1] != '' and any(phrase.startswith((phr[0] + ' ' if j != i else '') + decomposed[1]) for phrase in phraselist):
                             new_possible_phrases.append(((phr[0] + ' ' if j != i else '') + decomposed[1], (phr[1] + ' ' if j!= i else '') + decomposed[1]))
                             found = 1
+                    cache.append(split_text[j])
+
                     if found:
-                        cache.append(split_text[j])
                         j += 1
                         continue
 
