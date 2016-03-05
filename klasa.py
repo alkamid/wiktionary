@@ -436,6 +436,11 @@ class Pole():
         if self.type != 'auto':
             raise NotExampleField
         
+        re_refs = re.compile(r'(<ref.*?(?:/>|</ref>))')
+        newtext_without_refs = re.sub(re_refs, '', example_text)
+        if example_text in self.text:
+            return -1
+
         #https://regex101.com/r/xP6eR5/4
         #find all existing examples
         re_example = re.compile(r'(\: \(([0-9]\.[0-9]{1,2})\)\s{0,1}.*?)(?=\n\: \([0-9]\.[0-9]{1,2}\)|$)', re.DOTALL)
@@ -449,6 +454,7 @@ class Pole():
 
         #join them as a string, excluding empty examples ": (1.1) "
         self.text = '\n' + '\n'.join([a[0] for a in sorted_examples if len(a[0]) > 8])
+        return 1
 
 
     def merge(self, mode=2): #mode = 1 - test for a proper field, return 0 if invalid; mode=2 - merge a list/dict into a string

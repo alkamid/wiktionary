@@ -377,12 +377,8 @@ def check_edit_conflicts(verified_entry, page_section):
 
 def add_example_to_page(verified_entry, revid):
         
-    fetch_time = datetime.strptime(verified_entry['fetch_time'], '%Y-%m-%dT%H:%M:%SZ') 
-    
     try: page = Haslo(verified_entry['title'])
-    except sectionsNotFound:
-        pass
-    except WrongHeader:
+    except (sectionsNotFound, WrongHeader) as e:
         pass
     else:
         if page.type == 3:
@@ -403,7 +399,6 @@ def add_example_to_page(verified_entry, revid):
                     good_example_indices = [(ex['good_example'] and wikified_proportion(ex['example']) > 0.98) for ex in verified_entry['examples']]
                     if sum(good_example_indices) > 0:
                         lang_section.pola()
-                        #edit_conflict = pwb.Page(pwb.Site(), verified_entry['title']).editTime() > fetch_time
                         edit_conflict = check_edit_conflicts(verified_entry, lang_section)
 
                     for ix, verified_example in enumerate(verified_entry['examples']):
@@ -417,8 +412,10 @@ def add_example_to_page(verified_entry, revid):
                             if verified_example['correct_num'] == '':
                                 print('{0} - error - no number'.format(verified_entry['title']))
                                 continue
-                            lang_section.subSections['przykłady'].add_example(verified_example['correct_num'],\
-                                                                              add_ref_to_example(verified_example['example'], verified_example['source']))
+                            example_with_ref = add_ref_to_example(verified_example['example'], verified_example['source'])
+                            if lang_section.subSections['przykłady'].add_example(verified_example['correct_num'],\
+                                                                                 example_with_ref) == -1:
+                                continue
                             if 'references' not in lang_section.subSections['źródła'].text:
                                 lang_section.subSections['źródła'].text += '\n<references />'
                             lang_section.saveChanges()
