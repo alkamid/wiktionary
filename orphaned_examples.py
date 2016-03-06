@@ -655,6 +655,43 @@ def fetch_active_words():
     print(active_words)
     return {'active': active_words, 'inactive': inactive_words, 'under_review': words_in_active_pages}
 
+def write_edit_conflicts():
+    
+    todays_date = (datetime.today()).strftime('%Y%m%d')
+    conflicts_page = pwb.Page(pwb.Site(), 'Wikisłownik:Dodawanie przykładów/konflikty edycji')
+
+    added = []
+    with open('log/' + todays_date + '_examples.log', 'r') as inp:
+        for line in inp:
+            lsp = line.split('##')
+            if len(lsp) > 3:
+                if lsp[1] == '1' and 'edit_conflict' in lsp[-1]:
+                    added.append(tuple(lsp))
+
+    output = ''
+    ref_mapping = {'authors': 6, 'domain': 11, 'channel': 10, 'pub_title': 8, 'date': 9, 'article_title': 7}
+    for a in set(added):
+        
+        try: page = pwb.Page(pwb.Site(), a[0])
+        except pwb.NoPage:
+            pass
+        else:
+            if a[3][:-5] not in page.text and a[3][:-5]:
+                ref = {}
+                for r in ref_mapping:
+                    try: val = a[ref_mapping[r]]
+                    except IndexError:
+                        continue
+                    else:
+                        if a[ref_mapping[r]] != 'none':
+                            ref[r] = a[ref_mapping[r]]
+                output += '\n\n\'\'\'[[{0}]]\'\'\' ({1}) {{{{re|{2}}}}}'.format(a[0], a[4], a[2])
+                output += '\n\n{0}'.format(a[3])
+                output += '\n\n<code><nowiki>{0}</nowiki></code>'.format(add_ref_to_example(a[3], ref))
+    
+    conflicts_page.text += output
+    conflicts_page.save(comment='aktualizacja - lista wymaga weryfikacji')
+
 def write_stats_data():
     edit_history = read_edit_history()
     
@@ -934,4 +971,4 @@ if __name__ == '__main__':
     if orphaned_examples(test_word=None, hashtable=ht, online=True, complete_overwrite=False, onepage_testmode=False) == 2:
         del ht
         sweep_all_pages()
-
+        write_edit_conflicts()
