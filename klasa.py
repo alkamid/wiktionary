@@ -438,7 +438,10 @@ class Pole():
         
         re_refs = re.compile(r'(<ref.*?(?:/>|</ref>))')
         newtext_without_refs = re.sub(re_refs, '', example_text)
-        if example_text in self.text:
+        newtext_without_quotes = newtext_without_refs.replace('\'\'', '')
+        oldtext_without_refs = re.sub(re_refs, '', self.text)
+        oldtext_without_quotes = oldtext_without_refs.replace('\'\'', '')
+        if newtext_without_quotes in oldtext_without_quotes:
             return -1
 
         #https://regex101.com/r/xP6eR5/4

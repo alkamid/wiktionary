@@ -10,7 +10,7 @@ from nkjp_lookup import nkjp_lookup
 from lxml import etree
 import re
 import json
-from importsjp import morfAnalyse, wikilink, phrases_wikilink
+from importsjp import morfAnalyse, wikilink, phrases_wikilink, shortLink
 import morfeusz
 import xml.dom.minidom # for testing
 from klasa import *
@@ -167,10 +167,9 @@ def wikitext_one_sentence(left_match_right, match_base_form):
         pretty_sentence += whitespaces_left.group(1)
 
     if punctuation_match:
-        pretty_sentence += punctuation_match.group(1) + '[[' + match_base_form
-        if match_base_form != punctuation_match.group(2):
-            pretty_sentence += '|' + punctuation_match.group(2)
-        pretty_sentence += ']]' + punctuation_match.group(3)
+        pretty_sentence += punctuation_match.group(1)
+        pretty_sentence += shortLink(match_base_form, punctuation_match.group(2))
+        pretty_sentence += punctuation_match.group(3)
 
     else:
         pretty_sentence += left_match_right[1]
@@ -178,6 +177,7 @@ def wikitext_one_sentence(left_match_right, match_base_form):
         pretty_sentence += whitespaces_right.group(1)
     pretty_sentence += wikilink(left_match_right[2])
     prettier_sentence = phrases_wikilink(pretty_sentence)
+    print(prettier_sentence)
 
     return prettier_sentence
 
