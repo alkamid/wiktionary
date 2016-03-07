@@ -17,6 +17,7 @@ from klasa import *
 import pywikibot as pwb
 from datetime import datetime, timedelta, time
 import pdb
+from difflib import SequenceMatcher
 
 def extract_one_sentence(nkjp_match, nkjp_query):
     """
@@ -670,24 +671,44 @@ def write_edit_conflicts():
 
     output = ''
     ref_mapping = {'authors': 6, 'domain': 11, 'channel': 10, 'pub_title': 8, 'date': 9, 'article_title': 7}
+
     for a in set(added):
-        
-        try: page = pwb.Page(pwb.Site(), a[0])
-        except pwb.NoPage:
+
+        not_in_page = 0
+        already_added = 0
+
+        try: page = Haslo(a[0])
+        except sectionsNotFound:
             pass
         else:
-            if a[3][:-5] not in page.text and a[3][:-5]:
-                ref = {}
-                for r in ref_mapping:
-                    try: val = a[ref_mapping[r]]
-                    except IndexError:
-                        continue
-                    else:
-                        if a[ref_mapping[r]] != 'none':
-                            ref[r] = a[ref_mapping[r]]
-                output += '\n\n\'\'\'[[{0}]]\'\'\' ({1}) {{{{re|{2}}}}}'.format(a[0], a[4], a[2])
-                output += '\n\n{0}'.format(a[3])
-                output += '\n\n<code><nowiki>{0}</nowiki></code>'.format(add_ref_to_example(a[3], ref))
+            if page.type == 3:
+                for langsection in page.listLangs:
+                    if langsection.lang == 'polski':
+                        langsection.pola()
+                        #I'm not adding anything to page - this is just a convenient method to check
+                        #if an example has already been added to a page
+                        not_in_page = langsection.subSections['przykłady'].add_example('1.1', a[3])
+
+                        already_added = 0
+                        for line in conflicts_page.text.split('\n'):
+                            if not line.startswith('\'\'\'') and not line.startswith('<code>'):
+                                if SequenceMatcher(None, dewikify(a[3]), dewikify(line)).ratio() > 0.8:
+                                    already_added = 1
+                                    break
+                        break
+
+        if not_in_page == 1 and already_added == 0:
+            ref = {}
+            for r in ref_mapping:
+                try: val = a[ref_mapping[r]]
+                except IndexError:
+                    continue
+                else:
+                    if a[ref_mapping[r]] != 'none':
+                        ref[r] = a[ref_mapping[r]]
+            output += '\n\n\'\'\'[[{0}]]\'\'\' ({1}) {{{{re|{2}}}}}'.format(a[0], a[4], a[2])
+            output += '\n\n{0}'.format(a[3])
+            output += '\n\n<code><nowiki>{0}</nowiki></code>'.format(add_ref_to_example(a[3], ref))
     
     conflicts_page.text += output
     conflicts_page.save(comment='aktualizacja - lista wymaga weryfikacji')

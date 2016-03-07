@@ -17,6 +17,8 @@ from pywikibot.data.api import Request
 from os import environ
 #import mwparserfromhell
 from copy import deepcopy
+from difflib import SequenceMatcher
+from orphaned_examples import dewikify
 
 '''experimental: think about using mwparserfromhell
 def parseTitle(title):
@@ -435,19 +437,26 @@ class Pole():
         #TODO: make it universal so it works for any subsection
         if self.type != 'auto':
             raise NotExampleField
-        
-        re_refs = re.compile(r'(<ref.*?(?:/>|</ref>))')
-        newtext_without_refs = re.sub(re_refs, '', example_text)
-        newtext_without_quotes = newtext_without_refs.replace('\'\'', '')
-        oldtext_without_refs = re.sub(re_refs, '', self.text)
-        oldtext_without_quotes = oldtext_without_refs.replace('\'\'', '')
-        if newtext_without_quotes in oldtext_without_quotes:
-            return -1
 
         #https://regex101.com/r/xP6eR5/4
         #find all existing examples
         re_example = re.compile(r'(\: \(([0-9]\.[0-9]{1,2})\)\s{0,1}.*?)(?=\n\: \([0-9]\.[0-9]{1,2}\)|$)', re.DOTALL)
         s_examples = re.findall(re_example, self.text)
+
+        re_refs = re.compile(r'(<ref.*?(?:/>|</ref>))')
+        newtext_without_refs = re.sub(re_refs, '', example_text)
+        newtext_without_quotes = newtext_without_refs.replace('\'\'', '')
+
+        already_there = 0
+        for e in s_examples:
+            preprocessed = re.sub(re_refs, '', e[0])
+            preprocessed = preprocessed.replace('\'\'', '')
+            if SequenceMatcher(None, dewikify(preprocessed[8:]), dewikify(newtext_without_quotes)).ratio() > 0.8:
+                already_there = 1
+                break
+        
+        if already_there:
+            return -1
 
         #add the given example
         s_examples.append((': ({0}) {1}'.format(num, example_text), str(num)))
