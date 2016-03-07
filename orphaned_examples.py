@@ -472,7 +472,7 @@ def sweep_all_pages():
     with open('output/example_queue.json', 'r') as inp:
         example_queue = json.loads(inp.read())
 
-    for i in range(100):
+    for i in range(1,2):
         page = pwb.Page(site, prefix + '{0:03d}'.format(i))
         page_remaining_examples = check_verifications(page)
         
