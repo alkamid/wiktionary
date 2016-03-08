@@ -946,7 +946,7 @@ def wikilink(phrase):
 
 
     #http://www.ipipan.waw.pl/~wolinski/publ/znakowanie.pdf
-    verb_tags = ('inf', 'fin', 'pact', 'ppas', 'pcon', 'pant', 'imps', 'impt')
+    verb_tags = ('inf', 'fin', 'pact', 'ppas', 'pcon', 'pant', 'imps', 'impt', 'praet')
 
     phraseOutput = ''
     re_przymiotnikOd = re.compile(r'^przymiotnik od\:\s*(.*?)\s*$')
@@ -983,7 +983,7 @@ def wikilink(phrase):
                 elif i<n-1 and 'siê' in phraseTab[i+1]:
                     s_punctuation_around_sie = re.search(re_punctuation_around, phraseTab[i+1])
                     if s_punctuation_around_sie:
-                        if s_punctuation_around_sie.group(2) == 'siê' and morfAnalyse(s_word)[2] and any(tag + ':' in morfAnalyse(s_word)[2] for tag in verb_tags):
+                        if s_punctuation_around_sie.group(2) == 'siê' and morfAnalyse(s_word)[0] and all([any(tag + ':' in a[0][2] for tag in verb_tags) for a in analyse(s_word)]):
                             analysed = shortLink(morfAnalyse(s_word)[0] + ' siê', word + ' siê') + s_punctuation_around_sie.group(3)
                             i += 1
                         else:
@@ -1006,7 +1006,7 @@ def wikilink(phrase):
 
 def meanProcess(mean):
 
-    #obrï¿½bka znaczeï¿½
+    #obróbka znaczeñ
     mean = mean.replace('<br />', ' ')
     mean = mean.replace('dawniej:', '{{daw}}')
     mean = mean.replace('zdrobnienie od:', '{{zdrobn}}')
