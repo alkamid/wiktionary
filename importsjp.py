@@ -857,45 +857,49 @@ def phrases_wikilink(input_text):
                 if j == len(split_text):
                     pass
                 else:
-                    if split_text[j] == '[[stolica|Stolica]]':
+                    if split_text[j] == 'Ko¶ci':
                         pdb.set_trace()
                     s_decompose = re.search(re_wikilink_decompose, split_text[j])
                     if not s_decompose:
-                        pass
+                        decomposed = (split_text[j], split_text[j])
+                    elif s_decompose.group(3) != '' and s_decompose.group(2) == '':
+                        decomposed = (s_decompose.group(1), s_decompose.group(1) + s_decompose.group(3))
+                    elif s_decompose.group(2) == '':
+                        decomposed = (s_decompose.group(1), s_decompose.group(1))
                     else:
-                        if s_decompose.group(3) != '' and s_decompose.group(2) == '':
-                            decomposed = (s_decompose.group(1), s_decompose.group(1) + s_decompose.group(3))
-                        elif s_decompose.group(2) == '':
-                            decomposed = (s_decompose.group(1), s_decompose.group(1))
-                        else:
-                            decomposed = (s_decompose.group(1), s_decompose.group(2))
-                        if j == i:
-                            possible_phrases = [decomposed]
-                        else:
-                            possible_phrases = new_possible_phrases
+                        decomposed = (s_decompose.group(1), s_decompose.group(2))
+                    if j == i:
+                        possible_phrases = [decomposed]
+                    else:
+                        possible_phrases = new_possible_phrases
 
-                        new_possible_phrases = []
+                    new_possible_phrases = []
 
-                        found = 0
-                        for phr in possible_phrases:
-                            if any(phrase.startswith((phr[0] + ' ' if j != i else '') + decomposed[0]) for phrase in phraselist):
-                                found = 1
-                                new_possible_phrases.append(((phr[0] + ' ' if j != i else '') + decomposed[0], (phr[1] + ' ' if j!= i else '') + decomposed[1]))
+                    found = 0
+                    for phr in possible_phrases:
+                        if any(phrase.startswith((phr[0] + ' ' if j != i else '') + decomposed[0]) for phrase in phraselist):
+                            found = 1
+                            new_possible_phrases.append(((phr[0] + ' ' if j != i else '') + decomposed[0], (phr[1] + ' ' if j!= i else '') + decomposed[1]))
 
-                            if decomposed[1] != decomposed[0] and any(phrase.startswith((phr[0] + ' ' if j != i else '') + decomposed[1]) for phrase in phraselist):
-                                new_possible_phrases.append(((phr[0] + ' ' if j != i else '') + decomposed[1], (phr[1] + ' ' if j!= i else '') + decomposed[1]))
-                                found = 1
-                        cache.append(split_text[j])
+                        if decomposed[1] != decomposed[0] and any(phrase.startswith((phr[0] + ' ' if j != i else '') + decomposed[1]) for phrase in phraselist):
+                            new_possible_phrases.append(((phr[0] + ' ' if j != i else '') + decomposed[1], (phr[1] + ' ' if j!= i else '') + decomposed[1]))
+                            found = 1
 
-                        if found:
-                            j += 1
-                            continue
+                        if decomposed[1][0].isupper() and any(phrase.startswith((phr[0] + ' ' if j != i else '') + decomposed[0].title()) for phrase in phraselist):
+                            found = 1
+                            new_possible_phrases.append(((phr[0] + ' ' if j != i else '') + decomposed[0].title(), (phr[1] + ' ' if j!= i else '') + decomposed[1]))
 
-                if len(new_possible_phrases) == 0 and len(possible_phrases) == 1 and possible_phrases[0][0] in phraselist:
+                    cache.append(split_text[j])
+
+                    if found:
+                        j += 1
+                        continue
+
+                if len(new_possible_phrases) == 0 and len(set(possible_phrases)) == 1 and possible_phrases[0][0] in phraselist:
                     text.append(shortLink(possible_phrases[0][0], possible_phrases[0][1]))
                     loop = False
                     i = j 
-                elif len(new_possible_phrases) == 1 and new_possible_phrases[0][0] in phraselist:
+                elif len(set(new_possible_phrases)) == 1 and new_possible_phrases[0][0] in phraselist:
                     text.append(shortLink(new_possible_phrases[0][0], new_possible_phrases[0][1]))
                     loop = False
                     i = j + 1
