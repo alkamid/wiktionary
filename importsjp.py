@@ -32,6 +32,7 @@ def checkFlexSJP(forma):
     try: podstawowa = web.xpath('//b[@style="font-size: large;"]/a/text()')
     except AssertionError:
         return None
+
     try: flagi = web.xpath('//tt[1]/text()')
     except AssertionError:
         return None
@@ -44,23 +45,23 @@ def checkFlexSJP(forma):
 
     if search and any('j' in s for s in flagi) or any('UV' in s for s in flagi) or any('i' in s for s in flagi):
         if forma[-3:] in cie[0]:
-            return forma[:-3] + 'cie'
+            return forma[:-3].lower() + 'cie'
         elif forma[-4:] in anie[0]:
-            return forma[:-4] + 'anie'
+            return forma[:-4].lower() + 'anie'
         elif forma[-4:] in enie[0]:
-            return forma[:-4] + 'enie'
+            return forma[:-4].lower() + 'enie'
         elif forma[-4:] in cie[1]:
-            return forma[:-4] + 'cie'
+            return forma[:-4].lower() + 'cie'
         elif forma[-5:] in anie[1]:
-            return forma[:-5] + 'anie'
+            return forma[:-5].lower() + 'anie'
         elif forma[-5:] in enie[1]:
-            return forma[:-5] + 'enie'
+            return forma[:-5].lower() + 'enie'
         elif forma[-5:] in cie[2]:
-            return forma[:-5] + 'cie'
+            return forma[:-5].lower() + 'cie'
         elif forma[-6:] in anie[2]:
-            return forma[:-6] + 'anie'
+            return forma[:-6].lower() + 'anie'
         elif forma[-6:] in enie[2]:
-            return forma[:-6] + 'enie'
+            return forma[:-6].lower() + 'enie'
     elif len(podstawowa) == 1:
         return str(podstawowa[0])
     else:
@@ -848,7 +849,6 @@ def phrases_wikilink(input_text):
             i += 1
             continue
         else:
-            
             loop = True
             j = i
             outside_loop_control = 0
@@ -857,6 +857,8 @@ def phrases_wikilink(input_text):
                 if j == len(split_text):
                     pass
                 else:
+                    if split_text[j] == '[[stolica|Stolica]]':
+                        pdb.set_trace()
                     s_decompose = re.search(re_wikilink_decompose, split_text[j])
                     if not s_decompose:
                         pass
@@ -897,10 +899,14 @@ def phrases_wikilink(input_text):
                     text.append(shortLink(new_possible_phrases[0][0], new_possible_phrases[0][1]))
                     loop = False
                     i = j + 1
-                else:
+                elif len(cache) == 1:
                     text += cache
                     loop = False
-                    i += len(cache)
+                    i = j + 1
+                else:
+                    text += cache[:-1]
+                    loop = False
+                    i = j
     return ' '.join(text)
 
 def wikilink(phrase):
