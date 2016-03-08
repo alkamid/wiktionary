@@ -178,7 +178,6 @@ def wikitext_one_sentence(left_match_right, match_base_form):
         pretty_sentence += whitespaces_right.group(1)
     pretty_sentence += wikilink(left_match_right[2])
     prettier_sentence = phrases_wikilink(pretty_sentence)
-    print(prettier_sentence)
 
     return prettier_sentence
 
@@ -636,8 +635,7 @@ def fetch_active_words():
                     break
             if not found:
                 inactive_words.append(j['title'])
-                
-    print(active_words)
+
     return {'active': active_words, 'inactive': inactive_words, 'under_review': words_in_active_pages}
 
 def write_edit_conflicts():
