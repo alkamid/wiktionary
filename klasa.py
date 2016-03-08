@@ -18,7 +18,6 @@ from os import environ
 #import mwparserfromhell
 from copy import deepcopy
 from difflib import SequenceMatcher
-from orphaned_examples import dewikify
 
 '''experimental: think about using mwparserfromhell
 def parseTitle(title):
@@ -915,6 +914,22 @@ class HasloFrXML():
             self.list_lang.append(SectionFr(b, self.title))
         else:
             self.type = 4
+
+def dewikify(input_text):
+    """
+    Dewikify a wikified string.
+
+    Args:
+        input_text (str): wikified text ([[word]]s [[be|are]] [[write|written]]
+            [[like]] [[this]])
+    Returns:
+        str: unwikified text (words are written like this)
+    """
+    
+    #https://regex101.com/r/yB0pZ6/1
+    re_base_form = re.compile(r'(\[\[(?:[^\]\|]*?\||)(.*?)\]\])')
+    dewikified = re.sub(re_base_form, r'\2', input_text)
+    return dewikified
 
 #this is taken from http://code.activestate.com/recipes/578163-retry-loop/ - useful for some of the scripts that fetch things from websites - we don't want intermittent errors to crash the script
 class RetryError(Exception):

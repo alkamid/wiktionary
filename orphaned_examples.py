@@ -448,22 +448,6 @@ def add_example_to_page(verified_entry, revid):
     
     log_verification(verified_entry, 'not_written_to_page')
 
-def dewikify(input_text):
-    """
-    Dewikify a wikified string.
-
-    Args:
-        input_text (str): wikified text ([[word]]s [[be|are]] [[write|written]]
-            [[like]] [[this]])
-    Returns:
-        str: unwikified text (words are written like this)
-    """
-    
-    #https://regex101.com/r/yB0pZ6/1
-    re_base_form = re.compile(r'(\[\[(?:[^\]\|]*?\||)(.*?)\]\])')
-    dewikified = re.sub(re_base_form, r'\2', input_text)
-    return dewikified
-
 def sweep_all_pages():
     
     buffer_size = 20
