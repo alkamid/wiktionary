@@ -907,8 +907,8 @@ def wikilink(phrase):
     phrase = phrase.strip()
     phraseTab = re.split(r'\s*', phrase)
 
-    # https://regex101.com/r/yB6tQ8/5
-    re_punctuation_around = re.compile(r'([\W]*?)([\w]+(?:(?:\'|-|\s)\w+)*)([\W]*)')
+    # https://regex101.com/r/yB6tQ8/6
+    re_punctuation_around = re.compile(r'^([\W]*?)(.+?)([\W]*?)$')
 
     dontAnalyse = ['np.', 'm.in.', 'etc.', 'itd.', 'itp.', 'z', 'w', 'dziêki', 'co', 'po', 'pod', 'o', 'se']
     enieAnie = ('enia', 'enie', 'eniu', 'eniem', 'eniom', 'eniach', 'eniami', 'añ', 'ania', 'anie', 'aniu', 'aniem', 'aniom', 'aniach', 'aniami')
@@ -940,7 +940,6 @@ def wikilink(phrase):
     verb_tags = ('inf', 'fin', 'pact', 'ppas', 'pcon', 'pant', 'imps', 'impt')
 
     phraseOutput = ''
-
     re_przymiotnikOd = re.compile(r'^przymiotnik od\:\s*(.*?)\s*$')
     s_przymiotnikOd = re.search(re_przymiotnikOd, phrase)
     if s_przymiotnikOd:
