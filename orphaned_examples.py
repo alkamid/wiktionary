@@ -178,7 +178,6 @@ def wikitext_one_sentence(left_match_right, match_base_form):
         pretty_sentence += whitespaces_right.group(1)
     pretty_sentence += wikilink(left_match_right[2])
     prettier_sentence = phrases_wikilink(pretty_sentence)
-    print(prettier_sentence)
 
     return prettier_sentence
 

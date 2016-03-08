@@ -857,8 +857,6 @@ def phrases_wikilink(input_text):
                 if j == len(split_text):
                     pass
                 else:
-                    if split_text[j] == 'Ko¶ci':
-                        pdb.set_trace()
                     s_decompose = re.search(re_wikilink_decompose, split_text[j])
                     if not s_decompose:
                         decomposed = (split_text[j], split_text[j])
@@ -919,6 +917,7 @@ def wikilink(phrase):
 
     # https://regex101.com/r/yB6tQ8/6
     re_punctuation_around = re.compile(r'^([\W]*?)(.+?)([\W]*?)$')
+    re_nonwords_only = re.compile(r'\w')
 
     dontAnalyse = ['np.', 'm.in.', 'etc.', 'itd.', 'itp.', 'z', 'w', 'dziêki', 'co', 'po', 'pod', 'o', 'se']
     enieAnie = ('enia', 'enie', 'eniu', 'eniem', 'eniom', 'eniach', 'eniami', 'añ', 'ania', 'anie', 'aniu', 'aniem', 'aniom', 'aniach', 'aniami')
@@ -959,8 +958,13 @@ def wikilink(phrase):
         i = 0
         while (i<n):
             word = phraseTab[i]
+
+            s_nonword_only = re.search(re_nonwords_only, word)
             s_punctuation_around = re.search(re_punctuation_around, word)
-            if s_punctuation_around:
+
+            if s_nonword_only == None:
+                phraseOutput += ' ' + word            
+            elif s_punctuation_around:
                 analysed = ''
                 s_word = s_punctuation_around.group(2)
                 if s_word in dontAnalyse:
