@@ -32,6 +32,7 @@ def checkFlexSJP(forma):
     try: podstawowa = web.xpath('//b[@style="font-size: large;"]/a/text()')
     except AssertionError:
         return None
+
     try: flagi = web.xpath('//tt[1]/text()')
     except AssertionError:
         return None
@@ -44,23 +45,23 @@ def checkFlexSJP(forma):
 
     if search and any('j' in s for s in flagi) or any('UV' in s for s in flagi) or any('i' in s for s in flagi):
         if forma[-3:] in cie[0]:
-            return forma[:-3] + 'cie'
+            return forma[:-3].lower() + 'cie'
         elif forma[-4:] in anie[0]:
-            return forma[:-4] + 'anie'
+            return forma[:-4].lower() + 'anie'
         elif forma[-4:] in enie[0]:
-            return forma[:-4] + 'enie'
+            return forma[:-4].lower() + 'enie'
         elif forma[-4:] in cie[1]:
-            return forma[:-4] + 'cie'
+            return forma[:-4].lower() + 'cie'
         elif forma[-5:] in anie[1]:
-            return forma[:-5] + 'anie'
+            return forma[:-5].lower() + 'anie'
         elif forma[-5:] in enie[1]:
-            return forma[:-5] + 'enie'
+            return forma[:-5].lower() + 'enie'
         elif forma[-5:] in cie[2]:
-            return forma[:-5] + 'cie'
+            return forma[:-5].lower() + 'cie'
         elif forma[-6:] in anie[2]:
-            return forma[:-6] + 'anie'
+            return forma[:-6].lower() + 'anie'
         elif forma[-6:] in enie[2]:
-            return forma[:-6] + 'enie'
+            return forma[:-6].lower() + 'enie'
     elif len(podstawowa) == 1:
         return str(podstawowa[0])
     else:
@@ -848,7 +849,6 @@ def phrases_wikilink(input_text):
             i += 1
             continue
         else:
-            
             loop = True
             j = i
             outside_loop_control = 0
@@ -859,48 +859,56 @@ def phrases_wikilink(input_text):
                 else:
                     s_decompose = re.search(re_wikilink_decompose, split_text[j])
                     if not s_decompose:
-                        pass
+                        decomposed = (split_text[j], split_text[j])
+                    elif s_decompose.group(3) != '' and s_decompose.group(2) == '':
+                        decomposed = (s_decompose.group(1), s_decompose.group(1) + s_decompose.group(3))
+                    elif s_decompose.group(2) == '':
+                        decomposed = (s_decompose.group(1), s_decompose.group(1))
                     else:
-                        if s_decompose.group(3) != '' and s_decompose.group(2) == '':
-                            decomposed = (s_decompose.group(1), s_decompose.group(1) + s_decompose.group(3))
-                        elif s_decompose.group(2) == '':
-                            decomposed = (s_decompose.group(1), s_decompose.group(1))
-                        else:
-                            decomposed = (s_decompose.group(1), s_decompose.group(2))
-                        if j == i:
-                            possible_phrases = [decomposed]
-                        else:
-                            possible_phrases = new_possible_phrases
+                        decomposed = (s_decompose.group(1), s_decompose.group(2))
+                    if j == i:
+                        possible_phrases = [decomposed]
+                    else:
+                        possible_phrases = new_possible_phrases
 
-                        new_possible_phrases = []
+                    new_possible_phrases = []
 
-                        found = 0
-                        for phr in possible_phrases:
-                            if any(phrase.startswith((phr[0] + ' ' if j != i else '') + decomposed[0]) for phrase in phraselist):
-                                found = 1
-                                new_possible_phrases.append(((phr[0] + ' ' if j != i else '') + decomposed[0], (phr[1] + ' ' if j!= i else '') + decomposed[1]))
+                    found = 0
+                    for phr in possible_phrases:
+                        if any(phrase.startswith((phr[0] + ' ' if j != i else '') + decomposed[0]) for phrase in phraselist):
+                            found = 1
+                            new_possible_phrases.append(((phr[0] + ' ' if j != i else '') + decomposed[0], (phr[1] + ' ' if j!= i else '') + decomposed[1]))
 
-                            if decomposed[1] != decomposed[0] and any(phrase.startswith((phr[0] + ' ' if j != i else '') + decomposed[1]) for phrase in phraselist):
-                                new_possible_phrases.append(((phr[0] + ' ' if j != i else '') + decomposed[1], (phr[1] + ' ' if j!= i else '') + decomposed[1]))
-                                found = 1
-                        cache.append(split_text[j])
+                        if decomposed[1] != decomposed[0] and any(phrase.startswith((phr[0] + ' ' if j != i else '') + decomposed[1]) for phrase in phraselist):
+                            new_possible_phrases.append(((phr[0] + ' ' if j != i else '') + decomposed[1], (phr[1] + ' ' if j!= i else '') + decomposed[1]))
+                            found = 1
 
-                        if found:
-                            j += 1
-                            continue
+                        if decomposed[1][0].isupper() and any(phrase.startswith((phr[0] + ' ' if j != i else '') + decomposed[0].title()) for phrase in phraselist):
+                            found = 1
+                            new_possible_phrases.append(((phr[0] + ' ' if j != i else '') + decomposed[0].title(), (phr[1] + ' ' if j!= i else '') + decomposed[1]))
 
-                if len(new_possible_phrases) == 0 and len(possible_phrases) == 1 and possible_phrases[0][0] in phraselist:
+                    cache.append(split_text[j])
+
+                    if found:
+                        j += 1
+                        continue
+
+                if len(new_possible_phrases) == 0 and len(set(possible_phrases)) == 1 and possible_phrases[0][0] in phraselist:
                     text.append(shortLink(possible_phrases[0][0], possible_phrases[0][1]))
                     loop = False
                     i = j 
-                elif len(new_possible_phrases) == 1 and new_possible_phrases[0][0] in phraselist:
+                elif len(set(new_possible_phrases)) == 1 and new_possible_phrases[0][0] in phraselist:
                     text.append(shortLink(new_possible_phrases[0][0], new_possible_phrases[0][1]))
                     loop = False
                     i = j + 1
-                else:
+                elif len(cache) == 1:
                     text += cache
                     loop = False
-                    i += len(cache)
+                    i = j + 1
+                else:
+                    text += cache[:-1]
+                    loop = False
+                    i = j
     return ' '.join(text)
 
 def wikilink(phrase):
@@ -909,6 +917,7 @@ def wikilink(phrase):
 
     # https://regex101.com/r/yB6tQ8/6
     re_punctuation_around = re.compile(r'^([\W]*?)(.+?)([\W]*?)$')
+    re_nonwords_only = re.compile(r'\w')
 
     dontAnalyse = ['np.', 'm.in.', 'etc.', 'itd.', 'itp.', 'z', 'w', 'dziêki', 'co', 'po', 'pod', 'o', 'se']
     enieAnie = ('enia', 'enie', 'eniu', 'eniem', 'eniom', 'eniach', 'eniami', 'añ', 'ania', 'anie', 'aniu', 'aniem', 'aniom', 'aniach', 'aniami')
@@ -949,8 +958,13 @@ def wikilink(phrase):
         i = 0
         while (i<n):
             word = phraseTab[i]
+
+            s_nonword_only = re.search(re_nonwords_only, word)
             s_punctuation_around = re.search(re_punctuation_around, word)
-            if s_punctuation_around:
+
+            if s_nonword_only == None:
+                phraseOutput += ' ' + word            
+            elif s_punctuation_around:
                 analysed = ''
                 s_word = s_punctuation_around.group(2)
                 if s_word in dontAnalyse:
