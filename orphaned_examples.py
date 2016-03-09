@@ -179,7 +179,60 @@ def wikitext_one_sentence(left_match_right, match_base_form):
     pretty_sentence += wikilink(left_match_right[2])
     prettier_sentence = phrases_wikilink(pretty_sentence)
 
+    new = wikitext_one_sentence_new(left_match_right, match_base_form)
+    if new != prettier_sentence:
+        print(prettier_sentence)
+        print(new)
+
     return prettier_sentence
+
+
+def wikitext_one_sentence_new(left_match_right, match_base_form):
+    """
+    Take a tuple with the left and right side of the matched word
+    and format it for printing. This is a way to circumvent doing
+    wikilink('[[word]]'), which doesn't work properly as of 01/2015
+
+    Args:
+        left_match_right (tuple): a tuple of three strings: the left side
+            of the NKJP match, the match itself (in [[baseform|match]] form)
+            and the right side
+
+    Returns:
+        str: [[the|The]] [[input]] [[sentence]] [[format]]ted [[like]] [[this]].
+    """
+
+    re_whitespace_left = re.compile(r'(\s*?)$')
+    re_whitespace_right = re.compile(r'^(\s*)')
+
+    # https://regex101.com/r/yB6tQ8/6
+    re_punctuation_around = re.compile(r'^([\W]*?)(.+?)([\W]*?)$')
+
+    whitespaces_left = re.search(re_whitespace_left, left_match_right[0])
+    whitespaces_right = re.search(re_whitespace_right, left_match_right[2])
+    punctuation_match = re.search(re_punctuation_around, left_match_right[1])
+
+    pretty_sentence = wikilink(left_match_right[0])
+    if whitespaces_left:
+        pretty_sentence += whitespaces_left.group(1)
+
+    if punctuation_match:
+        matched_word = punctuation_match.group(2)
+    else:
+        matched_word = left_match_right[1]
+        
+    towikify = left_match_right[1]
+    if whitespaces_right:
+        towikify += whitespaces_right.group(1)
+    towikify += left_match_right[2]
+    wikified = wikilink(towikify)
+    wikified = wikified.replace('[[{0} się|{1} się]]'.format(match_base_form, matched_word), '\'\'\'[[{0} się|{1} się]]\'\'\''.format(match_base_form, matched_word)) 
+
+    pretty_sentence += wikified
+    prettier_sentence = phrases_wikilink(pretty_sentence)
+
+    return prettier_sentence
+
 
 def get_reference(api_output, hashtable):
     """

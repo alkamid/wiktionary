@@ -983,7 +983,22 @@ def wikilink(phrase):
                 elif i<n-1 and 'siê' in phraseTab[i+1]:
                     s_punctuation_around_sie = re.search(re_punctuation_around, phraseTab[i+1])
                     if s_punctuation_around_sie:
-                        if s_punctuation_around_sie.group(2) == 'siê' and morfAnalyse(s_word)[0] and all([any(tag + ':' in a[0][2] for tag in verb_tags) for a in analyse(s_word)]):
+                        if s_punctuation_around_sie.group(2) == 'siê' and morfAnalyse(s_word)[0]\
+                           and all([any(tag + ':' in a[0][2] for tag in verb_tags) for a in analyse(s_word)])\
+                           and not any('praet:sg:n' in a[0][2] for a in analyse(s_word)):
+                            
+                            analysed = s_punctuation_around.group(1)
+                            #if the structure is "[verb] siê [verb]" then it's hard to determine which one is reflective, so we should leave it wikified separately
+                            if i<n-2:
+                                s_punctuation_around_next_verb = re.search(re_punctuation_around, phraseTab[i+2])
+                                next_word = s_punctuation_around_next_verb.group(2)
+                                if morfAnalyse(next_word)[0] and all([any(tag + ':' in a[0][2] for tag in verb_tags) for a in analyse(next_word)]):
+                                    analysed += shortLink(morfAnalyse(s_word)[0:2]) + s_punctuation_around.group(3)
+                                    analysed += ' ' + s_punctuation_around_sie.group(1) + '[[siê]]' + s_punctuation_around_sie.group(3)
+                                    analysed += ' ' + s_punctuation_around_next_verb.group(1) + shortLink(morfAnalyse(next_word)[0:2]) + s_punctuation_around_next_verb.group(3)
+                                    phraseOutput += ' ' + analysed
+                                    i += 3
+                                    continue
                             analysed = shortLink(morfAnalyse(s_word)[0] + ' siê', word + ' siê') + s_punctuation_around_sie.group(3)
                             i += 1
                         else:
