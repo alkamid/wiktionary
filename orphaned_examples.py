@@ -336,12 +336,12 @@ def log_verification(verified_entry, example_index, error=''):
 
 def add_ref_to_example(example, ref):
     
-    #https://regex101.com/r/dW1xU3/2
+    #https://regex101.com/r/dW1xU3/4
     #https://pl.wiktionary.org/w/index.php?oldid=4957309#odno.C5.9Bniki_a_interpunkcja
     #https://pl.wiktionary.org/w/index.php?diff=4957513
 
     #three dots below because 'error: look-behind requires fixed-width pattern'
-    re_ref_punctuation = re.compile(r'(.*?)((?<!itp|itd|etc|.\.\.)\.$|$)', re.DOTALL)
+    re_ref_punctuation = re.compile(r'(.*?)((?<!itp|itd|etc|.\.\.|.\s[A-Z])\.$|$)', re.DOTALL)
     s_ref_punctuation = re.search(re_ref_punctuation, example)
 
     if type(ref) == str:
