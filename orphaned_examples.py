@@ -19,7 +19,7 @@ from datetime import datetime, timedelta, time
 import pdb
 from difflib import SequenceMatcher
 
-def extract_one_sentence(nkjp_match, nkjp_query):
+def extract_one_sentence(nkjp_match, left_context_min_length=100):
     """
     NKJP matches return the matched word itself, plus its context on both
     sides. This function attempts to take all three (left, match, right)
@@ -29,49 +29,33 @@ def extract_one_sentence(nkjp_match, nkjp_query):
     Args:
         nkjp_match (lxml.etree._Element): one result of NKJP api request,
             i.e. the content within one <line> tag
-        nkjp_query (str): the base form that we were looking for, to create
-            a wikilink for the matched word
+        left_context_min_length (str): minimum length of additional context;
+            if it's shorter than that, it's probably useless
 
     Returns:
-        tuple: three strings: the left side of the NKJP match, the match
-            itself (in [[baseform|match]] form) and the right side
+        tuple: five strings: the left side of the NKJP match, the match
+            itself (in [[baseform|match]] form), the right side, left extra
+            context and right extra context
     """
 
+    #abbreviations are not considered as the end of a sentence
     abbreviations = ['np\.', 'tzw\.', 'm\.in\.', 'prof\.', 'św\.', 'dr\.'] 
 
-    # regex here: https://regex101.com/r/yB8vG7/6
+    #https://regex101.com/r/yB8vG7/6
 
     re_end_sentence_left = re.compile(r'(?:^|[.?!]\s*)((?:' + r'|'.join(abbreviations) + r'|[^.?!]|[.?!](?!\s*[A-Z]))+)$')
     re_end_sentence_right = re.compile(r'^((?:' + r'|'.join(abbreviations) + r'|[^.?!]|[.?!](?!\s*[A-Z])|)+(?:[.?!]|$))')
-    #print(r'^((?:' + r'|'.join(abbreviations) + r'|[^.?!]|[.?!](?!\s*[A-Z])|)+(?:[.?!]|$))')
 
     left = nkjp_match.find('left').text
     centre = nkjp_match.find('match').text
     right = nkjp_match.find('right').text
 
-    right_end_sentence = re.search(re_end_sentence_right, right)
 
-
-    left_return = ''
-    #na razie zakomentowuję, ze względu na dyskusje o zbyt długich przykładach
-    '''
-    # Usually the context is to the left of the matched word, so it
-    # might be useful to set the lower limit for the length of the left context
-    left_context_min_length = 100
-
-    while len(left_return) < left_context_min_length:
-        left_end_sentence = re.search(re_end_sentence_left, left)
-        if left_end_sentence:
-            left_return = left_end_sentence.group(1) + left_return
-            left = left.replace(left_end_sentence.group(1), '')
-        else:
-            break
-    '''
-    left_context_min_length = 100
+    left_final = ''
 
     left_end_sentence = re.search(re_end_sentence_left, left)
     if left_end_sentence:
-        left_return = left_end_sentence.group(1)
+        left_final = left_end_sentence.group(1)
         if left.endswith(left_end_sentence.group(1)):
             left = left[:-len(left_end_sentence.group(1))]
 
@@ -80,29 +64,31 @@ def extract_one_sentence(nkjp_match, nkjp_query):
     if len(left) >= 20:
         left_extra_end_sentence = re.search(re_end_sentence_left, left)
         if left_extra_end_sentence:
+            #limit to 150 characters - a safeguard for very long sentences
+            #which usually are just lists of words
             left_extra = left_extra_end_sentence.group(1)[-150:]
     
-    centre_return = '[[{0}|{1}]]'.format(nkjp_query, centre)
-    
+    right_end_sentence = re.search(re_end_sentence_right, right)
     right_extra = ''
-
+    right_final = ''
     if right_end_sentence:
-        right_return = right_end_sentence.group(1)
-        right = right.replace(right_return, '', 1)
-        if len(right) >=20 and len(left_return+centre+right_return) <= 90:
+        right_final = right_end_sentence.group(1)
+        right = right.replace(right_final, '', 1)
+        #only add extra context on the right if it's long enough (>20 chars)
+        #and the sentence with matched word is short enough (<90 chars)
+        if len(right) >=20 and len(left_final+centre+right_final) <= 90:
             s_right_extra = re.search(re_end_sentence_right, right)
             if s_right_extra:
+                #limit to 150 characters - a safeguard for very long sentences
+                #wchich usually are just lists of words
                 right_extra = s_right_extra.group(1)[:150]
-    else:
-        right_return = ''
     
-    return (left_return, centre, right_return, left_extra, right_extra)
+    return (left_final, centre, right_final, left_extra, right_extra)
 
 def check_sentence_quality(left_match_right):
     """
-    Take a tuble with the left and right side of the matched word
-    and check a few arbitrary conditions to determine whether it's
-    a good example or not
+    Take a tuple with the left and right side of the matched word
+    and check a few conditions to determine whether it's a good example or not
 
     Args:
         left_match_right (tuple): a tuple of three strings: the left side
@@ -121,6 +107,11 @@ def check_sentence_quality(left_match_right):
     if sum(1 for c in joined_sentence if c.isupper())/len(joined_sentence) > allowed_uppercase_proportion:
         return 0
 
+    #too many titlecase words
+    allowed_titlecase_proportion = 0.4
+    if sum(1 for c in joined_sentence.split() if c[0].isupper())/len(joined_sentence.split()) > allowed_titlecase_proportion:
+        return 0
+
     # the sentence is too long
     allowed_length = 200
     minimum_length = 60
@@ -136,6 +127,7 @@ def check_sentence_quality(left_match_right):
     if joined_sentence.count('\n') > allowed_newlines:
         return 0
 
+    return 1
 
 def wikitext_one_sentence(left_match_right, match_base_form):
     """
