@@ -835,7 +835,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
                     o.write(formatted_output)
                 return 2
             
-            if (pages_count == 100) or (pages_count == 667 and onepage_testmode):
+            if (pages_count == 101) or (pages_count == 667 and onepage_testmode):
                 return 0
 
             # dealing with various list formats, e.g. *[[word]]
@@ -855,7 +855,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
 
                     if online:                        
                         while(True):
-                            output_page = pwb.Page(site, 'Wikisłownik:Dodawanie przykładów/dane/{0:03d}'.format(pages_count))
+                            output_page = pwb.Page(site, 'Wikisłownik:Dodawanie przykładów/dane/{0:03d}'.format(pages_count-1))
                             if pages_count == 666 or output_page.userName() == 'AlkamidBot':
                                 output_page.text = formatted_output
                                 output_page.save(comment='Pobranie nowych przykładów z NKJP.pl')
@@ -969,3 +969,6 @@ if __name__ == '__main__':
         del ht
         sweep_all_pages()
         write_edit_conflicts()
+        #refresh all pages on Monday
+        if datetime.today().weekday() == 0:
+            orphaned_examples(test_word=None, hashtable=ht, online=True, complete_overwrite=True, onepage_testmode=False)
