@@ -933,18 +933,17 @@ def wikilink(phrase):
     dontAnalyse.append('i¶æ') # alt: "i¶ciæ
     dontAnalyse.append('dzieñ') # alt: dzienia, dzienie, dzieniæ (?)
 
-    temp_capital = []
-    for elem in dontAnalyse:
-        temp_capital.append(elem.title())
-    dontAnalyse += temp_capital
-
     #so far I only found baseform ambiguity in pronouns where there was none in reality
     hardcoded_baseforms = [('jej', 'ona'), ('niej', 'ona'), ('j±', 'ona'), ('ni±', 'ona')]
     temp_capital = []
     for elem in hardcoded_baseforms:
-        temp_capital.append((elem[0].title(), elem[1].title()))
+        temp_capital.append((elem[0].title(), elem[1]))
     hardcoded_baseforms += temp_capital
 
+    #add all the words from dontAnalyse (and their titlecase versions)
+    for elem in dontAnalyse:
+        hardcoded_baseforms.append((elem, elem))
+        hardcoded_baseforms.append((elem.title(), elem))
 
     #http://www.ipipan.waw.pl/~wolinski/publ/znakowanie.pdf
     verb_tags = ('inf', 'fin', 'pact', 'ppas', 'pcon', 'pant', 'imps', 'impt', 'praet')
@@ -970,12 +969,10 @@ def wikilink(phrase):
                 s_word = s_punctuation_around.group(2)
                 if s_word == 'siê':
                     analysed = 'siê'
-                elif s_word in dontAnalyse:
-                    analysed = '[[{0}]]'.format(s_punctuation_around.group(2))
                 elif s_word in [a[0] for a in hardcoded_baseforms]:
                     for a in hardcoded_baseforms:
                         if s_word == a[0]:
-                            analysed = '[[{0}|{1}]]'.format(a[1], a[0])
+                            analysed = shortLink(a[1], a[0])
                 elif s_word.endswith(enieAnie):
                     checked = checkFlexSJP(s_word)
                     if checked:
