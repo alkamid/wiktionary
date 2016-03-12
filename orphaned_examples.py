@@ -768,13 +768,25 @@ def verify_added_examples():
                     break
 
 
+import urllib.request
+from lxml import html
+def refresh_orphans_list():
+
+    with urllib.request.urlopen('http://tools.wmflabs.org/alkamidbot/porzucone.html') as response,\
+         open('input/orphans.txt', 'w') as orphans:
+        t = html.parse(response)
+        for a in t.iter('a'):
+            text = a.text_content()
+            orphans.write(text + '\n')
+
+
 def check_if_includes_orphan(sentence, orphan_list, excluded_orphans):
     re_base_form = re.compile(r'\[\[(.*?)(?:\||\]\])')
     allwords = re.findall(re_base_form, wikilink(sentence[0] + sentence[2]))
     for word in allwords:
         if ' się' in word:
             word = word[:-4]
-        if '\n*[[{0}]]\n'.format(word) in orphan_list and word not in excluded_orphans:
+        if '\n*{0}\n'.format(word) in orphan_list and word not in excluded_orphans:
             return word
     return None
 
@@ -814,7 +826,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
 
 
     words_count = 0
-    with open('output/porzucone.txt') as f,\
+    with open('input/orphans.txt') as f,\
     open('output/empty_sections.txt', 'r') as g:
 
         # list of pages with no examples (obtained by empty_section.py)
@@ -964,6 +976,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
 
 
 if __name__ == '__main__':
+    refresh_orphans_list()
     ht = read_author_hashtable()
     if orphaned_examples(test_word=None, hashtable=ht, online=True, complete_overwrite=False, onepage_testmode=False) == 2:
         del ht
