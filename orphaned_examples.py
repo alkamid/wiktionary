@@ -979,9 +979,13 @@ if __name__ == '__main__':
     refresh_orphans_list()
     ht = read_author_hashtable()
     if orphaned_examples(test_word=None, hashtable=ht, online=True, complete_overwrite=False, onepage_testmode=False) == 2:
-        del ht
-        sweep_all_pages()
-        write_edit_conflicts()
         #refresh all pages on Monday
         if datetime.today().weekday() == 0:
+            sweep_all_pages()
+            write_edit_conflicts()
             orphaned_examples(test_word=None, hashtable=ht, online=True, complete_overwrite=True, onepage_testmode=False)
+            del ht
+        else:
+            del ht
+            sweep_all_pages()
+            write_edit_conflicts()
