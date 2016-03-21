@@ -867,7 +867,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
 
                     if online:                        
                         while(True):
-                            output_page = pwb.Page(site, 'Wikisłownik:Dodawanie przykładów/dane/{0:03d}'.format(pages_count-1))
+                            output_page = pwb.Page(site, 'Wikisłownik:Dodawanie przykładów/dane/{0:03d}'.format(pages_count))
                             if pages_count == 666 or output_page.userName() == 'AlkamidBot':
                                 output_page.text = formatted_output
                                 output_page.save(comment='Pobranie nowych przykładów z NKJP.pl')
