@@ -18,29 +18,41 @@ import pywikibot as pwb
 from datetime import datetime, timedelta, time
 import pdb
 from difflib import SequenceMatcher
+import xmltodict
 
 def join_sentence(left, match='', right=''):
     joined = ''
+    open_quote = 0
 
     if type(left) == OrderedDict:
         listwords = left['s']['wts']['wt']
-        for i, elem in enumerate(listwords):
-            tag = elem['ps']['p']['#text']
-            print(tag)
-            if ('punct:interp' not in tag and 'aglt:' not in tag) or elem['w'] == '(' or elem['w'] == '-':
-                if i > 0 and listwords[i-1]['w'] != '(':
-                    joined += ' '
-            joined += elem['w']
     else:
-        sent = left + match + right
-        for i, word_full in enumerate(sent):
-            word = word_full.split('|')
+        listwords = left + match + right
 
-            if ('punct:interp' not in word[2] and 'p:aglt' not in word[2]) or word[0] == 'w:(' or word[0] == 'w:-':
-                if i > 0 and sent[i-1].split('|')[0] != 'w:(':
-                    joined += ' '
+    for i, elem in enumerate(listwords):
+        if type(left) == OrderedDict:
+            tag = elem['ps']['p']['#text']
+            word = elem['w']
+            if i > 0:
+                prev = listwords[i-1]['w']
+        else:
+            word_elems = elem.split('|')
+            tag = word_elems[2]
+            word = word_elems[0][2:]
+            if i > 0:
+                prev = listwords[i-1].split('|')[0][2:]
 
-            joined += word[0][2:]
+        if ('punct:interp' not in tag and 'aglt:' not in tag) or word == '(' or word == '-':
+            if i > 0 and prev != '(' and not (open_quote == 1 and prev == '"'):
+                joined += ' '
+        elif word == '"':
+            if open_quote == 0:
+                open_quote = 1
+                joined += ' '
+            else:
+                open_quote = 0
+
+        joined += word
 
     return joined
 
@@ -54,18 +66,25 @@ def make_sentence_long_enough(nkjp_match, nkjp_doc, minimum_length=100):
     Args:
         nkjp_match (dict): one result of NKJP api request,
             i.e. one element of ['spans']
+        nkjo_doc (dict): the corresponding ['doc'] element of the result, where
+            seq and text_id are stored
         minimum_length (int): minimum length of the sentence
     """
 
-    whole_sentence = join_sentence(nkjp_match)
-    extra_left_context = []
+    whole_sentence = join_sentence(nkjp_match['lTks'], nkjp_match['mTks'], nkjp_match['rTks'])
+    extra_left_context = ''
+
+    seq = int(nkjp_doc['seq'])
     
-    while (len(whole_sentence) < minimum_length):
-        ctx = nkjp_find_context(nkjp_doc['seq'], nkjp_match['text_id'])['utt']
-    #TODO: join_sentence() works on three parts of a sentence. Make it universal so it also strips 'utt'
-        
+    while (len(whole_sentence) + len(extra_left_context) < minimum_length):
+        ctx_query_result = nkjp_find_context(seq, nkjp_match['text_id'])[0]['utt_tagged']
+        ctx_stripped = join_sentence(xmltodict.parse(ctx_query_result))
+        extra_left_context = ctx_stripped + ' ' + extra_left_context
+        seq -= 1
 
     
+    return extra_left_context.strip()
+
 
 def extract_one_sentence(nkjp_match, left_context_min_length=100):
     """
