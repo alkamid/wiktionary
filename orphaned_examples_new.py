@@ -19,17 +19,29 @@ from datetime import datetime, timedelta, time
 import pdb
 from difflib import SequenceMatcher
 
-def join_sentence(left, match, right):
+def join_sentence(left, match='', right=''):
     joined = ''
-    sent = left + match + right
-    for i, word_full in enumerate(sent):
-        word = word_full.split('|')
 
-        if ('punct:interp' not in word[2] and 'p:aglt' not in word[2]) or word[0] == 'w:(' or word[0] == 'w:-':
-            if i > 0 and sent[i-1].split('|')[0] != 'w:(':
-                joined += ' '
+    if type(left) == OrderedDict:
+        listwords = left['s']['wts']['wt']
+        for i, elem in enumerate(listwords):
+            tag = elem['ps']['p']['#text']
+            print(tag)
+            if ('punct:interp' not in tag and 'aglt:' not in tag) or elem['w'] == '(' or elem['w'] == '-':
+                if i > 0 and listwords[i-1]['w'] != '(':
+                    joined += ' '
+            joined += elem['w']
+    else:
+        sent = left + match + right
+        for i, word_full in enumerate(sent):
+            word = word_full.split('|')
 
-        joined += word[0][2:]
+            if ('punct:interp' not in word[2] and 'p:aglt' not in word[2]) or word[0] == 'w:(' or word[0] == 'w:-':
+                if i > 0 and sent[i-1].split('|')[0] != 'w:(':
+                    joined += ' '
+
+            joined += word[0][2:]
+
     return joined
 
 
