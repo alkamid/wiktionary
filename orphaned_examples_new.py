@@ -57,7 +57,7 @@ def join_sentence(left, match='', right=''):
     return joined
 
 
-def make_sentence_long_enough(nkjp_match, nkjp_doc, minimum_length=100):
+def make_sentence_long_enough(nkjp_match, nkjp_doc, minimum_length=60):
     """
     Short sentences are not the best matches, because the lack context.
     This function will calculate the length of a sentence and return 0 if
@@ -86,72 +86,7 @@ def make_sentence_long_enough(nkjp_match, nkjp_doc, minimum_length=100):
     return extra_left_context.strip()
 
 
-def extract_one_sentence(nkjp_match, left_context_min_length=100):
-    """
-    NKJP matches return the matched word itself, plus its context on both
-    sides. This function attempts to take all three (left, match, right)
-    and extract one sentence.
-
-
-    Args:
-        nkjp_match (dict): one result of NKJP api request,
-            i.e. one element of ['spans']
-        left_context_min_length (str): minimum length of additional context;
-            if it's shorter than that, it's probably useless
-
-    Returns:
-        tuple: five strings: the left side of the NKJP match, the match
-            itself (in [[baseform|match]] form), the right side, left extra
-            context and right extra context
-    """
-
-    #abbreviations are not considered as the end of a sentence
-    abbreviations = ['np\.', 'tzw\.', 'm\.in\.', 'prof\.', 'św\.', 'dr\.'] 
-
-    #https://regex101.com/r/yB8vG7/6
-
-    re_end_sentence_left = re.compile(r'(?:^|[.?!]\s*)((?:' + r'|'.join(abbreviations) + r'|[^.?!]|[.?!](?!\s*[A-Z]))+)$')
-    re_end_sentence_right = re.compile(r'^((?:' + r'|'.join(abbreviations) + r'|[^.?!]|[.?!](?!\s*[A-Z])|)+(?:[.?!]|$))')
-
-    left = nkjp_match.find('left').text
-    centre = nkjp_match.find('match').text
-    right = nkjp_match.find('right').text
-
-    left_final = ''
-
-    left_end_sentence = re.search(re_end_sentence_left, left)
-    if left_end_sentence:
-        left_final = left_end_sentence.group(1)
-        if left.endswith(left_end_sentence.group(1)):
-            left = left[:-len(left_end_sentence.group(1))]
-
-    # cut some extra stuff on the left so users can add it
-    left_extra = ''
-    if len(left) >= 20:
-        left_extra_end_sentence = re.search(re_end_sentence_left, left)
-        if left_extra_end_sentence:
-            #limit to 150 characters - a safeguard for very long sentences
-            #which usually are just lists of words
-            left_extra = left_extra_end_sentence.group(1)[-150:]
-    
-    right_end_sentence = re.search(re_end_sentence_right, right)
-    right_extra = ''
-    right_final = ''
-    if right_end_sentence:
-        right_final = right_end_sentence.group(1)
-        right = right.replace(right_final, '', 1)
-        #only add extra context on the right if it's long enough (>20 chars)
-        #and the sentence with matched word is short enough (<90 chars)
-        if len(right) >=20 and len(left_final+centre+right_final) <= 90:
-            s_right_extra = re.search(re_end_sentence_right, right)
-            if s_right_extra:
-                #limit to 150 characters - a safeguard for very long sentences
-                #wchich usually are just lists of words
-                right_extra = s_right_extra.group(1)[:150]
-    
-    return (left_final, centre, right_final, left_extra, right_extra)
-
-def check_sentence_quality(left_match_right):
+def check_sentence_quality(nkjp_match):
     """
     Take a tuple with the left and right side of the matched word
     and check a few conditions to determine whether it's a good example or not
@@ -165,7 +100,7 @@ def check_sentence_quality(left_match_right):
         int: 0 for bad quality, 1 for good quality
     """
 
-    joined_sentence = ''.join(left_match_right[:3])
+    joined_sentence = join_sentence(nkjp_match['lTks'], nkjp_match['mTks'], nkjp_match['rTks'])
 
     # the proportion of upper case letters to all letters is too high
     allowed_uppercase_proportion = 0.1
