@@ -172,7 +172,7 @@ def wikitext_one_sentence(left_context, nkjp_match, match_base_form):
 
     return final_sentence
 
-def get_reference(api_output, hashtable):
+def get_reference(doc):
     """
     Take one result from NKJP api (within <line> tags), extract info
     about autorship and format it for printing
@@ -186,50 +186,35 @@ def get_reference(api_output, hashtable):
             returns ''
     """
     
-
-    ref = OrderedDict()
-    if len(hashtable) == 0:
-        ref['authors'] = 'Nazwisko Autora'
-    else:
-        author_hash = bytes(api_output.find('hash').text, 'utf-8')
-        try: ref['authors'] = hashtable[author_hash].decode('utf-8')[4:-5].replace('</au><au>', ', ')
-        except KeyError:
-            return ''
-    
-    match = api_output.find('match').text.lower()
+    ref = {}
+    ref['authors'] = doc['authors']
     
     excluded_titles = ['Wikipedia:']
 
     # article title exists for newspaper records
-    article_title = api_output.find('title_a')
-    if article_title is not None:
-        if any(article_title.text.startswith(c) for c in excluded_titles):
+    ref['article_title'] = doc['title_a_s']
+    if ref['article_title'] != '':
+        if any(ref['article_title'].startswith(c) for c in excluded_titles):
             return ''
-        elif len(article_title.text) > 0:
-            ref['article_title'] = article_title.text
-
-
 
     # this is a book title or a newspaper name
-    pub_title = api_output.find('title_mono')
-    if pub_title is not None:
-        if article_title.text.lower().startswith(match) and 'Wikipedia' in pub_title.text:
-            return '' # Wikipedia pages about matched words are probably
-            # the best examples
-        ref['pub_title'] = pub_title.text.strip()
-            
-    pub_date = api_output.find('pubDate')
-    if pub_date is not None:
-        refdate = ''
-        if len(pub_date.text) == 8:
-            refdate += '{0}/{1}/'.format(pub_date.text[6:], pub_date.text[4:6])
-        if len(pub_date.text) in (4, 8):
-            refdate += pub_date.text[:4]
-        ref['date'] = refdate
+    ref['pub_title'] = doc['title_m_s']
 
+    ref['journal_title'] = doc['title_j_s']
+         
+    pub_date = doc['pub_date']
+
+    refdate = ''
+    if len(pub_date) == 10:
+        refdate += '{0}/{1}/'.format(pub_date[8:], pub_date[5:7])
+    if len(pub_date) in (4, 10):
+        refdate += pub_date[:4]
+    ref['date'] = refdate
+    
     #extras
-    for field in ['hash', 'match_start', 'match_end', 'channel', 'domain']:
-        ref[field] = api_output.find(field).text
+    ref['id'] = doc['id']
+    ref['channel'] = doc['medium']
+    ref['domain'] = doc['genre']
 
     return ref
 
@@ -589,20 +574,7 @@ def check_verifications(page):
     if not changes_in_list:
         return -1
     return revised_wordlist
-
-import gzip                                                           
-                                                                      
-def read_author_hashtable():                                          
-    mydict = {}                                                       
-    with gzip.open('input/authors_under3.tab.gz', 'r') as f:                
-        i = 0                                                         
-        for line in f:                                                
-            mydict[line[:32]] = line[33:-1]                           
-            #i+=1                                                      
-            #if i > 10:                                                
-            #    break                                                 
-    return mydict                                                     
-
+                                                                     
 def fetch_active_words():
     page_prefix = 'Wikisłownik:Dodawanie_przykładów/dane/'
     
@@ -789,7 +761,7 @@ def check_if_includes_orphan(sentence, orphan_list, excluded_orphans):
 
 
 import random
-def orphaned_examples(test_word=None, hashtable=None, online=False, complete_overwrite=False, onepage_testmode=False):
+def orphaned_examples(test_word=None, online=False, complete_overwrite=False, onepage_testmode=False):
 
     buffer_size = 20 #how many words will be printed on one page
     if online:
@@ -809,11 +781,6 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
     else:
         excluded_words += active_words['under_review']
     
-    if not hashtable:
-        authors_hashtable = read_author_hashtable()
-    else:
-        authors_hashtable = hashtable
-
     site = pwb.Site()
 
     # this is a dirty trick, because morfAnalyse() and wikilink() don't
@@ -916,7 +883,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
                     if check_sentence_quality(sentence) == 0:
                         continue
 
-                    ref = get_reference(line, authors_hashtable)
+                    ref = get_reference(line)
                     if ref == '':
                         break
 
@@ -974,11 +941,10 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
 
 if __name__ == '__main__':
     refresh_orphans_list()
-    ht = read_author_hashtable()
-    if orphaned_examples(test_word=None, hashtable=ht, online=True, complete_overwrite=False, onepage_testmode=False) == 2:
+    if orphaned_examples(test_word=None, online=True, complete_overwrite=False, onepage_testmode=False) == 2:
         del ht
         sweep_all_pages()
         write_edit_conflicts()
         #refresh all pages on Monday
         if datetime.today().weekday() == 0:
-            orphaned_examples(test_word=None, hashtable=ht, online=True, complete_overwrite=True, onepage_testmode=False)
+            orphaned_examples(test_word=None, online=True, complete_overwrite=True, onepage_testmode=False)
