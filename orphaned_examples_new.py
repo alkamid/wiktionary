@@ -57,7 +57,7 @@ def join_sentence(left, match=[], right=[]):
     return joined
 
 
-def make_sentence_long_enough(nkjp_match, nkjp_doc, minimum_length=60):
+def get_left_context(nkjp_match, nkjp_doc, minimum_length=60):
     """
     Short sentences are not the best matches, because the lack context.
     This function will calculate the length of a sentence and return 0 if
@@ -242,6 +242,7 @@ def get_definitions(word):
     except sectionsNotFound:
         pass
     else:
+        print(wikipage.type)
         if wikipage.type == 3:
             for langsection in wikipage.listLangs:
                 if langsection.lang == 'polski':
@@ -851,18 +852,17 @@ def orphaned_examples(test_word=None, online=False, complete_overwrite=False, on
             if input_word[0] == '-' or input_word[-1] == '-' or input_word[0].isupper():
                 continue # let's skip prefixes and sufixes for now, also whatever starts with a capital leter
 
-            query = '{0}**'.format(input_word).replace(' ', '** ')
-            result = nkjp_lookup(query)
-            root = etree.parse(result).getroot()
-
+            query = '({0}**)'.format(input_word).replace(' ', '** ')
+            result = nkjp_lookup_new(query)
             #print(xml.dom.minidom.parseString(etree.tostring(root)).toprettyxml())
             #return -1
-            if root.find('concordance') is not None:
+            if result['spanResponse']['numFound'] != 0:
                 found = 0
                 found_orphan = 0
 
                 defs = get_definitions(input_word)
                 if defs == 0:
+                    print('hahahha')
                     continue
 
                 new_word = ExampleDict()
@@ -870,20 +870,23 @@ def orphaned_examples(test_word=None, online=False, complete_overwrite=False, on
                 new_word['fetch_time'] = str(defs[1])
                 new_word['definitions'] = defs[0]
 
-                for line in root.find('concordance').findall('line'):
+                for line in result['spanResponse']['spans']:
+                    doc = result['response']['docs'][line['doc_seq']]
 
-                    sentence = extract_one_sentence(line, input_word)
+                    matched_sentence = join_sentence(line['lTks'], line['mTks'], line['rTks'])
+                    left_context = get_left_context(line, doc)
+                    sentence =  left_context + ' ' + matched_sentence
 
+                    matched_tag = line['mTks'][0].split('|')[2:]
                     # NKJP treats gerunds as verb forms. We don't
                     if '\'\'czasownik' in new_word['definitions'] and\
-                       all(('ger:' in analysed[2] or 'subst:' in analysed[2]) for analysed in morfeusz.analyse(sentence[1])[0]):
+                       all('ger:' in matched_tag or 'subst:' in matched_tag):
                         continue
 
-
-                    if check_sentence_quality(sentence) == 0:
+                    if check_sentence_quality(line) == 0:
                         continue
-
-                    ref = get_reference(line)
+                    
+                    ref = get_reference(docs)
                     if ref == '':
                         break
 
@@ -891,11 +894,11 @@ def orphaned_examples(test_word=None, online=False, complete_overwrite=False, on
                         temp_example = {'verificator': 'None', 'correct_num': 'None', 'good_example': False, 'bad_example': False}
                         #temp_example['left'] = line.find('left').text
                         #temp_example['right'] = line.find('right').text
-                        temp_example['example'] = wikitext_one_sentence(sentence, input_word)
-                        temp_example['left_extra'] = phrases_wikilink(wikilink(sentence[3]))
-                        temp_example['right_extra'] = phrases_wikilink(wikilink(sentence[4]))
+                        temp_example['example'] = wikitext_one_sentence(left_context, line, input_word)
+                        #temp_example['left_extra'] = phrases_wikilink(wikilink(sentence[3]))
+                        #temp_example['right_extra'] = phrases_wikilink(wikilink(sentence[4]))
                         temp_example['source'] = ref
-
+ 
                         orphan_switch = check_if_includes_orphan(sentence, orphans, edit_history['orphans'])
                         temp_example['orphan'] = orphan_switch
                         new_word['examples'].append(temp_example)
@@ -903,7 +906,7 @@ def orphaned_examples(test_word=None, online=False, complete_overwrite=False, on
                     else:
                         
                         found_new = 0
-                        wikified_example = wikitext_one_sentence(sentence, input_word)
+                        wikified_example = wikitext_one_sentence(left_context, line, input_word)
 
                         for ex_ix, ex in enumerate(new_word['examples']):
                             neworphan = check_if_includes_orphan(sentence, orphans, edit_history['orphans'])
@@ -929,9 +932,9 @@ def orphaned_examples(test_word=None, online=False, complete_overwrite=False, on
                             new_example['orphan'] = neworphan
                             #new_example['left'] = line.find('left').text
                             #new_example['right'] = line.find('right').text
-                            new_example['example'] = wikitext_one_sentence(sentence, input_word)
-                            new_example['left_extra'] = phrases_wikilink(wikilink(sentence[3]))
-                            new_example['right_extra'] = phrases_wikilink(wikilink(sentence[4]))
+                            new_example['example'] = wikitext_one_sentence(left_context, sentence, input_word)
+                            #new_example['left_extra'] = phrases_wikilink(wikilink(sentence[3]))
+                            #new_example['right_extra'] = phrases_wikilink(wikilink(sentence[4]))
                             new_example['source'] = ref
 
                 if new_word and len(new_word['examples']) > 0:
@@ -941,10 +944,13 @@ def orphaned_examples(test_word=None, online=False, complete_overwrite=False, on
 
 if __name__ == '__main__':
     refresh_orphans_list()
+    orphaned_examples(test_word=None, online=False, complete_overwrite=True, onepage_testmode=False)
+    '''
+    refresh_orphans_list()
     if orphaned_examples(test_word=None, online=True, complete_overwrite=False, onepage_testmode=False) == 2:
-        del ht
         sweep_all_pages()
         write_edit_conflicts()
         #refresh all pages on Monday
         if datetime.today().weekday() == 0:
             orphaned_examples(test_word=None, online=True, complete_overwrite=True, onepage_testmode=False)
+    '''
