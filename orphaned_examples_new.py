@@ -20,7 +20,7 @@ import pdb
 from difflib import SequenceMatcher
 import xmltodict
 
-def join_sentence(left, match='', right=''):
+def join_sentence(left, match=[], right=[]):
     joined = ''
     open_quote = 0
 
@@ -74,7 +74,7 @@ def make_sentence_long_enough(nkjp_match, nkjp_doc, minimum_length=60):
     whole_sentence = join_sentence(nkjp_match['lTks'], nkjp_match['mTks'], nkjp_match['rTks'])
     extra_left_context = ''
 
-    seq = int(nkjp_doc['seq'])
+    seq = int(nkjp_doc['seq'])-1
     
     while (len(whole_sentence) + len(extra_left_context) < minimum_length):
         ctx_query_result = nkjp_find_context(seq, nkjp_match['text_id'])[0]['utt_tagged']
@@ -130,7 +130,7 @@ def check_sentence_quality(nkjp_match):
 
     return 1
 
-def wikitext_one_sentence(left_match_right, match_base_form):
+def wikitext_one_sentence(left_context, nkjp_match, match_base_form):
     """
     Take a tuple with the left and right side of the matched word
     and format it for printing. This is a way to circumvent doing
@@ -146,35 +146,31 @@ def wikitext_one_sentence(left_match_right, match_base_form):
         str: [[the|The]] [[input]] [[sentence]] [[format]]ted [[like]] [[this]].
     """
 
-    re_whitespace_left = re.compile(r'(\s*?)$')
-    re_whitespace_right = re.compile(r'^(\s*)')
+    left_ctx_wikised = wikilink(left_context)
+    left_match_wikised = wikilink(join_sentence(nkjp_match['lTks']))
 
-    # https://regex101.com/r/yB6tQ8/6
-    re_punctuation_around = re.compile(r'^([\W]*?)(.+?)([\W]*?)$')
-
-    whitespaces_left = re.search(re_whitespace_left, left_match_right[0])
-    whitespaces_right = re.search(re_whitespace_right, left_match_right[2])
-    punctuation_match = re.search(re_punctuation_around, left_match_right[1])
-
-    pretty_sentence = wikilink(left_match_right[0])
-
-    if whitespaces_left:
-        pretty_sentence += whitespaces_left.group(1)
-
-    if punctuation_match:
-        pretty_sentence += punctuation_match.group(1)
-        pretty_sentence += shortLink(match_base_form, punctuation_match.group(2))
-        pretty_sentence += punctuation_match.group(3)
+    final_sentence = left_ctx_wikised + left_match_wikised
+    quote_count = final_sentence.count('"')
+    
+    last_left = nkjp_match['lTks'][-1].split('|')[0]
+    first_right = nkjp_match['rTks'][0].split('|')[0]
+    if ( last_left == 'w:"' and quote_count % 2 == 1)\
+       or last_left == 'w:(':
+        pass
     else:
-        pretty_sentence += left_match_right[1]
+        final_sentence += ' '
 
-    if whitespaces_right:
-        pretty_sentence += whitespaces_right.group(1)
-    pretty_sentence += wikilink(left_match_right[2])
-    prettier_sentence = phrases_wikilink(pretty_sentence)
+    final_sentence += shortLink(match_base_form, join_sentence(nkjp_match['mTks']))
+    
+    if (first_right == 'w:"' and quote_count % 2 == 1)\
+       or first_right == 'w:)':
+        pass
+    else:
+        final_sentence += ' '
 
-    return prettier_sentence
+    final_sentence += wikilink(join_sentence(nkjp_match['rTks']))
 
+    return final_sentence
 
 def get_reference(api_output, hashtable):
     """
