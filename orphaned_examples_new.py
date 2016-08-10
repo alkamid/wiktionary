@@ -828,7 +828,7 @@ def orphaned_examples(test_word=None, online=False, complete_overwrite=False, on
                     o.write(formatted_output)
                 return 2
             
-            if (pages_count == 101) or (pages_count == 667 and onepage_testmode):
+            if (pages_count == 11) or (pages_count == 667 and onepage_testmode):
                 return 0
 
             # dealing with various list formats, e.g. *[[word]]
@@ -961,13 +961,11 @@ def orphaned_examples(test_word=None, online=False, complete_overwrite=False, on
 
 if __name__ == '__main__':
     refresh_orphans_list()
-    orphaned_examples(test_word=None, online=False, complete_overwrite=True, onepage_testmode=False)
-    '''
-    refresh_orphans_list()
+    #orphaned_examples(test_word=None, online=False, complete_overwrite=True, onepage_testmode=False)
     if orphaned_examples(test_word=None, online=True, complete_overwrite=False, onepage_testmode=False) == 2:
         sweep_all_pages()
         write_edit_conflicts()
         #refresh all pages on Monday
-        if datetime.today().weekday() == 0:
+        if datetime.today().weekday() == 3:
             orphaned_examples(test_word=None, online=True, complete_overwrite=True, onepage_testmode=False)
-    '''
+    
