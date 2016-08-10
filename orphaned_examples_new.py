@@ -258,7 +258,6 @@ def get_definitions(word):
     except sectionsNotFound:
         pass
     else:
-        print(wikipage.type)
         if wikipage.type == 3:
             for langsection in wikipage.listLangs:
                 if langsection.lang == 'polski':
@@ -311,6 +310,7 @@ def log_verification(verified_entry, example_index, error=''):
             log_line += '##none'
 
         if type(this_example['source']) != str:
+            #TODO: add 'journal_title' but first check if there will be no conflicts in accesing the logs
             for field in ['authors', 'article_title', 'pub_title', 'date', 'channel', 'domain']:
                 if field in this_example['source'] and this_example['source'][field]:
                     log_line += '##{0}'.format(this_example['source'][field])
@@ -828,7 +828,7 @@ def orphaned_examples(test_word=None, online=False, complete_overwrite=False, on
                     o.write(formatted_output)
                 return 2
             
-            if (pages_count == 11) or (pages_count == 667 and onepage_testmode):
+            if (pages_count == 101) or (pages_count == 667 and onepage_testmode):
                 return 0
 
             # dealing with various list formats, e.g. *[[word]]
@@ -878,7 +878,6 @@ def orphaned_examples(test_word=None, online=False, complete_overwrite=False, on
 
                 defs = get_definitions(input_word)
                 if defs == 0:
-                    print('hahahha')
                     continue
 
                 new_word = ExampleDict()
@@ -966,6 +965,6 @@ if __name__ == '__main__':
         sweep_all_pages()
         write_edit_conflicts()
         #refresh all pages on Monday
-        if datetime.today().weekday() == 3:
+        if datetime.today().weekday() == 0:
             orphaned_examples(test_word=None, online=True, complete_overwrite=True, onepage_testmode=False)
     
