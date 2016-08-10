@@ -26,12 +26,16 @@ def join_sentence(left, match=[], right=[]):
 
     if type(left) == OrderedDict:
         listwords = left['s']['wts']['wt']
+        try: listwords[0]
+        except KeyError:
+            listwords = [listwords]
     else:
         listwords = left + match + right
 
     for i, elem in enumerate(listwords):
         if type(left) == OrderedDict:
             tag = elem['ps']['p']['#text']
+
             word = elem['w']
             if i > 0:
                 prev = listwords[i-1]['w']
@@ -77,7 +81,9 @@ def get_left_context(nkjp_match, nkjp_doc, minimum_length=60):
     seq = int(nkjp_doc['seq'])-1
     
     while (len(whole_sentence) + len(extra_left_context) < minimum_length):
-        ctx_query_result = nkjp_find_context(seq, nkjp_match['text_id'])[0]['utt_tagged']
+        try: ctx_query_result = nkjp_find_context(seq, nkjp_match['text_id'])[0]['utt_tagged']
+        except IndexError:
+            break
         ctx_stripped = join_sentence(xmltodict.parse(ctx_query_result))
         extra_left_context = ctx_stripped + ' ' + extra_left_context
         seq -= 1
@@ -152,7 +158,10 @@ def wikitext_one_sentence(left_context, nkjp_match, match_base_form):
     final_sentence = left_ctx_wikised + left_match_wikised
     quote_count = final_sentence.count('"')
     
-    last_left = nkjp_match['lTks'][-1].split('|')[0]
+    try: last_left = nkjp_match['lTks'][-1].split('|')[0]
+    except IndexError:
+        last_left = None
+
     first_right = nkjp_match['rTks'][0].split('|')[0]
     if ( last_left == 'w:"' and quote_count % 2 == 1)\
        or last_left == 'w:(':
@@ -876,17 +885,18 @@ def orphaned_examples(test_word=None, online=False, complete_overwrite=False, on
                     matched_sentence = join_sentence(line['lTks'], line['mTks'], line['rTks'])
                     left_context = get_left_context(line, doc)
                     sentence =  left_context + ' ' + matched_sentence
+                    
+                    matched_tag = line['mTks'][0].split('|')[2][2:]
 
-                    matched_tag = line['mTks'][0].split('|')[2:]
                     # NKJP treats gerunds as verb forms. We don't
                     if '\'\'czasownik' in new_word['definitions'] and\
-                       all('ger:' in matched_tag or 'subst:' in matched_tag):
+                       ('ger:' in matched_tag or 'subst:' in matched_tag):
                         continue
 
                     if check_sentence_quality(line) == 0:
                         continue
                     
-                    ref = get_reference(docs)
+                    ref = get_reference(doc)
                     if ref == '':
                         break
 
@@ -932,7 +942,7 @@ def orphaned_examples(test_word=None, online=False, complete_overwrite=False, on
                             new_example['orphan'] = neworphan
                             #new_example['left'] = line.find('left').text
                             #new_example['right'] = line.find('right').text
-                            new_example['example'] = wikitext_one_sentence(left_context, sentence, input_word)
+                            new_example['example'] = wikitext_one_sentence(left_context, line, input_word)
                             #new_example['left_extra'] = phrases_wikilink(wikilink(sentence[3]))
                             #new_example['right_extra'] = phrases_wikilink(wikilink(sentence[4]))
                             new_example['source'] = ref
