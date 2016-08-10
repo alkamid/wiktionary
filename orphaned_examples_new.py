@@ -201,15 +201,19 @@ def get_reference(doc):
     excluded_titles = ['Wikipedia:']
 
     # article title exists for newspaper records
-    ref['article_title'] = doc['title_a_s']
-    if ref['article_title'] != '':
-        if any(ref['article_title'].startswith(c) for c in excluded_titles):
+    a_title = doc['title_a_s']
+    if a_title != '':
+        if any(a_title.startswith(c) for c in excluded_titles):
             return ''
+        else:
+            ref['article_title'] = a_title
 
     # this is a book title or a newspaper name
-    ref['pub_title'] = doc['title_m_s']
+    if doc['title_m_s'] != '':
+        ref['pub_title'] = doc['title_m_s']
 
-    ref['journal_title'] = doc['title_j_s']
+    if doc['title_j_s'] != '':
+        ref['journal_title'] = doc['title_j_s']
          
     pub_date = doc['pub_date']
 
