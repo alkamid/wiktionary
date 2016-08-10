@@ -162,7 +162,10 @@ def wikitext_one_sentence(left_context, nkjp_match, match_base_form):
     except IndexError:
         last_left = None
 
-    first_right = nkjp_match['rTks'][0].split('|')[0]
+    try: first_right = nkjp_match['rTks'][0].split('|')[0]
+    except IndexError:
+        first_right = None
+
     if ( last_left == 'w:"' and quote_count % 2 == 1)\
        or last_left == 'w:(':
         pass
