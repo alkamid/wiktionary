@@ -68,7 +68,7 @@ class Haslo():
                 self.type = 2
             else:
                 self.type = 3
-                if page.namespace().id != 0 and 'Wikipedysta:AlkamidBot/sjp/' not in self.title:
+                if int(page.namespace()) != 0 and 'Wikipedysta:AlkamidBot/sjp/' not in self.title:
                     self.type = 5
 
                 if self.type == 3:
