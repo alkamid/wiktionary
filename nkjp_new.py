@@ -1,5 +1,4 @@
 import urllib.request, urllib.parse, urllib.error
-import random
 import ssl
 import json
 import config
