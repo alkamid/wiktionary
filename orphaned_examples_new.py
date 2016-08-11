@@ -46,8 +46,11 @@ def join_sentence(left, match=[], right=[]):
             if i > 0:
                 prev = listwords[i-1].split('|')[0][2:]
 
-        if ('punct:interp' not in tag and 'aglt:' not in tag) or word == '(' or word == '-':
-            if i > 0 and prev != '(' and not (open_quote == 1 and prev == '"'):
+        excluded_interpunction = ('(', '-', '„')
+        excluded_opening_chars = ('(', '„')
+
+        if ('punct:interp' not in tag and 'aglt:' not in tag) or any([word == p for p in excluded_interpunction]):
+            if i > 0 and all([prev != o_p for o_p in excluded_opening_chars]) and not (open_quote == 1 and prev == '"'):
                 joined += ' '
         elif word == '"':
             if open_quote == 0:
@@ -152,6 +155,7 @@ def wikitext_one_sentence(left_context, nkjp_match, match_base_form):
         str: [[the|The]] [[input]] [[sentence]] [[format]]ted [[like]] [[this]].
     """
 
+
     left_ctx_wikised = wikilink(left_context)
     left_match_wikised = wikilink(join_sentence(nkjp_match['lTks']))
 
@@ -165,6 +169,8 @@ def wikitext_one_sentence(left_context, nkjp_match, match_base_form):
     try: first_right = nkjp_match['rTks'][0].split('|')[0]
     except IndexError:
         first_right = None
+    else:
+        first_right_tag = nkjp_match['rTks'][0].split('|')[2][2:]
 
     if ( last_left == 'w:"' and quote_count % 2 == 1)\
        or last_left == 'w:(':
@@ -175,7 +181,7 @@ def wikitext_one_sentence(left_context, nkjp_match, match_base_form):
     final_sentence += shortLink(match_base_form, join_sentence(nkjp_match['mTks']))
     
     if (first_right == 'w:"' and quote_count % 2 == 1)\
-       or first_right == 'w:)':
+       or 'punct:interp' in first_right_tag:
         pass
     else:
         final_sentence += ' '
