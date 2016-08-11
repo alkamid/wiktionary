@@ -786,6 +786,7 @@ def check_if_includes_orphan(sentence, orphan_list, excluded_orphans):
 import random
 def orphaned_examples(test_word=None, online=False, complete_overwrite=False, onepage_testmode=False):
 
+    output_pages_number = 20
     buffer_size = 20 #how many words will be printed on one page
     if online:
         active_words = fetch_active_words() # prepare only as many pages as we need at the moment
@@ -834,7 +835,7 @@ def orphaned_examples(test_word=None, online=False, complete_overwrite=False, on
                     o.write(formatted_output)
                 return 2
             
-            if (pages_count == 101) or (pages_count == 667 and onepage_testmode):
+            if (pages_count == output_pages_number+1) or (pages_count == 667 and onepage_testmode):
                 return 0
 
             # dealing with various list formats, e.g. *[[word]]
@@ -861,7 +862,7 @@ def orphaned_examples(test_word=None, online=False, complete_overwrite=False, on
                                 break
                             else:
                                 pages_count += 1
-                                if pages_count == 100:
+                                if pages_count == output_pages_number:
                                     return 0
                             
 
@@ -875,7 +876,7 @@ def orphaned_examples(test_word=None, online=False, complete_overwrite=False, on
                 continue # let's skip prefixes and sufixes for now, also whatever starts with a capital leter
 
             query = '({0}**)'.format(input_word).replace(' ', '** ')
-            result = nkjp_lookup_new(query)
+            result = nkjp_lookup_new(query, 50)
             #print(xml.dom.minidom.parseString(etree.tostring(root)).toprettyxml())
             #return -1
             if result['spanResponse']['numFound'] != 0:
