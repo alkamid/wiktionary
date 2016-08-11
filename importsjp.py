@@ -776,12 +776,11 @@ def wikipage(hasloSJP, obrazki):
     #print finalText
     return finalText
 
-
 def common_tag_part(tag1, tag2):
     common = ''
     len_tag2 = len(tag2)
     for i in range(len(tag1)):
-        if i <= len_tag2 and tag1[i] == tag2[i]:
+        if i < len_tag2 and tag1[i] == tag2[i]:
             common += tag1[i]
         else:
             break
@@ -930,134 +929,17 @@ class AnalysedWord(object):
     def __str__(self):
         return self.word
 
-def wikilink(phrase):
-    phrase = phrase.strip()
-    phraseTab = re.split(r'\s*', phrase)
-    outputPhrase = []
-
-    # https://regex101.com/r/yB6tQ8/6
-    re_punctuation_around = re.compile(r'^([\W]*?)(.+?)([\W]*?)$')
-    re_nonwords_only = re.compile(r'\w')
-
-    dontAnalyse = ['np.', 'm.in.', 'etc.', 'itd.', 'itp.', 'z', 'w', 'dziêki', 'co', 'po', 'pod', 'o', 'se']
-    enieAnie = ('enia', 'enie', 'eniu', 'eniem', 'eniom', 'eniach', 'eniami', 'añ', 'ania', 'anie', 'aniu', 'aniem', 'aniom', 'aniach', 'aniami')
-    dontAnalyse.append('od') # alt: "oda"
-    dontAnalyse.append('byæ') # alt: "bycie"
-    dontAnalyse.append('lub') # alt: "lubiæ"
-    dontAnalyse.append('gdzie¶') # rozbija na "gdzie" i "by¶½"
-    dontAnalyse.append('albo') # alt: "alba"
-    dontAnalyse.append('jak') # alt: "jaka" (okrycie wierzchnie)
-    dontAnalyse.append('kawa') # alt: "Kawa" (?)
-    dontAnalyse.append('sposób') # alt: "sposobiæ½"
-    dontAnalyse.append('i¶æ') # alt: "i¶ciæ
-    dontAnalyse.append('dzieñ') # alt: dzienia, dzienie, dzieniæ (?)
-
-    #so far I only found baseform ambiguity in pronouns where there was none in reality
-    hardcoded_baseforms = [('jej', 'ona'), ('niej', 'ona'), ('j±', 'ona'), ('ni±', 'ona')]
-    temp_capital = []
-    for elem in hardcoded_baseforms:
-        temp_capital.append((elem[0].title(), elem[1]))
-    hardcoded_baseforms += temp_capital
-
-    #add all the words from dontAnalyse (and their titlecase versions)
-    for elem in dontAnalyse:
-        hardcoded_baseforms.append((elem, elem))
-        hardcoded_baseforms.append((elem.title(), elem))
-
-    #http://www.ipipan.waw.pl/~wolinski/publ/znakowanie.pdf
-    verb_tags = ('inf', 'fin', 'pact', 'ppas', 'pcon', 'pant', 'imps', 'impt', 'praet')
-
-    phraseOutput = ''
-    re_przymiotnikOd = re.compile(r'^przymiotnik od\:\s*(.*?)\s*$')
-    s_przymiotnikOd = re.search(re_przymiotnikOd, phrase)
-    if s_przymiotnikOd:
-        phraseOutput += '{{przym}} ''od'' [[%s]]' % s_przymiotnikOd.group(1)
-    else:
-        n = len(phraseTab)
-        i = 0
-        while (i<n):
-            word = phraseTab[i]
-
-            s_nonword_only = re.search(re_nonwords_only, word)
-            s_punctuation_around = re.search(re_punctuation_around, word)
-
-            if s_nonword_only == None:
-                phraseOutput += ' ' + word            
-            elif s_punctuation_around:
-                analysed = ''
-                s_word = s_punctuation_around.group(2)
-                if s_word == 'siê':
-                    analysed = 'siê'
-                elif s_word in [a[0] for a in hardcoded_baseforms]:
-                    for a in hardcoded_baseforms:
-                        if s_word == a[0]:
-                            analysed = shortLink(a[1], a[0])
-                elif s_word.endswith(enieAnie):
-                    checked = checkFlexSJP(s_word)
-                    if checked:
-                        analysed = shortLink(checked, s_word)
-                    else:
-                        analysed = shortLink(morfAnalyse(s_word)[0:2])
-
-                elif i<n-1 and 'siê' in phraseTab[i+1] and '.' not in word:
-                    s_punctuation_around_sie = re.search(re_punctuation_around, phraseTab[i+1])
-                    if s_punctuation_around_sie:
-                        if s_punctuation_around_sie.group(2) == 'siê' and morfAnalyse(s_word)[0]\
-                           and all([any(tag + ':' in a[0][2] for tag in verb_tags) for a in analyse(s_word)])\
-                           and not any(('praet:sg:n' in a[0][2] or 'fin:sg:ter' in a[0][2]) for a in analyse(s_word)):
-                            
-                            analysed = s_punctuation_around.group(1)
-                            if i<n-1:
-                                found_verb = 0
-                                for j in range(i+2,len(phraseTab)):
-                                    next_word = phraseTab[j]
-                                    s_punctuation_around_next_verb = re.search(re_punctuation_around, phraseTab[j])
-                                    next_word_stripped = s_punctuation_around_next_verb.group(2)
-                                    if morfAnalyse(next_word_stripped)[0] and all([any(tag + ':' in a[0][2] for tag in verb_tags) for a in analyse(next_word_stripped)]):
-                                        found_verb = 1
-                                        break
-                                if found_verb == 0:
-                                    analysed = s_punctuation_around.group(1) + shortLink(morfAnalyse(s_word)[0] + ' siê', s_word + ' siê') + s_punctuation_around_sie.group(3)
-                                    phraseOutput += ' ' + analysed
-                                    i += 2
-                                    continue
-                                else:
-                                    analysed = s_punctuation_around.group(1) + shortLink(morfAnalyse(s_word)[0:2]) + s_punctuation_around.group(3) + ' ' + phraseTab[i+1]
-                                    phraseOutput += ' ' + analysed
-                                    i += 2
-                                    continue
-                            analysed = shortLink(morfAnalyse(s_word)[0] + ' siê', word + ' siê') + s_punctuation_around_sie.group(3)
-                            i += 1
-                        else:
-                            analysed = shortLink(morfAnalyse(s_word)[0:2])
-
-                elif len(s_word):
-                    if '{{' in s_punctuation_around.group(1) and '}}' in s_punctuation_around.group(3):
-                        analysed = s_word
-                    else:
-                        analysed = shortLink(morfAnalyse(s_word)[0:2])
-
-                phraseOutput += ' {0}{1}{2}'.format(s_punctuation_around.group(1), analysed, s_punctuation_around.group(3))
-            else:
-                phraseOutput += ' ' + word
-
-            i+=1
-            phraseOutput = phraseOutput.strip()
-
-    return phraseOutput
-
-
-
 def find_reflective_verbs(input_list):
+    #this was an early attempt to solve issue #46, but then I realised
+    #that we can (almost) never be sure that there is only one verb in the phrase
+    #because situations where all words are tagged are very rare. So it
+    #seems that finding reflective is a futile task.
     reflective_only = ['boczyæ', 'wykluæ']
     verb_tags = ('inf', 'fin', 'pact', 'ppas', 'pcon', 'pant', 'imps', 'impt', 'praet')
 
     sumverbs = sum([any(vtag in word.tag for vtag in verb_tags) for word in input_list if (type(word) == AnalysedWord and word.tag)])
     vrbs = []
     for w in input_list:
-        if type(w) == AnalysedWord:
-            print(w.word)
-            print(w.tag)
         if type(w) == AnalysedWord and w.tag:
             found = any(vtag in w.tag for vtag in verb_tags)
             vrbs.append(found)
@@ -1074,7 +956,7 @@ def find_reflective_verbs(input_list):
 
     return input_list
 
-def wikilink_new(phrase):
+def wikilink(phrase):
     phrase = phrase.strip()
     phraseTab = re.split(r'\s*', phrase)
     outputPhrase = []
@@ -1140,7 +1022,8 @@ def wikilink_new(phrase):
                     else:
                         tmp = morfAnalyse(s_word)
                         analysed = AnalysedWord(tmp[1], tmp[0], tmp[2])
-
+                elif s_word == 'siê':
+                    analysed = AnalysedWord(s_word)
                 elif len(s_word):
                     if '{{' in s_punctuation_around.group(1) and '}}' in s_punctuation_around.group(3):
                         analysed = AnalysedWord(s_word)
@@ -1155,9 +1038,6 @@ def wikilink_new(phrase):
                 outputPhrase.append(' ')
                 outputPhrase.append(word)
 
-        if sum([str(w) == 'siê' for w in outputPhrase]) == 1:
-            outputPhrase = find_reflective_verbs(outputPhrase)
-            
         string_output = ''
         for elem in outputPhrase:
             try: bf = elem.baseform
