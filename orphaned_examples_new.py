@@ -21,6 +21,13 @@ from difflib import SequenceMatcher
 import xmltodict
 
 def join_sentence(left, match=[], right=[]):
+    """
+    Combine the results from an NKJP API query into one sentence. The results
+    either come in threes (left side, matched phrase and right side), or in an
+    OrderedDict (the result of xmltodict.parse) form when you query /select. /select
+    is used to fetch the context of a phrase that is too short. This function will also work
+    on a single list of tagged words.
+    """
     joined = ''
     open_quote = 0
 
