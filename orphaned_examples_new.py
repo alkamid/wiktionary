@@ -169,7 +169,7 @@ def wikitext_one_sentence(left_context, nkjp_match, match_base_form):
     try: first_right = nkjp_match['rTks'][0].split('|')[0]
     except IndexError:
         first_right = None
-        first_right_tag = None
+        first_right_tag = ''
     else:
         first_right_tag = nkjp_match['rTks'][0].split('|')[2][2:]
 
