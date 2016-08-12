@@ -160,6 +160,7 @@ def wikitext_one_sentence(left_context, nkjp_match, match_base_form):
     left_match_wikised = wikilink(join_sentence(nkjp_match['lTks']))
 
     final_sentence = left_ctx_wikised + left_match_wikised
+
     quote_count = final_sentence.count('"')
     
     try: last_left = nkjp_match['lTks'][-1].split('|')[0]
@@ -189,7 +190,7 @@ def wikitext_one_sentence(left_context, nkjp_match, match_base_form):
 
     final_sentence += wikilink(join_sentence(nkjp_match['rTks']))
 
-    return final_sentence
+    return final_sentence.strip()
 
 def get_reference(doc):
     """
