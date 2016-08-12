@@ -973,6 +973,6 @@ if __name__ == '__main__':
         sweep_all_pages()
         write_edit_conflicts()
         #refresh all pages on Monday
-        if datetime.today().weekday() == 0:
+        if datetime.today().weekday() == 4:
             orphaned_examples(test_word=None, online=True, complete_overwrite=True, onepage_testmode=False)
     
