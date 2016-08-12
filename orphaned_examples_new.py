@@ -35,7 +35,6 @@ def join_sentence(left, match=[], right=[]):
     for i, elem in enumerate(listwords):
         if type(left) == OrderedDict:
             tag = elem['ps']['p']['#text']
-
             word = elem['w']
             if i > 0:
                 prev = listwords[i-1]['w']
@@ -59,7 +58,8 @@ def join_sentence(left, match=[], right=[]):
             else:
                 open_quote = 0
 
-        joined += word
+        if word:
+            joined += word
 
     return joined
 
