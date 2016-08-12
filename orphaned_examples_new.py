@@ -85,7 +85,7 @@ def get_left_context(nkjp_match, nkjp_doc, minimum_length=60):
     
     while (len(whole_sentence) + len(extra_left_context) < minimum_length):
         try: ctx_query_result = nkjp_find_context(seq, nkjp_match['text_id'])[0]['utt_tagged']
-        except IndexError:
+        except (IndexError, ValueError) as e:
             break
         ctx_stripped = join_sentence(xmltodict.parse(ctx_query_result))
         extra_left_context = ctx_stripped + ' ' + extra_left_context
