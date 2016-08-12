@@ -964,6 +964,11 @@ def orphaned_examples(test_word=None, online=False, complete_overwrite=False, on
                 if new_word and len(new_word['examples']) > 0:
                     output.append(new_word)
                     words_count += 1
+                    if test_word:
+                        with open('output/test_word.json', 'w') as o:
+                            formatted_output = json.dumps(ordermydict(output), ensure_ascii=False, indent=4)
+                            o.write(formatted_output)
+                
 
 
 if __name__ == '__main__':
