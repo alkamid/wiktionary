@@ -775,6 +775,8 @@ def morfAnalyse(word):
         return [None, '', None]
     if word in ('X', 'M', 'I'):
         return [word, word, None]
+    if word.isdigit():
+        return [word, word, None]
 
     analiza = analyse(word, dag=1)
     numWords = analiza[-1][1]
