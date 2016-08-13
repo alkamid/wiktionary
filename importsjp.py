@@ -365,23 +365,7 @@ class Word():
                         tablepl['nom'].append('{{depr}} ' + depr)
                     if depr not in tablepl['voc']:
                         tablepl['voc'].append('{{depr}} ' + depr)
-                #(w fazie rozwojowej) poni¿ej sprawdzanie, czy w tabelce mo¿e znajdowaæ siê w±tpliwa odmiana
 
-                '''if len(tablepl['nom']) > 1:
-                        if len(tablepl['nom']) == 2 and u'{{depr}}' in tablepl['nom']:
-                                pass
-                        else:
-                                self.problems['kilka_form_odmiany'] = 1
-
-                for d in tablesg:
-                        if len(tablesg[d]) > 1:
-                                self.problems['kilka_form_odmiany'] = 1
-
-                for d in tablepl:
-                        if d != u'nom' and d != u'voc':
-                                if len(tablepl[d]) > 1:
-                                        self.problems['kilka_form_odmiany'] = 1
-                        '''
                 cnt = 0 # licznik pokazuj±cy czy znaleziono wiêcej ni¿ 1 rodzaj
                 found = ''
                 sum = 0
@@ -787,15 +771,18 @@ def common_tag_part(tag1, tag2):
     return common.strip(':')
 
 def morfAnalyse(word):
-    if word == u'':
-        return [None, u'', None]
+    if word == '':
+        return [None, '', None]
+    if word in ('X', 'M', 'I'):
+        return [word, word, None]
+
     analiza = analyse(word, dag=1)
     numWords = analiza[-1][1]
     count = [] # tablica z zerami do wy³apywania ró¿nic w formach podstawowych
     count_first = [] # tablica z zerami do ustawiania pierwszego elementu dla danego s³owa
     found = 0
     base = None
-    form = u''
+    form = ''
     text = ''
     for counter in range(numWords):
         count.append(0)
@@ -803,7 +790,7 @@ def morfAnalyse(word):
         seek_last = 0
 
         for a in analiza: #Morfeusz rozbija s³owa z "¶" na koñcu na co¶ + by¶ (wtedy w analizie pojawia siê oznakowanie "aglt"
-            if a[2][2] and u'aglt' in a[2][2]:
+            if a[2][2] and 'aglt' in a[2][2]:
                 count[counter] += 1
         for for_helper, element in enumerate(analiza):		
             #print element
