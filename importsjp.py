@@ -773,12 +773,11 @@ def common_tag_part(tag1, tag2):
 def morfAnalyse(word):
     if word == '':
         return [None, '', None]
-    if word in ('X', 'M', 'I'):
-        return [word, word, None]
-    if word.isdigit():
+
+    try: analiza = analyse(word, dag=1)
+    except KeyError:
         return [word, word, None]
 
-    analiza = analyse(word, dag=1)
     numWords = analiza[-1][1]
     count = [] # tablica z zerami do wy³apywania ró¿nic w formach podstawowych
     count_first = [] # tablica z zerami do ustawiania pierwszego elementu dla danego s³owa
