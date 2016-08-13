@@ -885,7 +885,8 @@ def orphaned_examples(test_word=None, online=False, complete_overwrite=False, on
                 continue # let's skip prefixes and sufixes for now, also whatever starts with a capital leter
 
             query = '({0}**)'.format(input_word).replace(' ', '** ')
-            result = nkjp_lookup_new(query, 50)
+            query_escaped = query.replace('.', '\.')
+            result = nkjp_lookup_new(query_escaped, 50)
             #print(xml.dom.minidom.parseString(etree.tostring(root)).toprettyxml())
             #return -1
             if result['spanResponse']['numFound'] != 0:
