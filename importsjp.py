@@ -961,8 +961,8 @@ def wikilink(phrase):
     phraseTab = re.split(r'\s*', phrase)
     outputPhrase = []
 
-    # https://regex101.com/r/yB6tQ8/6
-    re_punctuation_around = re.compile(r'^([\W]*?)(.+?)([\W]*?)$')
+    # https://regex101.com/r/yB6tQ8/7
+    re_punctuation_around = re.compile(r'^([\W]*?)([\w-]+?)([\W]*?)$')
     re_nonwords_only = re.compile(r'\w')
 
     dontAnalyse = ['np.', 'm.in.', 'etc.', 'itd.', 'itp.', 'z', 'w', 'dziêki', 'co', 'po', 'pod', 'o', 'se']
@@ -1000,7 +1000,6 @@ def wikilink(phrase):
         phraseOutput += '{{przym}} ''od'' [[%s]]' % s_przymiotnikOd.group(1)
     else:
         for word in phraseTab:
-
             s_nonword_only = re.search(re_nonwords_only, word)
             s_punctuation_around = re.search(re_punctuation_around, word)
 
