@@ -9,10 +9,12 @@ import re
 import collections
 import locale
 import sjpMaintain
+import pdb
 from morfeusz import *
 from klasa import *
 from lxml import etree, html
 from sjpClass import kategoriaSlowa, checkHistory
+
 
 
 def checkFlexSJP(forma):
@@ -30,6 +32,7 @@ def checkFlexSJP(forma):
     try: podstawowa = web.xpath('//b[@style="font-size: large;"]/a/text()')
     except AssertionError:
         return None
+
     try: flagi = web.xpath('//tt[1]/text()')
     except AssertionError:
         return None
@@ -42,25 +45,25 @@ def checkFlexSJP(forma):
 
     if search and any('j' in s for s in flagi) or any('UV' in s for s in flagi) or any('i' in s for s in flagi):
         if forma[-3:] in cie[0]:
-            return forma[:-3] + 'cie'
+            return forma[:-3].lower() + 'cie'
         elif forma[-4:] in anie[0]:
-            return forma[:-4] + 'anie'
+            return forma[:-4].lower() + 'anie'
         elif forma[-4:] in enie[0]:
-            return forma[:-4] + 'enie'
+            return forma[:-4].lower() + 'enie'
         elif forma[-4:] in cie[1]:
-            return forma[:-4] + 'cie'
+            return forma[:-4].lower() + 'cie'
         elif forma[-5:] in anie[1]:
-            return forma[:-5] + 'anie'
+            return forma[:-5].lower() + 'anie'
         elif forma[-5:] in enie[1]:
-            return forma[:-5] + 'enie'
+            return forma[:-5].lower() + 'enie'
         elif forma[-5:] in cie[2]:
-            return forma[:-5] + 'cie'
+            return forma[:-5].lower() + 'cie'
         elif forma[-6:] in anie[2]:
-            return forma[:-6] + 'anie'
+            return forma[:-6].lower() + 'anie'
         elif forma[-6:] in enie[2]:
-            return forma[:-6] + 'enie'
+            return forma[:-6].lower() + 'enie'
     elif len(podstawowa) == 1:
-        return podstawowa[0]
+        return str(podstawowa[0])
     else:
         return None
 
@@ -762,7 +765,7 @@ def wikipage(hasloSJP, obrazki):
     if ref_sjp or synTemp[1]:
         zrodla += '\n<references>'
         if ref_sjp:
-            zrodla += '\n<ref name=sjp.pl>{{importSJP.pl|%s}}</ref>' % (firstWord.title)
+            zrodla += '\n<ref name=sjp.pl>{{sjp.pl|%s}}</ref>' % (firstWord.title)
         if synTemp[1]:
             zrodla += '\n<ref name=synonimy>{{synonimy.ux.pl}}</ref>'
         zrodla += '\n</references>'
@@ -773,73 +776,91 @@ def wikipage(hasloSJP, obrazki):
     #print finalText
     return finalText
 
-
-
+def common_tag_part(tag1, tag2):
+    common = ''
+    len_tag2 = len(tag2)
+    for i in range(len(tag1)):
+        if i < len_tag2 and tag1[i] == tag2[i]:
+            common += tag1[i]
+        else:
+            break
+    return common.strip(':')
 
 def morfAnalyse(word):
+	if word == u'':
+		return [None, u'', None]
+	analiza = analyse(word, dag=1)
+	numWords = analiza[-1][1]
+	count = [] # tablica z zerami do wy³apywania ró¿nic w formach podstawowych
+	count_first = [] # tablica z zerami do ustawiania pierwszego elementu dla danego s³owa
+	found = 0
+	base = None
+	form = u''
+	text = ''
+	for counter in range(numWords):
+		count.append(0)
+		count_first.append(0)
+		seek_last = 0
+		
+		for a in analiza: #Morfeusz rozbija s³owa z "¶" na koñcu na co¶ + by¶ (wtedy w analizie pojawia siê oznakowanie "aglt"
+			if a[2][2] and u'aglt' in a[2][2]:
+				count[counter] += 1
+		for for_helper, element in enumerate(analiza):		
+			#print element
+			if element[0] == counter:
+				if seek_last == 0:
+					seek_last = 1
+				if count_first[counter] == 0: # catch the first element
+					pierwszy = element
+					count_first[counter] = 1
+				if element[2][1] != pierwszy[2][1]: # if base form is different from the base form of the first elem, ++counter
+					count[counter] += 1
+					break
+			else:
+				if seek_last == 1:
+					seek_last = 2
+
+    #When I updated to libmorfeusz2 on 18/02/2016, I realised sometimes ':a' or ':s'
+    #was added to the end of the base form. Until I figure out what it is, I'll have
+    #to use regex
+
+    re_before_colon = re.compile(r'([^:]*)')
     if word == '':
         return [None, '', None]
-    analiza = analyse(word, dag=1)
-    numWords = analiza[-1][1]
-    count = [] # tablica z zerami do wy³apywania ró¿nic w formach podstawowych
-    count_first = [] # tablica z zerami do ustawiania pierwszego elementu dla danego s³owa
-    found = 0
-    base = None
-    form = ''
-    text = ''
-    for counter in range(numWords):
-        count.append(0)
-        count_first.append(0)
-        seek_last = 0
+    try: analysed = analyse(word, dag=1)
+    except KeyError:
+        return [None, word, None]
 
-        for a in analiza: #Morfeusz rozbija s³owa z "¶" na koñcu na co¶ + by¶ (wtedy w analizie pojawia siê oznakowanie "aglt"
-            if a[2][2] and 'aglt' in a[2][2]:
-                count[counter] += 1
-        for for_helper, element in enumerate(analiza):
-            #print element
-            if element[0] == counter:
-                if seek_last == 0:
-                    seek_last = 1
-                if count_first[counter] == 0: # catch the first element
-                    pierwszy = element
-                    count_first[counter] = 1
-                if element[2][1] != pierwszy[2][1]: # if base form is different from the base form of the first elem, ++counter
-                    count[counter] += 1
-                    break
-            else:
-                if seek_last == 1:
-                    seek_last = 2
-
-            if seek_last == 2:
-                for_helper -= 1
-                break
-
-        # to jest trochê ryzykowne: je¶li Morfeusz widzi niejednoznaczno¶æ, wtedy skrypt sprawdza czy w sjp.pl to s³owo jest jednoznaczne. Przyk³ad: "temu" w sjp.pl ma wskazuje tylko na formê podstawow± "ten"
-        if count[counter] or analiza[for_helper][2][1] == None:
-            check = checkFlexSJP(word)
-            if check:
-                base = check
-                form = word
-                #text = text + shortLink(check, word)
-            else:
-                base = None
-                form = analiza[for_helper][2][0]
-                #text = text + analiza[for_helper][2][0]
-            type = None
-        elif analiza[for_helper][2][0] in ', ( ) ; - . : [ ]':
-            base = None
-            form = analiza[for_helper][2][0]
-            #text = text + analiza[for_helper][2][0]
-            type = None
+    if len(analysed) == 1:
+        if analysed[0][2][2] == 'ign':
+            analysed_return = [None, word, None]
         else:
-            base = analiza[for_helper][2][1]
-            form = analiza[for_helper][2][0]
-            #text = text + shortLink(analiza[for_helper][2][1], analiza[for_helper][2][0])
-            type = analiza[for_helper][2][2]
+            analysed_return = [re.match(re_before_colon, analysed[0][2][1]).group(1), word, analysed[0][2][2]]
+    elif 'ppron3' in analysed[0][2][2]:
+        #morfeusz links all 3rd person pronouns to 'on', so we'll skip them
+        return [None, word, 'ppron3']
+    else:
+        base_form = re.match(re_before_colon, analysed[0][2][1]).group(1)
+        ambig = 0
+        common_tag = analysed[0][2][2]
+        for elem in analysed:
+            common_tag = common_tag_part(common_tag, elem[2][2])
+            if re.match(re_before_colon, elem[2][1]).group(1) != base_form:
+                ambig += 1
+        if ambig == 0:
+            analysed_return = [base_form, word, common_tag]
+        elif ambig == 1 and analysed[-1][2][2] and analysed[-1][2][2].startswith('aglt:'):
+            analysed_return = [base_form, word, None]
+        else:
+            return [None, word, None]
 
-    return [base, form, type]
+    return analysed_return
 
-def shortLink(base, flex):
+
+def shortLink(base, flex=None):
+    if flex == None:
+        flex = base[1]
+        base = base[0]
     if base == None:
         return flex
     else:
@@ -849,17 +870,136 @@ def shortLink(base, flex):
         else:
             return '[[%s|%s]]' % (base, flex)
 
+def phrases_wikilink(input_text):
+    text = []
+    #https://regex101.com/r/dU5rE9/2
+    re_wikilink_decompose = re.compile(r'\[\[([^\]\|]*)(?:\||)(.*?)\]\](\w*)', re.UNICODE)
+
+    with open('input/phrases_under_4words.txt') as f:
+        phraselist = f.read().splitlines()
+
+    split_text = input_text.split()
+    lengths = [len(line.split()) for line in phraselist]
+    max_length = max(lengths)
+
+    i = 0
+    while (i < len(split_text)):
+        word = split_text[i]
+        if not ('[[' in word and ']]' in word):
+            text.append(word)
+            i += 1
+            continue
+        else:
+            loop = True
+            j = i
+            outside_loop_control = 0
+            cache = []
+            while (loop):
+                if j == len(split_text):
+                    pass
+                else:
+                    s_decompose = re.search(re_wikilink_decompose, split_text[j])
+                    if not s_decompose:
+                        decomposed = (split_text[j], split_text[j])
+                    elif s_decompose.group(3) != '' and s_decompose.group(2) == '':
+                        decomposed = (s_decompose.group(1), s_decompose.group(1) + s_decompose.group(3))
+                    elif s_decompose.group(2) == '':
+                        decomposed = (s_decompose.group(1), s_decompose.group(1))
+                    else:
+                        decomposed = (s_decompose.group(1), s_decompose.group(2))
+                    if j == i:
+                        possible_phrases = [decomposed]
+                    else:
+                        possible_phrases = new_possible_phrases
+
+                    new_possible_phrases = []
+
+                    found = 0
+                    for phr in possible_phrases:
+                        if any(phrase.startswith((phr[0] + ' ' if j != i else '') + decomposed[0]) for phrase in phraselist):
+                            found = 1
+                            new_possible_phrases.append(((phr[0] + ' ' if j != i else '') + decomposed[0], (phr[1] + ' ' if j!= i else '') + decomposed[1]))
+
+                        if decomposed[1] != decomposed[0] and any(phrase.startswith((phr[0] + ' ' if j != i else '') + decomposed[1]) for phrase in phraselist):
+                            new_possible_phrases.append(((phr[0] + ' ' if j != i else '') + decomposed[1], (phr[1] + ' ' if j!= i else '') + decomposed[1]))
+                            found = 1
+
+                        if decomposed[1][0].isupper() and any(phrase.startswith((phr[0] + ' ' if j != i else '') + decomposed[0].title()) for phrase in phraselist):
+                            found = 1
+                            new_possible_phrases.append(((phr[0] + ' ' if j != i else '') + decomposed[0].title(), (phr[1] + ' ' if j!= i else '') + decomposed[1]))
+
+                    cache.append(split_text[j])
+
+                    if found:
+                        j += 1
+                        continue
+
+                if len(new_possible_phrases) == 0 and len(set(possible_phrases)) == 1 and possible_phrases[0][0] in phraselist:
+                    text.append(shortLink(possible_phrases[0][0], possible_phrases[0][1]))
+                    loop = False
+                    i = j 
+                elif len(set(new_possible_phrases)) == 1 and new_possible_phrases[0][0] in phraselist:
+                    text.append(shortLink(new_possible_phrases[0][0], new_possible_phrases[0][1]))
+                    loop = False
+                    i = j + 1
+                elif len(cache) == 1:
+                    text += cache
+                    loop = False
+                    i = j + 1
+                else:
+                    text += cache[:-1]
+                    loop = False
+                    i = j
+    return ' '.join(text)
+
+class AnalysedWord(object):
+    def __init__(self, word, baseform=None, tag=None):
+        self.word = word
+        self.baseform = baseform
+        self.tag = tag
+    
+    def __str__(self):
+        return self.word
+
+def find_reflective_verbs(input_list):
+    #this was an early attempt to solve issue #46, but then I realised
+    #that we can (almost) never be sure that there is only one verb in the phrase
+    #because situations where all words are tagged are very rare. So it
+    #seems that finding reflective is a futile task.
+    reflective_only = ['boczyæ', 'wykluæ']
+    verb_tags = ('inf', 'fin', 'pact', 'ppas', 'pcon', 'pant', 'imps', 'impt', 'praet')
+
+    sumverbs = sum([any(vtag in word.tag for vtag in verb_tags) for word in input_list if (type(word) == AnalysedWord and word.tag)])
+    vrbs = []
+    for w in input_list:
+        if type(w) == AnalysedWord and w.tag:
+            found = any(vtag in w.tag for vtag in verb_tags)
+            vrbs.append(found)
+
+    print(vrbs)
+    for word in input_list:
+        if type(word) == AnalysedWord and (word.baseform in reflective_only or (word.tag and any(vtag in word.tag for vtag in verb_tags))):
+            word.baseform += ' siê'
+            tmp_bf = word.baseform
+    if 'tmp_bf' in locals():
+        for word in input_list:
+            if str(word) == 'siê':
+                word.baseform = tmp_bf
+
+    return input_list
+
 def wikilink(phrase):
     phrase = phrase.strip()
     phraseTab = re.split(r'\s*', phrase)
+    outputPhrase = []
 
-    dontAnalyse = ['np.', 'm.in.', 'etc.', 'itd.', 'itp.', 'z', 'w', 'dziêki', 'co', 'po', 'pod', 'o']
-    dontAnalyseNawias1 = []
-    dontAnalyseNawias2 = []
-    dontAnalyseNawiasy = []
-    dontAnalysePrzecinek = []
-    enieAnie = ['eñ', 'enia', 'enie', 'eniu', 'eniem', 'eniom', 'eniach', 'eniami', 'añ', 'ania', 'anie', 'aniu', 'aniem', 'aniom', 'aniach', 'aniami']
-    dontAnalyse.append('od') # mo¿e byæ te¿ od 'oda'
+    # https://regex101.com/r/yB6tQ8/7
+    re_punctuation_around = re.compile(r'^([\W]*?)([\w-]+?)([\W]*?)$')
+    re_nonwords_only = re.compile(r'\w')
+
+    dontAnalyse = ['np.', 'm.in.', 'etc.', 'itd.', 'itp.', 'z', 'w', 'dziêki', 'co', 'po', 'pod', 'o', 'se']
+    enieAnie = ('enia', 'enie', 'eniu', 'eniem', 'eniom', 'eniach', 'eniami', 'añ', 'ania', 'anie', 'aniu', 'aniem', 'aniom', 'aniach', 'aniami')
+    dontAnalyse.append('od') # alt: "oda"
     dontAnalyse.append('byæ') # alt: "bycie"
     dontAnalyse.append('lub') # alt: "lubiæ"
     dontAnalyse.append('gdzie¶') # rozbija na "gdzie" i "by¶½"
@@ -868,68 +1008,84 @@ def wikilink(phrase):
     dontAnalyse.append('kawa') # alt: "Kawa" (?)
     dontAnalyse.append('sposób') # alt: "sposobiæ½"
     dontAnalyse.append('i¶æ') # alt: "i¶ciæ
-    for a in dontAnalyse:
-        dontAnalyseNawias1.append('(%s' % a)
-        dontAnalyseNawias2.append('%s)' % a)
-        dontAnalyseNawiasy.append('(%s)' % a)
-        dontAnalysePrzecinek.append('%s,' % a)
-    phraseOutput = ''
+    dontAnalyse.append('dzieñ') # alt: dzienia, dzienie, dzieniæ (?)
 
+    #so far I only found baseform ambiguity in pronouns where there was none in reality
+    hardcoded_baseforms = [('jej', 'ona'), ('niej', 'ona'), ('j±', 'ona'), ('ni±', 'ona')]
+    temp_capital = []
+    for elem in hardcoded_baseforms:
+        temp_capital.append((elem[0].title(), elem[1]))
+    hardcoded_baseforms += temp_capital
+
+    #add all the words from dontAnalyse (and their titlecase versions)
+    for elem in dontAnalyse:
+        hardcoded_baseforms.append((elem, elem))
+        hardcoded_baseforms.append((elem.title(), elem))
+
+    #http://www.ipipan.waw.pl/~wolinski/publ/znakowanie.pdf
+    verb_tags = ('inf', 'fin', 'pact', 'ppas', 'pcon', 'pant', 'imps', 'impt', 'praet')
+
+    phraseOutput = ''
     re_przymiotnikOd = re.compile(r'^przymiotnik od\:\s*(.*?)\s*$')
     s_przymiotnikOd = re.search(re_przymiotnikOd, phrase)
     if s_przymiotnikOd:
         phraseOutput += '{{przym}} ''od'' [[%s]]' % s_przymiotnikOd.group(1)
     else:
-        n = len(phraseTab)
-        i = 0
-        while (i<n):
-            word = phraseTab[i]
-            if word in dontAnalyse:
-                phraseOutput += ' [[%s]]' % word
-            elif word in dontAnalyseNawiasy:
-                phraseOutput += ' ([[%s]])' % word[1:-1]
-            elif word in dontAnalyseNawias1:
-                phraseOutput += ' ([[%s]]' % word[1:]
-            elif word in dontAnalyseNawias2:
-                phraseOutput += ' [[%s]])' % word[:-1]
-            elif word in dontAnalysePrzecinek:
-                phraseOutput += ' [[%s]],' % word[:-1]
-            elif word.endswith(('enia', 'enie', 'eniu', 'eniem', 'eniom', 'eniach', 'eniami', 'ania', 'anie', 'aniu', 'aniem', 'aniom', 'aniach', 'aniami')):
-                checked = checkFlexSJP(word)
-                if checked:
-                    phraseOutput += ' %s' % shortLink(checked, word)
-                else:
-                    phraseOutput += ' ' + shortLink(morfAnalyse(word)[0], morfAnalyse(word)[1])
-            elif i<n-1 and (phraseTab[i+1] == 'siê' or phraseTab[i+1] == 'siê,' or phraseTab[i+1] == 'siê.' or phraseTab[i+1] == 'siê;' or phraseTab[i+1] == 'siê)' or phraseTab[i+1] == 'siê),' or phraseTab[i+1] == 'siê);' or phraseTab[i+1] == 'siê).') and morfAnalyse(word)[2] and ('inf:' in morfAnalyse(word)[2] or 'pact:' in morfAnalyse(word)[2]):
-                if phraseTab[i+1][-1] == ',' or phraseTab[i+1][-1] == '.' or phraseTab[i+1][-1] == ':' or phraseTab[i+1][-1] == ')' or phraseTab[i+1][-1] == ';':
-                    phraseOutput += ' %s' % (shortLink(morfAnalyse(word)[0] + ' siê', word + ' siê')) + phraseTab[i+1][-1]
-                elif phraseTab[i+1][-2:] == '),' or phraseTab[i+1][-2:] == ').' or phraseTab[i+1][-2:] == '):' or phraseTab[i+1][-2:] == ');':
-                    phraseOutput += ' %s' % (shortLink(morfAnalyse(word)[0] + ' siê', word + ' siê')) + phraseTab[i+1][-2:]
-                else:
-                    phraseOutput += ' %s' % (shortLink(morfAnalyse(word)[0] + ' siê', word + ' siê'))
-                i+=1
+        for word in phraseTab:
+            s_nonword_only = re.search(re_nonwords_only, word)
+            s_punctuation_around = re.search(re_punctuation_around, word)
+
+            if s_nonword_only == None:
+                outputPhrase.append(' ')
+                outputPhrase.append(AnalysedWord(word))
+                phraseOutput += ' ' + word            
+            elif s_punctuation_around:
+                analysed = ''
+                s_word = s_punctuation_around.group(2)
+                if s_word in [a[0] for a in hardcoded_baseforms]:
+                    for a in hardcoded_baseforms:
+                        if s_word == a[0]:
+                            analysed = AnalysedWord(a[0], a[1], 'hardcoded')
+                elif s_word.endswith(enieAnie):
+                    checked = checkFlexSJP(s_word)
+                    if checked:
+                        analysed = AnalysedWord(s_word, checked, 'sjp')
+                    else:
+                        tmp = morfAnalyse(s_word)
+                        analysed = AnalysedWord(tmp[1], tmp[0], tmp[2])
+                elif s_word == 'siê':
+                    analysed = AnalysedWord(s_word)
+                elif len(s_word):
+                    if '{{' in s_punctuation_around.group(1) and '}}' in s_punctuation_around.group(3):
+                        analysed = AnalysedWord(s_word)
+                    else:
+                        tmp = morfAnalyse(s_word)
+                        analysed = AnalysedWord(tmp[1], tmp[0], tmp[2])
+
+                outputPhrase.append(' {0}'.format(s_punctuation_around.group(1)))
+                outputPhrase.append(analysed)
+                outputPhrase.append(s_punctuation_around.group(3))
             else:
-                if '{{' in word and '}}' in word:
-                    phraseOutput += ' %s' % word
-                elif len(word) and ((word[0] == '(' and word[-1] == ')') or (word[0] == '(' and word[-1] == ',')):
-                    phraseOutput += ' (%s)' % shortLink(morfAnalyse(word[1:-1])[0], morfAnalyse(word[1:-1])[1])
-                elif len(word) and word[0] == '(':
-                    phraseOutput += ' (%s' % shortLink(morfAnalyse(word[1:])[0], morfAnalyse(word[1:])[1])
-                elif len(word) and (word[-2:] == '),' or word[-2:] == ').' or word[-2:] == '):' or word[-2:] == ');'):
-                    phraseOutput += ' ' + shortLink(morfAnalyse(word[:-2])[0], morfAnalyse(word[:-2])[1]) + word[-2:]
-                elif len(word) and (word[-1] == ',' or word[-1] == '.' or word[-1] == ':' or word[-1] == ')' or word[-1] == ';'):
-                    phraseOutput += ' ' + shortLink(morfAnalyse(word[:-1])[0], morfAnalyse(word[:-1])[1]) + word[-1]
+                outputPhrase.append(' ')
+                outputPhrase.append(word)
+
+        string_output = ''
+        for elem in outputPhrase:
+            try: bf = elem.baseform
+            except AttributeError:
+                string_output += str(elem)
+            else:
+                if elem.baseform:
+                    string_output += shortLink(elem.baseform, elem.word)
                 else:
-                    phraseOutput += ' ' + shortLink(morfAnalyse(word)[0], morfAnalyse(word)[1])
+                    string_output += str(elem)
 
-            i+=1
-            phraseOutput = phraseOutput.strip()
+    return string_output.strip()
 
-    return phraseOutput
 
 def meanProcess(mean):
 
-    #obrï¿½bka znaczeï¿½
+    #obróbka znaczeñ
     mean = mean.replace('<br />', ' ')
     mean = mean.replace('dawniej:', '{{daw}}')
     mean = mean.replace('zdrobnienie od:', '{{zdrobn}}')

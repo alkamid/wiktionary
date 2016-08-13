@@ -2,6 +2,7 @@
 
 import urllib.request, urllib.parse, urllib.error
 import random
+import config
 
 def nkjp_lookup(ngram):
 
@@ -15,7 +16,7 @@ def nkjp_lookup(ngram):
     #ngrams=["to bardzo ciekawe","dobra wola","dobra rada","ciekawa sprawa", "pleść** bzdura**"]
 
     #Klucz dostępu (prosimy o kontakt w celu jego uzyskania)
-    api_key="f6a11530-2382-11e4-8c21-0800200c9a66"
+    api_key=config.keys['nkjp']
 
     #Maks. odstęp między słowami
     span=0
@@ -24,18 +25,18 @@ def nkjp_lookup(ngram):
     #Od którego wyniku zaczynamy?
     offset=0
     #Po czym sortujemy? srodek|lewa|prawa|title_mono|pubDate|channel title_mono to  tytuł publikacji/książki/gazety
-    sort="srodek"
+    sort="prawa"
     #od 1 do 5000 na raz. Wartości > 5000 są przycinane.
-    limit=3
+    limit=100
     #Po czym grupujemy? (--- to brak grupowania)  title_mono|pubDate|channel|---|text_id
-    #groupBy="title_mono"
-    groupBy="---"
+    groupBy="title_mono"
+    #groupBy="---"
     #Limit grupowania (Przy ustawieniu --- ta zmienna jest pomijana)
-    groupByLimit=3
+    groupByLimit=1
     #Teksty nie wcześniejsze niż
-    m_date_from=1989
+    m_date_from=1950
     #Teksty nie późniejsze niż
-    m_date_to=2010
+    m_date_to=2015
     #Styl z taksonomii NKJP. Można podać > 1, rozdzielając przecinkami
     #http://nkjp.uni.lodz.pl/help.jsp#analiza_rejestru
     m_styles="---"
@@ -44,7 +45,7 @@ def nkjp_lookup(ngram):
     #Tytuł książki, gazety, forum internetowego, itp.
     m_title_mono=""
     #Ale z wyłączeniem:
-    m_title_mono_NOT=""
+    m_title_mono_NOT="Wikipedia.pl"
     #Tytuł tekstu, wątku, itp.
     m_text_title=""
     #Słowa kluczowe w pasującym akapicie
@@ -58,5 +59,9 @@ def nkjp_lookup(ngram):
     sid=random.random()
 
     params = urllib.parse.urlencode({'query': ngram, 'api_key':api_key,'offset': offset, 'span': span,'sort': sort, 'second_sort':'srodek', 'limit': limit,'groupBy':groupBy,'groupByLimit':groupByLimit,'preserve_order':preserve_order,'dummystring':dummystring,'sid':sid,'m_date_from':m_date_from,'m_date_to':m_date_to,'m_styles':m_styles,'m_channels':m_channels,'m_title_mono':m_title_mono,'m_title_mono_NOT':m_title_mono_NOT,'m_paragraphKWs_MUST':m_paragraphKWs_MUST,'m_paragraphKWs_MUST_NOT':m_paragraphKWs_MUST_NOT,"m_nkjpSubcorpus":m_nkjpSubcorpus})
-    f = urllib.request.urlopen(servlet, params)
-    return f.read()
+    binary_params = params.encode('utf-8')
+    f = urllib.request.urlopen(servlet, binary_params)
+    #with open('nkjp_output.xml', 'w') as g:
+    #   g.write(f.read().decode('utf-8'))
+    #return f.read()
+    return f

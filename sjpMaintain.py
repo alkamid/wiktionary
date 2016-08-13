@@ -11,6 +11,20 @@ from sjpClass import kategoriaSlowa, checkHistory
 
 
 def checkIfExists(page):
+	
+        initial_length = len(page.listLangs)
+        def determine(section):
+                try: check = Haslo(section.titleHeader)
+		except sectionsNotFound:
+			pass
+		except WrongHeader:
+			pass
+		else:
+			if check.type == 3:
+				for elem in check.listLangs:
+					if elem.lang == u'polski':
+                                                return 1
+                return 0
 
     initial_length = len(page.listLangs)
     def determine(section):
@@ -69,12 +83,7 @@ def checkImages(page, obrazki):
 def updateTable(katPages, pageCount, tableText):
     page = pywikibot.Page(site, '%s%d' % (katPages, pageCount))
     history = page.getVersionHistory()
-
-    author = history[0][2]
-    comment = history[0][3]
-
-    if (author == 'Olafbot' and comment == 'Zawartość została przeniesiona do artykułów.') or\
-       (author == 'AlkamidBot' and comment == 'usunięcie istniejącego hasła' and len(page.text) < 60):
+    if history[0][2] == 'Olafbot' and history[0][3] == 'Zawartość została przeniesiona do artykułów.':
         tableText = tableText.replace('\n| [[%s%d|%d]]' % (katPages, pageCount, pageCount), '')
     return tableText
 
@@ -131,3 +140,5 @@ if __name__ == '__main__':
         main()
     finally:
         pywikibot.stopme()
+        
+
