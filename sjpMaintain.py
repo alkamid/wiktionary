@@ -12,20 +12,6 @@ from sjpClass import kategoriaSlowa, checkHistory
 
 def checkIfExists(page):
 	
-        initial_length = len(page.listLangs)
-        def determine(section):
-                try: check = Haslo(section.titleHeader)
-		except sectionsNotFound:
-			pass
-		except WrongHeader:
-			pass
-		else:
-			if check.type == 3:
-				for elem in check.listLangs:
-					if elem.lang == u'polski':
-                                                return 1
-                return 0
-
     initial_length = len(page.listLangs)
     def determine(section):
         try: check = Haslo(section.titleHeader)

@@ -787,38 +787,38 @@ def common_tag_part(tag1, tag2):
     return common.strip(':')
 
 def morfAnalyse(word):
-	if word == u'':
-		return [None, u'', None]
-	analiza = analyse(word, dag=1)
-	numWords = analiza[-1][1]
-	count = [] # tablica z zerami do wy³apywania ró¿nic w formach podstawowych
-	count_first = [] # tablica z zerami do ustawiania pierwszego elementu dla danego s³owa
-	found = 0
-	base = None
-	form = u''
-	text = ''
-	for counter in range(numWords):
-		count.append(0)
-		count_first.append(0)
-		seek_last = 0
-		
-		for a in analiza: #Morfeusz rozbija s³owa z "¶" na koñcu na co¶ + by¶ (wtedy w analizie pojawia siê oznakowanie "aglt"
-			if a[2][2] and u'aglt' in a[2][2]:
-				count[counter] += 1
-		for for_helper, element in enumerate(analiza):		
-			#print element
-			if element[0] == counter:
-				if seek_last == 0:
-					seek_last = 1
-				if count_first[counter] == 0: # catch the first element
-					pierwszy = element
-					count_first[counter] = 1
-				if element[2][1] != pierwszy[2][1]: # if base form is different from the base form of the first elem, ++counter
-					count[counter] += 1
-					break
-			else:
-				if seek_last == 1:
-					seek_last = 2
+    if word == u'':
+        return [None, u'', None]
+    analiza = analyse(word, dag=1)
+    numWords = analiza[-1][1]
+    count = [] # tablica z zerami do wy³apywania ró¿nic w formach podstawowych
+    count_first = [] # tablica z zerami do ustawiania pierwszego elementu dla danego s³owa
+    found = 0
+    base = None
+    form = u''
+    text = ''
+    for counter in range(numWords):
+        count.append(0)
+        count_first.append(0)
+        seek_last = 0
+
+        for a in analiza: #Morfeusz rozbija s³owa z "¶" na koñcu na co¶ + by¶ (wtedy w analizie pojawia siê oznakowanie "aglt"
+            if a[2][2] and u'aglt' in a[2][2]:
+                count[counter] += 1
+        for for_helper, element in enumerate(analiza):		
+            #print element
+            if element[0] == counter:
+                if seek_last == 0:
+                    seek_last = 1
+                if count_first[counter] == 0: # catch the first element
+                    pierwszy = element
+                    count_first[counter] = 1
+                if element[2][1] != pierwszy[2][1]: # if base form is different from the base form of the first elem, ++counter
+                    count[counter] += 1
+                    break
+            else:
+                if seek_last == 1:
+                    seek_last = 2
 
     #When I updated to libmorfeusz2 on 18/02/2016, I realised sometimes ':a' or ':s'
     #was added to the end of the base form. Until I figure out what it is, I'll have
