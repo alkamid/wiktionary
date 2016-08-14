@@ -20,16 +20,37 @@ import pdb
 from difflib import SequenceMatcher
 import xmltodict
 
-def join_sentence(left, match=[], right=[]):
+def NKJP_to_text(left, match=[], right=[]):
     """
     Combine the results from an NKJP API query into one sentence. The results
     either come in threes (left side, matched phrase and right side), or in an
     OrderedDict (the result of xmltodict.parse) form when you query /select. /select
     is used to fetch the context of a phrase that is too short. This function will also work
-    on a single list of tagged words.
+    on a single list of tagged words. This function is necessary instead of a simple join()
+    for two reasons: 1) in the API's output, the information about spaces is lost,
+    so we need to correctly insert spaces around interpunction 2) we need to take care
+    of agglutinates, which may be useful for morphological analysis, but they'd
+    break wikitext.
+    
+    Args:
+        left (OrderedDict or list): This function can parse two types of input.
+            It's a consequence of NKJP API's different representation of /spans
+            and /select query results.
+            OrderedDict is the result from a nkjp_new.nkjp_find_context() call, while
+            nkjp_new.nkjp_lookup_new() returns a list. In the latter case, this function
+            can parse one, two or three lists. The first is useful when parsing only part
+            of an NKJP API's result, but if you're parsing all 'lTks', 'mTks', 'rTks' then
+            NKJP_to_text will return a full sentence from these three.
+        match (list): when parsing a result from NKJP API's /spans, you can
+            pass 'mTks' as the second argument
+        right (list): when parsing a result from NKJP API's /spans, you can
+            pass 'rTks' as the third argument
+    Returns:
+        str: API's output converted to plain text, with interpunction and
+            agglutinates handled correctly
     """
-    joined = ''
-    open_quote = 0
+
+    text_output = ''
 
     if type(left) == OrderedDict:
         listwords = left['s']['wts']['wt']
@@ -38,6 +59,10 @@ def join_sentence(left, match=[], right=[]):
             listwords = [listwords]
     else:
         listwords = left + match + right
+
+    #keep track of quotes - closing quote marks don't require spaces before,
+    #opening marks do require spaces
+    open_quote = 0
 
     for i, elem in enumerate(listwords):
         if type(left) == OrderedDict:
@@ -55,20 +80,21 @@ def join_sentence(left, match=[], right=[]):
         excluded_interpunction = ('(', '-', '„')
         excluded_opening_chars = ('(', '„')
 
+
         if ('punct:interp' not in tag and 'aglt:' not in tag) or any([word == p for p in excluded_interpunction]):
             if i > 0 and all([prev != o_p for o_p in excluded_opening_chars]) and not (open_quote == 1 and prev == '"'):
-                joined += ' '
+                text_output += ' '
         elif word == '"':
             if open_quote == 0:
                 open_quote = 1
-                joined += ' '
+                text_output += ' '
             else:
                 open_quote = 0
 
         if word:
-            joined += word
+            text_output += word
 
-    return joined
+    return text_output
 
 
 def get_left_context(nkjp_match, nkjp_doc, minimum_length=60):
@@ -85,7 +111,7 @@ def get_left_context(nkjp_match, nkjp_doc, minimum_length=60):
         minimum_length (int): minimum length of the sentence
     """
 
-    whole_sentence = join_sentence(nkjp_match['lTks'], nkjp_match['mTks'], nkjp_match['rTks'])
+    whole_sentence = NKJP_to_text(nkjp_match['lTks'], nkjp_match['mTks'], nkjp_match['rTks'])
     extra_left_context = ''
 
     seq = int(nkjp_doc['seq'])-1
@@ -94,7 +120,7 @@ def get_left_context(nkjp_match, nkjp_doc, minimum_length=60):
         try: ctx_query_result = nkjp_find_context(seq, nkjp_match['text_id'])[0]['utt_tagged']
         except (IndexError, ValueError) as e:
             break
-        ctx_stripped = join_sentence(xmltodict.parse(ctx_query_result))
+        ctx_stripped = NKJP_to_text(xmltodict.parse(ctx_query_result))
         extra_left_context = ctx_stripped + ' ' + extra_left_context
         seq -= 1
 
@@ -116,7 +142,7 @@ def check_sentence_quality(nkjp_match):
         int: 0 for bad quality, 1 for good quality
     """
 
-    joined_sentence = join_sentence(nkjp_match['lTks'], nkjp_match['mTks'], nkjp_match['rTks'])
+    joined_sentence = NKJP_to_text(nkjp_match['lTks'], nkjp_match['mTks'], nkjp_match['rTks'])
 
     # the proportion of upper case letters to all letters is too high
     allowed_uppercase_proportion = 0.1
@@ -164,7 +190,7 @@ def wikitext_one_sentence(left_context, nkjp_match, match_base_form):
 
 
     left_ctx_wikised = wikilink(left_context)
-    left_match_wikised = wikilink(join_sentence(nkjp_match['lTks']))
+    left_match_wikised = wikilink(NKJP_to_text(nkjp_match['lTks']))
 
     final_sentence = left_ctx_wikised + left_match_wikised
 
@@ -187,7 +213,7 @@ def wikitext_one_sentence(left_context, nkjp_match, match_base_form):
     else:
         final_sentence += ' '
 
-    final_sentence += shortLink(match_base_form, join_sentence(nkjp_match['mTks']))
+    final_sentence += shortLink(match_base_form, NKJP_to_text(nkjp_match['mTks']))
     
     if (first_right == 'w:"' and quote_count % 2 == 1)\
        or 'punct:interp' in first_right_tag:
@@ -195,7 +221,7 @@ def wikitext_one_sentence(left_context, nkjp_match, match_base_form):
     else:
         final_sentence += ' '
 
-    final_sentence += wikilink(join_sentence(nkjp_match['rTks']))
+    final_sentence += wikilink(NKJP_to_text(nkjp_match['rTks']))
 
     return final_sentence.strip()
 
@@ -905,7 +931,7 @@ def orphaned_examples(test_word=None, online=False, complete_overwrite=False, on
                 for line in result['spanResponse']['spans']:
                     doc = result['response']['docs'][line['doc_seq']]
 
-                    matched_sentence = join_sentence(line['lTks'], line['mTks'], line['rTks'])
+                    matched_sentence = NKJP_to_text(line['lTks'], line['mTks'], line['rTks'])
                     left_context = get_left_context(line, doc)
                     sentence =  left_context + ' ' + matched_sentence
                     
