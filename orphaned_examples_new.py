@@ -821,7 +821,7 @@ def check_if_includes_orphan(sentence, orphan_list, excluded_orphans):
 import random
 def orphaned_examples(test_word=None, online=False, complete_overwrite=False, onepage_testmode=False):
 
-    output_pages_number = 20
+    output_pages_number = 100
     buffer_size = 20 #how many words will be printed on one page
     if online:
         active_words = fetch_active_words() # prepare only as many pages as we need at the moment
