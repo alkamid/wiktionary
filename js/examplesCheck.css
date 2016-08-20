@@ -1,0 +1,98 @@
+#wikiEditor-ui-examples {
+	display: block;
+	background-color: #eeeedd;
+}
+
+.toggle-button {
+	background-color: white;
+	margin: 5px 0;
+	border: 2px solid #D0D0D0;
+	height: 24px;
+	width: 50px;
+	cursor: pointer;
+	position: relative;
+	display: inline-block;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+	text-align: center;
+	font-size: large;
+}
+
+.toggle-button-selected-good {
+	background-color: #83B152;
+	border: 2px solid #7DA652;
+}
+
+.toggle-button-selected-bad {
+	background-color: #e34a33;
+	border: 2px solid #ca331c;
+}
+
+.example-div {
+	display: none;
+}
+
+.example-box {
+	display: inline-block;
+	width: 100%;
+}
+
+.example-buttons {
+	width: 60px;
+	float: left;
+	text-align: center;
+}
+
+.def-selector {
+	width: 50px;
+	border: solid 2px #eeeedd;
+	text-align: center;
+	margin: 0 auto;
+}
+
+.raw-text {
+	width: 50%;
+	float: left;
+}
+
+.left-context, .right-context {
+	font-size: x-small;
+}
+
+.wikified-text-box {
+	overflow: auto;
+}
+
+.textarea {
+	-webkit-appearance: textarea;
+	-moz-appearance: textfield-multiline;
+	border: 1px solid gray;
+    font: medium -moz-fixed;
+    font: -webkit-small-control;
+    font-family: monospace;
+	line-height: normal;
+	height: 90px;
+	overflow: auto;
+	resize: vertical;
+	width: 99%;
+	background: white;
+}
+
+.source {
+	font-size: small;
+}
+
+.selector-div-unknown-choice {
+	border: solid 2px red;
+}
+
+.current {
+	display: block;
+}
+
+mark {
+  border-radius: 1px;
+  background-color: #b1d5e5;
+}
