@@ -16,6 +16,7 @@ def fraz(data):
     lista_stron = getListFromXML(data)
     site = pywikibot.Site('pl', 'wiktionary')
     outputPage = pywikibot.Page(site, 'Wikipedysta:AlkamidBot/listy/związki_frazeologiczne')
+    logfile = 'log/fraz.txt'
 
     tempLangs = []
 
@@ -57,7 +58,8 @@ def fraz(data):
                     except AttributeError:
                         pass
                     except KeyError:
-                        print('{0} / {1}: znaczenia not found'.format(word.title, lang.lang))
+                        with open(logfile, 'a+', encoding='utf-8') as lf:
+                            lf.write('\n"znaczenia" not found; word: {0}; lang: {1}'.format(word.title, lang.lang))
                     else:
                         if lang.type != 2 and 'związek frazeologiczny' in lang.subSections['znaczenia'].text and '[[{0}]]'.format(word.title) not in phraseList[lang.lang]:
                             notFoundList['%s' % lang.lang].append(word.title)
