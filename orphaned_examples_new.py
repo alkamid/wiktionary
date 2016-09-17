@@ -1008,11 +1008,10 @@ def orphaned_examples(test_word=None, online=False, complete_overwrite=False, on
 
 if __name__ == '__main__':
     refresh_orphans_list()
-    #orphaned_examples(test_word=None, online=False, complete_overwrite=True, onepage_testmode=False)
+    orphaned_examples(test_word=None, online=False, complete_overwrite=True, onepage_testmode=False)
     if orphaned_examples(test_word=None, online=True, complete_overwrite=False, onepage_testmode=False) == 2:
         sweep_all_pages()
         write_edit_conflicts()
         #refresh all pages on Monday
         if datetime.today().weekday() == 4:
             orphaned_examples(test_word=None, online=True, complete_overwrite=True, onepage_testmode=False)
-    
