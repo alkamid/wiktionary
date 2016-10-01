@@ -1,67 +1,67 @@
-# coding=utf-8
-
 import urllib.request, urllib.parse, urllib.error
-import random
+import ssl
+import json
 import config
 
-def nkjp_lookup(ngram):
+def nkjp_lookup_new(input_query, max_results=10):
 
-    servlet="http://nkjp.uni.lodz.pl/NKJPSpanSearchXML"
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
 
-    #Aby pobrać wyniki w formacie Microsoft Excel XML wywołujemy serwlet:
-    #servlet="http://nkjp.uni.lodz.pl/NKJPSpanSearchExcelXML"
+    url = 'https://mantel.pelcra.pl/solr/nkjp'
+    usr = config.nkjp['new_uname']
+    passw = config.nkjp['new_pwd']
 
+    handler = '/spans'
+    q = '*:*'
+    annot = 'true'
+    postSort = 'right'
+    spanField = 'utt_tagged'
+    fl = 'authors,genre,id,medium_id,text_id,title_a_s,title_j_s,title_m_s,seq,pub_date,medium'
+    start = 0
+    rows = max_results
 
-    #Zapytanie w składni PELCRA NKJP
-    #ngrams=["to bardzo ciekawe","dobra wola","dobra rada","ciekawa sprawa", "pleść** bzdura**"]
+    query = 'q=' + q + '&spanq=' + urllib.parse.quote(input_query) + '&annot=' + annot + '&postSort='\
+            + postSort + '&spanField' + spanField + '&fl=' + fl + '&start='\
+            + str(start) + '&rows=' + str(rows)
 
-    #Klucz dostępu (prosimy o kontakt w celu jego uzyskania)
-    api_key=config.keys['nkjp']
+    params = urllib.parse.urlencode({'u': usr, 'p':passw,'h': handler, 'q': query})
+    req = urllib.request.urlopen(url + '?' + params, context=ctx)
 
-    #Maks. odstęp między słowami
-    span=0
-    #Zachowujemy szyk? true|false
-    preserve_order="true"
-    #Od którego wyniku zaczynamy?
-    offset=0
-    #Po czym sortujemy? srodek|lewa|prawa|title_mono|pubDate|channel title_mono to  tytuł publikacji/książki/gazety
-    sort="prawa"
-    #od 1 do 5000 na raz. Wartości > 5000 są przycinane.
-    limit=100
-    #Po czym grupujemy? (--- to brak grupowania)  title_mono|pubDate|channel|---|text_id
-    groupBy="title_mono"
-    #groupBy="---"
-    #Limit grupowania (Przy ustawieniu --- ta zmienna jest pomijana)
-    groupByLimit=1
-    #Teksty nie wcześniejsze niż
-    m_date_from=1950
-    #Teksty nie późniejsze niż
-    m_date_to=2015
-    #Styl z taksonomii NKJP. Można podać > 1, rozdzielając przecinkami
-    #http://nkjp.uni.lodz.pl/help.jsp#analiza_rejestru
-    m_styles="---"
-    #Kanał z taksonomii NKJP. Można podać > 1, rozdzielając przecinkami
-    m_channels="---"
-    #Tytuł książki, gazety, forum internetowego, itp.
-    m_title_mono=""
-    #Ale z wyłączeniem:
-    m_title_mono_NOT="Wikipedia.pl"
-    #Tytuł tekstu, wątku, itp.
-    m_text_title=""
-    #Słowa kluczowe w pasującym akapicie
-    m_paragraphKWs_MUST=""
-    m_paragraphKWs_MUST_NOT=""
-    m_nkjpSubcorpus="all"
+    result = req.read().decode('utf-8')
 
+    return json.loads(result)
 
-    #A to musi już tak na razie być...
-    dummystring="ąĄćĆęĘłŁńŃóÓśŚźŹżŻ"
-    sid=random.random()
+def nkjp_find_context(seq, text_id):
 
-    params = urllib.parse.urlencode({'query': ngram, 'api_key':api_key,'offset': offset, 'span': span,'sort': sort, 'second_sort':'srodek', 'limit': limit,'groupBy':groupBy,'groupByLimit':groupByLimit,'preserve_order':preserve_order,'dummystring':dummystring,'sid':sid,'m_date_from':m_date_from,'m_date_to':m_date_to,'m_styles':m_styles,'m_channels':m_channels,'m_title_mono':m_title_mono,'m_title_mono_NOT':m_title_mono_NOT,'m_paragraphKWs_MUST':m_paragraphKWs_MUST,'m_paragraphKWs_MUST_NOT':m_paragraphKWs_MUST_NOT,"m_nkjpSubcorpus":m_nkjpSubcorpus})
-    binary_params = params.encode('utf-8')
-    f = urllib.request.urlopen(servlet, binary_params)
-    #with open('nkjp_output.xml', 'w') as g:
-    #   g.write(f.read().decode('utf-8'))
-    #return f.read()
-    return f
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
+
+    url = 'https://mantel.pelcra.pl/solr/nkjp'
+    usr = config.nkjp['new_uname']
+    passw = config.nkjp['new_pwd']
+
+    handler = '/select'
+    q = 'seq:' + str(seq) + ' AND text_id:' + text_id
+    annot = 'true'
+    postSort = 'right'
+    spanField = 'utt_tagged'
+    fl = 'authors,genre,id,medium_id,text_id,title_a_s,title_j_s,title_m_s,utt'
+    fl = 'utt_tagged,utt'
+
+    rows = 10
+
+    query = 'q=' + q + '&rows=' + str(rows) + '&fl=' + fl
+
+    params = urllib.parse.urlencode({'u': usr, 'p':passw,'h': handler, 'q': query})
+    req = urllib.request.urlopen(url + '?' + params, context=ctx)
+
+    result = req.read().decode('utf-8')
+
+    return json.loads(result)['response']['docs']
+
+#usage:
+#res = nkjp_lookup_new('(<lemma=położyć> się <lemma=spać>)')
+#res = nkjp_find_context(seq=3643, text_id='T9RX')

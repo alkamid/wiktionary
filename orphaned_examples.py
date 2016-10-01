@@ -6,7 +6,7 @@ these examples. It uses NKJP API (http://www.nkjp.uni.lodz.pl/help.jsp)
 to fetch examples from the most comprehensive Polish language corpus.
 """
 
-from nkjp_lookup import nkjp_lookup
+from nkjp_lookup import nkjp_lookup_new, nkjp_find_context
 from lxml import etree
 import re
 import json
@@ -18,74 +18,117 @@ import pywikibot as pwb
 from datetime import datetime, timedelta, time
 import pdb
 from difflib import SequenceMatcher
+import xmltodict
 
-def extract_one_sentence(nkjp_match, left_context_min_length=100):
+def NKJP_to_text(left, match=[], right=[]):
     """
-    NKJP matches return the matched word itself, plus its context on both
-    sides. This function attempts to take all three (left, match, right)
-    and extract one sentence.
+    Combine the results from an NKJP API query into one sentence. The results
+    either come in threes (left side, matched phrase and right side), or in an
+    OrderedDict (the result of xmltodict.parse) form when you query /select. /select
+    is used to fetch the context of a phrase that is too short. This function will also work
+    on a single list of tagged words. This function is necessary instead of a simple join()
+    for two reasons: 1) in the API's output, the information about spaces is lost,
+    so we need to correctly insert spaces around interpunction 2) we need to take care
+    of agglutinates, which may be useful for morphological analysis, but they'd
+    break wikitext.
+    
+    Args:
+        left (OrderedDict or list): This function can parse two types of input.
+            It's a consequence of NKJP API's different representation of /spans
+            and /select query results.
+            OrderedDict is the result from a nkjp_new.nkjp_find_context() call, while
+            nkjp_new.nkjp_lookup_new() returns a list. In the latter case, this function
+            can parse one, two or three lists. The first is useful when parsing only part
+            of an NKJP API's result, but if you're parsing all 'lTks', 'mTks', 'rTks' then
+            NKJP_to_text will return a full sentence from these three.
+        match (list): when parsing a result from NKJP API's /spans, you can
+            pass 'mTks' as the second argument
+        right (list): when parsing a result from NKJP API's /spans, you can
+            pass 'rTks' as the third argument
+    Returns:
+        str: API's output converted to plain text, with interpunction and
+            agglutinates handled correctly
+    """
 
+    text_output = ''
+
+    if type(left) == OrderedDict:
+        listwords = left['s']['wts']['wt']
+        try: listwords[0]
+        except KeyError:
+            listwords = [listwords]
+    else:
+        listwords = left + match + right
+
+    #keep track of quotes - closing quote marks don't require spaces before,
+    #opening marks do require spaces
+    open_quote = 0
+
+    for i, elem in enumerate(listwords):
+        if type(left) == OrderedDict:
+            tag = elem['ps']['p']['#text']
+            word = elem['w']
+            if i > 0:
+                prev = listwords[i-1]['w']
+        else:
+            word_elems = elem.split('|')
+            tag = word_elems[2]
+            word = word_elems[0][2:]
+            if i > 0:
+                prev = listwords[i-1].split('|')[0][2:]
+
+        excluded_interpunction = ('(', '-', '„')
+        excluded_opening_chars = ('(', '„')
+
+
+        if ('punct:interp' not in tag and 'aglt:' not in tag) or any([word == p for p in excluded_interpunction]):
+            if i > 0 and all([prev != o_p for o_p in excluded_opening_chars]) and not (open_quote == 1 and prev == '"'):
+                text_output += ' '
+        elif word == '"':
+            if open_quote == 0:
+                open_quote = 1
+                text_output += ' '
+            else:
+                open_quote = 0
+
+        if word:
+            text_output += word
+
+    return text_output
+
+
+def get_left_context(nkjp_match, nkjp_doc, minimum_length=60):
+    """
+    Short sentences are not the best matches, because the lack context.
+    This function will calculate the length of a sentence and return 0 if
+    it's too short.
 
     Args:
-        nkjp_match (lxml.etree._Element): one result of NKJP api request,
-            i.e. the content within one <line> tag
-        left_context_min_length (str): minimum length of additional context;
-            if it's shorter than that, it's probably useless
-
-    Returns:
-        tuple: five strings: the left side of the NKJP match, the match
-            itself (in [[baseform|match]] form), the right side, left extra
-            context and right extra context
+        nkjp_match (dict): one result of NKJP api request,
+            i.e. one element of ['spans']
+        nkjo_doc (dict): the corresponding ['doc'] element of the result, where
+            seq and text_id are stored
+        minimum_length (int): minimum length of the sentence
     """
 
-    #abbreviations are not considered as the end of a sentence
-    abbreviations = ['np\.', 'tzw\.', 'm\.in\.', 'prof\.', 'św\.', 'dr\.'] 
+    whole_sentence = NKJP_to_text(nkjp_match['lTks'], nkjp_match['mTks'], nkjp_match['rTks'])
+    extra_left_context = ''
 
-    #https://regex101.com/r/yB8vG7/6
-
-    re_end_sentence_left = re.compile(r'(?:^|[.?!]\s*)((?:' + r'|'.join(abbreviations) + r'|[^.?!]|[.?!](?!\s*[A-Z]))+)$')
-    re_end_sentence_right = re.compile(r'^((?:' + r'|'.join(abbreviations) + r'|[^.?!]|[.?!](?!\s*[A-Z])|)+(?:[.?!]|$))')
-
-    left = nkjp_match.find('left').text
-    centre = nkjp_match.find('match').text
-    right = nkjp_match.find('right').text
-
-
-    left_final = ''
-
-    left_end_sentence = re.search(re_end_sentence_left, left)
-    if left_end_sentence:
-        left_final = left_end_sentence.group(1)
-        if left.endswith(left_end_sentence.group(1)):
-            left = left[:-len(left_end_sentence.group(1))]
-
-    # cut some extra stuff on the left so users can add it
-    left_extra = ''
-    if len(left) >= 20:
-        left_extra_end_sentence = re.search(re_end_sentence_left, left)
-        if left_extra_end_sentence:
-            #limit to 150 characters - a safeguard for very long sentences
-            #which usually are just lists of words
-            left_extra = left_extra_end_sentence.group(1)[-150:]
+    seq = int(nkjp_doc['seq'])-1
     
-    right_end_sentence = re.search(re_end_sentence_right, right)
-    right_extra = ''
-    right_final = ''
-    if right_end_sentence:
-        right_final = right_end_sentence.group(1)
-        right = right.replace(right_final, '', 1)
-        #only add extra context on the right if it's long enough (>20 chars)
-        #and the sentence with matched word is short enough (<90 chars)
-        if len(right) >=20 and len(left_final+centre+right_final) <= 90:
-            s_right_extra = re.search(re_end_sentence_right, right)
-            if s_right_extra:
-                #limit to 150 characters - a safeguard for very long sentences
-                #wchich usually are just lists of words
-                right_extra = s_right_extra.group(1)[:150]
-    
-    return (left_final, centre, right_final, left_extra, right_extra)
+    while (len(whole_sentence) + len(extra_left_context) < minimum_length):
+        try: ctx_query_result = nkjp_find_context(seq, nkjp_match['text_id'])[0]['utt_tagged']
+        except (IndexError, ValueError) as e:
+            break
+        ctx_stripped = NKJP_to_text(xmltodict.parse(ctx_query_result))
+        extra_left_context = ctx_stripped + ' ' + extra_left_context
+        seq -= 1
 
-def check_sentence_quality(left_match_right):
+    
+    return extra_left_context.strip()
+
+
+def check_sentence_quality(nkjp_match):
     """
     Take a tuple with the left and right side of the matched word
     and check a few conditions to determine whether it's a good example or not
@@ -99,7 +142,7 @@ def check_sentence_quality(left_match_right):
         int: 0 for bad quality, 1 for good quality
     """
 
-    joined_sentence = ''.join(left_match_right[:3])
+    joined_sentence = NKJP_to_text(nkjp_match['lTks'], nkjp_match['mTks'], nkjp_match['rTks'])
 
     # the proportion of upper case letters to all letters is too high
     allowed_uppercase_proportion = 0.1
@@ -129,7 +172,7 @@ def check_sentence_quality(left_match_right):
 
     return 1
 
-def wikitext_one_sentence(left_match_right, match_base_form):
+def wikitext_one_sentence(left_context, nkjp_match, match_base_form):
     """
     Take a tuple with the left and right side of the matched word
     and format it for printing. This is a way to circumvent doing
@@ -145,37 +188,44 @@ def wikitext_one_sentence(left_match_right, match_base_form):
         str: [[the|The]] [[input]] [[sentence]] [[format]]ted [[like]] [[this]].
     """
 
-    re_whitespace_left = re.compile(r'(\s*?)$')
-    re_whitespace_right = re.compile(r'^(\s*)')
 
-    # https://regex101.com/r/yB6tQ8/6
-    re_punctuation_around = re.compile(r'^([\W]*?)(.+?)([\W]*?)$')
+    left_ctx_wikised = wikilink(left_context)
+    left_match_wikised = wikilink(NKJP_to_text(nkjp_match['lTks']))
 
-    whitespaces_left = re.search(re_whitespace_left, left_match_right[0])
-    whitespaces_right = re.search(re_whitespace_right, left_match_right[2])
-    punctuation_match = re.search(re_punctuation_around, left_match_right[1])
+    final_sentence = left_ctx_wikised + left_match_wikised
 
-    pretty_sentence = wikilink(left_match_right[0])
+    quote_count = final_sentence.count('"')
+    
+    try: last_left = nkjp_match['lTks'][-1].split('|')[0]
+    except IndexError:
+        last_left = None
 
-    if whitespaces_left:
-        pretty_sentence += whitespaces_left.group(1)
-
-    if punctuation_match:
-        pretty_sentence += punctuation_match.group(1)
-        pretty_sentence += shortLink(match_base_form, punctuation_match.group(2))
-        pretty_sentence += punctuation_match.group(3)
+    try: first_right = nkjp_match['rTks'][0].split('|')[0]
+    except IndexError:
+        first_right = None
+        first_right_tag = ''
     else:
-        pretty_sentence += left_match_right[1]
+        first_right_tag = nkjp_match['rTks'][0].split('|')[2][2:]
 
-    if whitespaces_right:
-        pretty_sentence += whitespaces_right.group(1)
-    pretty_sentence += wikilink(left_match_right[2])
-    prettier_sentence = phrases_wikilink(pretty_sentence)
+    if ( last_left == 'w:"' and quote_count % 2 == 1)\
+       or last_left == 'w:(':
+        pass
+    else:
+        final_sentence += ' '
 
-    return prettier_sentence
+    final_sentence += shortLink(match_base_form, NKJP_to_text(nkjp_match['mTks']))
+    
+    if (first_right == 'w:"' and quote_count % 2 == 1)\
+       or 'punct:interp' in first_right_tag:
+        pass
+    else:
+        final_sentence += ' '
 
+    final_sentence += wikilink(NKJP_to_text(nkjp_match['rTks']))
 
-def get_reference(api_output, hashtable):
+    return final_sentence.strip()
+
+def get_reference(doc):
     """
     Take one result from NKJP api (within <line> tags), extract info
     about autorship and format it for printing
@@ -189,50 +239,39 @@ def get_reference(api_output, hashtable):
             returns ''
     """
     
-
-    ref = OrderedDict()
-    if len(hashtable) == 0:
-        ref['authors'] = 'Nazwisko Autora'
-    else:
-        author_hash = bytes(api_output.find('hash').text, 'utf-8')
-        try: ref['authors'] = hashtable[author_hash].decode('utf-8')[4:-5].replace('</au><au>', ', ')
-        except KeyError:
-            return ''
-    
-    match = api_output.find('match').text.lower()
+    ref = {}
+    ref['authors'] = doc['authors']
     
     excluded_titles = ['Wikipedia:']
 
     # article title exists for newspaper records
-    article_title = api_output.find('title_a')
-    if article_title is not None:
-        if any(article_title.text.startswith(c) for c in excluded_titles):
+    a_title = doc['title_a_s']
+    if a_title != '':
+        if any(a_title.startswith(c) for c in excluded_titles):
             return ''
-        elif len(article_title.text) > 0:
-            ref['article_title'] = article_title.text
-
-
+        else:
+            ref['article_title'] = a_title
 
     # this is a book title or a newspaper name
-    pub_title = api_output.find('title_mono')
-    if pub_title is not None:
-        if article_title.text.lower().startswith(match) and 'Wikipedia' in pub_title.text:
-            return '' # Wikipedia pages about matched words are probably
-            # the best examples
-        ref['pub_title'] = pub_title.text.strip()
-            
-    pub_date = api_output.find('pubDate')
-    if pub_date is not None:
-        refdate = ''
-        if len(pub_date.text) == 8:
-            refdate += '{0}/{1}/'.format(pub_date.text[6:], pub_date.text[4:6])
-        if len(pub_date.text) in (4, 8):
-            refdate += pub_date.text[:4]
-        ref['date'] = refdate
+    if doc['title_m_s'] != '':
+        ref['pub_title'] = doc['title_m_s']
 
+    if doc['title_j_s'] != '':
+        ref['journal_title'] = doc['title_j_s']
+         
+    pub_date = doc['pub_date']
+
+    refdate = ''
+    if len(pub_date) == 10:
+        refdate += '{0}/{1}/'.format(pub_date[8:], pub_date[5:7])
+    if len(pub_date) in (4, 10):
+        refdate += pub_date[:4]
+    ref['date'] = refdate
+    
     #extras
-    for field in ['hash', 'match_start', 'match_end', 'channel', 'domain']:
-        ref[field] = api_output.find(field).text
+    ref['id'] = doc['id']
+    ref['channel'] = doc['medium']
+    ref['domain'] = doc['genre']
 
     return ref
 
@@ -312,6 +351,7 @@ def log_verification(verified_entry, example_index, error=''):
             log_line += '##none'
 
         if type(this_example['source']) != str:
+            #TODO: add 'journal_title' but first check if there will be no conflicts in accesing the logs
             for field in ['authors', 'article_title', 'pub_title', 'date', 'channel', 'domain']:
                 if field in this_example['source'] and this_example['source'][field]:
                     log_line += '##{0}'.format(this_example['source'][field])
@@ -592,20 +632,7 @@ def check_verifications(page):
     if not changes_in_list:
         return -1
     return revised_wordlist
-
-import gzip                                                           
-                                                                      
-def read_author_hashtable():                                          
-    mydict = {}                                                       
-    with gzip.open('input/authors_under3.tab.gz', 'r') as f:                
-        i = 0                                                         
-        for line in f:                                                
-            mydict[line[:32]] = line[33:-1]                           
-            #i+=1                                                      
-            #if i > 10:                                                
-            #    break                                                 
-    return mydict                                                     
-
+                                                                     
 def fetch_active_words():
     page_prefix = 'Wikisłownik:Dodawanie_przykładów/dane/'
     
@@ -792,8 +819,9 @@ def check_if_includes_orphan(sentence, orphan_list, excluded_orphans):
 
 
 import random
-def orphaned_examples(test_word=None, hashtable=None, online=False, complete_overwrite=False, onepage_testmode=False):
+def orphaned_examples(test_word=None, online=False, complete_overwrite=False, onepage_testmode=False):
 
+    output_pages_number = 100
     buffer_size = 20 #how many words will be printed on one page
     if online:
         active_words = fetch_active_words() # prepare only as many pages as we need at the moment
@@ -812,11 +840,6 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
     else:
         excluded_words += active_words['under_review']
     
-    if not hashtable:
-        authors_hashtable = read_author_hashtable()
-    else:
-        authors_hashtable = hashtable
-
     site = pwb.Site()
 
     # this is a dirty trick, because morfAnalyse() and wikilink() don't
@@ -847,7 +870,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
                     o.write(formatted_output)
                 return 2
             
-            if (pages_count == 101) or (pages_count == 667 and onepage_testmode):
+            if (pages_count == output_pages_number+1) or (pages_count == 667 and onepage_testmode):
                 return 0
 
             # dealing with various list formats, e.g. *[[word]]
@@ -867,14 +890,14 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
 
                     if online:                        
                         while(True):
-                            output_page = pwb.Page(site, 'Wikisłownik:Dodawanie przykładów/dane/{0:03d}'.format(pages_count-1))
+                            output_page = pwb.Page(site, 'Wikisłownik:Dodawanie przykładów/dane/{0:03d}'.format(pages_count))
                             if pages_count == 666 or output_page.userName() == 'AlkamidBot':
                                 output_page.text = formatted_output
                                 output_page.save(comment='Pobranie nowych przykładów z NKJP.pl')
                                 break
                             else:
                                 pages_count += 1
-                                if pages_count == 100:
+                                if pages_count == output_pages_number:
                                     return 0
                             
 
@@ -887,13 +910,12 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
             if input_word[0] == '-' or input_word[-1] == '-' or input_word[0].isupper():
                 continue # let's skip prefixes and sufixes for now, also whatever starts with a capital leter
 
-            query = '{0}**'.format(input_word).replace(' ', '** ')
-            result = nkjp_lookup(query)
-            root = etree.parse(result).getroot()
-
+            query = '({0}**)'.format(input_word).replace(' ', '** ')
+            query_escaped = query.replace('.', '\.')
+            result = nkjp_lookup_new(query_escaped, 50)
             #print(xml.dom.minidom.parseString(etree.tostring(root)).toprettyxml())
             #return -1
-            if root.find('concordance') is not None:
+            if result['spanResponse']['numFound'] != 0:
                 found = 0
                 found_orphan = 0
 
@@ -906,20 +928,24 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
                 new_word['fetch_time'] = str(defs[1])
                 new_word['definitions'] = defs[0]
 
-                for line in root.find('concordance').findall('line'):
+                for line in result['spanResponse']['spans']:
+                    doc = result['response']['docs'][line['doc_seq']]
 
-                    sentence = extract_one_sentence(line, input_word)
+                    matched_sentence = NKJP_to_text(line['lTks'], line['mTks'], line['rTks'])
+                    left_context = get_left_context(line, doc)
+                    sentence =  left_context + ' ' + matched_sentence
+                    
+                    matched_tag = line['mTks'][0].split('|')[2][2:]
 
                     # NKJP treats gerunds as verb forms. We don't
                     if '\'\'czasownik' in new_word['definitions'] and\
-                       all(('ger:' in analysed[2] or 'subst:' in analysed[2]) for analysed in morfeusz.analyse(sentence[1])[0]):
+                       ('ger:' in matched_tag or 'subst:' in matched_tag):
                         continue
 
-
-                    if check_sentence_quality(sentence) == 0:
+                    if check_sentence_quality(line) == 0:
                         continue
-
-                    ref = get_reference(line, authors_hashtable)
+                    
+                    ref = get_reference(doc)
                     if ref == '':
                         break
 
@@ -927,11 +953,11 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
                         temp_example = {'verificator': 'None', 'correct_num': 'None', 'good_example': False, 'bad_example': False}
                         #temp_example['left'] = line.find('left').text
                         #temp_example['right'] = line.find('right').text
-                        temp_example['example'] = wikitext_one_sentence(sentence, input_word)
-                        temp_example['left_extra'] = phrases_wikilink(wikilink(sentence[3]))
-                        temp_example['right_extra'] = phrases_wikilink(wikilink(sentence[4]))
+                        temp_example['example'] = wikitext_one_sentence(left_context, line, input_word)
+                        #temp_example['left_extra'] = phrases_wikilink(wikilink(sentence[3]))
+                        #temp_example['right_extra'] = phrases_wikilink(wikilink(sentence[4]))
                         temp_example['source'] = ref
-
+ 
                         orphan_switch = check_if_includes_orphan(sentence, orphans, edit_history['orphans'])
                         temp_example['orphan'] = orphan_switch
                         new_word['examples'].append(temp_example)
@@ -939,7 +965,7 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
                     else:
                         
                         found_new = 0
-                        wikified_example = wikitext_one_sentence(sentence, input_word)
+                        wikified_example = wikitext_one_sentence(left_context, line, input_word)
 
                         for ex_ix, ex in enumerate(new_word['examples']):
                             neworphan = check_if_includes_orphan(sentence, orphans, edit_history['orphans'])
@@ -965,23 +991,27 @@ def orphaned_examples(test_word=None, hashtable=None, online=False, complete_ove
                             new_example['orphan'] = neworphan
                             #new_example['left'] = line.find('left').text
                             #new_example['right'] = line.find('right').text
-                            new_example['example'] = wikitext_one_sentence(sentence, input_word)
-                            new_example['left_extra'] = phrases_wikilink(wikilink(sentence[3]))
-                            new_example['right_extra'] = phrases_wikilink(wikilink(sentence[4]))
+                            new_example['example'] = wikitext_one_sentence(left_context, line, input_word)
+                            #new_example['left_extra'] = phrases_wikilink(wikilink(sentence[3]))
+                            #new_example['right_extra'] = phrases_wikilink(wikilink(sentence[4]))
                             new_example['source'] = ref
 
                 if new_word and len(new_word['examples']) > 0:
                     output.append(new_word)
                     words_count += 1
+                    if test_word:
+                        with open('output/test_word.json', 'w') as o:
+                            formatted_output = json.dumps(ordermydict(output), ensure_ascii=False, indent=4)
+                            o.write(formatted_output)
+                
 
 
 if __name__ == '__main__':
     refresh_orphans_list()
-    ht = read_author_hashtable()
-    if orphaned_examples(test_word=None, hashtable=ht, online=True, complete_overwrite=False, onepage_testmode=False) == 2:
-        del ht
+    orphaned_examples(test_word=None, online=False, complete_overwrite=True, onepage_testmode=False)
+    if orphaned_examples(test_word=None, online=True, complete_overwrite=False, onepage_testmode=False) == 2:
         sweep_all_pages()
         write_edit_conflicts()
         #refresh all pages on Monday
-        if datetime.today().weekday() == 0:
-            orphaned_examples(test_word=None, hashtable=ht, online=True, complete_overwrite=True, onepage_testmode=False)
+        if datetime.today().weekday() == 4:
+            orphaned_examples(test_word=None, online=True, complete_overwrite=True, onepage_testmode=False)
