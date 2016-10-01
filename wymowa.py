@@ -15,7 +15,7 @@ import pywikibot
 from pywikibot import pagegenerators
 import re
 import datetime
-import urllib.request, urllib.error, urllib.parse
+import urllib.error
 import config
 from klasa import *
 from external.pageviews import PageviewsClient
@@ -93,45 +93,33 @@ def main():
     count_all = 0
 
     for page in lista_main:
-
-        for retry in retryloop(5, timeout=30):
+        title = page.title()
+        try:
+            pywikibot.page.FilePage(siteCommons, 'Pl-%s.ogg' % page.title()).fileIsShared()
+        except (pywikibot.exceptions.NoPage):
             try:
-                pywikibot.page.FilePage(siteCommons, 'Pl-%s.ogg' % page.title()).fileIsShared()
-            except (pywikibot.exceptions.NoPage, KeyError):
-                for retry in retryloop(5,timeout=30):
-                    try:
-                        pywikibot.page.FilePage(siteCommons, 'Pl-%s.OGG' % page.title()).fileIsShared()
-                    except (pywikibot.exceptions.NoPage, KeyError):
-                        if page.title() in lista_gwary:
-                            outputGwary.add(page.title())
-                        else:
-                            if page.title() in listArchaic:
-                                outputArchaic.add(page.title())
-                            else:
-                                if page.title() in lista_obce:
-                                    outputObce.add(page.title())
-                                else:
-                                    try: s_ipa = re.search(re_ipa, page.get())
-                                    except urllib.error.HTTPError:
-                                        pass
-                                    except pywikibot.exceptions.NoPage:
-                                        pass
-                                    except pywikibot.exceptions.IsRedirectPage:
-                                        pass
-                                    else:
-                                        if s_ipa == None:
-                                            lista_ipa.add(page.title())
-                                        else:
-                                            lista.add(page.title())
-                        count_brak = count_brak + 1
-                    except (urllib.error.HTTPError, except RuntimeError, requests.exceptions.ReadTimeout):
-                        retry()
+                pywikibot.page.FilePage(siteCommons, 'Pl-%s.OGG' % page.title()).fileIsShared()
+            except (pywikibot.exceptions.NoPage):
+                count_brak += 1
+                if title in lista_gwary:
+                    outputGwary.add(title)
+                elif title in listArchaic:
+                    outputArchaic.add(title)
+                elif title in lista_obce:
+                    outputObce.add(title)
+                else:
+                    try: s_ipa = re.search(re_ipa, page.get())
+                    except (urllib.error.HTTPError, pywikibot.exceptions.NoPage, pywikibot.exceptions.IsRedirectPage):
+                        pass
                     else:
-                        count_jest = count_jest + 1
-            except (urllib.error.HTTPError, except RuntimeError, requests.exceptions.ReadTimeout):
-               retry()
+                        if s_ipa == None:
+                            lista_ipa.add(title)
+                        else:
+                            lista.add(title)
             else:
                 count_jest = count_jest + 1
+        else:
+            count_jest = count_jest + 1
         count_all = count_all + 1
 
 
