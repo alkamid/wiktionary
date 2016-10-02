@@ -28,7 +28,7 @@ def main():
     ns = get_nonmain_namespaces('pl.wiktionary')
     top = p.top_articles('pl.wiktionary', limit=1000)
     top_main = [{'article': a['article'], 'views': a['views'],\
-                 'rank': a['rank']} for a in l if not\
+                 'rank': a['rank']} for a in top if not\
                 any(a['article'].startswith(prefix + ':') for prefix in ns)]
     popular_list = [a['article'] for a in top_main]
 
