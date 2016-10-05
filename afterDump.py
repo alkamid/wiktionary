@@ -9,8 +9,6 @@ import fraz
 import czescimowy
 import czescimowyReplace
 import frequencyList
-import aTergo
-import resource
 from statystyka import *
 from klasa import readRCLimit, checkForNewDumps
 
