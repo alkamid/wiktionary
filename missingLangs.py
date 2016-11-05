@@ -15,7 +15,7 @@ def missingLangs(date):
     existing = set(a.shortName for a in LangsMediaWiki)
 
     with open('{0}output/missingLangs.txt'.format(config.path['scripts']), encoding='utf-8', mode='w') as f:
-        for a in lista_stron:
+        for a in pageList:
 
             try: word = Haslo(a)
             except notFromMainNamespace:
