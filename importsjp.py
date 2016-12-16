@@ -73,7 +73,7 @@ class HasloSJP():
         self.words = []
         self.numWords = 0
         self.type = 1
-        self.problems = {'kilka_znaczen' : 0, 'kilka_form_odmiany' : 0, 'synonimy' : 0, 'obcy' : 0, 'ndm' : 0, 'rodzaj' : 0, 'brak_znaczenia' : 0, 'przymiotnik_od' : 0}
+        self.problems = {'osoba': 0, 'kilka_znaczen' : 0, 'kilka_form_odmiany' : 0, 'synonimy' : 0, 'obcy' : 0, 'ndm' : 0, 'rodzaj' : 0, 'brak_znaczenia' : 0, 'przymiotnik_od' : 0}
 
         if not noWiki and not grabExisting:
             try: ifExists = Haslo(a)
@@ -134,7 +134,7 @@ class HasloSJP():
 
             if xp_title == a:
                 temp = Word(str(xp_title))
-                temp_mean = web.xpath("//p[@style='margin-top: .5em; font-size: medium; max-width: 32em; '][%d]/text()" % (j+1))
+                temp_mean = web.xpath("//p[@style='margin: .5em 0; font-size: medium; max-width: 32em; '][%d]/text()" % (j+1))
                 mean = '<br />'.join(temp_mean)
                 temp.addTempMean(mean)
                 #temp.addInGames(xp_inGames[j].text)
@@ -169,8 +169,9 @@ class HasloSJP():
                     a.tempMean = ''
                     self.problems['brak_znaczenia'] = 1
                 if s_osoba or 'nazwisko' in a.tempMean or 'wie¶ w' in a.tempMean or 'imiê mêskie' in a.tempMean or 'imiê ¿eñskie' in a.tempMean:
-                    a.addMean(None)
-                    a.noMean = 1
+                    self.problems['osoba'] = 1
+                    tempMean = Meaning(a.tempMean, noWiki)
+                    a.addMean(tempMean)
                 elif not noWiki:
                     re_czytaj = re.compile(r'\[czytaj\:(.*?)\]\s*')
                     s_czytaj = re.search(re_czytaj, a.tempMean)
