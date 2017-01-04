@@ -11,20 +11,28 @@ from klasa import *
 import datetime
 import time
 
-def main():
+def addLang(shortName, code, etym, shortOnly = False, jakie = None, zjezyka = None, sysop = False):
+    """
+    Add a new language to the technical pages.
+    params:
+        shortName (str): short language name, i.e. without "język"
+        shortOnly (bool): some languages are referred to by their name only, e.g. "esperanto" (not "esperanto language") - in that case, set shortOnly to 1
+        code (str): wikimedia or ISO code
+        etym (str): abbreviation to use in {{etym}} template, chosen arbitrarily
+        jakie (str): adjective: polski -> polskie, esperanto -> esperanckie, volapuk -> volapuk (only define for non-standard names, e.g. "norweski (bokmal)"
+        zjezyka (str): "z języka polskiego", "z esperanto", "z języka akan" (only define for non-standard names, e.g. "norweski (bokmal)"
+        sysop (bool): one page (MediaWiki:Gadget-langdata.js) requires sysop access. Because of how OAuth works, the script needs to be executed separately for this page
+    """
+
+    if jakie == None and zjezyka == None:
+        if shortName.endswith('ski'):
+            jakie = shortName + 'e'
+            zjezyka = shortName + 'ego'
+        else:
+            jakie = shortName
+            zjezyka = shortName
+        
     site = pywikibot.Site()
-
-    '''Start input - remember to change the variables below!'''
-
-    shortName = 'krik' #short language name, i.e. without "język"
-    shortOnly = 0 #some languages are referred to by their name only, e.g. "esperanto" (not "esperanto language") - in that case, set shortOnly to 1
-    kod = 'mus' #wikimedia or ISO code
-    jakie = 'krik' #adjective: polski -> polskie, esperanto -> esperanckie, volapuk -> volapuk
-    zjezyka = 'krik' #"z' #"z języka polskiego", "z esperanto", "z języka akan"
-    etymSkr = 'krik' #abbreviation to use in {{etym}} template, chosen arbitrarily
-
-    '''End input'''
-
 
     if shortOnly:
         longName = shortName
@@ -60,7 +68,7 @@ def main():
     page3 = pywikibot.Page(site, 'Szablon:%s' % longName)
     try: page3.get()
     except pywikibot.NoPage:
-        page3.text = '<includeonly>{{nagłówek języka\n| długa          = %s\n| krótka         = %s\n| kod            = %s\n| klucz_indeksu       = {{{1|{{PAGENAME}}}}}\n}}</includeonly><noinclude>[[Kategoria:Szablony indeksujące języków| {{PAGENAME}}]]</noinclude>' % (longName, shortName, kod)
+        page3.text = '<includeonly>{{nagłówek języka\n| długa          = %s\n| krótka         = %s\n| kod            = %s\n| klucz_indeksu       = {{{1|{{PAGENAME}}}}}\n}}</includeonly><noinclude>[[Kategoria:Szablony indeksujące języków| {{PAGENAME}}]]</noinclude>' % (longName, shortName, code)
         page3.save(summary="Dodanie języka %s" % zjezyka)
         #print textPage3
     else:
@@ -113,7 +121,7 @@ def main():
         s_after = re.search(re_after, page7.get())
         if s_before and s_after:
             page7.text = s_before.group(1)
-            page7.text += '|-\n|%s\n|%s\n' % (longName, kod)
+            page7.text += '|-\n|%s\n|%s\n' % (longName, code)
             page7.text += s_after.group(1)
             page7.save(summary="Dodanie języka %s" % zjezyka)
         else:
@@ -134,7 +142,7 @@ def main():
 
     page72 = pywikibot.Page(site, 'Szablon:etym/język')
     if '%s\n' % shortName not in page72.get():
-        if ' %s=' % (etymSkr) not in page72.get():
+        if ' %s=' % (etym) not in page72.get():
             hook = ' |inny\n}}<noinclude>'
             re_before = re.compile(r'(.*?)%s' % re.escape(hook), re.DOTALL)
             re_after = re.compile(r'.*?(%s.*)' % re.escape(hook), re.DOTALL)
@@ -142,7 +150,7 @@ def main():
             s_after = re.search(re_after, page72.get())
             if s_before and s_after:
                 page72.text = s_before.group(1)
-                page72.text += ' |%s=%s\n' % (etymSkr, longNameCapital)
+                page72.text += ' |%s=%s\n' % (etym, longNameCapital)
                 page72.text += s_after.group(1)
                 page72.save(summary="Dodanie języka %s" % zjezyka)
             else:
@@ -153,25 +161,6 @@ def main():
         pywikibot.output('Nazwa języka (%s) istnieje już w szablonie {{etym/język}}' % shortName)
         
 
-    #9. MediaWiki:Gadget-langdata.js
-    page10 = pywikibot.Page(site, 'MediaWiki:Gadget-langdata.js')
-    if '"%s"' % (shortName) not in page10.text:
-        hook = '\n\t},\n\tshortLangs:'
-        re_before = re.compile(r'(.*?)%s' % re.escape(hook), re.DOTALL)
-        re_after = re.compile(r'.*?(%s.*)' % re.escape(hook), re.DOTALL)
-        s_before = re.search(re_before, page10.text)
-        s_after = re.search(re_after, page10.text)
-        if s_before and s_after:
-            page10.text = s_before.group(1)
-            page10.text += ',\n\t\t"%s"\t :"%s"' % (shortName, kod)
-            page10.text += s_after.group(1)
-            page10.save(summary='Dodanie języka {0}'.format(zjezyka), as_group='sysop')
-        else:
-            pywikibot.output('Nie dodano parametru do strony MediaWiki:Gadget-langdata.js!')
-    else:
-        pywikibot.output('Nazwa języka (%s) istnieje już na stronie MediaWiki:Gadget-langdata.js' % shortName)
-    
-
     #8. Moduł:statystyka/dane
     page8 = pywikibot.Page(site, 'Moduł:statystyka/dane')
     if '%s' % shortName not in page8.get():
@@ -181,8 +170,26 @@ def main():
         pywikibot.output('Nazwa języka (%s) istnieje już na stronie Moduł:statystyka/dane' % shortName)
 
 
-if __name__ == '__main__':
-    try:
-        main()
-    finally:
-        pywikibot.stopme()
+    if sysop:
+        #9. MediaWiki:Gadget-langdata.js
+        page10 = pywikibot.Page(site, 'MediaWiki:Gadget-langdata.js')
+        if '"%s"' % (shortName) not in page10.text:
+            hook = '\n\t},\n\tshortLangs:'
+            re_before = re.compile(r'(.*?)%s' % re.escape(hook), re.DOTALL)
+            re_after = re.compile(r'.*?(%s.*)' % re.escape(hook), re.DOTALL)
+            s_before = re.search(re_before, page10.text)
+            s_after = re.search(re_after, page10.text)
+            if s_before and s_after:
+                page10.text = s_before.group(1)
+                page10.text += ',\n\t\t"%s"\t :"%s"' % (shortName, code)
+                page10.text += s_after.group(1)
+                page10.save(summary='Dodanie języka {0}'.format(zjezyka), as_group='sysop')
+            else:
+                pywikibot.output('Nie dodano parametru do strony MediaWiki:Gadget-langdata.js!')
+        else:
+            pywikibot.output('Nazwa języka (%s) istnieje już na stronie MediaWiki:Gadget-langdata.js' % shortName)
+
+
+#newlangs = [('godoberyjski', 'gdo', 'godob')]
+for lang in newlangs:
+    addLang(*lang, sysop=False)
