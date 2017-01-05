@@ -16,3 +16,8 @@ config.py
 /wikt-listy/
 /rclimits/
 /internal_tests/
+
+# IDEs #
+.project
+.pydevproject
+.settings/
