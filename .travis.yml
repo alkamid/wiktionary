@@ -5,4 +5,15 @@ python:
 # command to install dependencies
 install: "pip install -r requirements.txt"
 # command to run tests
-script: python -m unittest discover -s tests/ -p "test_*.py"
+script:
+
+  - mkdir ~/.pywikibot
+
+  - if [[ -n "$OAUTH_TOKEN" && -n "$PYWIKIBOT2_USERNAME" ]]; then
+        printf "usernames['wiktionary']['pl'] = '%q'\n" "$PYWIKIBOT2_USERNAME" >> ~/.pywikibot/user-config.py ;
+        printf "authenticate['pl.wiktionary.org'] = ('%s')\n" "$OAUTH_TOKEN" >> ~/.pywikibot/user-config.py ;
+      fi ;
+    fi
+
+ - python -m unittest discover -s tests/ -p "test_*.py"
+
