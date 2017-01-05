@@ -174,6 +174,7 @@ def addLang(shortName, code, etym, shortOnly = False, jakie = None, zjezyka = No
         #9. MediaWiki:Gadget-langdata.js
         page10 = pywikibot.Page(site, 'MediaWiki:Gadget-langdata.js')
         if '"%s"' % (shortName) not in page10.text:
+            changed = False
             hook = '\n\t},\n\tshortLangs:'
             re_before = re.compile(r'(.*?)%s' % re.escape(hook), re.DOTALL)
             re_after = re.compile(r'.*?(%s.*)' % re.escape(hook), re.DOTALL)
@@ -183,6 +184,21 @@ def addLang(shortName, code, etym, shortOnly = False, jakie = None, zjezyka = No
                 page10.text = s_before.group(1)
                 page10.text += ',\n\t\t"%s"\t :"%s"' % (shortName, code)
                 page10.text += s_after.group(1)
+                changed = True
+            else:
+                pywikibot.output('Nie uzupełniono obiektu "lang2code" w MediaWiki:Gadget-langdata.js!')
+            if shortOnly:
+                re_short = re.compile(r'shortLangs: \[\n[^\]]+((?=\n\t\]))')
+                s_short = re.search(re_short, page10.text)
+                if s_short:
+                    temp = page10.text
+                    page10.text = temp[:s_short.start(1)]
+                    page10.text += ',\n\t\t"%s"' % shortName
+                    page10.text += temp[s_short.end(1):]
+                    changed = True
+                else:
+                    pywikibot.output('Nie uzupełniono tablicy "shortLangs" w MediaWiki:Gadget-langdata.js!')
+            if changed:
                 page10.save(summary='Dodanie języka {0}'.format(zjezyka), as_group='sysop')
             else:
                 pywikibot.output('Nie dodano parametru do strony MediaWiki:Gadget-langdata.js!')
