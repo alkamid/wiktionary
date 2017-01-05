@@ -2,18 +2,29 @@ language: python
 python:
  - "3.4"
 
+addons:
+  apt:
+    sources:
+      - lucid
+    packages:
+      - language-pack-pl
+
 # command to install dependencies
-install: "pip install -r requirements.txt"
+before_script:
+  - pip install -r requirements.txt
+  - pip install git+git://github.com/wikimedia/pywikibot-core.git
+
 # command to run tests
 script:
-
   - mkdir ~/.pywikibot
 
-  - if [[ -n "$OAUTH_TOKEN" && -n "$PYWIKIBOT2_USERNAME" ]]; then
+  - if [[ -n "$OAUTH_TOKEN1" && -n "$OAUTH_TOKEN2" && -n "$OAUTH_TOKEN3" && -n "$OAUTH_TOKEN4" && -n "$PYWIKIBOT2_USERNAME" ]]; then
+        printf "family = 'wiktionary'\n" >> ~/.pywikibot/user-config.py ;
+        printf "mylang = 'pl'\n" >> ~/.pywikibot/user-config.py ;
         printf "usernames['wiktionary']['pl'] = '%q'\n" "$PYWIKIBOT2_USERNAME" >> ~/.pywikibot/user-config.py ;
-        printf "authenticate['pl.wiktionary.org'] = ('%s')\n" "$OAUTH_TOKEN" >> ~/.pywikibot/user-config.py ;
-      fi ;
+        printf "authenticate['pl.wiktionary.org'] = ('%q', '%q', '%q', '%q')\n" "$OAUTH_TOKEN1" "$OAUTH_TOKEN2" "$OAUTH_TOKEN3" "$OAUTH_TOKEN4" >> ~/.pywikibot/user-config.py ;
     fi
 
- - python -m unittest discover -s tests/ -p "test_*.py"
+  - printf "a = 3" >> config.py ;
 
+  - python -m unittest discover -s tests/ -p "test_*.py"

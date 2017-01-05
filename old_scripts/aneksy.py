@@ -4,7 +4,6 @@
 # do eksportowania wszystkich słów z podanych języków
 
 import sys
-sys.path.append('/home/adam/pywiki/pywikipedia')
 import codecs
 from pywikibot import Category
 import pywikibot
