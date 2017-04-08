@@ -113,7 +113,7 @@ def addLang(shortName, code, etym, shortOnly = False, jakie = None, zjezyka = No
     
     #7. skróty do sekcji
     page7 = pywikibot.Page(site, 'Wikisłownik:Kody języków')
-    if ' %s\n' % shortName not in page7.get():
+    if '{0}\n'.format(shortName) not in page7.get():
         hook = '|}\n\n== Linki zewnętrzne'
         re_before = re.compile(r'(.*?)%s' % re.escape(hook), re.DOTALL)
         re_after = re.compile(r'.*?(%s.*)' % re.escape(hook), re.DOTALL)
@@ -141,7 +141,7 @@ def addLang(shortName, code, etym, shortOnly = False, jakie = None, zjezyka = No
     #7b. etymologia Szablon:etym/język
 
     page72 = pywikibot.Page(site, 'Szablon:etym/język')
-    if '%s\n' % shortName not in page72.get():
+    if ('{0}\n'.format(shortName) not in page72.get()) and ('{0}\n'.format(shortName.title()) not in page72.get()):
         if ' %s=' % (etym) not in page72.get():
             hook = ' |inny\n}}<noinclude>'
             re_before = re.compile(r'(.*?)%s' % re.escape(hook), re.DOTALL)
@@ -206,6 +206,6 @@ def addLang(shortName, code, etym, shortOnly = False, jakie = None, zjezyka = No
             pywikibot.output('Nazwa języka (%s) istnieje już na stronie MediaWiki:Gadget-langdata.js' % shortName)
 
 
-#newlangs = [('godoberyjski', 'gdo', 'godob')]
+newlangs = [('gallo', 'roa-gal', 'gallo')]
 for lang in newlangs:
-    addLang(*lang, sysop=False)
+    addLang(*lang, shortOnly=False, sysop=False)
