@@ -24,6 +24,16 @@ def addLang(shortName, code, etym, shortOnly = False, jakie = None, zjezyka = No
         sysop (bool): one page (MediaWiki:Gadget-langdata.js) requires sysop access. Because of how OAuth works, the script needs to be executed separately for this page
     """
 
+    # Usually the input for this function is copied from user-created content
+    # on Wiki. To make sure there are no invisible unwanted characters,
+    # clean the input first
+    clean_word_pattern = re.compile(r'\W+', re.UNICODE)
+    shortName = clean_word_pattern.sub('', shortName)
+    code = clean_word_pattern.sub('', code)
+    etym = clean_word_pattern.sub('', etym)
+    jakie = clean_word_pattern.sub('', jakie)
+    zjezyka = clean_word_pattern.sub('', zjezyka)
+
     if jakie == None and zjezyka == None:
         if shortName.endswith('ski'):
             jakie = shortName + 'e'
@@ -206,6 +216,6 @@ def addLang(shortName, code, etym, shortOnly = False, jakie = None, zjezyka = No
             pywikibot.output('Nazwa języka (%s) istnieje już na stronie MediaWiki:Gadget-langdata.js' % shortName)
 
 
-newlangs = [('gallo', 'roa-gal', 'gallo')]
+newlangs = [('tshangla', 'tsj', 'tsha')]
 for lang in newlangs:
     addLang(*lang, shortOnly=False, sysop=False)
