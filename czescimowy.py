@@ -50,7 +50,8 @@ def czescimowy(data):
     re_zwrotnyFr = re.compile(r'\'\'\'\'\'(s\'|se ).*?\'\'\', czasownik zwrotny\'\'$')
     re_zwrotny = re.compile(r'\'\'czasownik zwrotny \'\'\'(.*?)(\'\'\'|\')$')
     re_nieprzechodni_dk_ndk = re.compile(r'\'\'czasownik( (nie|)przechodni|)( (nie|)dokonany|)( lub (nie|)dokonany|)\'\' \({{(n|)dk}} (\[\[(.*?)\]\]|\'\'brak\'\')\)$') #potem można usunąć | z "przechodni" i "dokonany" - wymóg, by wszystkie czasowniki posiadały informację o przechodniości i aspekcie
-    re_zwrotny_dk_ndk = re.compile(r'\'\'czasownik zwrotny( (nie|)dokonany|)( lub (nie|)dokonany|) \'\'\'(.*?)(się|sobie)\'\'\'\'\' \({{(n|)dk}} (\[\[(.*?)(się|sobie)\]\]|\'\'brak\'\')\)$')
+    re_zwrotny_dk_ndk_pl = re.compile(r'\'\'czasownik zwrotny( (nie|)dokonany|)( lub (nie|)dokonany|) \'\'\'(.*?)(się|sobie)\'\'\'\'\' \({{(n|)dk}} (\[\[(.*?)(się|sobie)\]\]|\'\'brak\'\')\)$')
+    re_zwrotny_dk_ndk = re.compile(r'\'\'czasownik zwrotny( (nie|)dokonany|)( lub (nie|)dokonany|)\'\' \({{(n|)dk}} (\[\[(.*?)\]\]|\'\'brak\'\')\)$') #  https://regex101.com/r/C9pkHi/1
     re_zwrotny_sie_in_title = re.compile(r'\'\'czasownik zwrotny( (nie|)dokonany|)( lub (nie|)dokonany|)\'\' \({{(n|)dk}} (\[\[(.*?)(się|sobie)\]\]|\'\'brak\'\')\)$')
 
     final = ''
@@ -93,13 +94,16 @@ def czescimowy(data):
                             s_zwrotnyFr = re.search(re_zwrotnyFr, temp)
                             s_zwrotny = re.search(re_zwrotny, temp)
                             s_nieprzechodni_dk_ndk = re.search(re_nieprzechodni_dk_ndk, temp)
-                            s_zwrotny_dk_ndk = re.search(re_zwrotny_dk_ndk, temp)
                             if 'się' in a.title:
                                 s_zwrotny_sie_in_title = re.search(re_zwrotny_sie_in_title, temp)
                             else:
-                                s_zwrotny_sie_in_title = 0
+                                s_zwrotny_sie_in_title = False
+                            if c.lang == 'polski':
+                                s_zwrotny_dk_ndk = re.search(re_zwrotny_dk_ndk_pl, temp)
+                            else:
+                                s_zwrotny_dk_ndk = re.search(re_zwrotny_dk_ndk, temp)
 
-                            if not found and not s_przyslowie and not s_forma and not s_morfem and not s_zwrotny and not s_zwrotnyFr and not s_zwrotny_dk_ndk and not s_nieprzechodni_dk_ndk and not s_zwrotny_sie_in_title:
+                            if not any((found, s_przyslowie, s_forma, s_morfem, s_zwrotny, s_zwrotnyFr, s_zwrotny_dk_ndk, s_nieprzechodni_dk_ndk, s_zwrotny_sie_in_title)):
                                 try: lista_na_wiki[temp]
                                 except KeyError:
                                     lista_na_wiki[temp] = collections.defaultdict()
