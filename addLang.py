@@ -27,12 +27,10 @@ def addLang(shortName, code, etym, shortOnly = False, jakie = None, zjezyka = No
     # Usually the input for this function is copied from user-created content
     # on Wiki. To make sure there are no invisible unwanted characters,
     # clean the input first
-    clean_word_pattern = re.compile(r'\W+', re.UNICODE)
+    clean_word_pattern = re.compile(r'[^\w\s]+', re.UNICODE)
     shortName = clean_word_pattern.sub('', shortName)
     code = clean_word_pattern.sub('', code)
     etym = clean_word_pattern.sub('', etym)
-    jakie = clean_word_pattern.sub('', jakie)
-    zjezyka = clean_word_pattern.sub('', zjezyka)
 
     if jakie == None and zjezyka == None:
         if shortName.endswith('ski'):
@@ -41,6 +39,11 @@ def addLang(shortName, code, etym, shortOnly = False, jakie = None, zjezyka = No
         else:
             jakie = shortName
             zjezyka = shortName
+    else:
+        if jakie == None:
+            jakie = clean_word_pattern.sub('', jakie)
+        if zjezyka == None:
+            zjezyka = clean_word_pattern.sub('', zjezyka)
         
     site = pywikibot.Site()
 
@@ -216,6 +219,6 @@ def addLang(shortName, code, etym, shortOnly = False, jakie = None, zjezyka = No
             pywikibot.output('Nazwa języka (%s) istnieje już na stronie MediaWiki:Gadget-langdata.js' % shortName)
 
 
-newlangs = [('tshangla', 'tsj', 'tsha')]
+newlangs = [('dani zachodni', 'dnw', 'dani-zach'), ('dżerma', 'dje', 'dżer'), ('kankuamo', 'qji', 'kank'), ('purepecha', 'tsz', 'pure'), ('jita', 'jit', 'jita'), ('talossański', 'tzl', 'talos'), ('kaingang', 'kgp', 'kain'), ('kansa', 'ksk', 'kan')]
 for lang in newlangs:
-    addLang(*lang, shortOnly=False, sysop=False)
+    addLang(*lang, shortOnly=False, sysop=True)
