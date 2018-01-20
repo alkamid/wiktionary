@@ -60,7 +60,7 @@ def addLang(shortName, code, etym, shortOnly = False, jakie = None, zjezyka = No
     #1. kategoria główna
     page1 = pywikibot.Page(site, 'Kategoria:%s' % longNameCapital)
     try: page1.get()
-    except pywikibot.NoPage:
+    except pywikibot.exceptions.NoPage:
         page1.text = '{{kategoria języka\n|nazwa polska=%s\n|nazwa własna=\n|język krótko=%s\n|z języka=%s\n|przysłowia=\n|podręcznik=\n|tworzenie haseł=\n|nagrania wymowy=\n|dodatkowe=\n}}\n\n[[Kategoria:Języki|%s]]' % (longNameCapital, shortName, zjezyka, shortName)
         page1.save(summary="Dodanie języka %s" % zjezyka)
         #print textPage1
@@ -109,7 +109,7 @@ def addLang(shortName, code, etym, shortOnly = False, jakie = None, zjezyka = No
     #6. {{dopracować}}
     page6 = pywikibot.Page(site, 'Szablon:dopracować')
     if ' %s=' % shortName not in page6.get():
-        hook = ' |#default=<br>Należy w nim poprawić: <i>{{{1}}}</i>[[Kategoria:Hasła do dopracowania|{{BASEPAGENAME}}]]'
+        hook = ' |#default=<br>Należy w nim poprawić: \'\'{{{1}}}\'\'[[Kategoria:Hasła do dopracowania|{{BASEPAGENAME}}]]'
         re_before = re.compile(r'(.*?)%s' % re.escape(hook), re.DOTALL)
         re_after = re.compile(r'.*?(%s.*)' % re.escape(hook), re.DOTALL)
         s_before = re.search(re_before, page6.get())
@@ -219,6 +219,6 @@ def addLang(shortName, code, etym, shortOnly = False, jakie = None, zjezyka = No
             pywikibot.output('Nazwa języka (%s) istnieje już na stronie MediaWiki:Gadget-langdata.js' % shortName)
 
 
-newlangs = [('dani zachodni', 'dnw', 'dani-zach'), ('dżerma', 'dje', 'dżer'), ('kankuamo', 'qji', 'kank'), ('purepecha', 'tsz', 'pure'), ('jita', 'jit', 'jita'), ('talossański', 'tzl', 'talos'), ('kaingang', 'kgp', 'kain'), ('kansa', 'ksk', 'kan')]
+newlangs = [('amal', 'aad', 'amal'), ('miniafia-oyan', 'aai', 'min-oy'), ('ankave', 'aak', 'ank'), ('arara parajski', 'aap', 'ara-par'), ('algonkiński', 'alg', 'algon'), ('arabela', 'arl', 'arabe'), ('południowojukagirski‏‎', 'yux', 'płdjuk'), ('yagua', 'yad', 'yag'), ('zaparo', 'zro', 'zapa'), ('futuna wschodni', 'fud', 'futwsch'), ('mandejski', 'mid', 'mand'), ('sasak', 'sas', 'sasa'), ('suazi', 'ss', 'suaz'), ('mazahua', 'maz', 'maza'), ('kadazdański', 'dtp', 'kadaz'), ('seszelski', 'crs', 'sesz'), ('pileni', 'piv', 'pile')]
 for lang in newlangs:
-    addLang(*lang, shortOnly=False, sysop=True)
+    addLang(*lang, shortOnly=False, sysop=False)
