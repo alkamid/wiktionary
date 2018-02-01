@@ -27,7 +27,7 @@ def addLang(shortName, code, etym, shortOnly = False, jakie = None, zjezyka = No
     # Usually the input for this function is copied from user-created content
     # on Wiki. To make sure there are no invisible unwanted characters,
     # clean the input first
-    clean_word_pattern = re.compile(r'[^\w\s]+', re.UNICODE)
+    clean_word_pattern = re.compile(r'[^\w\s\-\!]+', re.UNICODE)
     shortName = clean_word_pattern.sub('', shortName)
     code = clean_word_pattern.sub('', code)
     etym = clean_word_pattern.sub('', etym)
@@ -219,6 +219,6 @@ def addLang(shortName, code, etym, shortOnly = False, jakie = None, zjezyka = No
             pywikibot.output('Nazwa języka (%s) istnieje już na stronie MediaWiki:Gadget-langdata.js' % shortName)
 
 
-newlangs = [('amal', 'aad', 'amal'), ('miniafia-oyan', 'aai', 'min-oy'), ('ankave', 'aak', 'ank'), ('arara parajski', 'aap', 'ara-par'), ('algonkiński', 'alg', 'algon'), ('arabela', 'arl', 'arabe'), ('południowojukagirski‏‎', 'yux', 'płdjuk'), ('yagua', 'yad', 'yag'), ('zaparo', 'zro', 'zapa'), ('futuna wschodni', 'fud', 'futwsch'), ('mandejski', 'mid', 'mand'), ('sasak', 'sas', 'sasa'), ('suazi', 'ss', 'suaz'), ('mazahua', 'maz', 'maza'), ('kadazdański', 'dtp', 'kadaz'), ('seszelski', 'crs', 'sesz'), ('pileni', 'piv', 'pile')]
+newlangs = [('omahijsko-ponkaski', 'oma', 'omah-pon')]
 for lang in newlangs:
     addLang(*lang, shortOnly=False, sysop=False)
