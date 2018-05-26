@@ -71,7 +71,7 @@ def addLang(shortName, code, etym, shortOnly = False, jakie = None, zjezyka = No
     page2 = pywikibot.Page(site, 'Kategoria:%s (indeks)' % shortName)
     try: page2.get()
     except pywikibot.NoPage:
-        page2.text = '<div align=center>\'\'\'[[:Kategoria:%s|%s]]\'\'\'<p>{{indeks|%s}}</div>\n{{dodajhasło}}\n[[Kategoria:Indeks słów wg języków]]\n[[Kategoria:%s| ]]' % (longNameCapital, longNameCapital, shortName, longNameCapital)
+        page2.text = '<div style="text-align: center;">\'\'\'[[:Kategoria:%s|%s]]\'\'\'</div>\n{{indeks|%s}}\n{{dodajhasło}}\n\n[[Kategoria:Indeks słów wg języków]]\n[[Kategoria:%s| ]]' % (longNameCapital, longNameCapital, shortName, longNameCapital)
         page2.save(summary="Dodanie języka %s" % zjezyka)
         #print textPage2
     else:
