@@ -41,7 +41,7 @@ def monthly_stat_plot(filename='stat-data.csv', lang='pl'):
     
     ax2.set_ylim(ax.get_ylim())
     ax2.set_yticks([data['sections'][-1], data['pages'][-1]])
-    ax.grid('on')
+    ax.grid(True)
 
     legend = ax.legend(loc='upper left')
     
