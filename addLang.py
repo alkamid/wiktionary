@@ -177,7 +177,8 @@ def addLang(shortName, code, etym, shortOnly = False, jakie = None, zjezyka = No
     #8. Moduł:statystyka/dane
     page8 = pywikibot.Page(site, 'Moduł:statystyka/dane')
     if '%s' % shortName not in page8.get():
-        page8.text = page8.get()[:-40] + page8.get()[-40:].replace("\tdate =", "\t{ '%s' },\n\tdate =" % shortName)
+        replacement = "\t{ '%s', { w = true } },\n\tdate =" if shortOnly else "\t{ '%s' },\n\tdate ="
+        page8.text = page8.get()[:-40] + page8.get()[-40:].replace("\tdate =", replacement % shortName)
         page8.save(summary="Dodanie języka %s" % zjezyka)
     else:
         pywikibot.output('Nazwa języka (%s) istnieje już na stronie Moduł:statystyka/dane' % shortName)
