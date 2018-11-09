@@ -10,7 +10,7 @@ import collections
 import locale
 import sjpMaintain
 import pdb
-from morfeusz import *
+#from morfeusz import *
 from klasa import *
 from lxml import etree, html
 from sjpClass import kategoriaSlowa, checkHistory
@@ -134,7 +134,7 @@ class HasloSJP():
 
             if xp_title == a:
                 temp = Word(str(xp_title))
-                temp_mean = web.xpath("//p[@style='margin: .5em 0; font-size: medium; max-width: 32em; '][%d]/text()" % (j+1))
+                temp_mean = web.xpath("//p[@style='margin: .5em 0; font: medium/1.4 sans-serif; max-width: 32em; '][%d]/text()" % (j+1))
                 mean = '<br />'.join(temp_mean)
                 temp.addTempMean(mean)
                 #temp.addInGames(xp_inGames[j].text)

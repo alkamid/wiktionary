@@ -4,7 +4,7 @@
 import codecs
 import pywikibot
 import re
-import config
+#import config
 from os import environ
 from klasa import *
 from sjpClass import kategoriaSlowa, checkHistory
