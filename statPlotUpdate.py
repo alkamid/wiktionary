@@ -1,24 +1,24 @@
-import urllib.request, urllib.error, urllib.parse
-from lxml import etree, html
 from datetime import date, timedelta
-from subprocess import call
+
 import upload
 import pywikibot
+from bs4 import BeautifulSoup
+import requests
+
 from statPlot import monthly_stat_plot
 
 def update():
 
-    oldMainURL = 'https://pl.wiktionary.org/w/index.php?title=Wikis%C5%82ownik:Strona_g%C5%82%C3%B3wna&oldid=2639658'
+    old_main_url = 'https://pl.wiktionary.org/w/index.php?title=Wikis%C5%82ownik:Strona_g%C5%82%C3%B3wna&oldid=2639658'
 
-    toParse = urllib.request.urlopen(oldMainURL)
-    doc = etree.parse(toParse)
-    toParse.close()
+    r = requests.get(old_main_url)
+    soup = BeautifulSoup(r.content, 'lxml')
 
-    entryNum =  int(doc.xpath('//td[@class="sg_ramka"]/div/div[1]/p/a/font/b/text()')[0].replace('\xa0', ''))
-    pageNum =  int(doc.xpath('//td[@class="sg_ramka"]/div/div[1]/p/b/text()')[0].replace('\xa0', ''))
+    stat_paragraphs_str = soup.table.find_all('td')[2].div.div.find_all('p')
+    num_entries, num_pages = [int(p.b.contents[0].replace('\xa0', '')) for p in stat_paragraphs_str]
 
-    entry = '%.1f' % (entryNum/1000.0)
-    page = '%.1f' % (pageNum/1000.0)
+    entry = '%.1f' % (num_entries/1000.0)
+    page = '%.1f' % (num_pages/1000.0)
 
     dateToday = date.today()
     dateEarlier = dateToday - timedelta(days=5)
@@ -37,6 +37,5 @@ def update():
 
     bot = upload.UploadRobot([targetFilename], description=desc, keepFilename=True, verifyDescription=False, ignoreWarning=True, targetSite=pywikibot.getSite('commons', 'commons'))
     bot.run()
-
 
 update()
