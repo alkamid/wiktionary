@@ -9,7 +9,7 @@ import locale
 import time
 import datetime
 import os
-import config
+#import config
 from pywikibot import xmlreader
 import bz2
 import sys
@@ -597,7 +597,7 @@ def getAllLanguages():
     langTable = []
     shortOnly = []
     re_langs = re.compile(r'lang2code: \{\n(.*?)\n\t\},', re.DOTALL)
-    re_oneLang = re.compile(r'\s*?"(.*?)"\s*?\:\s*"([a-z-]*?)')
+    re_oneLang = re.compile(r'\s*?\"(.*?)\"\s*?\:\s*\"([a-z-]*?)\"')
     re_shorts = re.compile(r'shortLangs: \[\n(.*?)\n\t\]', re.DOTALL)
     re_oneShort = re.compile(r'\s*?\"(.*?)\"(?:,\s*|\n)?')
 
