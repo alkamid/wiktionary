@@ -38,6 +38,9 @@ def rzeczownikRodzaj(data):
     for a in LangsMediaWiki:
         allNounsCount[a.shortName] = 0
 
+    # list of languages in which plural-only nouns do not have gender
+    plural_no_gender_langs = ('jidysz', 'niemiecki')
+
     for a in lista_stron:
         try: word = Haslo(a)
         except sectionsNotFound:
@@ -52,6 +55,8 @@ def rzeczownikRodzaj(data):
                         if lang.type == 1:
                             for d in lang.znaczeniaDetail:
                                 if 'rzeczownik' in d[0] and '{{forma rzeczownika' not in d[0]:
+                                    if 'liczba mnoga' in d[0] and lang.lang in plural_no_gender_langs:
+                                        continue
                                     try: allNounsCount['%s' % lang.lang] += 1
                                     except KeyError:
                                         pass
