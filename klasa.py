@@ -319,6 +319,9 @@ class LanguageSection():
                     self.headerArg = ''
                 self.header = s_headerAndContent.group(1).strip()
                 self.lang = s_lang.group(3)
+                if len(self.lang) == 0:
+                    self.type = 2
+                    raise WrongHeader
                 self.langUpper = self.lang[0].upper() + self.lang[1:]
                 self.langLong = s_langLong.group(2)
                 self.content = s_headerAndContent.group(2)
