@@ -128,7 +128,7 @@ def main():
     item = None
     for arg in pywikibot.handleArgs():
         continue
-    bot = myRevertBot(site = pywikibot.getSite())
+    bot = myRevertBot(site = pywikibot.Site())
     bot.revert_contribs()
 
 if __name__ == "__main__":

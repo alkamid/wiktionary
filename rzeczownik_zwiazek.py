@@ -15,7 +15,7 @@ def main():
 
     data = '20110310'
 
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     cat = Category(site,'Kategoria:francuski (indeks)')
     lista = pagegenerators.CategorizedPageGenerator(cat)
     #lista_stron1 = xmlreader.XmlDump('plwiktionary-%s-pages-articles.xml' % data)

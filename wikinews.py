@@ -16,7 +16,7 @@ import datetime
 
 def main():
 
-    site = pywikibot.getSite('pl', 'wikinews')
+    site = pywikibot.Site('pl', 'wikinews')
     lista_stron = pagegenerators.AllpagesPageGenerator(site=site)
 
     re_cytat = re.compile('{{[cC]ytat\|(.*?)}}', re.DOTALL)

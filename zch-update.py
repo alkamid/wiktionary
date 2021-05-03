@@ -613,11 +613,11 @@ def main():
 
     list = makeConversionList()
     global site_pl
-    site_pl = pywikibot.getSite()
+    site_pl = pywikibot.Site()
     global site_en
-    site_en = pywikibot.getSite('en', 'wiktionary')
+    site_en = pywikibot.Site('en', 'wiktionary')
     global commons
-    commons = pywikibot.getSite('commons', 'commons')
+    commons = pywikibot.Site('commons', 'commons')
     global test_mode
     test_mode = 0
     global data_en

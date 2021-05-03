@@ -12,7 +12,7 @@ from klasa import *
 
 def main():
 
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
 
     # mode = 1 - updating pages from recent changes; 2 - after adding new languages to the script, all the words in that language have to be checked
     mode = 1

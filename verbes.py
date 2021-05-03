@@ -16,7 +16,7 @@ import time
 
 def main():
     test_mode = 0;
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     spis = pywikibot.Page(site, 'Wikipedysta:Alkamid/formy_czas_franc')
     #logi = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/do_sprawdzenia')
     #prop = pywikibot.Page(site, u'Wikipedysta:AlkamidBot/propozycje')

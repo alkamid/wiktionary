@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+
 import brakCzesciMowy
 import rzeczownik_rodzaj
 import rzeczownik_rodzaj_niepotrzebny

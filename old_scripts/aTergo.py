@@ -7,7 +7,7 @@ from pyuca import Collator
 
 def aTergo(date):
 
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     c = Collator('allkeys.txt')
     pageList = getListFromXML(date) # if not called from afterDump.py, it can be changed to getListFromXML('foo', True) - will fetch the latest dump
 

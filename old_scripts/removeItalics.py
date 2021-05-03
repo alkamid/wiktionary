@@ -12,7 +12,7 @@ from klasa import *
 
 def main():
 
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
 
     re_italics = re.compile(r'(?<!\')\'\'(?!\')(.*?)(?<!\')\'\'(?!\')')
     #replace = {}

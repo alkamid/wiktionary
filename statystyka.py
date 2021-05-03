@@ -481,7 +481,7 @@ def stat_wikitable(old, new):
                         text8 = text8 + '\n|-\n! %d' % (i)
                         text7 = text7 + '|-\n| [[:Kategoria:%s (indeks)|%s]]\n| align="right"| %.0f\n| align="right"| %s\n| align="right"| %.4f\n| align="right"| %s\n' % (new[a].shortName, new[a].shortName, new[a].countMeans, changeText(changes['means'], 0), new[a].avgMean, changeText(changes['avgMean'], 4))
 
-        site = pywikibot.getSite()
+        site = pywikibot.Site()
         page_dane = pywikibot.Page(site, 'Moduł:statystyka/dane')
         text_dane = page_dane.get()
 
@@ -575,7 +575,7 @@ def stat_wikitable(old, new):
         
 
 def dlaczego(new):
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     dlaczego_strona = pywikibot.Page(site, 'Wikisłownik:Dlaczego Wikisłownik')
     presskit = pywikibot.Page(site, 'Wikisłownik:Presskit')
 
@@ -635,7 +635,7 @@ def meaningsUpdateWikitext(lang, mean, text):
 
 def data_stat():
 
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     stat = pywikibot.Page(site, 'Wikisłownik:Statystyka')
 
     re_przed = re.compile('(.*Zestawienie obejmuje 50 największych \(posiadających najwięcej haseł\) języków na Wikisłowniku. Zanalizowano stan na dzień )', re.DOTALL)

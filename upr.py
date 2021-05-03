@@ -20,9 +20,9 @@ def main():
     global test_mode
     test_mode = 0
     global site
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     global site_en
-    site_en = pywikibot.getSite('en', 'wiktionary')
+    site_en = pywikibot.Site('en', 'wiktionary')
 
 
 

@@ -7,7 +7,7 @@ import datetime
 import time
 
 def main():
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
 
     jakie = 'bengalskie'
     catname = 'Język bengalski'

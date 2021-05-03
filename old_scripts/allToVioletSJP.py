@@ -12,7 +12,7 @@ from klasa import *
 
 def main():
 
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     lista = []
 
     filename_input = 'potrzebne.txt'

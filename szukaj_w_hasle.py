@@ -38,7 +38,7 @@ def main():
 
     '''print query.GetData(params)['query']
 
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     lista = pagegenerators.RecentchangesPageGenerator(100, site)
     lista1 = pagegenerators.RecentchangesPageGenerator(100, site)
 
@@ -63,7 +63,7 @@ def main():
                             print h.title'''
 
     '''
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     sekcje = []
     sekcje.append(u'{{odmiana')
     sekcje.append(u'{{etymologia}}')

@@ -384,11 +384,11 @@ def main():
     global test_mode
     test_mode = 0
     global site
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     global site_en
-    site_en = pywikibot.getSite('en', 'wiktionary')
+    site_en = pywikibot.Site('en', 'wiktionary')
     global site_com
-    site_com = pywikibot.getSite('commons', 'commons')
+    site_com = pywikibot.Site('commons', 'commons')
     global log_site
     log_site = pywikibot.Page(site, 'Wikipedysta:AlkamidBot/zch/log')
 

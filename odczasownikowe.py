@@ -66,7 +66,7 @@ def main():
     global odmOlafa
     odmOlafa = OdmianaOlafa()
     global site
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     templatePage = pywikibot.Page(site, 'Szablon:ndk')
     #lista = pagegenerators.ReferringPageGenerator(templatePage, True, True, True)
     lista = ['poszukać']

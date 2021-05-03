@@ -8,7 +8,7 @@ from klasa import *
 def czescimowy(data):
 
     data_slownie = data[6:8] + '.' + data[4:6] + '.' + data[0:4]
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     allowedPage = pywikibot.Page(site, 'Wikipedysta:AlkamidBot/części_mowy/dozwolone')
     outputPage = pywikibot.Page(site, 'Wikipedysta:AlkamidBot/części_mowy/wszystkie')
     allowedPageText = allowedPage.get()

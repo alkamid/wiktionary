@@ -9,7 +9,7 @@ from klasa import *
 
 def main():
     global site
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     templatePage1 = pywikibot.Page(site, 'Szablon:forma czasownika')
     templatePage2 = pywikibot.Page(site, 'Szablon:forma rzeczownika')
     templatePage3 = pywikibot.Page(site, 'Szablon:forma przymiotnika')

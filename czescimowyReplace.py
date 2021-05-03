@@ -16,7 +16,7 @@ import config
 
 def czescimowyReplace():
 
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     inp = codecs.open('%soutput/czescimowy_input.txt' % config.path['scripts'], encoding='utf-8')
     replacePage = pywikibot.Page(site, 'Wikipedysta:AlkamidBot/części_mowy/zamiana')
     replacePageText = replacePage.get()

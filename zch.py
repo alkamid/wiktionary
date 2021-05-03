@@ -11,9 +11,9 @@ import re
 
 def main():
     test_mode = 0;
-    site = pywikibot.getSite()
-    site_en = pywikibot.getSite('en', 'wiktionary')
-    site_com = pywikibot.getSite('commons', 'commons')
+    site = pywikibot.Site()
+    site_en = pywikibot.Site('en', 'wiktionary')
+    site_com = pywikibot.Site('commons', 'commons')
     cat = Category(site,'Kategoria:japoński (indeks)')
     lista_stron = pagegenerators.CategorizedPageGenerator(cat)
     log_site = pywikibot.Page(site, 'Wikipedysta:AlkamidBot/zch/log')

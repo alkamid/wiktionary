@@ -14,7 +14,7 @@ from klasa import *
 
 def main():
 
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     cat = Category(site,'Kategoria:esperanto (indeks)')
     lista = pagegenerators.CategorizedPageGenerator(cat, start='anemi')
     #, start=u'abduktoro'

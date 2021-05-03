@@ -11,7 +11,7 @@ import datetime
 import time
 
 def main():
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
 
     username = 'Richiski'
     outputPage = pywikibot.Page(site, 'Wikipedysta:AlkamidBot/zaufani/%s' % username)

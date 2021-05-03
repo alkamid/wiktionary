@@ -11,7 +11,7 @@ import re
 from klasa import *
 
 def main():
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
 
     replace = {}
     replace['nowogrecki'] = {'Ά': 'Α', 'Έ': 'Ε', 'Ί': 'Ι', 'Ϊ': 'Ι', 'Ό': 'Ο', 'Ύ': 'Υ', 'Ϋ': 'Υ', 'Ώ': 'Ω', 'ά': 'α', 'έ': 'ε', 'ί': 'ι', 'ϊ': 'ι', 'ΐ': 'ι', 'ό': 'ο', 'ύ': 'υ', 'ϋ': 'υ', 'ΰ': 'υ', 'ώ': 'ω', 'ς': 'σ'}

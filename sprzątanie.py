@@ -30,7 +30,7 @@ def main():
     sekcje.append('{{antonimy}}')
     sekcje.append('{{źródła}}')
 
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     cat = Category(site,'Kategoria:łaciński (indeks)')
     lista_stron = pagegenerators.CategorizedPageGenerator(cat)
     #lista_stron = pagegenerators.AllpagesPageGenerator(namespace = 0, includeredirects = False)

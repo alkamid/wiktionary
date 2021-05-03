@@ -13,7 +13,7 @@ def czescimowy_listy(data):
     locale.setlocale(locale.LC_ALL, 'pl_PL.UTF-8')
 
     data_slownie = data[6] + data[7] + '.' + data[4] + data[5] + '.' + data[0] + data[1] + data[2] + data[3]
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     notAllowed = pywikibot.Page(site, 'Wikipedysta:AlkamidBot/części_mowy/wszystkie')
     notAllowedPageText = notAllowed.get()
     tempListNotAllowed = notAllowedPageText.split('\n')

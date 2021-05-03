@@ -4,7 +4,7 @@
 import pywikibot
 
 def test():
-    site = pywikibot.getSite('pl', 'wiktionary')
+    site = pywikibot.Site('pl', 'wiktionary')
     page = pywikibot.Page(site, 'cool')
     print((page.get()))
 

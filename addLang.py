@@ -220,6 +220,10 @@ def addLang(shortName, code, etym, shortOnly = False, jakie = None, zjezyka = No
             pywikibot.output('Nazwa języka (%s) istnieje już na stronie MediaWiki:Gadget-langdata.js' % shortName)
 
 
-newlangs = [('omahijsko-ponkaski', 'oma', 'omah-pon')]
+#newlangs = [('wschodniokadazański', 'dtb', 'wsch-kadaz'), ('środkowy bikolski', 'bcl', 'środ-bik'), ('bhodźpuri', 'bho', 'bho')]
+#newlangs = [('tsonga', 'tso', 'tso'), ('venda', 'ven', 'ven'), ('mongorski', 'mjg', 'mongor'), ('bedża', 'bej', 'bedż'), ('selkupski', 'sel', 'selk'), ('achwaski', 'akv', 'achw'), ('andyjski', 'ani', 'and'), ('jagnobijski', 'yai', 'jagn'), ('bagulalski', 'kva', 'bagul'), ('tindyjski', 'tin', 'tind'), ('czamalalski', 'cji', 'czamal'), ('khowarski', 'khw', 'khow'), ('hadżong', 'haj', 'hadż'), ('maithili', 'mai', 'maith')]
+newlangs = [('prakryt magadhi', 'pra', 'pra-mag')]
+
 for lang in newlangs:
-    addLang(*lang, shortOnly=False, sysop=False)
+    addLang(*lang, shortOnly=True, sysop=True)
+

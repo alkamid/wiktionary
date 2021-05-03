@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from tqdm import tqdm
+
 import pywikibot
 from pywikibot import pagegenerators
 import re
@@ -24,7 +26,9 @@ def brakCzesciMowy(data):
     LangsMediaWiki = getAllLanguages()
 
     with open('output/missing_pos.txt', encoding='utf-8', mode='w') as f:
-        for a in lista_stron:
+        for i, a in enumerate(tqdm(lista_stron)):
+            if i < 722349:
+                continue
             try: word = Haslo(a)
             except notFromMainNamespace:
                 pass
@@ -32,6 +36,9 @@ def brakCzesciMowy(data):
                 pass
             except WrongHeader:
                 pass
+            except IndexError:
+                print(a.text)
+                raise IndexError
             else:
                 if word.type == 3:
                     for lang in word.listLangs:

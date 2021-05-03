@@ -13,7 +13,7 @@ import re
 
 def main():
 
-    frwikt = pywikibot.getSite('fr', 'wiktionary')
+    frwikt = pywikibot.Site('fr', 'wiktionary')
 
     lista = []
     inp = codecs.open('lista_odmiana', encoding='utf-8')

@@ -9,7 +9,7 @@ import pywikibot
 import re
 
 def main():
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     indeks = pywikibot.Page(site, 'Indeks:Francuski_-_Związki_frazeologiczne')
     cat = Category(site,'Kategoria:francuski_(indeks)')
     gen1 = pagegenerators.CategorizedPageGenerator(cat)

@@ -11,7 +11,7 @@ import pywikibot
 def main():
 
     offline_mode = 0
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     page_dlugosc = pywikibot.Page(site, 'Wikipedysta:Alkamid/statystyka/długość')
     page_srednia = pywikibot.Page(site, 'Wikipedysta:Alkamid/statystyka/długość_średnia')
     page_multimedia = pywikibot.Page(site, 'Wikipedysta:Alkamid/statystyka/multimedia')

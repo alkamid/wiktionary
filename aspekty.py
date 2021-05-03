@@ -100,7 +100,7 @@ def main():
     global odmOlafa
     odmOlafa = OdmianaOlafa()
     global site
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     templatePageNdk = pywikibot.Page(site, 'Szablon:ndk')
     lista_ndk = pagegenerators.ReferringPageGenerator(templatePageNdk, True, True, True)
     templatePageDk = pywikibot.Page(site, 'Szablon:dk')

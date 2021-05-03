@@ -20,7 +20,7 @@ def checkHistory(pagename):
 
     bots = ('AlkamidBot', 'Olafbot', 'PBbot')
 
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     page = pywikibot.Page(site, pagename)
     try: page.get()
     except pywikibot.NoPage:

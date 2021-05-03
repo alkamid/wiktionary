@@ -12,7 +12,7 @@ from klasa import *
 
 def main():
 
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     cat = Category(site,'Kategoria:francuski (indeks)')
     lista = pagegenerators.CategorizedPageGenerator(cat)
 
