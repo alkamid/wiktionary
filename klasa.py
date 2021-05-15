@@ -60,9 +60,9 @@ class Haslo():
 
             try:
                 self.content = page.get()
-            except pywikibot.IsRedirectPage:
+            except pywikibot.exceptions.IsRedirectPageError:
                 self.type = 0
-            except pywikibot.NoPage:
+            except pywikibot.exceptions.NoPageError:
                 self.type = 1
             except pywikibot.Error:
                 self.type = 2

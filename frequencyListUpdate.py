@@ -30,9 +30,9 @@ def frequencyListUpdate():
             found = 0
             page = pwb.Page(site, tmp[0].strip())
             try: page.get()
-            except pwb.NoPage:
+            except pwb.exceptions.NoPageError:
                 pass
-            except pwb.IsRedirectPage:
+            except pwb.exceptions.IsRedirectPageError:
                 pass
             except pwb.InvalidTitle:
                 continue
